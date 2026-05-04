@@ -1,0 +1,57 @@
+plan:
+  - key: plan-inform
+    guide_category: specification
+    guide: Explain the main event of the day.
+    guide_localized: "오늘의 주요 일정을 알려주세요."
+    example: "Today we are visiting grandmother."
+    example_localized: "오늘은 할머니 집 가는 날이야."
+  - key: plan-todo
+    guide_category: specification
+    guide: Explain to-do of your child.
+    guide_localized: "오늘 {child_name}가 해야 할 일을 알려주세요."
+    example: "Do you know what to do today, {child_name}?"
+    example_localized: "{child_name}는 오늘 무슨 일 해야 하는지 알고 있어?"
+  - key: plan-expectation
+    guide_category: intention
+    guide: Ask your child what they expect to do.
+    guide_localized: "{child_name}가 기대하는 일정을 물어봐 주세요."
+    example: "What do you want to do today, {child_name}?"
+    example_localized: "{child_name}는 오늘 뭐 하고 싶어?"
+recall:
+  - key: recall-event
+    guide_category: specification
+    guide: Ask about an event of the day.
+    guide_localized: "오늘 어떤 일이 있었는지 물어보세요."
+    example: "What did you do, {child_name}?"
+    example_localized: "{child_name} 오늘 뭐 했어?"
+  - key: recall-memorable
+    guide_category: specification
+    guide: Ask about the most memorable thing of the day.
+    guide_localized: "가장 기억에 남는 일에 대해 물어보세요."
+    example: "What was the most memorable thing, {child_name}?"
+    example_localized: "{child_name}는 오늘 뭐가 제일 기억나?"
+  - key: recall-place
+    guide_category: specification
+    guide: Ask where {child_name} went to.
+    guide_localized: "{child_name}가 오늘 간 장소에 대해 물어보세요."
+    example: "Did you go to any interesting place, {child_name}?"
+    example_localized: "{child_name}는 오늘 어디 갔었어?"
+free:
+  - key: free-inform
+    guide_category: specification
+    guide: Raise what you are going to talk about.
+    guide_localized: "무엇에 대해 이야기할지 알려주세요."
+    example: "What do you want to talk about? {subtopic}?"
+    example_localized: "우리 무슨 이야기 할까? {subtopic} 이야기 할까?"
+  - key: free-curiosity
+    guide_category: encourage
+    guide: Spice up the conversation.
+    guide_localized: "대화의 흥미를 돋궈주세요."
+    example: "Why don't we talk about something interesting?"
+    example_localized: "우리 재미있는 이야기 해볼까? 뭐 하면 좋을까?"
+  - key: free-specific
+    guide_category: extend
+    guide: "Ask what specific things {child_name} wants to talk about {subtopic}."
+    guide_localized: "{subtopic}에 대해 어떤 이야기를 하고 싶은지 물어보세요."
+    example: "What do you want to specifically talk about {subtopic}?"
+    example_localized: "오늘은 {subtopic} 이야기 뭐로 할까?"

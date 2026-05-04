@@ -1,0 +1,26 @@
+- id: 'yes'
+  label: 'Yes'
+  label_localized: 네
+  category: core
+  image: 'card_core/iz9zski8dz.png'
+- id: 'no'
+  label: 'No'
+  label_localized: 아니오
+  category: core
+  image: 'card_core/5FwLcuFAGw.png'
+- id: idk
+  label: I don't know
+  label_localized: 모르겠어요
+  category: core
+  image: 'card_core/eUCdvU-_z1.png'
+- id: hby
+  label:
+    father: How about you, dad?
+    mother: How about you, mom?
+  label_localized: 
+    father: 아빠는요?
+    mother: 엄마는요?
+  category: core
+  image:
+    father: 'card_core/xutZT392SX.png'
+    mother: 'card_core/Aa2p2WUs98.png'
