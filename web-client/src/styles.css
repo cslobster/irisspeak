@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; margin: 0; }
+html, body { overscroll-behavior-y: none; }
+body {
+  font-family: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #2b2d31;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+/* iOS-safe full-height: dvh > vh, falls back where unsupported. */
+.min-h-screen { min-height: 100vh; min-height: 100dvh; }
+.h-screen     { height: 100vh; height: 100dvh; }
+
+/* Safe-area helpers for notched iPhones / iPad home-indicator */
+.safe-bottom { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+.safe-top    { padding-top:    max(0.5rem, env(safe-area-inset-top)); }
+
+@layer components {
+  .pill-btn {
+    @apply px-8 py-3 rounded-full font-bold text-white transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+    min-height: 48px;
+  }
+  .topic-button {
+    @apply relative rounded-3xl text-white font-extrabold flex flex-col justify-end overflow-hidden cursor-pointer transition-transform active:scale-95 shadow-lg;
+    min-height: 96px;
+  }
+  .card-chip {
+    @apply px-4 py-3 rounded-2xl border border-black/5 font-bold cursor-pointer select-none transition shadow-sm active:scale-95 text-slate-800;
+  }
+  .guide-card {
+    @apply bg-white rounded-2xl p-5 shadow-md border border-slate-200/60;
+  }
+  .ribbon {
+    @apply px-6 py-2 rounded-full font-bold text-white shadow;
+  }
+  .icon-btn {
+    @apply rounded-2xl bg-white/90 backdrop-blur shadow border border-slate-200 flex items-center justify-center;
+    min-width: 48px; min-height: 48px;
+  }
+}
+
+/* Hill background — pure CSS so we don't need SVG imports */
+.hill-bg {
+  position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
+}
+.hill-bg::before, .hill-bg::after {
+  content: ''; position: absolute; left: -10%; right: -10%; height: 280px; border-radius: 50%/60%;
+}
+.hill-bg::before { bottom: -120px; height: 320px; }
+.hill-bg::after  { bottom: -180px; opacity: 0.6; }
+
+/* Cloud floats */
+.cloud {
+  position: absolute; width: 80px; height: 30px; background: white; border-radius: 999px; opacity: 0.85;
+  box-shadow:
+    20px -10px 0 -2px white,
+    40px 0 0 -4px white,
+    60px -8px 0 -2px white;
+}
