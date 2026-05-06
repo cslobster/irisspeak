@@ -17,6 +17,7 @@ export async function POST(req: Request, ctx: { params: { sessionId: string } })
     const out = await requestParentExample(ctx.params.sessionId, dyad, String(body.recommendation_id), String(body.guide_id));
     return ok(out);
   } catch (e: any) {
+    console.error('[parent-example] error:', e?.message, e?.status, e?.code);
     return serverError(e?.message || 'example failed');
   }
 }
