@@ -1,6 +1,6 @@
 # AACessTalk Backend
 
-Next.js 14 API backend for an AAC (Augmentative and Alternative Communication) platform. Helps minimally-verbal autistic children (ages 5–7) communicate with caregivers via AI-generated card suggestions and parent guidance messages.
+Next.js 14 API backend for an AAC (Augmentative and Alternative Communication) platform. Helps minimally-verbal people with autism (any age) communicate with caregivers via AI-generated card suggestions and parent guidance messages.
 
 ## Repo structure
 
@@ -46,7 +46,7 @@ Child taps cards  → LLM generates parent guidance messages
 |------|------|
 | `moderator.ts` | Orchestration — all turn logic (464 lines) |
 | `gemini.ts` | LLM client (OpenAI SDK → Google Gemini endpoint) |
-| `corpus.ts` | Local semantic search (6,658 vocab items, MiniLM-L6-v2) |
+| `corpus.ts` | Local semantic search (~2,002 vocab items, MiniLM-L6-v2) |
 | `db.ts` | Neon Postgres — lazy schema init, tagged-template SQL |
 | `prompts.ts` | LLM prompt builders |
 | `staticData.ts` | YAML loaders (core cards, emotion cards, initial guides) |
@@ -55,7 +55,7 @@ Child taps cards  → LLM generates parent guidance messages
 
 **15 API endpoints** under `/api/v1/dyad/` covering: auth, session lifecycle, parent messages, child card taps/confirms/undos, and parent example utterances.
 
-**Data files (`/data/`):** CSV vocabulary corpus (2.3 MB), pre-computed MiniLM float32 embeddings (9.8 MB), YAML card/guide definitions.
+**Data files (`/data/`):** CSV vocabulary corpus (`corpus_vocabulary_slim.csv`, ~2,002 single-word entries), pre-computed MiniLM float32 embeddings (`.bin` + `.meta.json`), YAML card/guide definitions. To update the corpus: rename new CSV to `corpus_vocabulary.csv`, run the Colab embedding notebook, drop `.bin` + `.meta.json` + renamed CSV into `/data/`.
 
 ## LLM configuration
 
