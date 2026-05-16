@@ -2,7 +2,7 @@
  * Local corpus retriever — MiniLM-L6-v2 + search_smart.
  *
  * Loads on first call:
- *   data/corpus_vocabulary_slim.csv      → 6,658 rows: category, name_en, description_brief
+ *   data/corpus_vocabulary.csv            → ~2,002 rows: category, name_en, description_brief
  *   data/minilm_name_embeddings.bin      → (6658, 384) float32, L2-normalized
  *   data/minilm_name_embeddings.meta.json
  *
@@ -41,7 +41,7 @@ class _CorpusRetriever {
   async load(dataDir: string = path.join(process.cwd(), 'data')) {
     if (this.rowCount > 0) return;
 
-    const csvPath = path.join(dataDir, 'corpus_vocabulary_slim.csv');
+    const csvPath = path.join(dataDir, 'corpus_vocabulary.csv');
     const binPath = path.join(dataDir, 'minilm_name_embeddings.bin');
     const metaPath = path.join(dataDir, 'minilm_name_embeddings.meta.json');
 
