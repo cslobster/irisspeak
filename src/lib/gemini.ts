@@ -4,15 +4,23 @@ let _client: OpenAI | null = null;
 
 function client(): OpenAI {
   if (!_client) {
-    _client = new OpenAI({
-      apiKey: process.env.GEMINI_API_KEY!,
-      baseURL: process.env.OPENAI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta/openai/',
-    });
+    const openRouterKey = process.env.OPENROUTER_API_KEY;
+    if (openRouterKey) {
+      _client = new OpenAI({
+        apiKey: openRouterKey,
+        baseURL: 'https://openrouter.ai/api/v1',
+      });
+    } else {
+      _client = new OpenAI({
+        apiKey: process.env.GEMINI_API_KEY!,
+        baseURL: process.env.OPENAI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta/openai/',
+      });
+    }
   }
   return _client;
 }
 
-const MODEL = process.env.LLM_MODEL || 'gemini-2.5-flash-lite';
+const MODEL = process.env.LLM_MODEL || (process.env.OPENROUTER_API_KEY ? 'google/gemini-2.5-flash' : 'gemini-2.5-flash-lite');
 const FENCE_RE = /```(?:[a-zA-Z0-9_+-]*)\s*\n?([\s\S]*?)\n?\s*```/;
 
 /** Strip a single ```yaml/```json fence wrapper if present. Gemini commonly wraps structured output. */

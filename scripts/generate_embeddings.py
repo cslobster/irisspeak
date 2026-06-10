@@ -38,7 +38,7 @@ def main():
 
     print("Writing .meta.json...")
     with open(meta_path, "w") as f:
-        json.dump({"words": words, "dim": dim, "count": len(words)}, f)
+        json.dump({"rows": len(words), "dim": dim, "dtype": "float32"}, f)
 
     print(f"Done. {len(words)} embeddings written to {bin_path}")
 
