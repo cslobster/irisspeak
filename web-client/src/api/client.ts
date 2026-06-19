@@ -159,6 +159,10 @@ class ApiClient {
     return r.data;
   }
 
+  async rateSession(sessionId: string, rating: number): Promise<void> {
+    await this.http.put(`/dyad/session/${sessionId}/rating`, { rating });
+  }
+
   async getFreeTopics(): Promise<import('./types').FreeTopicDetail[]> {
     const r = await this.http.get<{ dyad_id: string; details: import('./types').FreeTopicDetail[] }>(
       '/dyad/data/freetopics'

@@ -78,6 +78,7 @@ export async function ensureSchema(): Promise<void> {
       )
     `;
     await sql`CREATE INDEX IF NOT EXISTS idx_session_dyad ON session(dyad_id, created_at DESC)`;
+    await sql`ALTER TABLE session ADD COLUMN IF NOT EXISTS rating INTEGER`;
 
     // ---------- DIALOGUE TURN (parent or child) ----------
     await sql`
@@ -91,6 +92,7 @@ export async function ensureSchema(): Promise<void> {
       )
     `;
     await sql`CREATE INDEX IF NOT EXISTS idx_turn_session ON dialogue_turn(session_id, started_timestamp)`;
+    await sql`ALTER TABLE dialogue_turn ADD COLUMN IF NOT EXISTS inferred_sentence TEXT`;
 
     // ---------- DIALOGUE MESSAGE (parent text/audio, or child confirmed cards) ----------
     await sql`

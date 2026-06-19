@@ -78,4 +78,5 @@ export interface MessageRow {
   content_type: 'text' | 'cards';
   content: unknown;
   timestamp: number;
+  inferred_sentence: string | null;
 }

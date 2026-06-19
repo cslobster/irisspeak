@@ -11,7 +11,9 @@ export function SessionEndScreen() {
   const nav = useNavigate();
   const { sessionId } = useParams<{ sessionId: string }>();
   const [dialogue, setDialogue] = useState<DialogueMessage[]>([]);
-  const [stars, setStars] = useState(0);
+  const [rating, setRating] = useState<number | null>(null);
+  const [hovered, setHovered] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (!sessionId) return;
@@ -21,10 +23,16 @@ export function SessionEndScreen() {
     ]).then(([d, l]) => {
       setDialogue(d.dialogue || []);
       const s = (l.sessions || []).find(x => x.id === sessionId);
-      if (s) setStars(Math.floor((s.num_turns || 0) / 2));
-      else setStars(Math.floor((d.dialogue?.length || 0) / 4));
+      if (s?.rating) { setRating(s.rating); setSubmitted(true); }
     });
   }, [sessionId]);
+
+  function handleRate(r: number) {
+    if (submitted || !sessionId) return;
+    setRating(r);
+    setSubmitted(true);
+    api.rateSession(sessionId, r).catch(() => {});
+  }
 
   return (
     <HillBackground>
@@ -32,14 +40,38 @@ export function SessionEndScreen() {
         <h2 className="text-3xl font-extrabold text-slate-700 mb-2">Great conversation!</h2>
         <p className="text-base text-slate-500 mb-8">Here's what you talked about today.</p>
 
-        <div className="bg-amber-100 border-2 border-amber-300 rounded-3xl px-8 py-6 flex items-center gap-4 mb-8 shadow">
-          <div className="flex gap-1">
-            {Array.from({ length: Math.max(stars, 1) }).slice(0, 6).map((_, i) => <StarIcon key={i} size={42} />)}
-          </div>
-          <div>
-            <div className="text-3xl font-extrabold text-amber-700">{stars} {stars === 1 ? 'star' : 'stars'}</div>
-            <div className="text-sm font-semibold text-amber-800">earned from this conversation</div>
-          </div>
+        {/* 5-star rating prompt */}
+        <div className="bg-white border-2 border-amber-200 rounded-3xl px-8 py-6 flex flex-col items-center gap-3 mb-8 shadow w-full max-w-md">
+          {!submitted ? (
+            <>
+              <p className="text-lg font-bold text-slate-700">How did the conversation go?</p>
+              <p className="text-sm text-slate-500 mb-1">Tap a star to rate it together</p>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map(s => (
+                  <button
+                    key={s}
+                    onClick={() => handleRate(s)}
+                    onMouseEnter={() => setHovered(s)}
+                    onMouseLeave={() => setHovered(0)}
+                    className="transition-transform active:scale-90"
+                    aria-label={`Rate ${s} star${s > 1 ? 's' : ''}`}
+                  >
+                    <StarIcon size={52} fill={(hovered || 0) >= s || (rating || 0) >= s ? '#fbbf24' : '#e2e8f0'} />
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-lg font-bold text-slate-700">Thanks for rating!</p>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map(s => (
+                  <StarIcon key={s} size={44} fill={(rating || 0) >= s ? '#fbbf24' : '#e2e8f0'} />
+                ))}
+              </div>
+              <p className="text-sm text-slate-500">{rating} out of 5 stars</p>
+            </>
+          )}
         </div>
 
         <div className="self-stretch bg-white rounded-3xl p-5 shadow border border-slate-200/60 mb-8">

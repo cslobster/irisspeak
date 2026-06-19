@@ -122,6 +122,13 @@ export function UsersTab() {
           onClose={() => setModal(null)}
         />
       )}
+
+      {transcriptsDyad && (
+        <TranscriptsDrawer
+          dyad={transcriptsDyad}
+          onClose={() => setTranscriptsDyad(null)}
+        />
+      )}
     </div>
   );
 }
