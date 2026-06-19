@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   const rows = (await sql`
     SELECT d.* FROM dyad_login_code lc
     JOIN dyad d ON d.id = lc.dyad_id
-    WHERE d.alias = ${String(username)} AND lc.code = ${String(password)} AND lc.active = TRUE
+    WHERE LOWER(d.alias) = LOWER(${String(username)}) AND lc.code = ${String(password)} AND lc.active = TRUE
     LIMIT 1
   `) as Dyad[];
 

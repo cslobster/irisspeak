@@ -35,6 +35,27 @@ export async function verifyDyadJwt(token: string): Promise<JwtPayload> {
   return payload as unknown as JwtPayload;
 }
 
+export async function issueAdminJwt(): Promise<string> {
+  return await new SignJWT({ role: 'admin' })
+    .setProtectedHeader({ alg: ALG })
+    .setSubject('admin')
+    .setIssuedAt()
+    .setExpirationTime('24h')
+    .sign(SECRET());
+}
+
+export async function adminFromRequest(req: Request): Promise<boolean> {
+  const auth = req.headers.get('authorization') || '';
+  const m = auth.match(/^Bearer\s+(.+)$/i);
+  if (!m) return false;
+  try {
+    const { payload } = await jwtVerify(m[1], SECRET(), { algorithms: [ALG] });
+    return (payload as any).role === 'admin';
+  } catch {
+    return false;
+  }
+}
+
 /** Pull JWT out of the Authorization header and return the dyad row, or null. */
 export async function dyadFromRequest(req: Request): Promise<Dyad | null> {
   const auth = req.headers.get('authorization') || '';

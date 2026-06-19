@@ -28,11 +28,28 @@ export async function ensureSchema(): Promise<void> {
     `;
     await sql`
       CREATE TABLE IF NOT EXISTS dyad_login_code (
-        code      TEXT PRIMARY KEY,
+        code      TEXT NOT NULL,
         dyad_id   TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
         active    BOOLEAN NOT NULL DEFAULT TRUE,
-        issued_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        issued_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        PRIMARY KEY (code, dyad_id)
       )
+    `;
+    // Migration: if the old PK was only on `code`, upgrade it to composite (code, dyad_id)
+    // so multiple users can share the same login code.
+    await sql`
+      DO $$ BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM pg_constraint c
+          JOIN pg_attribute a ON a.attrelid = c.conrelid AND a.attnum = ANY(c.conkey)
+          WHERE c.conrelid = 'dyad_login_code'::regclass
+            AND c.contype = 'p'
+            AND a.attname = 'dyad_id'
+        ) THEN
+          ALTER TABLE dyad_login_code DROP CONSTRAINT IF EXISTS dyad_login_code_pkey;
+          ALTER TABLE dyad_login_code ADD PRIMARY KEY (code, dyad_id);
+        END IF;
+      END $$
     `;
     await sql`
       CREATE TABLE IF NOT EXISTS free_topic (
@@ -122,6 +139,23 @@ export async function ensureSchema(): Promise<void> {
       )
     `;
 
+    // ---------- USER ANALYTICS EVENTS ----------
+    await sql`
+      CREATE TABLE IF NOT EXISTS user_event (
+        id          TEXT PRIMARY KEY,
+        dyad_id     TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
+        session_id  TEXT,
+        screen      TEXT NOT NULL,
+        element     TEXT NOT NULL,
+        event_type  TEXT NOT NULL DEFAULT 'tap',
+        metadata    JSONB,
+        ts          BIGINT NOT NULL,
+        created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      )
+    `;
+    await sql`CREATE INDEX IF NOT EXISTS idx_event_dyad ON user_event(dyad_id, created_at DESC)`;
+    await sql`CREATE INDEX IF NOT EXISTS idx_event_screen ON user_event(screen, element)`;
+
     // ---------- SEED TEST DYAD ----------
     const code = process.env.TEST_LOGIN_CODE || '12345';
     const alias = process.env.TEST_DYAD_ALIAS || 'abcde';
@@ -145,7 +179,7 @@ export async function ensureSchema(): Promise<void> {
       `;
       await sql`
         INSERT INTO dyad_login_code (code, dyad_id) VALUES (${code}, ${dyadId})
-        ON CONFLICT (code) DO NOTHING
+        ON CONFLICT (code, dyad_id) DO NOTHING
       `;
       // Default free topics
       const topics = [

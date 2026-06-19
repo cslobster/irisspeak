@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../api/client';
+import { analytics } from '../api/analytics';
 import { authError, authStart, authSuccess, logout, useDispatch, useSelector } from '../store';
 
 interface FlowerProps {
@@ -43,10 +44,12 @@ export function SignInScreen() {
 
   async function submit() {
     if (!username.trim() || !password.trim() || isAuthorizing) return;
+    analytics.signInAttempt();
     dispatch(authStart());
     try {
       const r = await api.login(username.trim(), password.trim());
       dispatch(authSuccess({ jwt: r.jwt, freeTopics: r.free_topics, childName: r.child_name }));
+      analytics.signInSuccess();
       setSearchParams({});
       nav('/home', { replace: true });
     } catch (e: any) {
