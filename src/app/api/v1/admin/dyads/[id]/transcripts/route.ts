@@ -20,8 +20,10 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   const messages = sessions.length > 0
     ? await sql`
-        SELECT m.id, m.session_id, m.role, m.content_type, m.content, m.timestamp
+        SELECT m.id, m.session_id, m.role, m.content_type, m.content, m.timestamp,
+               t.inferred_sentence
         FROM dialogue_message m
+        LEFT JOIN dialogue_turn t ON t.id = m.turn_id
         WHERE m.session_id = ANY(${sessions.map((s: any) => s.id)})
         ORDER BY m.session_id, m.timestamp
       `

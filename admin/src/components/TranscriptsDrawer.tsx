@@ -114,9 +114,8 @@ function MessageBubble({ msg }: { msg: MessageRow }) {
   const isParent = msg.role === 'parent';
   const content = msg.content_type === 'text'
     ? String(msg.content)
-    : Array.isArray(msg.content)
-      ? (msg.content as any[]).map((c: any) => c.corpus_name || c.label).join(' · ')
-      : JSON.stringify(msg.content);
+    : (msg.inferred_sentence ?? null)
+      ?? ((msg.content as any[]).map((c: any) => c.corpus_name || c.label).join(' · '));
 
   return (
     <div className={`flex ${isParent ? 'justify-end' : 'justify-start'}`}>

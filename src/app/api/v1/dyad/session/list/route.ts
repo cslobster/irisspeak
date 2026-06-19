@@ -11,7 +11,7 @@ export async function GET(req: Request) {
   if (!dyad) return unauthorized();
   const rows = (await sql`
     SELECT id, dyad_id, topic_category, subtopic, subtopic_description, local_timezone,
-           status, started_timestamp, ended_timestamp, num_turns
+           status, started_timestamp, ended_timestamp, num_turns, rating
     FROM session
     WHERE dyad_id = ${dyad.id}
     ORDER BY created_at DESC
@@ -25,6 +25,7 @@ export async function GET(req: Request) {
     started_timestamp: Number(r.started_timestamp || 0),
     ended_timestamp: r.ended_timestamp ? Number(r.ended_timestamp) : null,
     num_turns: r.num_turns,
+    rating: r.rating ?? null,
   }));
   return ok({ dyad_id: dyad.id, sessions });
 }

@@ -425,7 +425,9 @@ export async function inferSentenceFromCards(sessionId: string, dyad: Dyad): Pro
     { role: 'system', content: buildSentenceInferencePrompt(interim, dyad.child_name, lastParentMsg) },
     { role: 'user',   content: dialogueToXml(dialogue) },
   ]);
-  return raw.replace(/^["'](.*)["']$/s, '$1').trim();
+  const sentence = raw.replace(/^["'](.*)["']$/s, '$1').trim();
+  await sql`UPDATE dialogue_turn SET inferred_sentence = ${sentence} WHERE id = ${cur.id}`;
+  return sentence;
 }
 
 // ---------- confirm child cards → switch turn → generate parent guides ----------
