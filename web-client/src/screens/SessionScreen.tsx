@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { api } from '../api/client';
+import { analytics } from '../api/analytics';
 import { HillBackground } from '../components/HillBackground';
 import { TurnBanner } from '../components/TurnBanner';
 import { RecordingPill } from '../components/RecordingPill';
@@ -213,6 +214,7 @@ export function SessionScreen() {
     if (r && r.getState() !== 'idle') await r.stop(true).catch(() => {});
     setPartialTranscript('');
 
+    analytics.parentMessageSend(sessionId);
     try {
       setPhase('thinking');
       setPhaseLabel('Generating cards for the child…');
@@ -269,6 +271,7 @@ export function SessionScreen() {
   // pulled -- on touch screens an instant role flip felt like a crash.)
   const onCardClick = useCallback(async (card: CardInfo) => {
     if (!sessionId || role !== 'child') return;
+    analytics.cardTap(sessionId, card.label);
     speakCard(card);
     setInterimCards(prev => [...prev, card]); // optimistic -- instant UI update
     try {
@@ -313,6 +316,7 @@ export function SessionScreen() {
   // Step 1: infer sentence from selected cards, show approval overlay
   const onConfirm = useCallback(async () => {
     if (!sessionId || interimCards.length === 0) return;
+    analytics.cardConfirm(sessionId);
     setPhase('thinking');
     setPhaseLabel('Figuring out what you want to say…');
     try {
@@ -354,6 +358,7 @@ export function SessionScreen() {
 
   const onRefreshCards = useCallback(async () => {
     if (!sessionId || refreshingCards) return;
+    analytics.cardRefresh(sessionId);
     setRefreshingCards(true);
     try {
       const r = await api.refreshCards(sessionId);
@@ -368,6 +373,7 @@ export function SessionScreen() {
   // ----- Example utterance -----
   const requestExample = useCallback(async (guideId: string) => {
     if (!sessionId || !parentGuide) return;
+    analytics.guideExampleExpand(sessionId);
     setExampleByGuideId(prev => ({ ...prev, [guideId]: '__loading__' }));
     try {
       const r = await api.parentExample(sessionId, parentGuide.id, guideId);
@@ -381,6 +387,7 @@ export function SessionScreen() {
   // ----- End / discard -----
   async function endSession() {
     if (!sessionId) { nav('/home', { replace: true }); return; }
+    analytics.sessionEnd(sessionId);
     stopSpeaking();
     if (recRef.current) await recRef.current.stop(true).catch(() => {});
     setShowMenu(false);
@@ -390,6 +397,7 @@ export function SessionScreen() {
   }
   async function abortSession() {
     if (!sessionId) { nav('/home', { replace: true }); return; }
+    analytics.sessionAbort(sessionId);
     stopSpeaking();
     if (recRef.current) await recRef.current.stop(true).catch(() => {});
     try { await api.abortSession(sessionId); } catch {}
@@ -476,7 +484,7 @@ export function SessionScreen() {
               onRefresh={onRefreshCards}
               onConfirm={onConfirm}
               busy={refreshingCards}
-              onSearchOpen={() => setShowSearch(true)}
+              onSearchOpen={() => { analytics.cardSearchOpen(sessionId!); setShowSearch(true); }}
             />
           )}
         </div>

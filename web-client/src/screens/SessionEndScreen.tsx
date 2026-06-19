@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api/client';
+import { analytics } from '../api/analytics';
 import { HillBackground } from '../components/HillBackground';
 import { StarIcon } from '../components/Icons';
 import type { DialogueMessage } from '../api/types';
@@ -70,8 +71,8 @@ export function SessionEndScreen() {
         </div>
 
         <div className="flex gap-3">
-          <button onClick={() => nav('/home', { replace: true })} className="pill-btn bg-emerald-500">Back to home</button>
-          <button onClick={() => nav('/stars')} className="pill-btn bg-amber-400">See all stars</button>
+          <button onClick={() => { analytics.sessionEndGoHome(); nav('/home', { replace: true }); }} className="pill-btn bg-emerald-500">Back to home</button>
+          <button onClick={() => { analytics.sessionEndViewStars(); nav('/stars'); }} className="pill-btn bg-amber-400">See all stars</button>
         </div>
       </div>
     </HillBackground>

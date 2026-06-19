@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
+import { analytics } from '../api/analytics';
 import { TopicButton } from '../components/TopicButton';
 import { CalendarIcon, HomeIcon, StarIcon, MenuIcon } from '../components/Icons';
 import { HillBackground } from '../components/HillBackground';
@@ -48,6 +49,7 @@ export function HomeScreen() {
   }, []);
 
   async function startSession(category: TopicCategory) {
+    analytics.topicSelect(category);
     if (category === 'free') { nav('/free-topic'); return; }
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const sid = await api.newSession({ category }, tz);
@@ -67,14 +69,14 @@ export function HomeScreen() {
               {serverOk ? 'Backend connected' : 'Backend unreachable'}
             </span>
             <button
-              onClick={() => nav('/stars')}
+              onClick={() => { analytics.starsButton(); nav('/stars'); }}
               className="rounded-xl px-3 py-2 bg-amber-300 hover:bg-amber-400 text-amber-900 font-bold shadow flex items-center gap-2"
               title="Earned stars"
             >
               <StarIcon size={20} /> {totalStars}
             </button>
             <button
-              onClick={() => { api.setJwt(null); dispatch(logout()); nav('/', { replace: true }); }}
+              onClick={() => { analytics.signOut(); api.setJwt(null); dispatch(logout()); nav('/', { replace: true }); }}
               className="rounded-xl p-3 bg-white shadow border border-slate-200 hover:bg-slate-50"
               title="Sign out"
             >
