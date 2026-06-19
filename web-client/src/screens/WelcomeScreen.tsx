@@ -85,35 +85,31 @@ export function WelcomeScreen() {
             backgroundClip: 'text',
           }}
         >
-          Welcome, {childName}.
+          Welcome, {childName}!
         </h1>
 
         {/* Big play button */}
-        <button
-          onClick={() => nav('/who-first')}
-          className="group relative flex items-center justify-center rounded-full shadow-2xl active:scale-95 transition-transform"
-          style={{
-            width: 200,
-            height: 200,
-            background: 'linear-gradient(135deg, #34d399 0%, #10b981 60%, #059669 100%)',
-            boxShadow: '0 12px 40px rgba(16,185,129,0.45)',
-          }}
-          aria-label="Start a conversation"
-        >
-          {/* Subtle pulse ring */}
-          <span
-            className="absolute inset-0 rounded-full animate-ping opacity-20"
-            style={{ background: '#10b981' }}
-          />
-          {/* Play triangle */}
-          <svg width="72" height="72" viewBox="0 0 72 72" fill="none" className="ml-4">
-            <path d="M18 12 L62 36 L18 60 Z" fill="white" />
-          </svg>
-        </button>
-
-        <p className="mt-7 text-lg sm:text-xl font-bold text-slate-500 select-none">
-          Start a conversation
-        </p>
+        <div className="flex flex-col items-center gap-5">
+          <p className="text-2xl sm:text-3xl font-bold text-slate-600 select-none tracking-tight">
+            Start a conversation
+          </p>
+          <button
+            onClick={() => nav('/who-first')}
+            className="flex items-center justify-center shadow-2xl active:scale-95 transition-transform"
+            style={{
+              width: 200,
+              height: 200,
+              borderRadius: 40,
+              background: 'linear-gradient(135deg, #34d399 0%, #10b981 60%, #059669 100%)',
+              boxShadow: '0 12px 40px rgba(16,185,129,0.45)',
+            }}
+            aria-label="Start a conversation"
+          >
+            <svg width="80" height="80" viewBox="0 0 72 72" fill="none">
+              <path d="M18 12 L62 36 L18 60 Z" fill="white" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Hills + flowers */}

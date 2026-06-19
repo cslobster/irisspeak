@@ -1,0 +1,791 @@
+folder,word,image_url
+Root,yes,/symbols/mulberry/correct.svg
+Root,no,/symbols/mulberry/no.svg
+quick chat,yes,/symbols/mulberry/correct.svg
+quick chat,no,/symbols/mulberry/no.svg
+quick chat,hello,/symbols/mulberry/hello.svg
+quick chat,goodbye,/symbols/arasaac/goodbye.png
+quick chat,good,/symbols/mulberry/good.svg
+quick chat,bad,/symbols/mulberry/bad.svg
+quick chat,I can't speak,/symbols/mulberry/non_speaking.svg
+quick chat,thank you,/symbols/arasaac/thanks.png
+quick chat,please,/symbols/arasaac/please.png
+time,time,/symbols/mulberry/clock.svg
+time,now,/symbols/mulberry/now.svg
+time,yesterday,/symbols/mulberry/yesterday.svg
+time,today,/symbols/mulberry/today.svg
+time,tomorrow,/symbols/mulberry/tomorrow.svg
+time,morning,/symbols/mulberry/morning.svg
+time,afternoon,/symbols/mulberry/afternoon.svg
+time,night,/symbols/mulberry/night.svg
+time,day,/symbols/mulberry/day.svg
+time,this week,/symbols/mulberry/this_week.svg
+time,weekend,/symbols/mulberry/weekend.svg
+time,next week,/symbols/mulberry/next_week.svg
+time,this month,/symbols/mulberry/this_month.svg
+time,next month,/symbols/mulberry/next_month.svg
+time,last month,/symbols/mulberry/last_month.svg
+time,one hour,/symbols/mulberry/one_hour.svg
+time,minute,/symbols/mulberry/minute.svg
+time,second,/symbols/mulberry/second.svg
+food,I'm hungry,/symbols/mulberry/hungry.svg
+food,I want,"/symbols/mulberry/want_,_to.svg"
+food,and,/symbols/arasaac/ampersand.png
+food,I dislike,/symbols/mulberry/bad.svg
+food > soup,soup,/symbols/mulberry/soup.svg
+food > soup,carrot soup,/symbols/mulberry/carrot_soup.svg
+food > soup,chicken soup,/symbols/mulberry/chicken_soup.svg
+food > soup,mushroom soup,/symbols/mulberry/mushroom_soup.svg
+food > soup,onion soup,/symbols/mulberry/onion_soup.svg
+food > soup,pea soup,/symbols/mulberry/pea_soup.svg
+food > soup,tomato soup,/symbols/mulberry/tomato_soup.svg
+food > soup,vegetable soup,/symbols/mulberry/vegetable_soup.svg
+food > vegetables,vegetables,/symbols/mulberry/vegetables.svg
+food > vegetables,salad,/symbols/mulberry/salad.svg
+food > vegetables,potato,/symbols/mulberry/potato.svg
+food > vegetables,mash potato,/symbols/mulberry/mash_potato_1.svg
+food > vegetables,sweet potato,/symbols/mulberry/sweet_potato.svg
+food > vegetables,rice,/symbols/mulberry/rice.svg
+food > vegetables,baked beans,/symbols/mulberry/baked_beans_2.svg
+food > vegetables,sweetcorn,/symbols/mulberry/sweetcorn.svg
+food > vegetables,beetroot,/symbols/mulberry/beetroot.svg
+food > vegetables,carrot,/symbols/mulberry/carrot.svg
+food > vegetables,tomato,/symbols/mulberry/tomato.svg
+food > vegetables,cucumber,/symbols/mulberry/cucumber.svg
+food > vegetables,cabbage,/symbols/mulberry/cabbage.svg
+food > vegetables,onion,/symbols/mulberry/onion.svg
+food > vegetables,spring onions,/symbols/mulberry/spring_onions.svg
+food > vegetables,pepper,/symbols/mulberry/pepper.svg
+food > vegetables,chilli pepper,/symbols/mulberry/chilli_pepper.svg
+food > vegetables,lettuce,/symbols/mulberry/lettuce.svg
+food > vegetables,asparagus,/symbols/mulberry/asparagus.svg
+food > vegetables,radish,/symbols/mulberry/radish.svg
+food > vegetables,aubergine,/symbols/mulberry/aubergine.svg
+food > vegetables,broccoli,/symbols/mulberry/broccoli.svg
+food > vegetables,peas,/symbols/mulberry/peas.svg
+food > vegetables,avocado,/symbols/mulberry/avocado.svg
+food > vegetables,green beans,/symbols/mulberry/green_beans.svg
+food > vegetables,spinach,/symbols/mulberry/spinach.svg
+food > vegetables,pumpkin,/symbols/mulberry/pumpkin.svg
+food > vegetables,brussel sprouts,/symbols/mulberry/brussel_sprouts.svg
+food > fruit,strawberry,/symbols/mulberry/strawberry.svg
+food > fruit,apple,/symbols/mulberry/apple.svg
+food > fruit,apricot,/symbols/mulberry/apricot.svg
+food > fruit,peach,/symbols/mulberry/peach.svg
+food > fruit,mango,/symbols/mulberry/mango.svg
+food > fruit,pear,/symbols/mulberry/pear.svg
+food > fruit,orange,/symbols/mulberry/orange.svg
+food > fruit,melon,/symbols/mulberry/melon.svg
+food > fruit,banana,/symbols/mulberry/banana.svg
+food > fruit,kiwi,/symbols/mulberry/kiwi.svg
+food > fruit,pineapple,/symbols/mulberry/pineapple.svg
+food > fruit,watermelon,/symbols/mulberry/watermelon.svg
+food > fruit,cherry,/symbols/mulberry/cherry.svg
+food > fruit,grapefruit,/symbols/mulberry/grapefruit.svg
+food > fruit,grapes,/symbols/mulberry/grapes.svg
+food,pizza,/symbols/mulberry/pizza_2.svg
+food,bread,/symbols/mulberry/bread.svg
+food,boiled egg,/symbols/mulberry/boiled_egg.svg
+food,fried egg,/symbols/mulberry/fried_egg.svg
+food,croissant,/symbols/mulberry/croissant.svg
+food,cereal,/symbols/mulberry/cereal.svg
+food,porridge,/symbols/mulberry/porridge.svg
+food,pancakes,/symbols/mulberry/pancakes.svg
+food,pasta,/symbols/mulberry/pasta.svg
+food,poultry,/symbols/mulberry/poultry.svg
+food,beef,/symbols/mulberry/beef.svg
+food,fish,/symbols/mulberry/fish.svg
+food,spaghetti bolognaise,/symbols/mulberry/spaghetti_bolognaise.svg
+food,hamburger,/symbols/mulberry/hamburger.svg
+food,hot dog,/symbols/mulberry/hot_dog.svg
+food,pie,/symbols/mulberry/pie.svg
+food,pepper mill,/symbols/mulberry/pepper_mill.svg
+food,salt,/symbols/mulberry/salt.svg
+food,tomato sauce,/symbols/mulberry/tomato_sauce.svg
+food,vinegar,/symbols/mulberry/vinegar.svg
+food,sandwich,/symbols/mulberry/sandwich.svg
+food,bagel,/symbols/mulberry/bagel_2.svg
+food,toast,/symbols/mulberry/toast.svg
+food,cheese,/symbols/mulberry/cheese.svg
+food,noodles,/symbols/mulberry/noodles.svg
+food,chips,/symbols/mulberry/chips.svg
+drinks,I'm thirsty,/symbols/mulberry/thirsty.svg
+drinks,I want,"/symbols/mulberry/want_,_to.svg"
+drinks,I dislike,/symbols/mulberry/bad.svg
+drinks,drink,/symbols/mulberry/drink.svg
+drinks,water,/symbols/mulberry/water.svg
+drinks,orange juice,/symbols/mulberry/orange_juice.svg
+drinks,apple juice,/symbols/mulberry/apple_juice.svg
+drinks,grape juice,/symbols/mulberry/grape_juice.svg
+drinks,cranberry juice,/symbols/mulberry/cranberry_juice.svg
+drinks,pineapple juice,/symbols/mulberry/pineapple_juice.svg
+drinks,lemonade,/symbols/mulberry/lemonade.svg
+drinks,milk,/symbols/mulberry/milk.svg
+drinks,milkshake,/symbols/mulberry/milkshake.svg
+drinks,hot chocolate,/symbols/mulberry/hot_chocolate.svg
+drinks,tea,/symbols/mulberry/tea.svg
+drinks,coffee,/symbols/mulberry/coffee.svg
+drinks,wine,/symbols/mulberry/wine.svg
+drinks,beer,/symbols/mulberry/beer.svg
+drinks,straw,/symbols/mulberry/straw.svg
+snacks,I want,"/symbols/mulberry/want_,_to.svg"
+snacks,ice cream,/symbols/mulberry/ice_cream.svg
+snacks,chocolate,/symbols/mulberry/chocolate.svg
+snacks,crisps,/symbols/mulberry/crisps.svg
+snacks,marshmallows,/symbols/mulberry/marshmallows.svg
+snacks,biscuits,/symbols/mulberry/biscuits.svg
+snacks,jelly beans,/symbols/mulberry/jelly_beans.svg
+snacks,candy cane,/symbols/mulberry/candy_cane.svg
+snacks,nuts,/symbols/mulberry/nuts.svg
+snacks,cake slice,/symbols/mulberry/cake_slice_2.svg
+snacks,chocolate chip biscuit,/symbols/mulberry/chocolate_chip_biscuit.svg
+snacks,yogurt,/symbols/mulberry/yogurt.svg
+snacks,ice lolly,/symbols/mulberry/ice_lolly.svg
+snacks,pretzel,/symbols/mulberry/pretzel.svg
+snacks,peanut,/symbols/mulberry/peanut.svg
+activities,I want,"/symbols/mulberry/want_,_to.svg"
+activities,to cycle,"/symbols/mulberry/cycle_,_to.svg"
+activities,to play basketball,/symbols/mulberry/basketball.svg
+activities,to go bowling,/symbols/mulberry/bowler_1.svg
+activities,to play computer games,/symbols/mulberry/computer_game.svg
+activities,to watch TV,/symbols/mulberry/flatscreen_tv.svg
+activities,to solve jigsaw puzzle,/symbols/mulberry/jigsaw_puzzle.svg
+activities,to play soccer,"/symbols/mulberry/kick_ball_1_,_to.svg"
+activities,to play bingo,/symbols/mulberry/bingo.svg
+activities,to bathe,"/symbols/mulberry/bathe_,_to.svg"
+activities,to work,"/symbols/mulberry/work_,_to.svg"
+activities,to cook,"/symbols/mulberry/cook_,_to.svg"
+activities,to exercise,"/symbols/mulberry/exercise_,_to.svg"
+activities,to run,"/symbols/mulberry/run_,_to.svg"
+activities,to armwrestle,"/symbols/mulberry/armwrestle_,_to.svg"
+activities,to celebrate,"/symbols/mulberry/celebrate_3_,_to.svg"
+activities,to swim,"/symbols/mulberry/swim_,_to.svg"
+activities,to fish,"/symbols/mulberry/fish_,_to.svg"
+activities,to play darts,/symbols/mulberry/darts.svg
+activities,to play cards,/symbols/mulberry/playing_cards.svg
+emotions,I am,/symbols/arasaac/i_am.png
+emotions,You are,/symbols/arasaac/you_are.png
+emotions,Are you,/symbols/arasaac/are_you.png
+emotions,happy,/symbols/mulberry/happy_man.svg
+emotions,sad,/symbols/mulberry/sad_man.svg
+emotions,angry,/symbols/mulberry/angry_man.svg
+emotions,afraid,/symbols/mulberry/afraid_man.svg
+emotions,confused,/symbols/mulberry/confused_man.svg
+emotions,hot,/symbols/mulberry/hot_person.svg
+emotions,excited,/symbols/mulberry/excited_man.svg
+emotions,relaxed,"/symbols/mulberry/relax_3_,_to.svg"
+body,I have pain in,/symbols/arasaac/i_am_pain.png
+body,itch,/symbols/mulberry/itch.svg
+body,head,/symbols/mulberry/head.svg
+body > face,face,/symbols/mulberry/neutral_face.svg
+body > face,eyebrow,/symbols/mulberry/eyebrow.svg
+body > face,eyes,/symbols/mulberry/eyes.svg
+body > face,eye,/symbols/mulberry/eye.svg
+body > face,eyelash,/symbols/mulberry/eyelash.svg
+body > face,cheek,/symbols/mulberry/cheek.svg
+body > face,ear,/symbols/mulberry/ear.svg
+body > face,lips,/symbols/mulberry/lips_1.svg
+body > face,teeth,/symbols/mulberry/teeth.svg
+body > face,gum,/symbols/mulberry/gum.svg
+body > face,tongue,/symbols/mulberry/tongue.svg
+body > face,chin,/symbols/mulberry/chin.svg
+body,neck,/symbols/mulberry/neck.svg
+body,shoulder,/symbols/mulberry/shoulder.svg
+body,arms,/symbols/mulberry/arms.svg
+body,right hand,/symbols/mulberry/right_hand.svg
+body,left hand,/symbols/mulberry/left_hand.svg
+body,elbow,/symbols/mulberry/elbow.svg
+body,back,/symbols/mulberry/back.svg
+body,stomach,/symbols/mulberry/stomach_1.svg
+body,finger,/symbols/mulberry/finger.svg
+body,leg,/symbols/mulberry/leg.svg
+body,foot,/symbols/mulberry/foot.svg
+body,throat,/symbols/mulberry/throat.svg
+body,hip,/symbols/mulberry/hip.svg
+body,bottom,/symbols/mulberry/bottom_3.svg
+body > medical,I am,/symbols/arasaac/i_am.png
+body > medical,I have,/symbols/arasaac/i_have.png
+body > medical,I need,"/symbols/mulberry/help_,_to.svg"
+body > medical,back ache,/symbols/mulberry/back_ache.svg
+body > medical,headache,/symbols/mulberry/headache.svg
+body > medical,stomach ache,/symbols/mulberry/stomach_ache.svg
+body > medical,toothache,/symbols/mulberry/toothache.svg
+body > medical,inhaler,/symbols/mulberry/inhaler.svg
+body > medical,rash,/symbols/mulberry/rash.svg
+body > medical,operation,/symbols/mulberry/operation.svg
+body > medical,plaster,/symbols/mulberry/plaster.svg
+body > medical,medicine,/symbols/mulberry/medicine.svg
+body > medical,xray,/symbols/mulberry/xray.svg
+body > medical,surgery health centre,/symbols/mulberry/surgery_health_centre.svg
+body > medical,syringe,/symbols/mulberry/syringe.svg
+body > medical,tablets,/symbols/mulberry/tablets.svg
+body > medical,blood pressure,/symbols/mulberry/blood_pressure.svg
+body > medical,cut,/symbols/mulberry/cut.svg
+body > medical,oxygen mask,/symbols/mulberry/oxygen_mask.svg
+body > medical,to vomit,"/symbols/mulberry/vomit_,_to.svg"
+body > medical,thermometer,/symbols/mulberry/thermometer.svg
+body,thumb,/symbols/mulberry/thumb.svg
+body,toe nail,/symbols/mulberry/toe_nail.svg
+body,fingernail,/symbols/mulberry/fingernail.svg
+body,muscles,/symbols/mulberry/muscles.svg
+body,skin,/symbols/mulberry/skin.svg
+body,bone,/symbols/mulberry/bone_2.svg
+body,knee,/symbols/mulberry/knee.svg
+clothing > clothing accessories,glasses,/symbols/mulberry/glasses.svg
+clothing > clothing accessories,sunglasses,/symbols/mulberry/sunglasses.svg
+clothing > clothing accessories,bobble hat,/symbols/mulberry/bobble_hat.svg
+clothing > clothing accessories,cap,/symbols/mulberry/cap.svg
+clothing > clothing accessories,bow tie,/symbols/mulberry/bow_tie.svg
+clothing > clothing accessories,tie,/symbols/mulberry/tie.svg
+clothing > clothing accessories,socks,/symbols/mulberry/socks.svg
+clothing > clothing accessories,gloves,/symbols/mulberry/gloves.svg
+clothing > clothing accessories,boots,/symbols/mulberry/boots.svg
+clothing > clothing accessories,bra,/symbols/mulberry/bra.svg
+clothing > clothing accessories,boxer shorts,/symbols/mulberry/boxer_shorts.svg
+clothing > clothing accessories,pants,/symbols/mulberry/pants.svg
+clothing > clothing accessories,purse,/symbols/mulberry/purse.svg
+clothing > clothing accessories,jewellery,/symbols/mulberry/jewellery.svg
+clothing > clothing accessories,sandals,/symbols/mulberry/sandals.svg
+clothing > clothing accessories,trainers,/symbols/mulberry/trainers.svg
+clothing > clothing accessories,scarf,/symbols/mulberry/scarf.svg
+clothing > clothing accessories,umbrella,/symbols/mulberry/umbrella.svg
+clothing > clothing accessories,watch,/symbols/mulberry/watch.svg
+clothing,shirt,/symbols/mulberry/shirt.svg
+clothing,t-shirt,/symbols/mulberry/t-shirt.svg
+clothing,trousers,/symbols/mulberry/trousers.svg
+clothing,shorts,/symbols/mulberry/shorts.svg
+clothing,jacket,/symbols/mulberry/jacket.svg
+clothing,coat,/symbols/mulberry/coat.svg
+clothing,blouse,/symbols/mulberry/blouse.svg
+clothing,dress,/symbols/mulberry/dress.svg
+clothing,jumper,/symbols/mulberry/jumper.svg
+clothing,hoodie,/symbols/mulberry/hoodie.svg
+clothing,skirt,/symbols/mulberry/skirt.svg
+clothing,vest,/symbols/mulberry/vest.svg
+clothing,pyjamas,/symbols/mulberry/pyjamas.svg
+clothing > colours,black,/symbols/mulberry/black.svg
+clothing > colours,white,/symbols/mulberry/white.svg
+clothing > colours,mauve,/symbols/mulberry/mauve.svg
+clothing > colours,yellow,/symbols/mulberry/yellow.svg
+clothing > colours,pink,/symbols/mulberry/pink.svg
+clothing > colours,blue,/symbols/mulberry/blue.svg
+clothing > colours,green,/symbols/mulberry/green.svg
+clothing > colours,red,/symbols/mulberry/red.svg
+clothing > colours,colour,/symbols/mulberry/colour.svg
+people > family,my,/symbols/arasaac/my.png
+people > family,your,/symbols/arasaac/you_are.png
+people > family,family,/symbols/mulberry/family.svg
+people > family,grandfather,/symbols/mulberry/grandfather.svg
+people > family,grandmother,/symbols/mulberry/grandmother.svg
+people > family,mum,/symbols/mulberry/mum.svg
+people > family,dad,/symbols/mulberry/dad.svg
+people > family,sister,/symbols/mulberry/sister.svg
+people > family,brother,/symbols/mulberry/brother.svg
+people > family,daughter,/symbols/mulberry/daughter.svg
+people > family,son,/symbols/mulberry/son.svg
+people > family,baby,/symbols/mulberry/baby.svg
+people > characters,fairy,/symbols/mulberry/fairy.svg
+people > characters,ghost,/symbols/mulberry/ghost.svg
+people > characters,elf,/symbols/mulberry/elf.svg
+people > characters,witch,/symbols/mulberry/witch.svg
+people > characters,monster,/symbols/mulberry/monster.svg
+people,dad,/symbols/mulberry/dad.svg
+people,mum,/symbols/mulberry/mum.svg
+people,teacher,/symbols/mulberry/teacher_1b.svg
+people,doctor,/symbols/mulberry/doctor_1a.svg
+people,nurse,/symbols/mulberry/nurse_2a.svg
+people,speech language therapist,/symbols/mulberry/speech_language_therapist_1b.svg
+people,police,/symbols/mulberry/police_1b.svg
+people,delivery person,/symbols/mulberry/delivery_person_1a.svg
+people,post person,/symbols/mulberry/post_person_1a.svg
+people,dentist,/symbols/mulberry/dentist_1a.svg
+people,carpenter,/symbols/mulberry/carpenter_1b.svg
+people,secretary,/symbols/mulberry/secretary_1a.svg
+people,taxi driver,/symbols/mulberry/taxi_driver_1c.svg
+people,gardener,/symbols/mulberry/gardener_2b.svg
+people,IT assistant,/symbols/mulberry/it_assistant_2b.svg
+describe,I am,/symbols/arasaac/i_am.png
+describe,It is,/symbols/arasaac/it_is.png
+describe,You are,/symbols/arasaac/you_are.png
+describe,no,/symbols/mulberry/no.svg
+describe > colours,black,/symbols/mulberry/black.svg
+describe > colours,white,/symbols/mulberry/white.svg
+describe > colours,mauve,/symbols/mulberry/mauve.svg
+describe > colours,yellow,/symbols/mulberry/yellow.svg
+describe > colours,pink,/symbols/mulberry/pink.svg
+describe > colours,blue,/symbols/mulberry/blue.svg
+describe > colours,green,/symbols/mulberry/green.svg
+describe > colours,red,/symbols/mulberry/red.svg
+describe > colours,colour,/symbols/mulberry/colour.svg
+describe > shapes,circle,/symbols/mulberry/circle.svg
+describe > shapes,oval,/symbols/mulberry/oval.svg
+describe > shapes,triangle equilateral,/symbols/mulberry/triangle_equilateral.svg
+describe > shapes,square,/symbols/mulberry/square.svg
+describe > shapes,rectangle,/symbols/mulberry/rectangle.svg
+describe > shapes,pentagon,/symbols/mulberry/pentagon.svg
+describe > shapes,hexagon,/symbols/mulberry/hexagon.svg
+describe > shapes,octagon,/symbols/mulberry/octagon.svg
+describe > shapes,star,/symbols/mulberry/star_2.svg
+describe > shapes,diamond,/symbols/mulberry/diamond.svg
+describe > shapes,pyramid triangular base,/symbols/mulberry/pyramid_triangular_base.svg
+describe,ugly,/symbols/mulberry/ugly.svg
+describe,pretty,/symbols/mulberry/pretty.svg
+describe,large,/symbols/mulberry/large.svg
+describe,little,/symbols/mulberry/little.svg
+describe,same,/symbols/mulberry/same.svg
+describe,old,/symbols/mulberry/old_object.svg
+describe,fast,/symbols/mulberry/fast_2.svg
+describe,dirty,/symbols/mulberry/dirty.svg
+describe,quiet,/symbols/mulberry/quiet.svg
+describe,loud,/symbols/mulberry/loud.svg
+describe,fat,/symbols/mulberry/fat.svg
+describe,thin,/symbols/mulberry/thin.svg
+describe,tall,/symbols/mulberry/tall.svg
+describe,short,/symbols/mulberry/short_2.svg
+describe,long,/symbols/mulberry/long.svg
+describe,empty,/symbols/mulberry/empty.svg
+describe,full,/symbols/mulberry/full.svg
+describe,deep,/symbols/mulberry/deep.svg
+describe,shallow,/symbols/mulberry/shallow.svg
+describe,open,/symbols/mulberry/open_2.svg
+describe,closed,/symbols/mulberry/closed.svg
+describe,heavy,/symbols/mulberry/heavy.svg
+describe,light,/symbols/mulberry/light.svg
+describe,broken,/symbols/mulberry/broken.svg
+describe,soft,/symbols/mulberry/soft.svg
+describe,hard,/symbols/mulberry/hard.svg
+describe,curly,/symbols/mulberry/curly.svg
+describe,thick,/symbols/mulberry/thick.svg
+describe,shiny,/symbols/mulberry/shiny.svg
+describe,fancy,/symbols/mulberry/fancy.svg
+describe,noisy,/symbols/mulberry/noisy.svg
+describe,dry,/symbols/mulberry/dry.svg
+describe,wet,/symbols/mulberry/wet_1.svg
+describe,sticky,/symbols/mulberry/sticky.svg
+kitchen,where is,/symbols/mulberry/where.svg
+kitchen,I need,"/symbols/mulberry/help_,_to.svg"
+kitchen,my,/symbols/arasaac/my
+kitchen,fork,/symbols/mulberry/fork.svg
+kitchen,knife,/symbols/mulberry/knife.svg
+kitchen,spoon,/symbols/mulberry/spoon.svg
+kitchen,plate,/symbols/mulberry/plate.svg
+kitchen,drinking glass,"/symbols/mulberry/glass_,_drinking.svg"
+kitchen,mug,/symbols/mulberry/mug_2.svg
+kitchen,straw,/symbols/mulberry/straw.svg
+kitchen,serviette,/symbols/mulberry/serviette.svg
+kitchen,bowl,/symbols/mulberry/bowl.svg
+kitchen,place mat,/symbols/mulberry/place_mat.svg
+kitchen,cooker,/symbols/mulberry/cooker.svg
+kitchen,fridge,/symbols/mulberry/fridge.svg
+kitchen,apron,/symbols/mulberry/apron.svg
+school,pen,/symbols/mulberry/pen.svg
+school,pencil,/symbols/mulberry/pencil.svg
+school,pencil sharpener,/symbols/mulberry/pencil_sharpener.svg
+school,pencil case,/symbols/mulberry/pencil_case.svg
+school,school bag,/symbols/mulberry/school_bag.svg
+school,notebook,/symbols/mulberry/notebook.svg
+school,ring binder,/symbols/mulberry/ring_binder.svg
+school,calculator,/symbols/mulberry/calculator.svg
+school,scissors,/symbols/mulberry/scissors.svg
+school,blackboard,/symbols/mulberry/blackboard.svg
+school,teacher,/symbols/mulberry/teacher_2a.svg
+school > class room,algebra class,/symbols/mulberry/algebra_class.svg
+school > class room,art class,/symbols/mulberry/art_class.svg
+school > class room,drama class,/symbols/mulberry/drama_class.svg
+school > class room,english class,/symbols/mulberry/english_class.svg
+school > class room,geography class,/symbols/mulberry/geography_class.svg
+school > class room,history class,/symbols/mulberry/history_class.svg
+school > class room,maths class,/symbols/mulberry/maths_class.svg
+school > class room,IT class,/symbols/mulberry/it_class.svg
+school > class room,music class,/symbols/mulberry/music_class.svg
+school > class room,science class,/symbols/mulberry/science_class.svg
+school > class room,no class,/symbols/mulberry/no_class.svg
+school,tippex,/symbols/mulberry/tippex.svg
+school,crayon,/symbols/mulberry/crayon.svg
+school,glue,/symbols/mulberry/glue.svg
+school,stapler,/symbols/mulberry/stapler.svg
+animals,I have,/symbols/arasaac/i_have.png
+animals,I saw,/symbols/arasaac/i_saw.png
+animals,I want,"/symbols/mulberry/want_,_to.svg"
+animals,dog,/symbols/mulberry/dog.svg
+animals,cat,/symbols/mulberry/cat.svg
+animals,hamster,/symbols/mulberry/hamster.svg
+animals,rabbit,/symbols/mulberry/rabbit.svg
+animals,hedgehog,/symbols/mulberry/hedgehog.svg
+animals,horse,/symbols/mulberry/horse.svg
+animals,donkey,/symbols/mulberry/donkey.svg
+animals,toad,/symbols/mulberry/toad.svg
+animals,sheep,/symbols/mulberry/sheep.svg
+animals,dog kennel,/symbols/mulberry/dog_kennel.svg
+animals,cage,/symbols/mulberry/cage.svg
+animals,stable,/symbols/mulberry/stable.svg
+animals,frog,/symbols/mulberry/frog.svg
+animals,chick,/symbols/mulberry/chick.svg
+animals,fish,/symbols/mulberry/fish.svg
+animals,chicken live,/symbols/mulberry/live_chicken.svg
+animals,mouse,/symbols/mulberry/mouse.svg
+animals,rat,/symbols/mulberry/rat.svg
+animals,parrot,/symbols/mulberry/parrot.svg
+animals,nest,/symbols/mulberry/nest.svg
+animals,goose,/symbols/mulberry/goose.svg
+animals,cow,/symbols/mulberry/cow.svg
+animals > wild animals,tiger,/symbols/mulberry/tiger.svg
+animals > wild animals,elephant,/symbols/mulberry/elephant.svg
+animals > wild animals,giraffe,/symbols/mulberry/giraffe.svg
+animals > wild animals,gorilla,/symbols/mulberry/gorilla.svg
+animals > wild animals,snake,/symbols/mulberry/snake.svg
+animals > wild animals,rattle snake,/symbols/mulberry/rattle_snake.svg
+animals > wild animals,panda,/symbols/mulberry/panda.svg
+animals > wild animals,hippopotamus,/symbols/mulberry/hippopotamus.svg
+animals > wild animals,bear,/symbols/mulberry/bear.svg
+animals > wild animals,polar bear,/symbols/mulberry/polar_bear.svg
+animals > wild animals,fox,/symbols/mulberry/fox.svg
+animals > wild animals,lion,/symbols/mulberry/lion.svg
+animals > wild animals,wolf,/symbols/mulberry/wolf.svg
+animals > wild animals,chimpanzee,/symbols/mulberry/chimpanzee.svg
+animals > wild animals,deer,/symbols/mulberry/deer.svg
+animals > wild animals,zebra,/symbols/mulberry/zebra.svg
+animals > wild animals,kangaroo,/symbols/mulberry/kangaroo.svg
+animals > wild animals,bat,/symbols/mulberry/bat.svg
+animals > wild animals,koala,/symbols/mulberry/koala.svg
+animals > wild animals,rhinoceros,/symbols/mulberry/rhinoceros.svg
+animals > wild animals,dinosaur,/symbols/mulberry/dinosaur.svg
+animals > wild animals,cheetah,/symbols/mulberry/cheetah.svg
+animals > wild animals,ant eater,/symbols/mulberry/ant_eater.svg
+animals > wild animals,antelope,/symbols/mulberry/antelope.svg
+animals > wild animals,chameleon,/symbols/mulberry/chameleon.svg
+animals > marine animals,seahorse,/symbols/mulberry/seahorse.svg
+animals > marine animals,penguin,/symbols/mulberry/penguin.svg
+animals > marine animals,starfish,/symbols/mulberry/starfish.svg
+animals > marine animals,dolphin,/symbols/mulberry/dolphin.svg
+animals > marine animals,seal,/symbols/mulberry/seal.svg
+animals > marine animals,killer whale,/symbols/mulberry/killer_whale.svg
+animals > marine animals,crab,/symbols/mulberry/crab.svg
+animals > marine animals,goldfish,/symbols/mulberry/goldfish.svg
+animals > marine animals,oyster,/symbols/mulberry/oyster_2.svg
+animals > marine animals,shrimp,/symbols/mulberry/shrimp.svg
+animals > marine animals,crocodile,/symbols/mulberry/crocodile_2.svg
+animals > marine animals,jellyfish,/symbols/mulberry/jellyfish.svg
+animals > marine animals,walrus,/symbols/mulberry/walrus.svg
+animals > marine animals,tropical fish,/symbols/mulberry/tropical_fish.svg
+animals > marine animals,fish koi carp,/symbols/mulberry/koi_carp_fish.svg
+animals > marine animals,fish,/symbols/mulberry/fish.svg
+animals > insects,snail,/symbols/mulberry/snail.svg
+animals > insects,beetle,/symbols/mulberry/beetle.svg
+animals > insects,honey bee,/symbols/mulberry/honey_bee.svg
+animals > insects,ant,/symbols/mulberry/ant.svg
+animals > insects,cricket,/symbols/mulberry/cricket_2.svg
+animals > insects,moth,/symbols/mulberry/moth.svg
+animals > insects,butterfly,/symbols/mulberry/butterfly.svg
+animals > insects,fly,/symbols/mulberry/fly.svg
+animals > insects,dragonfly,/symbols/mulberry/dragonfly.svg
+animals > insects,earwig,/symbols/mulberry/earwig.svg
+animals > insects,slug,/symbols/mulberry/slug.svg
+animals > insects,wasp,/symbols/mulberry/wasp.svg
+animals > insects,beehive,/symbols/mulberry/beehive.svg
+animals > insects,bees nest,/symbols/mulberry/bees_nest.svg
+animals > insects,caterpillar,/symbols/mulberry/caterpillar.svg
+animals > birds,owl,/symbols/mulberry/owl.svg
+animals > birds,vulture,/symbols/mulberry/vulture.svg
+animals > birds,seagull,/symbols/mulberry/seagull.svg
+animals > birds,dove,/symbols/mulberry/dove.svg
+animals > birds,parrot,/symbols/mulberry/parrot.svg
+animals > birds,chick,/symbols/mulberry/chick.svg
+animals > birds,chicken live,/symbols/mulberry/live_chicken.svg
+animals > birds,duck,/symbols/mulberry/duck.svg
+animals > birds,goose,/symbols/mulberry/goose.svg
+animals > birds,swan,/symbols/mulberry/swan.svg
+animals > birds,robin,/symbols/mulberry/robin.svg
+animals > birds,turkey,/symbols/mulberry/turkey.svg
+animals > birds,ostrich,/symbols/mulberry/ostrich.svg
+animals > birds,bird,/symbols/mulberry/bird.svg
+animals > birds,penguin,/symbols/mulberry/penguin.svg
+animals > birds,flamingo,/symbols/mulberry/flamingo.svg
+animals > birds,peacock,/symbols/mulberry/peacock.svg
+animals > birds,cockerel,/symbols/mulberry/cockerel.svg
+animals > birds,cockatiel,/symbols/mulberry/cockatiel.svg
+animals,tortoise,/symbols/mulberry/tortoise.svg
+animals,camel,/symbols/mulberry/camel.svg
+animals,piglet,/symbols/mulberry/piglet.svg
+technology,I need,"/symbols/mulberry/help_,_to.svg"
+technology,where is,/symbols/mulberry/where.svg
+technology,my,/symbols/arasaac/my.png
+technology,your,/symbols/arasaac/you_are.png
+technology,computer,/symbols/mulberry/computer_2.svg
+technology,laptop,/symbols/mulberry/laptop.svg
+technology,electric charger,/symbols/mulberry/electric_charger.svg
+technology,battery,/symbols/mulberry/battery_2.svg
+technology,camera,/symbols/mulberry/camera.svg
+technology,headphones,/symbols/mulberry/headphones.svg
+technology,playstation,/symbols/mulberry/playstation.svg
+technology,usb stick,/symbols/mulberry/usb_stick.svg
+technology,printer,/symbols/mulberry/printer.svg
+technology,computer mouse,/symbols/mulberry/computer_mouse_2.svg
+technology,ipod,/symbols/mulberry/ipod.svg
+technology,iphone,/symbols/mulberry/iphone.svg
+technology,stereo,/symbols/mulberry/stereo.svg
+technology,dvd player,/symbols/mulberry/dvd_player.svg
+technology,wii,/symbols/mulberry/wii.svg
+technology,remote control,/symbols/mulberry/remote_control.svg
+technology,computer keyboard,/symbols/mulberry/computer_keyboard.svg
+technology,extension lead,/symbols/mulberry/extension_lead.svg
+weather,rain,/symbols/mulberry/rain.svg
+weather,sun,/symbols/mulberry/sun.svg
+weather,snow,/symbols/mulberry/snow.svg
+weather,thunder storm,/symbols/mulberry/thunder_storm.svg
+weather,cloudy,/symbols/mulberry/cloudy.svg
+weather,autumn,/symbols/mulberry/autumn.svg
+weather,winter,/symbols/mulberry/winter.svg
+weather,spring,/symbols/mulberry/spring.svg
+weather,summer,/symbols/mulberry/summer.svg
+plants,potted plant,/symbols/mulberry/potted_plant.svg
+plants,tree,/symbols/mulberry/tree.svg
+plants,branch,/symbols/mulberry/branch.svg
+plants,leaf,/symbols/mulberry/leaf.svg
+plants,tree trunk,/symbols/mulberry/tree_trunk.svg
+plants,grass,/symbols/mulberry/grass.svg
+plants,hedge,/symbols/mulberry/hedge.svg
+plants,bush,/symbols/mulberry/bush.svg
+plants,flower,/symbols/mulberry/flower.svg
+plants,daffodil,/symbols/mulberry/daffodil.svg
+plants,daisy,/symbols/mulberry/daisy.svg
+plants,rose,/symbols/mulberry/rose.svg
+plants,tulip,/symbols/mulberry/tulip.svg
+plants,petal,/symbols/mulberry/petal.svg
+plants,seedling,/symbols/mulberry/seedling.svg
+plants,seeds,/symbols/mulberry/seeds.svg
+plants,stick,/symbols/mulberry/stick.svg
+plants,roots,/symbols/mulberry/roots.svg
+plants,vine,/symbols/mulberry/vine.svg
+plants,holly,/symbols/mulberry/holly.svg
+plants,weeds,/symbols/mulberry/weeds.svg
+plants,ivy,/symbols/mulberry/ivy_2.svg
+plants,palm tree,/symbols/mulberry/palm_tree.svg
+plants,dead plant,/symbols/mulberry/dead_plant.svg
+plants,acorn,/symbols/mulberry/acorn.svg
+plants,cactus,/symbols/mulberry/cactus.svg
+plants,pine cone,/symbols/mulberry/pine_cone.svg
+sports,judo,/symbols/mulberry/judo.svg
+sports,tennis,/symbols/mulberry/tennis.svg
+sports,basketball,/symbols/mulberry/basketball.svg
+sports,cricket,/symbols/mulberry/cricket.svg
+sports,baseball bat,/symbols/mulberry/baseball_bat.svg
+sports,badminton,/symbols/mulberry/badminton.svg
+sports,golf,/symbols/mulberry/golf.svg
+sports,archery,/symbols/mulberry/archery.svg
+sports,to ski,"/symbols/mulberry/ski_,_to.svg"
+sports,to swim,"/symbols/mulberry/swim_,_to.svg"
+sports,darts,/symbols/mulberry/darts.svg
+sports,pool snooker,/symbols/mulberry/pool_snooker.svg
+sports,to ride horse,"/symbols/mulberry/ride_horse_,_to.svg"
+sports,bowling,/symbols/mulberry/bowling.svg
+sports,boccia,/symbols/mulberry/boccia.svg
+sports,volleyball,/symbols/mulberry/volleyball.svg
+sports,olympic rings,/symbols/mulberry/olympic_rings.svg
+sports,para olympic games,/symbols/mulberry/para_olympic_games.svg
+sports,olympic torch,/symbols/mulberry/olympic_torch_2.svg
+sports,golf,/symbols/mulberry/golf.svg
+sports,race athletics,/symbols/mulberry/race_athletics.svg
+transport,Let's go by,/symbols/arasaac/go.png
+transport,I went by,/symbols/mulberry/past.svg
+transport,car,/symbols/mulberry/car.svg
+transport,bicycle,/symbols/mulberry/bicycle.svg
+transport,wheelchair,/symbols/mulberry/wheelchair.svg
+transport,motorcycle,/symbols/mulberry/motorcycle.svg
+transport,bus,/symbols/mulberry/bus.svg
+transport,taxi,/symbols/mulberry/taxi.svg
+transport,aeroplane,/symbols/mulberry/aeroplane.svg
+transport,helicopter,/symbols/mulberry/helicopter.svg
+transport,train,/symbols/mulberry/train.svg
+transport,mini bus,/symbols/mulberry/mini_bus.svg
+transport,ferry,/symbols/mulberry/ferry.svg
+transport,boat,/symbols/mulberry/boat.svg
+transport,tractor,/symbols/mulberry/tractor.svg
+transport,skateboard,/symbols/mulberry/skateboard.svg
+transport,army tank,/symbols/mulberry/army_tank.svg
+transport,hot air balloon,/symbols/mulberry/hot_air_balloon.svg
+transport,fire engine,/symbols/mulberry/fire_engine.svg
+transport,spaceship,/symbols/mulberry/spaceship.svg
+transport,rocket,/symbols/mulberry/rocket.svg
+transport,jeep,/symbols/mulberry/jeep.svg
+transport,ambulance,/symbols/mulberry/ambulance.svg
+transport,police car,/symbols/mulberry/police_car.svg
+transport,van,/symbols/mulberry/van.svg
+transport,transport,/symbols/mulberry/travel.svg
+transport,lorry,/symbols/mulberry/lorry.svg
+transport,refuse lorry,/symbols/mulberry/refuse_lorry.svg
+places,house,/symbols/mulberry/house.svg
+places,shop,/symbols/mulberry/shop.svg
+places,bank,/symbols/mulberry/bank.svg
+places,office block,/symbols/mulberry/office_block.svg
+places,outside,/symbols/mulberry/outside.svg
+places,beach,/symbols/mulberry/beach.svg
+places,gym,/symbols/mulberry/gym_1.svg
+places,church,/symbols/mulberry/church.svg
+places,field,/symbols/mulberry/field.svg
+places,back garden,/symbols/mulberry/back_garden.svg
+places,school,/symbols/mulberry/school.svg
+places,surgery health centre,/symbols/mulberry/surgery_health_centre.svg
+places,garage,/symbols/mulberry/garage.svg
+places,aquarium,/symbols/mulberry/aquarium.svg
+places > countries,flag argentina,/symbols/mulberry/flag_argentina.svg
+places > countries,flag israel,/symbols/mulberry/flag_israel.svg
+places > countries,flag united states of america,/symbols/mulberry/flag_united_states_of_america.svg
+places > countries,flag india,/symbols/mulberry/flag_india.svg
+places > countries,flag united kingdom,/symbols/mulberry/flag_united_kingdom.svg
+places > countries,flag france,/symbols/mulberry/flag_france.svg
+places > countries,flag spain,/symbols/mulberry/flag_spain.svg
+places > countries,flag indonesia,/symbols/mulberry/flag_indonesia.svg
+places > countries,flag russian federation,/symbols/mulberry/flag_russian_federation.svg
+places > countries,flag poland,/symbols/mulberry/flag_poland.svg
+places > countries,flag brazil,/symbols/mulberry/flag_brazil.svg
+places > countries,flag canada,/symbols/mulberry/flag_canada.svg
+places > countries,flag germany,/symbols/mulberry/flag_germany.svg
+places > countries,flag lebanon,/symbols/mulberry/flag_lebanon.svg
+places > countries,flag jordan,/symbols/mulberry/flag_jordan.svg
+places > countries,flag syria,/symbols/mulberry/flag_syria.svg
+places > countries,flag egypt,/symbols/mulberry/flag_egypt.svg
+places > countries,flag iraq,/symbols/mulberry/flag_iraq.svg
+places > countries,flag italy,/symbols/mulberry/flag_italy.svg
+places > countries,flag sweden,/symbols/mulberry/flag_sweden.svg
+places > countries,flag the netherlands,/symbols/mulberry/flag_the_netherlands.svg
+places > countries,flag china,/symbols/mulberry/flag_china.svg
+position,in,/symbols/mulberry/in.svg
+position,out,/symbols/mulberry/out.svg
+position,on,/symbols/mulberry/on.svg
+position,under,/symbols/mulberry/under_1.svg
+position,over,/symbols/mulberry/over.svg
+position,behind,/symbols/mulberry/behind.svg
+position,in front,/symbols/mulberry/in_front.svg
+position,through,/symbols/mulberry/through.svg
+position,between,/symbols/mulberry/between.svg
+position,up,/symbols/mulberry/up.svg
+position,down,/symbols/mulberry/down.svg
+position,left,/symbols/mulberry/left.svg
+position,right,/symbols/mulberry/right.svg
+position,around,/symbols/mulberry/around.svg
+position,forwards,/symbols/mulberry/forwards.svg
+position,backwards,/symbols/mulberry/backwards.svg
+position,before,/symbols/mulberry/before.svg
+position,after,/symbols/mulberry/after.svg
+toys,I want,"/symbols/mulberry/want_,_to.svg"
+toys,I love,/symbols/arasaac/i_love.png
+toys,where,/symbols/mulberry/where.svg
+toys,your,/symbols/arasaac/you_are.png
+toys,my,/symbols/arasaac/my.png
+toys,teddy bear,/symbols/mulberry/teddy_bear.svg
+toys,doll,/symbols/mulberry/doll.svg
+toys,shape puzzle,/symbols/mulberry/shape_puzzle.svg
+toys,toy car,/symbols/mulberry/toy_car.svg
+toys,toy soldier,/symbols/mulberry/toy_soldier.svg
+toys,toy telephone,/symbols/mulberry/toy_telephone.svg
+toys,bricks,/symbols/mulberry/bricks.svg
+toys,ball,/symbols/mulberry/ball.svg
+toys,bubbles,/symbols/mulberry/bubbles.svg
+toys,kite,/symbols/mulberry/kite.svg
+toys,playdough,/symbols/mulberry/playdough.svg
+toys,puppet,/symbols/mulberry/puppet.svg
+toys,beads,/symbols/mulberry/beads.svg
+toys,lego,/symbols/mulberry/lego.svg
+toys,trampoline,/symbols/mulberry/trampoline.svg
+toys,toys,/symbols/mulberry/toys.svg
+toys,colouring book,/symbols/mulberry/colouring_book.svg
+toys,toy box,/symbols/mulberry/toy_box.svg
+toys,stickers,/symbols/mulberry/stickers.svg
+actions,to get,"/symbols/mulberry/get_,_to.svg"
+actions,to give,"/symbols/mulberry/give_,_to.svg"
+actions,to put,"/symbols/mulberry/put_,_to.svg"
+actions,to hear,"/symbols/mulberry/hear_,_to.svg"
+actions,to come,"/symbols/mulberry/come_,_to.svg"
+actions,to go,"/symbols/mulberry/go_,_to.svg"
+actions,to wait,"/symbols/mulberry/wait_,_to.svg"
+actions,to take,"/symbols/mulberry/take_,_to.svg"
+actions,to watch,"/symbols/mulberry/watch_,_to.svg"
+actions,to think,"/symbols/mulberry/think_,_to.svg"
+actions,to make,"/symbols/mulberry/make_,_to.svg"
+actions,to break,"/symbols/mulberry/break_2_,_to.svg"
+actions,to sleep male,"/symbols/mulberry/sleep_male_,_to.svg"
+actions,to wake up,"/symbols/mulberry/wake_up_,_to.svg"
+actions,to talk,"/symbols/mulberry/talk_2_,_to.svg"
+actions,to shout,"/symbols/mulberry/shout_,_to.svg"
+actions,to bring,"/symbols/mulberry/bring_,_to.svg"
+actions,to move,"/symbols/mulberry/move_,_to.svg"
+actions,to fall over,"/symbols/mulberry/fall_over_,_to.svg"
+actions,to stand,"/symbols/mulberry/stand_,_to.svg"
+actions,to sit,"/symbols/mulberry/sit_,_to.svg"
+actions,to share,"/symbols/mulberry/share_,_to.svg"
+actions,to carry,"/symbols/mulberry/carry_,_to.svg"
+actions,to reach for,"/symbols/mulberry/reach_for_,_to.svg"
+actions,to hold,"/symbols/mulberry/hold_,_to.svg"
+actions,to keep,"/symbols/mulberry/keep_,_to.svg"
+actions,to jump,"/symbols/mulberry/jump_,_to.svg"
+actions,to chase,"/symbols/mulberry/chase_,_to.svg"
+actions,to climb up,"/symbols/mulberry/climb_up_,_to.svg"
+actions,to crawl,"/symbols/mulberry/crawl_,_to.svg"
+actions,to hop,"/symbols/mulberry/hop_,_to.svg"
+actions,to enter door,"/symbols/mulberry/enter_door_,_to.svg"
+actions,to exit door,"/symbols/mulberry/exit_door_,_to.svg"
+actions,to rest,"/symbols/mulberry/rest_,_to.svg"
+actions,to arrest,"/symbols/mulberry/arrest_,_to.svg"
+actions,to find,"/symbols/mulberry/find_,_to.svg"
+actions,to kick ball,"/symbols/mulberry/kick_ball_,_to.svg"
+actions,to study,"/symbols/mulberry/study_,_to.svg"
+actions,to change mind,"/symbols/mulberry/change_mind_,_to.svg"
+actions,to pray,"/symbols/mulberry/pray_,_to.svg"
+actions,to open,"/symbols/mulberry/open_,_to.svg"
+questions,what,/symbols/mulberry/what.svg
+questions,why,/symbols/mulberry/why.svg
+questions,how,/symbols/mulberry/how.svg
+questions,how many,/symbols/mulberry/how_many.svg
+questions,when,/symbols/mulberry/when.svg
+questions,which,/symbols/mulberry/which.svg
+questions,where,/symbols/mulberry/where.svg
+furniture,chair,/symbols/mulberry/chair.svg
+furniture,table,/symbols/mulberry/table.svg
+furniture,high chair,/symbols/mulberry/high_chair.svg
+furniture,rocking chair,/symbols/mulberry/rocking_chair.svg
+furniture,coffee table,/symbols/mulberry/coffee_table.svg
+furniture,rug,/symbols/mulberry/rug.svg
+furniture,corner cabinet,/symbols/mulberry/corner_cabinet_2.svg
+furniture,dresser,/symbols/mulberry/dresser.svg
+furniture,drawer,/symbols/mulberry/drawer.svg
+furniture,door,/symbols/mulberry/door_2.svg
+furniture,window,/symbols/mulberry/window.svg
+furniture,book shelf,/symbols/mulberry/book_shelf.svg
+furniture,bookcase,/symbols/mulberry/bookcase.svg
+furniture,stool,/symbols/mulberry/stool.svg
+furniture,beanbag,/symbols/mulberry/beanbag.svg
+furniture,dining table,/symbols/mulberry/dining_table.svg
+furniture,curtains,/symbols/mulberry/curtains.svg
+furniture,single bed,/symbols/mulberry/single_bed.svg
+furniture,blanket,/symbols/mulberry/blanket.svg
+furniture,lamp,/symbols/mulberry/lamp.svg
+furniture,picture,/symbols/mulberry/picture.svg
+hygiene,toothbrush,/symbols/mulberry/toothbrush.svg
+hygiene,toothpaste,/symbols/mulberry/toothpaste.svg
+hygiene,soap,/symbols/mulberry/soap.svg
+hygiene,towel,/symbols/mulberry/towel.svg
+hygiene,comb,/symbols/mulberry/comb.svg
+hygiene,nail clippers,/symbols/mulberry/nail_clippers.svg
+hygiene,paper towel,/symbols/mulberry/paper_towel.svg
+hygiene,sanitary towel,/symbols/mulberry/sanitary_towel.svg
+hygiene,tissues,/symbols/mulberry/tissues.svg
+hygiene,shampoo,/symbols/mulberry/shampoo.svg
+hygiene,aftershave,/symbols/mulberry/aftershave_1.svg
+hygiene,electric razor,/symbols/mulberry/electric_razor.svg
+hygiene,hair conditioner,/symbols/mulberry/hair_conditioner.svg
+hygiene,make up,/symbols/mulberry/make_up.svg
+hygiene,deodorant,/symbols/mulberry/deodorant.svg
+hygiene,toilet roll,/symbols/mulberry/toilet_roll.svg
+hygiene,hairdryer,/symbols/mulberry/hairdryer.svg
+hygiene,hair dye,/symbols/mulberry/hair_dye.svg
+numbers,zero,/symbols/mulberry/zero.svg
+numbers,one,/symbols/mulberry/one.svg
+numbers,two,/symbols/mulberry/two.svg
+numbers,three,/symbols/mulberry/three.svg
+numbers,four,/symbols/mulberry/four.svg
+numbers,five,/symbols/mulberry/five.svg
+numbers,six,/symbols/mulberry/six.svg
+numbers,seven,/symbols/mulberry/seven.svg
+numbers,eight,/symbols/mulberry/eight.svg
+numbers,nine,/symbols/mulberry/nine.svg

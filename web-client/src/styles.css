@@ -58,6 +58,22 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
 .hill-bg::before { bottom: -120px; height: 320px; }
 .hill-bg::after  { bottom: -180px; opacity: 0.6; }
 
+/* Outward ripple for mic recording state */
+@keyframes mic-ripple {
+  0%   { transform: scale(1);   opacity: 0.55; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+.mic-ripple::before,
+.mic-ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  animation: mic-ripple 1.6s ease-out infinite;
+}
+.mic-ripple::after { animation-delay: 0.8s; }
+
 /* Cloud floats */
 .cloud {
   position: absolute; width: 80px; height: 30px; background: white; border-radius: 999px; opacity: 0.85;
