@@ -28,18 +28,14 @@ function escapeXml(s: string): string {
 export function buildChildCardPrompt(args: {
   parentType: ParentType;
   topic: TopicCategory;
-  prevCards?: CardInfo[];
+  seenLabels?: string[];
   interimCards?: CardInfo[];
 }): string {
   const emotionList = EMOTION_LABELS.join(', ');
 
   let prev = '';
-  if (args.prevCards && args.prevCards.length) {
-    const labels = args.prevCards
-      .filter((c) => c.category === 'topic' || c.category === 'action')
-      .map((c) => c.label)
-      .slice(0, 8);
-    if (labels.length) prev = `\nAvoid repeating: ${labels.join(', ')}.`;
+  if (args.seenLabels && args.seenLabels.length) {
+    prev = `\nAvoid ALL of these (already shown this turn): ${args.seenLabels.join(', ')}.`;
   }
 
   let interim = '';
@@ -102,6 +98,68 @@ export function buildParentGuidePrompt(args: {
 // ---------- ParentExampleMessageGenerator ----------
 export function buildParentExamplePrompt(): string {
   return `Given a parent-child dialogue and a guide, write ONE short parent utterance (≤8 words) that follows the guide.\nOutput ONLY the utterance, no quotes or labels.`;
+}
+
+// ---------- SentenceInferenceGenerator ----------
+export function buildSentenceInferencePrompt(
+  cards: CardInfo[],
+  childName: string,
+  lastParentMessage?: string,
+): string {
+  const content = cards.filter(c => c.category === 'topic' || c.category === 'action');
+  const emotions = cards.filter(c => c.category === 'emotion');
+  const core = cards.filter(c => c.category === 'core');
+
+  const contentWords = content.map(c => c.corpus_name || c.label);
+  const emotionWords = emotions.map(c => c.corpus_name || c.label);
+  const coreLabels = core.map(c => c.label);
+  const hasCoreCard = core.length > 0;
+
+  const lines: string[] = [
+    `You interpret what a minimally-verbal autistic child named ${childName} is trying to say using AAC cards.`,
+  ];
+
+  if (lastParentMessage) {
+    lines.push(``, `The parent just said: "${lastParentMessage}"`);
+  }
+
+  lines.push(
+    ``,
+    `${childName} tapped these AAC cards (in order, first tapped = most emphasized):`,
+  );
+  if (contentWords.length) lines.push(`  Content (topic/action): ${contentWords.join(', ')}`);
+  if (emotionWords.length) lines.push(`  Feeling: ${emotionWords.join(', ')}`);
+  if (coreLabels.length)   lines.push(`  Core (Yes/No/More/Help/etc): ${coreLabels.join(', ')}`);
+
+  lines.push(
+    ``,
+    `Write ONE natural first-person sentence that captures what ${childName} means.`,
+    ``,
+    `RULES:`,
+    `1. ${hasCoreCard ? `Core word "${coreLabels.join('/')}" goes at the very start and drives the tone.` : `No core card tapped — do NOT start with Yes, No, or any affirmation. Begin with "I".`}`,
+    `2. Use the parent's question as context — if the parent asked about food, you don't need to re-explain food; just answer about it.`,
+    `3. Capture the MEANING of all the cards. Use natural prepositions (at, in, on, with) to connect them — don't just list words with "and".`,
+    `4. If a feeling card is present, weave it in naturally ("I feel X" or "I'm X").`,
+    `5. 4–10 words. ONE sentence only. First-person.`,
+    `6. Do NOT invent ideas that aren't in the cards or the parent's question.`,
+    `7. Output ONLY the sentence — no quotes, no explanation.`,
+    ``,
+    `Examples WITH parent context:`,
+    `  Parent: "What do you want to eat?" | Cards: [pizza, want, more] → I want more pizza`,
+    `  Parent: "Are you okay?" | Cards: [No, hurt, stomach] → No, my stomach hurts`,
+    `  Parent: "Do you want to go out?" | Cards: [Yes, park, swing, play] → Yes, I want to play on the swings at the park`,
+    `  Parent: "How was school today?" | Cards: [friend, play, happy] → I played with a friend and felt happy`,
+    `  Parent: "Are you done eating?" | Cards: [No, more, cookie] → No, I want more cookies`,
+    `  Parent: "Where does it hurt?" | Cards: [hurt, tummy] → My tummy hurts`,
+    `  Parent: "What do you want to do?" | Cards: [home, go, tired] → I'm tired and want to go home`,
+    ``,
+    `Examples WITHOUT parent context (child initiates):`,
+    `  Cards: [hungry, food] → I'm hungry and want food`,
+    `  Cards: [sad, help] → I feel sad and need help`,
+    `  Cards: [play, outside, happy] → I want to play outside and I feel happy`,
+  );
+
+  return lines.join('\n');
 }
 
 // ---------- DialogueInspector ----------

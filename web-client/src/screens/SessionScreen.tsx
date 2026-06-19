@@ -52,6 +52,7 @@ export function SessionScreen() {
   const [showDialogue, setShowDialogue] = useState(false);
   const [turnNumber, setTurnNumber] = useState(0);
   const [lastParentMessage, setLastParentMessage] = useState<string | null>(null);
+  const [inferredSentence, setInferredSentence] = useState<string | null>(null);
 
   // Recording
   const [recState, setRecState] = useState<'idle' | 'recording' | 'paused'>('idle');
@@ -289,39 +290,49 @@ export function SessionScreen() {
   // until they tap the explicit Done ✓ button. (Auto-confirm-on-tap was tried and
   // pulled — on touch screens an instant role flip felt like a crash.)
   const onCardClick = useCallback(async (card: CardInfo) => {
-    if (!sessionId || refreshingCards || role !== 'child') return;
+    if (!sessionId || role !== 'child') return;
     speakCard(card);
-    setInterimCards(prev => [...prev, card]); // optimistic
-    setRefreshingCards(true);
+    setInterimCards(prev => [...prev, card]); // optimistic — instant UI update
     try {
       const r = await api.addChildCard(sessionId, card);
-      setInterimCards(r.interim_cards);
-      setChildRec(r.new_recommendation);
+      setInterimCards(r.interim_cards); // reconcile with server
+      // new_recommendation is unchanged from server (no auto-regen), skip childRec update
     } catch (e: any) {
       setErrorMsg(e?.message || 'Failed to add card');
-      try { const fresh = await api.refreshCards(sessionId); setChildRec(fresh); } catch {}
-    } finally {
-      setRefreshingCards(false);
+      setInterimCards(prev => prev.filter(c => c.id !== card.id)); // revert optimistic
     }
-  }, [sessionId, role, refreshingCards]);
+  }, [sessionId, role]);
 
-  const onPopCard = useCallback(async () => {
-    if (!sessionId || interimCards.length === 0 || refreshingCards) return;
-    setInterimCards(prev => prev.slice(0, -1));
-    setRefreshingCards(true);
+  const onRemoveCard = useCallback(async (index: number) => {
+    if (!sessionId || index < 0) return;
+    setInterimCards(prev => prev.filter((_, i) => i !== index)); // optimistic
     try {
-      const r = await api.popLastCard(sessionId);
-      setInterimCards(r.interim_cards);
-      setChildRec(r.new_recommendation);
+      const r = await api.removeCard(sessionId, index);
+      setInterimCards(r.interim_cards); // reconcile
     } catch (e: any) {
-      setErrorMsg(e?.message || 'Failed to pop card');
-    } finally {
-      setRefreshingCards(false);
+      setErrorMsg(e?.message || 'Failed to remove card');
     }
-  }, [sessionId, interimCards, refreshingCards]);
+  }, [sessionId]);
 
+  // Step 1: infer sentence from selected cards, show approval overlay
   const onConfirm = useCallback(async () => {
     if (!sessionId || interimCards.length === 0) return;
+    setPhase('thinking');
+    setPhaseLabel('Figuring out what you want to say…');
+    try {
+      const { sentence } = await api.inferSentence(sessionId);
+      setInferredSentence(sentence);
+      setPhase('idle');
+    } catch (e: any) {
+      setErrorMsg(e?.message || 'Failed to infer sentence');
+      setPhase('idle');
+    }
+  }, [sessionId, interimCards]);
+
+  // Step 2a: child approves → generate parent guides
+  const onAcceptSentence = useCallback(async () => {
+    if (!sessionId) return;
+    setInferredSentence(null);
     setPhase('thinking');
     setPhaseLabel('Generating parent guides…');
     try {
@@ -338,7 +349,12 @@ export function SessionScreen() {
       setErrorMsg(e?.message || 'Failed to confirm');
       setPhase('idle');
     }
-  }, [sessionId, interimCards, refreshDialogue]);
+  }, [sessionId, refreshDialogue]);
+
+  // Step 2b: child rejects → stay on child turn, keep cards
+  const onRejectSentence = useCallback(() => {
+    setInferredSentence(null);
+  }, []);
 
   const onRefreshCards = useCallback(async () => {
     if (!sessionId || refreshingCards) return;
@@ -384,9 +400,15 @@ export function SessionScreen() {
     nav('/home', { replace: true });
   }
 
-  // ----- Keyboard: Enter advances; Esc opens menu -----
+  // ----- Keyboard: Enter advances; Esc opens menu (or rejects sentence) -----
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
+      // When sentence approval overlay is open, Enter = yes, Escape = no
+      if (inferredSentence) {
+        if (e.key === 'Enter') { e.preventDefault(); onAcceptSentence(); }
+        if (e.key === 'Escape') { e.preventDefault(); onRejectSentence(); }
+        return;
+      }
       if (e.key === 'Escape') { setShowMenu(true); return; }
       if (phase !== 'idle') return;
       const inTextarea = (e.target as HTMLElement)?.tagName === 'TEXTAREA';
@@ -398,7 +420,7 @@ export function SessionScreen() {
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [phase, role, submitParent, onConfirm, interimCards]);
+  }, [phase, role, submitParent, onConfirm, interimCards, inferredSentence, onAcceptSentence, onRejectSentence]);
 
   const stars = useMemo(() => Array.from({ length: Math.floor((turnNumber - 1) / 2) }), [turnNumber]);
 
@@ -460,11 +482,14 @@ export function SessionScreen() {
               rec={childRec}
               interim={interimCards}
               onCardClick={onCardClick}
-              onPop={onPopCard}
+              onRemoveCard={onRemoveCard}
               onRefresh={onRefreshCards}
               onConfirm={onConfirm}
               busy={refreshingCards}
               parentMessage={lastParentMessage}
+              inferredSentence={inferredSentence}
+              onAcceptSentence={onAcceptSentence}
+              onRejectSentence={onRejectSentence}
             />
           )}
         </div>
@@ -733,15 +758,19 @@ interface ChildTurnProps {
   rec: ChildCardRecommendationResult;
   interim: CardInfo[];
   onCardClick: (c: CardInfo) => void;
-  onPop: () => void;
+  onRemoveCard: (index: number) => void;
   onRefresh: () => void;
   onConfirm: () => void;
   busy: boolean;
   parentMessage: string | null;
+  inferredSentence: string | null;
+  onAcceptSentence: () => void;
+  onRejectSentence: () => void;
 }
 
 function ChildTurn({
-  rec, interim, onCardClick, onPop, onRefresh, onConfirm, busy, parentMessage,
+  rec, interim, onCardClick, onRemoveCard, onRefresh, onConfirm, busy, parentMessage,
+  inferredSentence, onAcceptSentence, onRejectSentence,
 }: ChildTurnProps) {
   const byCat = useMemo(() => {
     const groups: Record<CardInfo['category'], CardInfo[]> = { topic: [], action: [], emotion: [], core: [] };
@@ -757,6 +786,26 @@ function ChildTurn({
 
   return (
     <div className="w-full flex flex-col items-stretch gap-3 sm:gap-5">
+      {/* Sentence approval overlay */}
+      {inferredSentence && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl flex flex-col items-center gap-4">
+            <p className="text-[11px] sm:text-xs font-extrabold uppercase tracking-widest text-purple-500">I think you're saying…</p>
+            <p className="text-2xl sm:text-3xl font-extrabold text-slate-800 text-center leading-snug">{inferredSentence}</p>
+            <div className="flex gap-3 w-full mt-2">
+              <button
+                onClick={onRejectSentence}
+                className="flex-1 pill-btn bg-red-400 text-lg py-4"
+              >No</button>
+              <button
+                onClick={onAcceptSentence}
+                className="flex-1 pill-btn bg-emerald-500 text-lg py-4"
+              >Yes!</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Parent's last message — what the child is responding to */}
       {parentMessage && (
         <div className="bg-blue-50 border-l-4 border-blue-400 rounded-xl px-3 sm:px-4 py-2 sm:py-3 shadow-sm">
@@ -765,22 +814,23 @@ function ChildTurn({
         </div>
       )}
 
-      {/* Selected-card deck. Tapping a card adds it; tap Done ✓ to send to parent. */}
+      {/* Selected-card deck — tap any card to remove it */}
       <div className="bg-amber-50/80 border-2 border-dashed border-amber-300 rounded-2xl sm:rounded-3xl p-2 sm:p-3 min-h-[80px] sm:min-h-[112px] shadow-sm">
-        <div className="flex items-center mb-1.5 sm:mb-2">
-          <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-amber-700">Your selection</span>
-          <button
-            onClick={onPop}
-            disabled={interim.length === 0 || busy}
-            className="ml-auto text-xs font-bold text-amber-700 active:text-amber-900 disabled:opacity-30 px-2 py-1 -my-1"
-          >← undo</button>
-        </div>
+        <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-amber-700">
+          Your selection {interim.length > 0 && <span className="font-normal normal-case">(tap to remove)</span>}
+        </span>
         {interim.length === 0 ? (
-          <p className="italic text-slate-400 text-xs sm:text-sm">Tap cards below to build your sentence…</p>
+          <p className="italic text-slate-400 text-xs sm:text-sm mt-1.5">Tap cards below to build your sentence…</p>
         ) : (
-          <div className="flex gap-2 flex-wrap items-end">
+          <div className="flex gap-2 flex-wrap items-end mt-1.5">
             {interim.map((c, i) => (
-              <CardChip key={`${c.id}-${i}`} card={c} size="sm" onClick={() => speakCard(c)} />
+              <div key={`${c.id}-${i}`} className="relative group">
+                <CardChip card={c} size="sm" onClick={() => onRemoveCard(i)} />
+                {/* ✕ badge — visible on hover/focus, always visible on touch */}
+                <span className="pointer-events-none absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-extrabold flex items-center justify-center shadow opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
+                  ✕
+                </span>
+              </div>
             ))}
           </div>
         )}

@@ -16,7 +16,7 @@ import YAML from 'yaml';
 import { sql, ensureSchema } from './db';
 import { chat, stripFence } from './gemini';
 import {
-  buildChildCardPrompt, buildParentGuidePrompt, dialogueToXml,
+  buildChildCardPrompt, buildParentGuidePrompt, buildSentenceInferencePrompt, dialogueToXml,
 } from './prompts';
 import {
   EMOTION_LABELS, buildInitialGuides, labelForParent, loadCoreCards, loadEmotionCards,
@@ -139,16 +139,29 @@ async function generateChildCards(args: {
   turnId: string;
   dyad: Dyad;
   topic: SessionTopicInfo;
-  prevCards?: CardInfo[];
   interimCards?: CardInfo[];
 }): Promise<ChildCardRecommendationResult> {
   const { dyad } = args;
   const dialogue = await getDialogue(args.sessionId);
 
+  // Collect ALL topic/action labels shown in any previous recommendation this turn → avoid repeating
+  const prevRecsRows = (await sql`
+    SELECT cards FROM child_card_recommendation
+    WHERE session_id = ${args.sessionId} AND turn_id = ${args.turnId}
+    ORDER BY timestamp ASC
+  `) as any[];
+  const seenLabels = new Set<string>();
+  for (const row of prevRecsRows) {
+    const prevCards: CardInfo[] = row.cards || [];
+    prevCards
+      .filter((c) => c.category === 'topic' || c.category === 'action')
+      .forEach((c) => seenLabels.add((c.corpus_name || c.label).toLowerCase()));
+  }
+
   const sysPrompt = buildChildCardPrompt({
     parentType: dyad.parent_type,
     topic: args.topic.category,
-    prevCards: args.prevCards,
+    seenLabels: [...seenLabels],
     interimCards: args.interimCards,
   });
 
@@ -265,12 +278,14 @@ async function getInterimCards(sessionId: string, turnId: string): Promise<CardI
   const r = (await sql`
     SELECT cards FROM interim_card_selection
     WHERE session_id = ${sessionId} AND turn_id = ${turnId}
-    ORDER BY timestamp DESC LIMIT 1
+    LIMIT 1
   `) as any[];
   return r[0]?.cards || [];
 }
 
 async function setInterimCards(sessionId: string, turnId: string, cards: CardInfo[]): Promise<void> {
+  // DELETE + INSERT keeps exactly one row per (session, turn), eliminating timestamp-collision bugs.
+  await sql`DELETE FROM interim_card_selection WHERE session_id = ${sessionId} AND turn_id = ${turnId}`;
   await sql`
     INSERT INTO interim_card_selection (id, session_id, turn_id, cards, timestamp)
     VALUES (${nanoid()}, ${sessionId}, ${turnId}, ${JSON.stringify(cards)}, ${now()})
@@ -304,16 +319,18 @@ export async function addChildCard(sessionId: string, dyad: Dyad, cardIdentity: 
   interim.push(card);
   await setInterimCards(sessionId, cur.id, interim);
 
-  // Regenerate cards with the updated interim selection
-  const session = (await sql`SELECT * FROM session WHERE id = ${sessionId} LIMIT 1`) as any[];
-  const newRec = await generateChildCards({
-    sessionId, turnId: cur.id, dyad,
-    topic: { category: session[0].topic_category, subtopic: session[0].subtopic, subtopic_description: session[0].subtopic_description },
-    prevCards: allCards,
-    interimCards: interim,
-  });
+  // Return the existing recommendation unchanged — no LLM regen on tap.
+  // Explicit Refresh button is the only trigger for new card generation.
+  const lastRecRow = (await sql`
+    SELECT * FROM child_card_recommendation
+    WHERE session_id = ${sessionId} AND turn_id = ${cur.id}
+    ORDER BY timestamp DESC LIMIT 1
+  `) as any[];
+  const existingRec: ChildCardRecommendationResult = lastRecRow[0]
+    ? { id: lastRecRow[0].id, timestamp: Number(lastRecRow[0].timestamp), turn_id: lastRecRow[0].turn_id, cards: lastRecRow[0].cards }
+    : { id: nanoid(), timestamp: now(), turn_id: cur.id, cards: [] };
 
-  return { interim_cards: interim, new_recommendation: newRec };
+  return { interim_cards: interim, new_recommendation: existingRec };
 }
 
 export async function refreshChildCards(sessionId: string, dyad: Dyad): Promise<ChildCardRecommendationResult> {
@@ -323,37 +340,55 @@ export async function refreshChildCards(sessionId: string, dyad: Dyad): Promise<
 
   const session = (await sql`SELECT * FROM session WHERE id = ${sessionId} LIMIT 1`) as any[];
   const interim = await getInterimCards(sessionId, cur.id);
-  const prev = await getLastChildRec(sessionId, cur.id);
 
   return generateChildCards({
     sessionId, turnId: cur.id, dyad,
     topic: { category: session[0].topic_category, subtopic: session[0].subtopic, subtopic_description: session[0].subtopic_description },
-    prevCards: prev ?? [],
     interimCards: interim,
   });
 }
 
-export async function popLastChildCard(sessionId: string, dyad: Dyad): Promise<CardSelectionResult> {
+export async function removeChildCardAtIndex(sessionId: string, dyad: Dyad, index: number): Promise<CardSelectionResult> {
   await ensureSchema();
   const cur = await getCurrentTurn(sessionId);
   if (!cur || cur.role !== 'child') throw new Error('not child turn');
 
   const interim = await getInterimCards(sessionId, cur.id);
-  if (interim.length > 0) interim.pop();
+  if (index < 0 || index >= interim.length) throw new Error('index out of range');
+  interim.splice(index, 1);
   await setInterimCards(sessionId, cur.id, interim);
 
-  // Re-issue the most recent recommendation as the "new_recommendation" — same shape as upstream
   const lastRec = (await sql`
     SELECT * FROM child_card_recommendation
     WHERE session_id = ${sessionId} AND turn_id = ${cur.id}
     ORDER BY timestamp DESC LIMIT 1
   `) as any[];
   const recRow = lastRec[0];
-  const newRec: ChildCardRecommendationResult = recRow
+  const existingRec: ChildCardRecommendationResult = recRow
     ? { id: recRow.id, timestamp: Number(recRow.timestamp), turn_id: recRow.turn_id, cards: recRow.cards }
     : { id: nanoid(), timestamp: now(), turn_id: cur.id, cards: [] };
 
-  return { interim_cards: interim, new_recommendation: newRec };
+  return { interim_cards: interim, new_recommendation: existingRec };
+}
+
+// ---------- infer full sentence from selected cards ----------
+export async function inferSentenceFromCards(sessionId: string, dyad: Dyad): Promise<string> {
+  await ensureSchema();
+  const cur = await getCurrentTurn(sessionId);
+  if (!cur || cur.role !== 'child') throw new Error('not child turn');
+
+  const interim = await getInterimCards(sessionId, cur.id);
+  if (interim.length === 0) throw new Error('no cards selected');
+
+  const dialogue = await getDialogue(sessionId);
+  const lastParent = [...dialogue].reverse().find(m => m.role === 'parent');
+  const lastParentMsg = lastParent && typeof lastParent.content === 'string' ? lastParent.content : undefined;
+
+  const raw = await chat([
+    { role: 'system', content: buildSentenceInferencePrompt(interim, dyad.child_name, lastParentMsg) },
+    { role: 'user',   content: dialogueToXml(dialogue) },
+  ]);
+  return raw.replace(/^["'](.*)["']$/s, '$1').trim();
 }
 
 // ---------- confirm child cards → switch turn → generate parent guides ----------

@@ -8,13 +8,13 @@ export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   await ensureSchema();
-  const { code } = await req.json().catch(() => ({}));
-  if (!code) return badRequest('code required');
+  const { username, password } = await req.json().catch(() => ({}));
+  if (!username || !password) return badRequest('username and password required');
 
   const rows = (await sql`
     SELECT d.* FROM dyad_login_code lc
     JOIN dyad d ON d.id = lc.dyad_id
-    WHERE lc.code = ${String(code)} AND lc.active = TRUE
+    WHERE d.alias = ${String(username)} AND lc.code = ${String(password)} AND lc.active = TRUE
     LIMIT 1
   `) as Dyad[];
 
@@ -30,5 +30,5 @@ export async function POST(req: Request) {
     ORDER BY created_at ASC
   `) as FreeTopicDetail[];
 
-  return ok({ jwt, free_topics: topics });
+  return ok({ jwt, free_topics: topics, child_name: dyad.child_name });
 }

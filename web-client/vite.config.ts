@@ -1,12 +1,28 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import fs from 'fs';
 
 export default defineConfig({
   root: __dirname,
   cacheDir: 'node_modules/.vite',
-  server: { port: 4200, host: 'localhost' },
-  preview: { port: 4300, host: 'localhost' },
+  server: {
+    port: 4200,
+    host: true,
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, '.certs/key.pem')),
+      cert: fs.readFileSync(path.resolve(__dirname, '.certs/cert.pem')),
+    },
+    // Proxy all API calls through Vite so the browser never sees an HTTP→HTTPS
+    // mixed-content issue when loading from a LAN IP on iPad Safari.
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
+  },
+  preview: { port: 4300, host: true },
   plugins: [react()],
   resolve: {
     alias: {
@@ -14,7 +30,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    // transformers.js ships ESM with onnx-runtime + sharp deps that confuse pre-bundling.
     exclude: ['@huggingface/transformers'],
   },
   build: {
@@ -27,7 +42,7 @@ export default defineConfig({
   },
   define: {
     __BACKEND_URL__: JSON.stringify(
-      process.env.BACKEND_ADDRESS || process.env.VITE_BACKEND_ADDRESS || 'http://localhost:3000'
+      process.env.BACKEND_ADDRESS || process.env.VITE_BACKEND_ADDRESS || ''
     ),
   },
 });

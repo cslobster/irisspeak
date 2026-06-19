@@ -77,6 +77,7 @@ export interface SessionTopicInfo {
 export interface AuthResponse {
   jwt: string;
   free_topics: FreeTopicDetail[];
+  child_name?: string;
 }
 
 export interface SessionStartResult {

@@ -5,7 +5,8 @@ if (!process.env.DATABASE_URL) {
 }
 
 // Tagged-template SQL client. Usage:  await sql`SELECT * FROM dyad WHERE id = ${id}`
-export const sql = neon(process.env.DATABASE_URL);
+// cache: 'no-store' prevents Next.js Data Cache from serving stale DB reads across requests.
+export const sql = neon(process.env.DATABASE_URL, { fetchOptions: { cache: 'no-store' } });
 
 // First-call lazy init: ensure all tables exist. Idempotent.
 let _ready: Promise<void> | null = null;
@@ -123,11 +124,16 @@ export async function ensureSchema(): Promise<void> {
 
     // ---------- SEED TEST DYAD ----------
     const code = process.env.TEST_LOGIN_CODE || '12345';
-    const alias = process.env.TEST_DYAD_ALIAS || 'test';
+    const alias = process.env.TEST_DYAD_ALIAS || 'abcde';
     const childName = process.env.TEST_CHILD_NAME || 'Sammy';
     const childGender = process.env.TEST_CHILD_GENDER || 'girl';
     const parentType = process.env.TEST_PARENT_TYPE || 'mother';
     const locale = process.env.TEST_LOCALE || 'en';
+
+    // Rename legacy 'test' alias to the current configured alias on existing DBs
+    if (!process.env.TEST_DYAD_ALIAS) {
+      await sql`UPDATE dyad SET alias = ${alias} WHERE alias = 'test'`;
+    }
 
     const existing = await sql`SELECT id FROM dyad WHERE alias = ${alias} LIMIT 1`;
     if (existing.length === 0) {
