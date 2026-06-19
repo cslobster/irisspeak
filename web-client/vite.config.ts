@@ -9,10 +9,10 @@ export default defineConfig({
   server: {
     port: 4200,
     host: true,
-    https: {
+    https: fs.existsSync(path.resolve(__dirname, '.certs/key.pem')) ? {
       key: fs.readFileSync(path.resolve(__dirname, '.certs/key.pem')),
       cert: fs.readFileSync(path.resolve(__dirname, '.certs/cert.pem')),
-    },
+    } : undefined,
     // Proxy all API calls through Vite so the browser never sees an HTTP→HTTPS
     // mixed-content issue when loading from a LAN IP on iPad Safari.
     proxy: {
