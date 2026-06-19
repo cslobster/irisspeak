@@ -7,7 +7,11 @@ import type {
 } from './types';
 
 declare const __BACKEND_URL__: string;
-const BASE_URL = (typeof __BACKEND_URL__ !== 'undefined' ? __BACKEND_URL__ : 'http://localhost:3000') + '/api/v1';
+// Empty string → relative URL, so Vite's proxy forwards /api/* to localhost:3000.
+// This is the default for both local and LAN (iPad) access over HTTPS.
+// Set VITE_BACKEND_ADDRESS to override for production deploys.
+const _backendBase = (typeof __BACKEND_URL__ !== 'undefined' ? __BACKEND_URL__ : '') || '';
+const BASE_URL = _backendBase + '/api/v1';
 const JWT_KEY = 'aacesstalk:jwt';
 
 class ApiClient {
@@ -47,8 +51,8 @@ class ApiClient {
     try { await this.http.head('/ping'); return true; } catch { return false; }
   }
 
-  async login(code: string): Promise<AuthResponse> {
-    const r = await this.http.post<AuthResponse>('/dyad/account/login', { code });
+  async login(username: string, password: string): Promise<AuthResponse> {
+    const r = await this.http.post<AuthResponse>('/dyad/account/login', { username, password });
     this.setJwt(r.data.jwt);
     return r.data;
   }
@@ -110,8 +114,18 @@ class ApiClient {
     return r.data;
   }
 
-  async popLastCard(sessionId: string): Promise<CardSelectionResult> {
-    const r = await this.http.put<CardSelectionResult>(`/dyad/session/${sessionId}/message/child/pop_last_card`);
+  async removeCard(sessionId: string, index: number): Promise<CardSelectionResult> {
+    const r = await this.http.put<CardSelectionResult>(
+      `/dyad/session/${sessionId}/message/child/pop_last_card`,
+      { index }
+    );
+    return r.data;
+  }
+
+  async inferSentence(sessionId: string): Promise<{ sentence: string }> {
+    const r = await this.http.post<{ sentence: string }>(
+      `/dyad/session/${sessionId}/message/child/infer_sentence`
+    );
     return r.data;
   }
 

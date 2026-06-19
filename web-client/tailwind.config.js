@@ -15,7 +15,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Nunito', 'system-ui', 'sans-serif'],
+        sans: ['Fredoka', 'system-ui', 'sans-serif'],
       },
     },
   },
