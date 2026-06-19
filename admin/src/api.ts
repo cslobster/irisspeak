@@ -66,6 +66,7 @@ export interface SessionRow {
   subtopic: string | null;
   status: string;
   num_turns: number;
+  rating: number | null;
   started_timestamp: number | null;
   ended_timestamp: number | null;
   created_at: string;
