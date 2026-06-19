@@ -12,7 +12,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   const { id } = params;
 
   const sessions = await sql`
-    SELECT id, topic_category, subtopic, status, num_turns, started_timestamp, ended_timestamp, created_at
+    SELECT id, topic_category, subtopic, status, num_turns, rating, started_timestamp, ended_timestamp, created_at
     FROM session
     WHERE dyad_id = ${id}
     ORDER BY created_at DESC

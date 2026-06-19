@@ -86,6 +86,7 @@ export function TranscriptsDrawer({ dyad, onClose }: Props) {
                       <div className="text-xs text-slate-400 mt-0.5">{date} · {s.num_turns} turns · {msgs.length} messages</div>
                     </div>
                     <div className="flex items-center gap-3">
+                      {s.rating != null && <StarRating rating={s.rating} />}
                       <StatusBadge status={s.status} />
                       <span className="text-slate-400 text-lg">{isOpen ? '▲' : '▼'}</span>
                     </div>
@@ -127,6 +128,16 @@ function MessageBubble({ msg }: { msg: MessageRow }) {
         <div className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-1">{msg.role}</div>
         <div className="font-medium leading-snug">{content}</div>
       </div>
+    </div>
+  );
+}
+
+function StarRating({ rating }: { rating: number }) {
+  return (
+    <div className="flex gap-0.5" title={`${rating}/5`}>
+      {[1, 2, 3, 4, 5].map(s => (
+        <span key={s} className={`text-base ${s <= rating ? 'text-amber-400' : 'text-slate-200'}`}>★</span>
+      ))}
     </div>
   );
 }
