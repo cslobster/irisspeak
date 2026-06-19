@@ -23,11 +23,12 @@ export interface CardInfo {
   label: string;
   label_localized: string;
   category: CardCategory;
-  // Corpus enrichment from MiniLM + search_smart
+  // Corpus enrichment — filled in by CorpusRetriever
   corpus_name?: string | null;
   corpus_category?: string | null;
   corpus_cosine?: number | null;
   corpus_mode?: 'exact' | 'word' | 'cos' | null;
+  corpus_image_url?: string | null;
 }
 
 export interface ChildCardRecommendationResult {

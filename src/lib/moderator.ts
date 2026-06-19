@@ -189,7 +189,7 @@ async function generateChildCards(args: {
 
   // Corpus enrichment for topics + actions
   const topicActionWords = [...topics, ...actions];
-  let corpusMatches: ({ name: string; category: string; cosine: number; mode: string } | null)[] = topicActionWords.map(() => null);
+  let corpusMatches: ({ name: string; category: string; cosine: number; mode: string; image_url: string | null } | null)[] = topicActionWords.map(() => null);
   try {
     const retriever = await getCorpusRetriever();
     corpusMatches = await retriever.matchBatch(topicActionWords);
@@ -215,6 +215,7 @@ async function generateChildCards(args: {
       corpus_category: cm?.category ?? null,
       corpus_cosine: cm?.cosine ?? null,
       corpus_mode: (cm?.mode as any) ?? null,
+      corpus_image_url: cm?.image_url ?? null,
     });
   });
 
@@ -366,6 +367,42 @@ export async function removeChildCardAtIndex(sessionId: string, dyad: Dyad, inde
   const recRow = lastRec[0];
   const existingRec: ChildCardRecommendationResult = recRow
     ? { id: recRow.id, timestamp: Number(recRow.timestamp), turn_id: recRow.turn_id, cards: recRow.cards }
+    : { id: nanoid(), timestamp: now(), turn_id: cur.id, cards: [] };
+
+  return { interim_cards: interim, new_recommendation: existingRec };
+}
+
+// ---------- add a free (search-picked) card to interim selection ----------
+export async function addFreeCard(
+  sessionId: string,
+  dyad: Dyad,
+  card: { label: string; category: string; image_url: string | null },
+): Promise<CardSelectionResult> {
+  await ensureSchema();
+  const cur = await getCurrentTurn(sessionId);
+  if (!cur || cur.role !== 'child') throw new Error('not child turn');
+
+  const freeCard: CardInfo = {
+    id: nanoid(),
+    recommendation_id: 'free',
+    label: card.label,
+    label_localized: card.label,
+    category: card.category as any,
+    corpus_name: card.label,
+    corpus_image_url: card.image_url,
+  };
+
+  const interim = await getInterimCards(sessionId, cur.id);
+  interim.push(freeCard);
+  await setInterimCards(sessionId, cur.id, interim);
+
+  const lastRecRow = (await sql`
+    SELECT * FROM child_card_recommendation
+    WHERE session_id = ${sessionId} AND turn_id = ${cur.id}
+    ORDER BY timestamp DESC LIMIT 1
+  `) as any[];
+  const existingRec: ChildCardRecommendationResult = lastRecRow[0]
+    ? { id: lastRecRow[0].id, timestamp: Number(lastRecRow[0].timestamp), turn_id: lastRecRow[0].turn_id, cards: lastRecRow[0].cards }
     : { id: nanoid(), timestamp: now(), turn_id: cur.id, cards: [] };
 
   return { interim_cards: interim, new_recommendation: existingRec };

@@ -122,6 +122,14 @@ class ApiClient {
     return r.data;
   }
 
+  async addFreeCard(sessionId: string, label: string, category: string, image_url: string | null): Promise<CardSelectionResult> {
+    const r = await this.http.post<CardSelectionResult>(
+      `/dyad/session/${sessionId}/message/child/add_free_card`,
+      { label, category, image_url },
+    );
+    return r.data;
+  }
+
   async inferSentence(sessionId: string): Promise<{ sentence: string }> {
     const r = await this.http.post<{ sentence: string }>(
       `/dyad/session/${sessionId}/message/child/infer_sentence`
