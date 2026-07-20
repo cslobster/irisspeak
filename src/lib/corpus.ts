@@ -35,6 +35,7 @@ class _CorpusRetriever {
   private dim = 0;
   private nameToIdx = new Map<string, number>();
   private nameLowerArr: string[] = [];
+  private categoryIndex = new Map<string, number[]>();
   private encoder: any = null;
   private hasEmbeddings = false;
 
@@ -75,6 +76,10 @@ class _CorpusRetriever {
       const lower = this.rows[i].name_en.toLowerCase();
       this.nameLowerArr.push(lower);
       this.nameToIdx.set(lower, i);
+
+      const cat = this.rows[i].category;
+      if (!this.categoryIndex.has(cat)) this.categoryIndex.set(cat, []);
+      this.categoryIndex.get(cat)!.push(i);
     }
 
     console.log(`[corpus] loaded ${this.rows.length} words`);
@@ -95,20 +100,13 @@ class _CorpusRetriever {
     return out.data as Float32Array;
   }
 
-  private cosineAll(qv: Float32Array, limit: number): Float32Array {
-    const sims = new Float32Array(limit);
-    const dim  = this.dim;
-    const emb  = this.emb!;
-    for (let i = 0; i < limit; i++) {
-      let s = 0;
-      const off = i * dim;
-      for (let d = 0; d < dim; d++) s += qv[d] * emb[off + d];
-      sims[i] = s;
-    }
-    return sims;
-  }
-
-  async match(word: string, opts: { boost?: number } = {}): Promise<CorpusMatch> {
+  /**
+   * `category`, when given, restricts every stage (exact / word-boundary / cosine) to rows
+   * tagged with that category — e.g. an "action" query can never resolve to a "topic" row.
+   * Without it, a category with few rows (like the 39 action words) loses cosine ties to the
+   * much larger topic bucket (682 rows) simply because nouns dominate the embedding space.
+   */
+  async match(word: string, opts: { boost?: number; category?: string } = {}): Promise<CorpusMatch> {
     const boost = opts.boost ?? 0.15;
     const s = (word || '').toLowerCase().trim();
 
@@ -116,9 +114,15 @@ class _CorpusRetriever {
       return { name: '', category: 'topic', cosine: 0, mode: 'cos', image_url: null };
     }
 
-    // 1. Exact match
+    const scope = opts.category ? (this.categoryIndex.get(opts.category) ?? []) : null;
+    const pool  = scope ?? Array.from({ length: this.rowCount }, (_, i) => i);
+    if (pool.length === 0) {
+      return { name: '', category: opts.category ?? 'topic', cosine: 0, mode: 'cos', image_url: null };
+    }
+
+    // 1. Exact match (within scope)
     const exactIdx = this.nameToIdx.get(s);
-    if (exactIdx !== undefined) {
+    if (exactIdx !== undefined && (!scope || scope.includes(exactIdx))) {
       const r = this.rows[exactIdx];
       return { name: r.name_en, category: r.category, cosine: 1.0, mode: 'exact', image_url: r.image_url ?? null };
     }
@@ -126,37 +130,44 @@ class _CorpusRetriever {
     const escaped = s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const re = new RegExp(`\\b${escaped}\\b`);
 
-    // 2. Word-boundary string scan (always available)
+    // 2. Word-boundary string scan (within scope, always available)
     let wordHitIdx = -1;
-    for (let i = 0; i < this.rowCount; i++) {
+    for (const i of pool) {
       if (re.test(this.nameLowerArr[i])) { wordHitIdx = i; break; }
     }
 
-    // 3. Cosine search with word-boundary boost (only when embeddings exist)
+    // 3. Cosine search with word-boundary boost (within scope, only when embeddings exist)
     if (this.hasEmbeddings && this.emb) {
       const embLimit = Math.floor(this.emb.length / this.dim);
-      const sims = this.cosineAll(await this.encode(word), embLimit);
+      const qv = await this.encode(word);
+      const dim = this.dim;
+      const emb = this.emb;
 
-      let best = 0;
+      let best = pool[0];
       let bestScore = -Infinity;
       let bestIsHit = false;
-      for (let i = 0; i < embLimit; i++) {
+      let bestSim = 0;
+      for (const i of pool) {
+        if (i >= embLimit) continue;
+        const off = i * dim;
+        let sim = 0;
+        for (let d = 0; d < dim; d++) sim += qv[d] * emb[off + d];
         const hit   = re.test(this.nameLowerArr[i]);
-        const score = sims[i] + (hit ? boost : 0);
-        if (score > bestScore) { bestScore = score; best = i; bestIsHit = hit; }
+        const score = sim + (hit ? boost : 0);
+        if (score > bestScore) { bestScore = score; best = i; bestIsHit = hit; bestSim = sim; }
       }
       const r = this.rows[best];
-      return { name: r.name_en, category: r.category, cosine: sims[best], mode: bestIsHit ? 'word' : 'cos', image_url: r.image_url ?? null };
+      return { name: r.name_en, category: r.category, cosine: bestSim, mode: bestIsHit ? 'word' : 'cos', image_url: r.image_url ?? null };
     }
 
-    // Fallback: use the first word-boundary hit, or the exact-case scan
-    const idx = wordHitIdx >= 0 ? wordHitIdx : 0;
+    // Fallback: use the first word-boundary hit, or the first candidate in scope
+    const idx = wordHitIdx >= 0 ? wordHitIdx : pool[0];
     const r   = this.rows[idx];
     return { name: r.name_en, category: r.category, cosine: wordHitIdx >= 0 ? 0.8 : 0, mode: wordHitIdx >= 0 ? 'word' : 'cos', image_url: r.image_url ?? null };
   }
 
-  async matchBatch(words: string[]): Promise<CorpusMatch[]> {
-    return Promise.all(words.map((w) => this.match(w)));
+  async matchBatch(items: { word: string; category: string }[]): Promise<CorpusMatch[]> {
+    return Promise.all(items.map((it) => this.match(it.word, { category: it.category })));
   }
 }
 

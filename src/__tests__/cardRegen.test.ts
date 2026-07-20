@@ -52,17 +52,13 @@ const existingRecommendation = {
 // SQL call order after fix:
 //   1. getCurrentTurn
 //   2. get rec by recommendation_id (card lookup)
-//   3. getInterimCards
-//   4. setInterimCards DELETE
-//   5. setInterimCards INSERT
-//   6. SELECT * child_card_recommendation (return existing rec)
+//   3. appendInterimCard: atomic INSERT ... ON CONFLICT ... RETURNING cards
+//   4. SELECT * child_card_recommendation (return existing rec)
 function mockAddCardSequence(interimBefore: any[] = []) {
   mockSql
     .mockResolvedValueOnce([{ id: 'turn-child-1', role: 'child', ended_timestamp: null }])
     .mockResolvedValueOnce([{ cards: [existingCard] }])
-    .mockResolvedValueOnce(interimBefore.length ? [{ cards: interimBefore }] : [])
-    .mockResolvedValueOnce(undefined)  // DELETE
-    .mockResolvedValueOnce(undefined)  // INSERT
+    .mockResolvedValueOnce([{ cards: [...interimBefore, existingCard] }])
     .mockResolvedValueOnce([existingRecommendation]);
 }
 

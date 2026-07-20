@@ -156,9 +156,6 @@ topic,celebrate,"/symbols/mulberry/celebrate_3_,_to.svg"
 topic,swim,"/symbols/mulberry/swim_,_to.svg"
 topic,play darts,/symbols/mulberry/darts.svg
 topic,play cards,/symbols/mulberry/playing_cards.svg
-emotion,I am,/symbols/arasaac/i_am.png
-emotion,You are,/symbols/arasaac/you_are.png
-emotion,Are you,/symbols/arasaac/are_you.png
 emotion,happy,/symbols/mulberry/happy_man.svg
 emotion,sad,/symbols/mulberry/sad_man.svg
 emotion,angry,/symbols/mulberry/angry_man.svg
@@ -657,7 +654,7 @@ action,take,"/symbols/mulberry/take_,_to.svg"
 action,think,"/symbols/mulberry/think_,_to.svg"
 action,make,"/symbols/mulberry/make_,_to.svg"
 action,break,"/symbols/mulberry/break_2_,_to.svg"
-action,sleep male,"/symbols/mulberry/sleep_male_,_to.svg"
+action,sleep,"/symbols/mulberry/sleep_male_,_to.svg"
 action,wake up,"/symbols/mulberry/wake_up_,_to.svg"
 action,talk,"/symbols/mulberry/talk_2_,_to.svg"
 action,shout,"/symbols/mulberry/shout_,_to.svg"

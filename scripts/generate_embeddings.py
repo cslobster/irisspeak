@@ -24,7 +24,9 @@ def main():
 
     print("Loading MiniLM-L6-v2 model...")
     from sentence_transformers import SentenceTransformer
-    model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
+    # Must match the runtime encoder in src/lib/corpus.ts (Xenova/all-MiniLM-L6-v2 is the
+    # ONNX port of this exact model) — a different model here makes cosine similarity meaningless.
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
     print("Encoding...")
     embeddings = model.encode(words, batch_size=256, show_progress_bar=True, normalize_embeddings=True)
