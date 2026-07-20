@@ -44,12 +44,13 @@ export function buildChildCardPrompt(args: {
   }
 
   return [
-    `You suggest English keywords for an AAC card UI. `,
     `Child age 5–7 with ASD, talking with their ${args.parentType.toLowerCase()}. `,
     `Conversation: ${TOPIC_DESCRIPTION[args.topic]}\n`,
+    `Silently consider what the child's next sentence or question would be, and the key nouns `,
+    `and verbs they'd need to say it. Do not write out this reasoning.\n`,
     `Given the dialogue's last parent message, output 4 topic nouns, 4 action verbs, `,
     `and 4 emotions chosen from this fixed list: ${emotionList}.\n`,
-    `Output ONLY this YAML, nothing else:\n`,
+    `Output ONLY the YAML below, nothing else — no reasoning, no bullet points, no explanation:\n`,
     `topics: [w1, w2, w3, w4]\n`,
     `actions: [w1, w2, w3, w4]\n`,
     `emotions: [w1, w2, w3, w4]`,
