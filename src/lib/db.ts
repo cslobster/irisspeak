@@ -140,6 +140,24 @@ export async function ensureSchema(): Promise<void> {
         created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
     `;
+    // Migration: collapse any pre-existing duplicate rows per (session_id, turn_id) — the old
+    // DELETE+INSERT update pattern could leave two rows behind under concurrent requests —
+    // before adding the uniqueness constraint that lets card taps upsert atomically.
+    await sql`
+      DELETE FROM interim_card_selection a USING interim_card_selection b
+      WHERE a.session_id = b.session_id AND a.turn_id = b.turn_id
+        AND (a.timestamp, a.id) < (b.timestamp, b.id)
+    `;
+    await sql`
+      DO $$ BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM pg_constraint WHERE conname = 'interim_card_selection_session_turn_key'
+        ) THEN
+          ALTER TABLE interim_card_selection
+            ADD CONSTRAINT interim_card_selection_session_turn_key UNIQUE (session_id, turn_id);
+        END IF;
+      END $$
+    `;
 
     // ---------- USER ANALYTICS EVENTS ----------
     await sql`

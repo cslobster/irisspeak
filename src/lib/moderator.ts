@@ -25,7 +25,6 @@ import type {
   CardInfo, CardSelectionResult, ChildCardRecommendationResult, DialogueMessage, Dyad,
   ParentGuideElement, ParentGuideRecommendationResult, SessionTopicInfo, TopicCategory,
 } from './types';
-import { getCorpusRetriever } from './corpus';
 
 // ---------- helpers ----------
 function now(): number { return Date.now(); }
@@ -187,35 +186,25 @@ async function generateChildCards(args: {
     .map((e: string) => emotionCards.find((c) => labelForParent(c, dyad.parent_type).toLowerCase() === String(e).toLowerCase().trim()))
     .filter(Boolean) as ReturnType<typeof loadEmotionCards>;
 
-  // Corpus enrichment for topics + actions
-  const topicActionWords = [...topics, ...actions];
-  let corpusMatches: ({ name: string; category: string; cosine: number; mode: string; image_url: string | null } | null)[] = topicActionWords.map(() => null);
-  try {
-    const retriever = await getCorpusRetriever();
-    corpusMatches = await retriever.matchBatch(topicActionWords);
-  } catch (e: any) {
-    console.error('[child-cards] corpus enrichment skipped:', e?.message);
-  }
+  // Semantic corpus search is bypassed for now — the AI-generated words go straight to
+  // cards, unmatched against corpus entries (no corpus_name/image override).
+  const topicActionWords = [
+    ...topics.map((w: string) => ({ word: String(w), category: 'topic' })),
+    ...actions.map((w: string) => ({ word: String(w), category: 'action' })),
+  ];
 
   const recId = nanoid();
   const ts = now();
   const cards: CardInfo[] = [];
 
-  // 4 topics + 4 actions, enriched
-  topicActionWords.forEach((word, i) => {
-    const cat = i < topics.length ? 'topic' : 'action';
-    const cm = corpusMatches[i];
+  // 4 topics + 4 actions, straight from the LLM
+  topicActionWords.forEach((item) => {
     cards.push({
       id: nanoid(),
       recommendation_id: recId,
-      label: String(word),
-      label_localized: String(word),
-      category: cat as any,
-      corpus_name: cm?.name ?? null,
-      corpus_category: cm?.category ?? null,
-      corpus_cosine: cm?.cosine ?? null,
-      corpus_mode: (cm?.mode as any) ?? null,
-      corpus_image_url: cm?.image_url ?? null,
+      label: item.word,
+      label_localized: item.word,
+      category: item.category as any,
     });
   });
 
@@ -284,13 +273,31 @@ async function getInterimCards(sessionId: string, turnId: string): Promise<CardI
   return r[0]?.cards || [];
 }
 
-async function setInterimCards(sessionId: string, turnId: string, cards: CardInfo[]): Promise<void> {
-  // DELETE + INSERT keeps exactly one row per (session, turn), eliminating timestamp-collision bugs.
-  await sql`DELETE FROM interim_card_selection WHERE session_id = ${sessionId} AND turn_id = ${turnId}`;
-  await sql`
+// Appends one card in a single atomic UPSERT (no read-then-write) — two rapid taps that fire
+// overlapping requests would otherwise both read the same starting array and each overwrite
+// the other's addition, silently dropping whichever card's write landed first.
+async function appendInterimCard(sessionId: string, turnId: string, card: CardInfo): Promise<CardInfo[]> {
+  const r = (await sql`
     INSERT INTO interim_card_selection (id, session_id, turn_id, cards, timestamp)
-    VALUES (${nanoid()}, ${sessionId}, ${turnId}, ${JSON.stringify(cards)}, ${now()})
-  `;
+    VALUES (${nanoid()}, ${sessionId}, ${turnId}, ${JSON.stringify([card])}, ${now()})
+    ON CONFLICT (session_id, turn_id)
+    DO UPDATE SET cards = interim_card_selection.cards || EXCLUDED.cards, timestamp = EXCLUDED.timestamp
+    RETURNING cards
+  `) as any[];
+  return r[0].cards;
+}
+
+// Removes by index in a single atomic UPDATE (jsonb `-` operator), same rationale as above.
+async function removeInterimCardAtIndex(sessionId: string, turnId: string, index: number): Promise<CardInfo[]> {
+  const current = await getInterimCards(sessionId, turnId);
+  if (index < 0 || index >= current.length) throw new Error('index out of range');
+  const r = (await sql`
+    UPDATE interim_card_selection
+    SET cards = cards - ${index}::int, timestamp = ${now()}
+    WHERE session_id = ${sessionId} AND turn_id = ${turnId}
+    RETURNING cards
+  `) as any[];
+  return r[0].cards;
 }
 
 async function getLastChildRec(sessionId: string, turnId: string): Promise<CardInfo[] | null> {
@@ -316,9 +323,7 @@ export async function addChildCard(sessionId: string, dyad: Dyad, cardIdentity: 
   const card = allCards.find((c) => c.id === cardIdentity.id);
   if (!card) throw new Error('card not in recommendation');
 
-  const interim = await getInterimCards(sessionId, cur.id);
-  interim.push(card);
-  await setInterimCards(sessionId, cur.id, interim);
+  const interim = await appendInterimCard(sessionId, cur.id, card);
 
   // Return the existing recommendation unchanged — no LLM regen on tap.
   // Explicit Refresh button is the only trigger for new card generation.
@@ -354,10 +359,7 @@ export async function removeChildCardAtIndex(sessionId: string, dyad: Dyad, inde
   const cur = await getCurrentTurn(sessionId);
   if (!cur || cur.role !== 'child') throw new Error('not child turn');
 
-  const interim = await getInterimCards(sessionId, cur.id);
-  if (index < 0 || index >= interim.length) throw new Error('index out of range');
-  interim.splice(index, 1);
-  await setInterimCards(sessionId, cur.id, interim);
+  const interim = await removeInterimCardAtIndex(sessionId, cur.id, index);
 
   const lastRec = (await sql`
     SELECT * FROM child_card_recommendation
@@ -392,9 +394,7 @@ export async function addFreeCard(
     corpus_image_url: card.image_url,
   };
 
-  const interim = await getInterimCards(sessionId, cur.id);
-  interim.push(freeCard);
-  await setInterimCards(sessionId, cur.id, interim);
+  const interim = await appendInterimCard(sessionId, cur.id, freeCard);
 
   const lastRecRow = (await sql`
     SELECT * FROM child_card_recommendation

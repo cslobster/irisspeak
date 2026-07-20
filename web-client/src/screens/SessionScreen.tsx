@@ -465,6 +465,7 @@ export function SessionScreen() {
           {phase === 'idle' && role === 'parent' && parentGuide && (
             <div className="flex-1 min-h-0 flex flex-col items-center justify-center overflow-y-auto">
               <ParentTurn
+                topic={topic.category}
                 parentMessage={parentMessage}
                 setParentMessage={setParentMessage}
                 onSubmit={submitParent}
@@ -610,7 +611,17 @@ function Loader({ label }: { label: string }) {
   );
 }
 
+// Idle mic button borrows each topic's accent color so it reads as inviting
+// rather than alarming; red is reserved for the active-recording state, matching
+// the universal "REC" convention (camera/voice apps) instead of a "danger" cue.
+const MIC_ACCENT: Record<TopicCategory, { light: string; dark: string; shadow: string }> = {
+  plan:   { light: '#8AB8FF', dark: '#4C7EF0', shadow: 'rgba(76,126,240,0.45)' },
+  recall: { light: '#7BE065', dark: '#35B31C', shadow: 'rgba(53,179,28,0.45)' },
+  free:   { light: '#FFB273', dark: '#F3862B', shadow: 'rgba(243,134,43,0.45)' },
+};
+
 interface ParentTurnProps {
+  topic: TopicCategory;
   parentMessage: string;
   setParentMessage: (s: string) => void;
   onSubmit: () => void;
@@ -620,11 +631,12 @@ interface ParentTurnProps {
 }
 
 function ParentTurn({
-  parentMessage, setParentMessage, onSubmit,
+  topic, parentMessage, setParentMessage, onSubmit,
   isRecording, partialTranscript, onMicTap,
 }: ParentTurnProps) {
   const displayValue = isRecording ? partialTranscript : parentMessage;
   const canSend = !!(parentMessage.trim() || (isRecording && partialTranscript.trim()));
+  const accent = MIC_ACCENT[topic];
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto px-4">
@@ -637,22 +649,25 @@ function ParentTurn({
       <div className="flex flex-col items-center gap-4">
         <div className="relative flex items-center justify-center" style={{ width: 200, height: 200 }}>
           {isRecording && (
-            <span className="absolute inset-0 rounded-full mic-ripple" style={{ color: '#ef4444' }} />
+            <span className="absolute inset-0 rounded-full mic-ripple" style={{ color: '#e11d48' }} />
           )}
           <button
             onClick={onMicTap}
             aria-label={isRecording ? 'Stop recording' : 'Start recording'}
-            className="relative z-10 flex items-center justify-center active:scale-95 transition-transform"
+            className={`relative z-10 flex items-center justify-center active:scale-95 transition-transform ${isRecording ? 'mic-breathe' : ''}`}
             style={{
               width: 170, height: 170,
-              borderRadius: isRecording ? 40 : '50%',
-              background: 'linear-gradient(135deg, #ef4444, #b91c1c)',
-              boxShadow: '0 12px 40px rgba(239,68,68,0.55)',
-              transition: 'border-radius 0.25s',
+              borderRadius: '50%',
+              background: isRecording
+                ? 'linear-gradient(135deg, #fb7185, #e11d48)'
+                : `linear-gradient(135deg, ${accent.light}, ${accent.dark})`,
+              boxShadow: isRecording
+                ? '0 10px 32px rgba(225,29,72,0.4)'
+                : `0 12px 40px ${accent.shadow}`,
             }}
           >
             {isRecording
-              ? <div className="w-16 h-16 rounded-2xl bg-white" />
+              ? <div className="w-14 h-14 rounded-xl bg-white" />
               : <MicIcon size={80} color="#fff" />
             }
           </button>

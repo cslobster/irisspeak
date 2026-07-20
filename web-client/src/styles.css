@@ -58,10 +58,10 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
 .hill-bg::before { bottom: -120px; height: 320px; }
 .hill-bg::after  { bottom: -180px; opacity: 0.6; }
 
-/* Outward ripple for mic recording state */
+/* Outward ripple for mic recording state — thin outlined rings, not solid fading discs */
 @keyframes mic-ripple {
-  0%   { transform: scale(1);   opacity: 0.55; }
-  100% { transform: scale(1.9); opacity: 0; }
+  0%   { transform: scale(1);    opacity: 0.5; }
+  100% { transform: scale(1.65); opacity: 0; }
 }
 .mic-ripple::before,
 .mic-ripple::after {
@@ -69,10 +69,20 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: currentColor;
-  animation: mic-ripple 1.6s ease-out infinite;
+  border: 3px solid currentColor;
+  animation: mic-ripple 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
-.mic-ripple::after { animation-delay: 0.8s; }
+.mic-ripple::after { animation-delay: 0.9s; }
+
+/* Gentle "listening" glow on the mic button itself — brightness only, so it never
+   fights the active:scale-95 tap-feedback transform. */
+@keyframes mic-breathe {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.08); }
+}
+.mic-breathe {
+  animation: mic-breathe 1.8s ease-in-out infinite;
+}
 
 /* Cloud floats */
 .cloud {

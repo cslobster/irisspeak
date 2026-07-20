@@ -42,7 +42,7 @@ export class WebSpeechRecognizer {
       // pause. We work around this by restarting the recognizer transparently
       // whenever onend fires while we're still in 'listening' state.
       const startSession = () => {
-        // stop() may have been called during the 150ms gap — bail out and let
+        // stop() may have been called during the restart gap — bail out and let
         // stop()'s immediate-resolve path handle it.
         if (this.state !== 'listening') return;
 
@@ -86,7 +86,7 @@ export class WebSpeechRecognizer {
             // iOS auto-stopped us. Null rec NOW so stop() can detect the gap,
             // then restart after a brief pause.
             this.rec = null;
-            setTimeout(startSession, 150);
+            setTimeout(startSession, 50);
             return;
           }
 
