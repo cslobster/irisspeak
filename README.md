@@ -9,7 +9,6 @@ Self-contained Next.js 14 backend that ports the FastAPI service:
 ## Run locally
 
 ```bash
-cd /Users/haobo/work3/ai_aactalk
 npm install
 npm run dev          # → http://localhost:3000
 ```
@@ -47,6 +46,5 @@ All routes live under `/api/v1/`:
 - Korean translation (DeepL)
 - CLOVA Voice / Speech
 - Card-image PNG corpus retrieval (still missing the image zip)
-- Admin console
 - `/parent/example` (parent example utterance) — easy to add when needed
 - DialogueInspector background task — easy to add
