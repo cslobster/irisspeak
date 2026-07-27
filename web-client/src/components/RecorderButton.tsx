@@ -59,7 +59,7 @@ export function RecorderButton({ onStop, disabled }: Props) {
   return recording ? (
     <button
       onClick={stop}
-      className="rounded-full bg-red-500 hover:bg-red-600 text-white px-6 py-4 shadow-lg flex items-center gap-3 font-bold animate-pulse"
+      className="rounded-full bg-red-500 hover:bg-red-600 text-white px-6 py-4 shadow-lg flex items-center gap-3 font-bold animate-pulse motion-reduce:animate-none"
     >
       <StopIcon /> Stop · {String(Math.floor(seconds / 60)).padStart(2, '0')}:{String(seconds % 60).padStart(2, '0')}
     </button>

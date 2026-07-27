@@ -55,7 +55,7 @@ export function WhoFirstScreen() {
 
         {loading && (
           <div className="flex items-center gap-3 text-slate-500 font-bold text-xl">
-            <div className="w-7 h-7 border-2 border-slate-300 border-t-amber-400 rounded-full animate-spin" />
+            <div className="w-7 h-7 border-2 border-slate-300 border-t-amber-400 rounded-full animate-spin motion-reduce:animate-none" />
             Starting…
           </div>
         )}

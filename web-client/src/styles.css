@@ -58,9 +58,12 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
 .hill-bg::before { bottom: -120px; height: 320px; }
 .hill-bg::after  { bottom: -180px; opacity: 0.6; }
 
-/* Outward ripple for mic recording state — thin outlined rings, not solid fading discs */
+/* Outward ripple for mic recording state — thin outlined rings, not solid fading discs.
+   Slowed down and eased more gently (vs. a sharp cubic-bezier "pop") so the SessionScreen
+   conversation task reads as calm rather than snappy — this is the child's focused-task
+   screen, unlike the decorative sign-in/welcome screens. */
 @keyframes mic-ripple {
-  0%   { transform: scale(1);    opacity: 0.5; }
+  0%   { transform: scale(1);    opacity: 0.45; }
   100% { transform: scale(1.65); opacity: 0; }
 }
 .mic-ripple::before,
@@ -70,18 +73,18 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
   inset: 0;
   border-radius: inherit;
   border: 3px solid currentColor;
-  animation: mic-ripple 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  animation: mic-ripple 2.6s ease-in-out infinite;
 }
-.mic-ripple::after { animation-delay: 0.9s; }
+.mic-ripple::after { animation-delay: 1.3s; }
 
 /* Gentle "listening" glow on the mic button itself — brightness only, so it never
-   fights the active:scale-95 tap-feedback transform. */
+   fights the active:scale-95 tap-feedback transform. Slowed for a calmer breathe. */
 @keyframes mic-breathe {
   0%, 100% { filter: brightness(1); }
-  50%      { filter: brightness(1.08); }
+  50%      { filter: brightness(1.06); }
 }
 .mic-breathe {
-  animation: mic-breathe 1.8s ease-in-out infinite;
+  animation: mic-breathe 2.8s ease-in-out infinite;
 }
 
 /* Cloud floats */
@@ -91,4 +94,29 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
     20px -10px 0 -2px white,
     40px 0 0 -4px white,
     60px -8px 0 -2px white;
+}
+
+/* Respect the OS-level "reduce motion" accessibility preference app-wide.
+   Hand-written keyframe animations are fully disabled here (rather than merely
+   sped up) — the ripple/breathe rings are hidden outright instead of freezing
+   mid-frame, which would otherwise leave a stray ring/brightness shift on screen. */
+@media (prefers-reduced-motion: reduce) {
+  .mic-ripple::before,
+  .mic-ripple::after,
+  .mic-breathe {
+    animation: none !important;
+  }
+  .mic-ripple::before,
+  .mic-ripple::after {
+    opacity: 0 !important;
+  }
+
+  /* Shared press/tap feedback (pill-btn, topic-button, card-chip) — drop the
+     scale-down transform, keep a simple opacity change so taps still feel responsive. */
+  .pill-btn:active,
+  .topic-button:active,
+  .card-chip:active {
+    transform: none !important;
+    opacity: 0.85;
+  }
 }

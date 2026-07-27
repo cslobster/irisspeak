@@ -5,6 +5,9 @@ interface Props {
   topic?: TopicCategory;
   children: ReactNode;
   className?: string;
+  /** Quieter "stage" mode for focused-task screens (e.g. SessionScreen): fewer
+   * decorative clouds. Sky/hills stay the same so the topic tinting is unchanged. */
+  calm?: boolean;
 }
 
 const skyByTopic: Record<string, { sky: string; hill1: string; hill2: string }> = {
@@ -14,14 +17,15 @@ const skyByTopic: Record<string, { sky: string; hill1: string; hill2: string }> 
   free:    { sky: 'from-amber-100 via-orange-50 to-white', hill1: '#FFD9A8', hill2: '#FD974B' },
 };
 
-export function HillBackground({ topic, children, className = '' }: Props) {
+export function HillBackground({ topic, children, className = '', calm = false }: Props) {
   const c = skyByTopic[topic || 'default'];
   return (
     <div className={`relative min-h-full w-full bg-gradient-to-b ${c.sky} ${className}`}>
-      {/* Clouds */}
+      {/* Clouds — trimmed to a single one in calm mode to keep the conversation
+          screen visually quiet during the child's card-tapping task. */}
       <div className="cloud" style={{ top: 80, left: '15%' }} />
-      <div className="cloud" style={{ top: 130, right: '20%', transform: 'scale(0.8)' }} />
-      <div className="cloud" style={{ top: 220, left: '60%', transform: 'scale(0.6)', opacity: 0.7 }} />
+      {!calm && <div className="cloud" style={{ top: 130, right: '20%', transform: 'scale(0.8)' }} />}
+      {!calm && <div className="cloud" style={{ top: 220, left: '60%', transform: 'scale(0.6)', opacity: 0.7 }} />}
 
       {/* Hills */}
       <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 360" preserveAspectRatio="none" style={{ height: 280 }}>

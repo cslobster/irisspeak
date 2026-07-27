@@ -13,7 +13,7 @@ export function RecordingPill({ state, level }: { state: RecorderState; level: n
           style={{ transform: `scale(${recording ? scale : 0.5})` }}
         />
       </div>
-      <span className={`text-sm font-bold ${recording ? 'text-rose-600' : 'text-slate-500'} ${recording ? 'animate-pulse' : ''}`}>
+      <span className={`text-sm font-bold ${recording ? 'text-rose-600' : 'text-slate-500'} ${recording ? 'animate-pulse motion-reduce:animate-none' : ''}`}>
         {recording ? 'Recording…' : 'Paused'}
       </span>
     </div>
