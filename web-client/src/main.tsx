@@ -4,7 +4,11 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { store } from './store';
+import { initUiScale } from './uiScale';
 import './styles.css';
+
+// Apply the persisted accessibility text/card-size setting before first paint.
+initUiScale();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
