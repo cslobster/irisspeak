@@ -24,6 +24,48 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
 .safe-bottom { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 .safe-top    { padding-top:    max(0.5rem, env(safe-area-inset-top)); }
 
+/* --------------------------------------------------------------------------
+ * Accessibility text/card-size setting (see src/uiScale.ts).
+ *
+ * `--ui-scale` defaults to 1 (a total no-op) and is bumped by a `ui-scale-*`
+ * class applied to <html>. This replaces free pinch-to-zoom (disabled in
+ * index.html) with a small number of pre-verified steps that are guaranteed
+ * to still fit the iPad viewport without causing scrolling.
+ * -------------------------------------------------------------------------- */
+:root { --ui-scale: 1; }
+html.ui-scale-large { --ui-scale: 1.12; }
+html.ui-scale-xl    { --ui-scale: 1.22; }
+
+/* CardChip's label text is scaled from here, not from CardChip.tsx itself
+ * (that file is intentionally left untouched). The selector below keys off
+ * CardChip's stable, unique class combination -- `font-bold text-slate-800
+ * line-clamp-2` only ever appears on the card label -- so this rule can't
+ * accidentally match other text elsewhere in the app. It mirrors the exact
+ * base/sm/md breakpoints CardChip's sizeMap already uses, so at --ui-scale:1
+ * this is byte-for-byte the same as before. */
+.line-clamp-2.font-bold.text-slate-800.text-\[10px\] { font-size: calc(10px * var(--ui-scale)); }
+.line-clamp-2.font-bold.text-slate-800.text-xs       { font-size: calc(0.75rem * var(--ui-scale)); }
+.line-clamp-2.font-bold.text-slate-800.text-sm       { font-size: calc(0.875rem * var(--ui-scale)); }
+@media (min-width: 640px) {
+  .line-clamp-2.font-bold.text-slate-800.sm\:text-xs { font-size: calc(0.75rem * var(--ui-scale)); }
+  .line-clamp-2.font-bold.text-slate-800.sm\:text-sm { font-size: calc(0.875rem * var(--ui-scale)); }
+}
+@media (min-width: 768px) {
+  .line-clamp-2.font-bold.text-slate-800.md\:text-base { font-size: calc(1rem * var(--ui-scale)); }
+}
+
+/* Parent-turn heading / mic status label / textarea (SessionScreen.tsx's
+ * ParentTurn) -- these carry their own `ui-scale-*` marker classes since that
+ * file is freely editable, so the selectors here are simple and exact. Sizes
+ * mirror the Tailwind classes already on each element at --ui-scale:1. */
+.ui-scale-heading.text-2xl    { font-size: calc(1.5rem * var(--ui-scale)); }
+.ui-scale-mic-label.text-xl   { font-size: calc(1.25rem * var(--ui-scale)); }
+.ui-scale-textarea.text-xl    { font-size: calc(1.25rem * var(--ui-scale)); }
+@media (min-width: 640px) {
+  .ui-scale-heading.sm\:text-3xl  { font-size: calc(1.875rem * var(--ui-scale)); }
+  .ui-scale-mic-label.sm\:text-2xl { font-size: calc(1.5rem * var(--ui-scale)); }
+}
+
 @layer components {
   .pill-btn {
     @apply px-8 py-3 rounded-full font-bold text-white transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
