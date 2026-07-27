@@ -4,12 +4,14 @@ import { useSelector, useDispatch, logout } from '../store';
 import { api } from '../api/client';
 import { GearIcon } from '../components/Icons';
 import { FlowerHillsBackdrop } from '../components/FlowerHills';
+import { UI_SCALE_LEVELS, UI_SCALE_LABELS, getUiScaleLevel, setUiScaleLevel, type UiScaleLevel } from '../uiScale';
 
 export function WelcomeScreen() {
   const nav = useNavigate();
   const dispatch = useDispatch();
   const childName = useSelector(s => s.auth.childName) || 'there';
   const [showSettings, setShowSettings] = useState(false);
+  const [uiScale, setUiScale] = useState<UiScaleLevel>(getUiScaleLevel);
 
   function signOut() {
     api.setJwt(null);
@@ -40,7 +42,28 @@ export function WelcomeScreen() {
         </button>
 
         {showSettings && (
-          <div className="absolute right-0 mt-2 w-44 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+          <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            <div className="px-5 pt-4 pb-3 border-b border-slate-100">
+              <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2">
+                Text &amp; card size
+              </p>
+              <div className="flex gap-1.5">
+                {UI_SCALE_LEVELS.map(level => (
+                  <button
+                    key={level}
+                    onClick={() => { setUiScaleLevel(level); setUiScale(level); }}
+                    className={`flex-1 rounded-xl py-2 text-xs font-bold transition active:scale-95 ${
+                      uiScale === level
+                        ? 'bg-emerald-500 text-white shadow'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                    aria-pressed={uiScale === level}
+                  >
+                    {UI_SCALE_LABELS[level]}
+                  </button>
+                ))}
+              </div>
+            </div>
             <button
               onClick={signOut}
               className="w-full text-left px-5 py-4 text-sm font-bold text-red-500 hover:bg-red-50 transition"
