@@ -74,7 +74,7 @@ export function FreeTopicScreen() {
 
         {loading ? (
           <div className="flex flex-col items-center gap-3 py-10">
-            <div className="w-12 h-12 border-4 border-slate-300 border-t-orange-400 rounded-full animate-spin" />
+            <div className="w-12 h-12 border-4 border-slate-300 border-t-orange-400 rounded-full animate-spin motion-reduce:animate-none" />
             <p className="text-sm font-bold text-slate-500">Loading favorite topics…</p>
             <button
               onClick={() => setAttempt(a => a + 1)}
@@ -103,7 +103,7 @@ export function FreeTopicScreen() {
                 <button
                   key={t.id}
                   onClick={() => pick(t.subtopic, t.subtopic_description)}
-                  className="bg-white rounded-3xl p-5 text-left shadow-md hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all border-2 border-topicfree-dimmed flex flex-col gap-2"
+                  className="bg-white rounded-3xl p-5 text-left shadow-md hover:shadow-xl motion-safe:hover:-translate-y-1 motion-reduce:hover:translate-y-0 active:scale-95 transition-all border-2 border-topicfree-dimmed flex flex-col gap-2"
                 >
                   <div className="bg-topicfree-dimmed/60 rounded-2xl flex items-center justify-center h-32 mb-2">
                     <span className="text-7xl drop-shadow-sm" role="img" aria-label={t.subtopic}>{emoji}</span>

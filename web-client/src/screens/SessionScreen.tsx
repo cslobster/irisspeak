@@ -429,7 +429,7 @@ export function SessionScreen() {
   const stars = useMemo(() => Array.from({ length: Math.floor((turnNumber - 1) / 2) }), [turnNumber]);
 
   return (
-    <HillBackground topic={topic.category}>
+    <HillBackground topic={topic.category} calm>
       <div className="h-screen overflow-hidden px-3 sm:px-4 pt-3 flex flex-col items-center relative safe-top">
         <RecordingPill state={recState} level={recLevel} />
 
@@ -437,7 +437,7 @@ export function SessionScreen() {
         <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10">
           <button
             onClick={() => setShowDialogue(s => !s)}
-            className="text-sm sm:text-base font-bold px-4 py-2 rounded-full bg-white shadow-md border-2 border-slate-200 text-slate-700 hover:bg-slate-50 active:scale-95 transition-all"
+            className="text-sm sm:text-base font-bold px-4 py-2 rounded-full bg-white shadow-md border-2 border-slate-200 text-slate-700 hover:bg-slate-50 active:scale-95 motion-reduce:active:scale-100 transition-all duration-300 ease-in-out"
           >
             Transcript
           </button>
@@ -532,7 +532,7 @@ export function SessionScreen() {
                 <h3 className="text-xl font-extrabold text-slate-800">Transcript</h3>
                 <button
                   onClick={() => setShowDialogue(false)}
-                  className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors"
+                  className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors duration-300 ease-in-out"
                   aria-label="Close transcript"
                 >
                   <CloseIcon />
@@ -605,7 +605,7 @@ export function SessionScreen() {
 function Loader({ label }: { label: string }) {
   return (
     <div className="flex flex-col items-center gap-4 py-10">
-      <div className="w-16 h-16 border-4 border-slate-300 border-t-amber-400 rounded-full animate-spin" />
+      <div className="w-16 h-16 border-4 border-slate-300 border-t-amber-400 rounded-full animate-spin motion-reduce:animate-none" />
       <p className="text-base font-bold text-slate-600">{label}</p>
     </div>
   );
@@ -654,7 +654,7 @@ function ParentTurn({
           <button
             onClick={onMicTap}
             aria-label={isRecording ? 'Stop recording' : 'Start recording'}
-            className={`relative z-10 flex items-center justify-center active:scale-95 transition-transform ${isRecording ? 'mic-breathe' : ''}`}
+            className={`relative z-10 flex items-center justify-center active:scale-95 motion-reduce:active:scale-100 transition-transform duration-300 ease-in-out ${isRecording ? 'mic-breathe' : ''}`}
             style={{
               width: 170, height: 170,
               borderRadius: '50%',
@@ -856,11 +856,11 @@ function SentenceAcceptance({
       <button
         onClick={handlePlay}
         disabled={playState === 'playing'}
-        className="flex flex-col items-center gap-3 active:scale-95 transition-transform disabled:opacity-60"
+        className="flex flex-col items-center gap-3 active:scale-95 motion-reduce:active:scale-100 transition-transform duration-300 ease-in-out disabled:opacity-60"
         aria-label={playState === 'done' ? 'Play again' : 'Play sentence'}
       >
         <div
-          className="w-32 h-32 rounded-full flex items-center justify-center shadow-xl transition-colors"
+          className="w-32 h-32 rounded-full flex items-center justify-center shadow-xl transition-colors duration-300 ease-in-out"
           style={{
             background: playState === 'playing'
               ? '#a78bfa'
@@ -872,9 +872,9 @@ function SentenceAcceptance({
           )}
           {playState === 'playing' && (
             <div className="flex gap-2 items-center">
-              <div className="w-3 h-10 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-              <div className="w-3 h-10 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-              <div className="w-3 h-10 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              <div className="w-3 h-10 bg-white rounded-full animate-bounce motion-reduce:animate-none" style={{ animationDelay: '0ms' }} />
+              <div className="w-3 h-10 bg-white rounded-full animate-bounce motion-reduce:animate-none" style={{ animationDelay: '150ms' }} />
+              <div className="w-3 h-10 bg-white rounded-full animate-bounce motion-reduce:animate-none" style={{ animationDelay: '300ms' }} />
             </div>
           )}
           {playState === 'done' && (
@@ -890,15 +890,15 @@ function SentenceAcceptance({
       <div className="flex gap-4 w-full max-w-xl">
         <button
           onClick={onReject}
-          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-red-300 text-red-500 bg-white active:bg-red-50 transition-colors shadow-sm"
+          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-red-300 text-red-500 bg-white active:bg-red-50 transition-colors duration-300 ease-in-out shadow-sm"
         >no</button>
         <button
           onClick={onRetry}
-          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-yellow-300 text-yellow-600 bg-white active:bg-yellow-50 transition-colors shadow-sm"
+          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-yellow-300 text-yellow-600 bg-white active:bg-yellow-50 transition-colors duration-300 ease-in-out shadow-sm"
         >try again</button>
         <button
           onClick={onAccept}
-          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-green-300 text-green-600 bg-white active:bg-green-50 transition-colors shadow-sm"
+          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-green-300 text-green-600 bg-white active:bg-green-50 transition-colors duration-300 ease-in-out shadow-sm"
         >yes</button>
       </div>
     </div>
