@@ -46,7 +46,7 @@ Child taps cards  → LLM generates parent guidance messages
 |------|------|
 | `moderator.ts` | Orchestration — all turn logic (464 lines) |
 | `gemini.ts` | LLM client (OpenAI SDK → Google Gemini endpoint) |
-| `corpus.ts` | Local semantic search (~2,002 vocab items, MiniLM-L6-v2) |
+| `corpus.ts` | Local semantic search (vocab count varies — verify `data/corpus_vocabulary.csv` directly; see `CONTEXT.md`) |
 | `db.ts` | Neon Postgres — lazy schema init, tagged-template SQL |
 | `prompts.ts` | LLM prompt builders |
 | `staticData.ts` | YAML loaders (core cards, emotion cards, initial guides) |
@@ -55,7 +55,7 @@ Child taps cards  → LLM generates parent guidance messages
 
 **15 API endpoints** under `/api/v1/dyad/` covering: auth, session lifecycle, parent messages, child card taps/confirms/undos, and parent example utterances.
 
-**Data files (`/data/`):** CSV vocabulary corpus (`corpus_vocabulary_slim.csv`, ~2,002 single-word entries), pre-computed MiniLM float32 embeddings (`.bin` + `.meta.json`), YAML card/guide definitions. To update the corpus: rename new CSV to `corpus_vocabulary.csv`, run the Colab embedding notebook, drop `.bin` + `.meta.json` + renamed CSV into `/data/`.
+**Data files (`/data/`):** CSV vocabulary corpus (`corpus_vocabulary.csv` — row count and columns change as the vocabulary source is swapped; verify the live file, don't assume a fixed size), pre-computed MiniLM float32 embeddings (`.bin` + `.meta.json`), YAML card/guide definitions. The corpus-expansion pipeline (ARASAAC fetch → dedupe → LLM reclassify → re-embed) is being ported from a Colab notebook into a repo-native script — see `CONTEXT.md` and update this note once that lands.
 
 ## LLM configuration
 
@@ -81,6 +81,10 @@ Tests live in `src/__tests__/`. Uses Vitest with mocked DB and Gemini dependenci
 
 - `main` — stable branch
 - `feature/new-vocab` — active development branch for new vocabulary features
+
+## Keeping domain docs current
+
+This repo has more than one contributor and no enforced process for keeping `CONTEXT.md` in sync with reality (vocabulary files, pipeline decisions, etc. have changed multiple times without doc updates). If you're a Claude Code session working in this repo and a conversation surfaces a core project fact — a decision, a domain concept, a changed data source — that isn't already reflected in `CONTEXT.md`, add it. If something already in `CONTEXT.md` turns out to be stale or wrong, correct or remove it rather than leaving it to mislead the next session (human or AI) that reads it.
 
 ## Known gotchas
 
