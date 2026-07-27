@@ -637,11 +637,17 @@ function ParentTurn({
   const displayValue = isRecording ? partialTranscript : parentMessage;
   const canSend = !!(parentMessage.trim() || (isRecording && partialTranscript.trim()));
   const accent = MIC_ACCENT[topic];
+  // Accessibility text-size setting (src/uiScale.ts) -- scales the reading/
+  // interaction surfaces that matter most here: the heading, the mic status
+  // label, and the textarea. The `ui-scale-*` marker classes below are picked
+  // up by matching rules in styles.css (kept in lockstep with each element's
+  // existing Tailwind breakpoints), so responsiveness is preserved and at the
+  // "Normal" level this renders byte-for-byte the same as before.
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto px-4">
       {/* Heading */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-slate-600 text-center">
+      <h2 className="ui-scale-heading text-2xl sm:text-3xl font-bold text-slate-600 text-center">
         Type or speak to say a sentence.
       </h2>
 
@@ -672,7 +678,7 @@ function ParentTurn({
             }
           </button>
         </div>
-        <p className="text-xl sm:text-2xl font-bold text-slate-500 select-none">
+        <p className="ui-scale-mic-label text-xl sm:text-2xl font-bold text-slate-500 select-none">
           {isRecording ? 'Listening... tap to stop' : 'Tap to speak'}
         </p>
       </div>
@@ -682,7 +688,7 @@ function ParentTurn({
 
       {/* Textbox */}
       <textarea
-        className="w-full bg-white rounded-2xl p-5 border-2 border-slate-200 focus:border-red-400 focus:outline-none font-medium text-slate-700 resize-none text-xl placeholder-slate-300 shadow-sm"
+        className="ui-scale-textarea w-full bg-white rounded-2xl p-5 border-2 border-slate-200 focus:border-red-400 focus:outline-none font-medium text-slate-700 resize-none text-xl placeholder-slate-300 shadow-sm"
         style={{ height: 130 }}
         placeholder="Start typing here..."
         value={displayValue}
