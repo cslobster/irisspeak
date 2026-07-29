@@ -12,11 +12,27 @@ export function WelcomeScreen() {
   const childName = useSelector(s => s.auth.childName) || 'there';
   const [showSettings, setShowSettings] = useState(false);
   const [uiScale, setUiScale] = useState<UiScaleLevel>(getUiScaleLevel);
+  const [starting, setStarting] = useState(false);
+  const [startError, setStartError] = useState<string | null>(null);
 
   function signOut() {
     api.setJwt(null);
     dispatch(logout());
     nav('/', { replace: true });
+  }
+
+  async function startConversation() {
+    if (starting) return;
+    setStarting(true);
+    setStartError(null);
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const sid = await api.newSession({ category: 'plan' }, tz);
+      nav(`/session/${encodeURIComponent(sid)}`, { state: { topic: { category: 'plan' } } });
+    } catch (e: any) {
+      setStartError(e?.response?.data?.detail || e?.message || 'Could not start session.');
+      setStarting(false);
+    }
   }
 
   return (
@@ -98,8 +114,9 @@ export function WelcomeScreen() {
             Start a conversation
           </p>
           <button
-            onClick={() => nav('/who-first')}
-            className="flex items-center justify-center shadow-2xl active:scale-95 transition-transform"
+            onClick={startConversation}
+            disabled={starting}
+            className="flex items-center justify-center shadow-2xl active:scale-95 disabled:opacity-60 transition-transform"
             style={{
               width: 200,
               height: 200,
@@ -109,10 +126,17 @@ export function WelcomeScreen() {
             }}
             aria-label="Start a conversation"
           >
-            <svg width="80" height="80" viewBox="0 0 72 72" fill="none">
-              <path d="M18 12 L62 36 L18 60 Z" fill="white" />
-            </svg>
+            {starting ? (
+              <div className="w-10 h-10 border-4 border-white/40 border-t-white rounded-full animate-spin motion-reduce:animate-none" />
+            ) : (
+              <svg width="80" height="80" viewBox="0 0 72 72" fill="none">
+                <path d="M18 12 L62 36 L18 60 Z" fill="white" />
+              </svg>
+            )}
           </button>
+          {startError && (
+            <p className="text-red-500 font-bold text-base">{startError}</p>
+          )}
         </div>
       </div>
 
