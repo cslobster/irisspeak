@@ -97,7 +97,7 @@ export function WelcomeScreen() {
       >
         {/* Greeting */}
         <h1
-          className="text-5xl sm:text-7xl font-bold text-center mb-14 select-none"
+          className="ui-scale-welcome-heading text-5xl sm:text-7xl font-bold text-center mb-14 select-none leading-[1.25] pb-2"
           style={{
             background: 'linear-gradient(135deg, #f43f5e 0%, #a855f7 45%, #0ea5e9 80%, #10b981 100%)',
             WebkitBackgroundClip: 'text',
@@ -110,7 +110,7 @@ export function WelcomeScreen() {
 
         {/* Big play button */}
         <div className="flex flex-col items-center gap-5">
-          <p className="text-2xl sm:text-3xl font-bold text-slate-600 select-none tracking-tight">
+          <p className="ui-scale-welcome-subtitle text-2xl sm:text-3xl font-bold text-slate-600 select-none tracking-tight">
             Start a conversation
           </p>
           <button

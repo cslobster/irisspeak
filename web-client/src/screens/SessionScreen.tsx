@@ -445,7 +445,7 @@ export function SessionScreen() {
 
         {/* Turn banner + stars -- single horizontal row to save vertical space on iPad landscape */}
         <div className="mt-2 flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap z-10 flex-shrink-0">
-          <TurnBanner role={role} topic={topic.category} subtopic={topic.subtopic} turnNumber={turnNumber} />
+          <TurnBanner role={role} turnNumber={turnNumber} />
           {stars.length > 0 && (
             <div className="flex items-center gap-0.5">
               {stars.slice(0, 6).map((_, i) => <StarIcon key={i} size={20} />)}
@@ -544,14 +544,14 @@ export function SessionScreen() {
                 ) : (
                   <div className="space-y-2">
                     {dialogue.map((m, i) => (
-                      <div key={i} className={`p-3 rounded-xl text-sm ${m.role === 'parent' ? 'bg-blue-50 border-l-4 border-blue-300' : 'bg-purple-50 border-l-4 border-purple-300'}`}>
-                        <div className="text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-1">{m.role}</div>
+                      <div key={i} className={`ui-scale-transcript-msg p-3 rounded-xl text-sm ${m.role === 'parent' ? 'bg-blue-50 border-l-4 border-blue-300' : 'bg-purple-50 border-l-4 border-purple-300'}`}>
+                        <div className="ui-scale-transcript-role text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-1">{m.role}</div>
                         {Array.isArray(m.content) ? (
                           <div className="flex flex-wrap gap-1.5 mt-1">
                             {m.content.map((c, j) => (
                               <span
                                 key={j}
-                                className="inline-flex items-center bg-white border border-purple-200 rounded-lg px-2 py-1 text-xs font-bold text-purple-800 shadow-sm"
+                                className="ui-scale-transcript-chip inline-flex items-center bg-white border border-purple-200 rounded-lg px-2 py-1 text-xs font-bold text-purple-800 shadow-sm"
                                 title={c.corpus_name ? `corpus: ${c.corpus_name}` : c.category}
                               >
                                 {c.corpus_name || c.label}

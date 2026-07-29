@@ -1,4 +1,5 @@
 import { neon } from '@neondatabase/serverless';
+import { capitalizeName } from './text';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is not set — copy .env.local.example and fill in.');
@@ -179,7 +180,7 @@ export async function ensureSchema(): Promise<void> {
     // ---------- SEED TEST DYAD ----------
     const code = process.env.TEST_LOGIN_CODE || '12345';
     const alias = process.env.TEST_DYAD_ALIAS || 'abcde';
-    const childName = process.env.TEST_CHILD_NAME || 'Sammy';
+    const childName = capitalizeName(process.env.TEST_CHILD_NAME || 'Sammy');
     const childGender = process.env.TEST_CHILD_GENDER || 'girl';
     const parentType = process.env.TEST_PARENT_TYPE || 'mother';
     const locale = process.env.TEST_LOCALE || 'en';
