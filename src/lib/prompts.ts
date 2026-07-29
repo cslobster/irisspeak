@@ -2,7 +2,7 @@
  * Prompt builders — one per LLM task. Mirrors libs/py_core/py_core/system/task/*
  * after the latest prompt-trimming pass.
  */
-import { EMOTION_LABELS, TOPIC_DESCRIPTION } from './staticData';
+import { TOPIC_DESCRIPTION } from './staticData';
 import type {
   CardInfo, DialogueMessage, ParentType, TopicCategory,
 } from './types';
@@ -33,7 +33,6 @@ export function buildChildCardPrompt(args: {
   seenLabels?: string[];
   interimCards?: CardInfo[];
 }): string {
-  const emotionList = EMOTION_LABELS.join(', ');
   const topicList = args.topicVocab.join(', ');
   const actionList = args.actionVocab.join(', ');
 
@@ -60,8 +59,7 @@ export function buildChildCardPrompt(args: {
     `vocabularies below — do not invent new words or use words outside these lists. List each set of `,
     `6 in order from most-fitting to least-fitting, since only the first few valid ones may get shown:\n`,
     `   Topic vocabulary: ${topicList}\n`,
-    `   Action vocabulary: ${actionList}\n`,
-    `4. Also pick 4 emotions chosen ONLY from this fixed list: ${emotionList}.\n\n`,
+    `   Action vocabulary: ${actionList}\n\n`,
     `Every topic/action word must relate directly to the theme from step 1, not just loosely `,
     `associated filler. If a vocabulary doesn't contain enough strongly on-theme words, pick the `,
     `closest available ones rather than switching to a different theme. Do NOT repeat the same word `,
@@ -69,8 +67,7 @@ export function buildChildCardPrompt(args: {
     `Do steps 1-2 silently — do NOT write out the theme or sentences. `,
     `Output ONLY this YAML, nothing else, no text before or after it:\n`,
     `topics: [w1, w2, w3, w4, w5, w6]\n`,
-    `actions: [w1, w2, w3, w4, w5, w6]\n`,
-    `emotions: [w1, w2, w3, w4]`,
+    `actions: [w1, w2, w3, w4, w5, w6]`,
     prev,
     interim,
   ].join('');
@@ -116,6 +113,16 @@ export function buildParentGuidePrompt(args: {
 // ---------- ParentExampleMessageGenerator ----------
 export function buildParentExamplePrompt(): string {
   return `Given a parent-child dialogue and a guide, write ONE short parent utterance (≤8 words) that follows the guide.\nOutput ONLY the utterance, no quotes or labels.`;
+}
+
+// ---------- SessionTitleGenerator ----------
+export function buildSessionTitlePrompt(childName: string): string {
+  return [
+    `Given a parent-child dialogue, write ONE short title (3-6 words) that captures what ${childName} `,
+    `talked about — like a caption a parent could scan later to remember this conversation.\n`,
+    `Use plain, warm language, not a generic label like "Daily chat".\n`,
+    `Output ONLY the title, no quotes, no punctuation at the end.`,
+  ].join('');
 }
 
 // ---------- SentenceInferenceGenerator ----------
