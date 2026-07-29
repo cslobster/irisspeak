@@ -81,7 +81,7 @@ export function SessionEndScreen() {
           ) : (
             <div className="space-y-2 max-h-96 overflow-auto">
               {dialogue.map((m, i) => (
-                <div key={i} className={`p-3 rounded-xl text-sm ${m.role === 'parent' ? 'bg-blue-50 border-l-4 border-blue-300' : 'bg-purple-50 border-l-4 border-purple-300'}`}>
+                <div key={i} className={`p-3 rounded-xl text-sm ${m.role === 'parent' ? 'bg-[#94c1c2]/10 border-l-4 border-[#94c1c2]' : 'bg-purple-50 border-l-4 border-purple-300'}`}>
                   <div className="text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-1">{m.role}</div>
                   {Array.isArray(m.content) ? (
                     <div className="flex flex-wrap gap-1.5 mt-1">
@@ -103,7 +103,7 @@ export function SessionEndScreen() {
         </div>
 
         <div className="flex gap-3">
-          <button onClick={() => { analytics.sessionEndGoHome(); nav('/home', { replace: true }); }} className="pill-btn bg-emerald-500">Back to home</button>
+          <button onClick={() => { analytics.sessionEndGoHome(); nav('/home', { replace: true }); }} className="pill-btn bg-[#94c1c2]">Back to home</button>
           <button onClick={() => { analytics.sessionEndViewStars(); nav('/stars'); }} className="pill-btn bg-amber-400">See all stars</button>
         </div>
       </div>

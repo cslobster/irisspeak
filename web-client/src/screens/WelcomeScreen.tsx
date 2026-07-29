@@ -38,7 +38,7 @@ export function WelcomeScreen() {
   return (
     <div
       className="relative min-h-screen overflow-hidden"
-      style={{ background: 'linear-gradient(160deg, #e0f7f4 0%, #eef4ff 55%, #f9f0ff 100%)' }}
+      style={{ background: '#f0ebe1' }}
       onClick={() => setShowSettings(false)}
     >
       {/* Decorative blobs */}
@@ -70,7 +70,7 @@ export function WelcomeScreen() {
                     onClick={() => { setUiScaleLevel(level); setUiScale(level); }}
                     className={`flex-1 rounded-xl py-2 text-xs font-bold transition active:scale-95 ${
                       uiScale === level
-                        ? 'bg-emerald-500 text-white shadow'
+                        ? 'bg-[#94c1c2] text-white shadow'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                     aria-pressed={uiScale === level}
@@ -88,7 +88,7 @@ export function WelcomeScreen() {
             </button>
             <button
               onClick={signOut}
-              className="w-full text-left px-5 py-4 text-sm font-bold text-red-500 hover:bg-red-50 transition"
+              className="w-full text-left px-5 py-4 text-sm font-bold text-[#f09281] hover:bg-[#f09281]/10 transition"
             >
               Sign out
             </button>
@@ -127,7 +127,7 @@ export function WelcomeScreen() {
               width: 200,
               height: 200,
               borderRadius: '50%',
-              background: '#10b981',
+              background: '#94c1c2',
             }}
             aria-label="Start a conversation"
           >
@@ -147,7 +147,7 @@ export function WelcomeScreen() {
             )}
           </button>
           {startError && (
-            <p className="text-red-500 font-bold text-base">{startError}</p>
+            <p className="text-[#f09281] font-bold text-base">{startError}</p>
           )}
         </div>
       </div>
