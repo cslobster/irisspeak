@@ -45,7 +45,17 @@ export function SessionScreen() {
   const [turnId, setTurnId] = useState<string | null>(null);
   const [parentGuide, setParentGuide] = useState<ParentGuideRecommendationResult | null>(null);
   const [childRec, setChildRec] = useState<ChildCardRecommendationResult | null>(null);
-  const [interimCards, setInterimCards] = useState<CardInfo[]>([]);
+  const [interimCards, setInterimCardsState] = useState<CardInfo[]>([]);
+  // Ref mirrors interimCards synchronously (state updates are batched/async, but
+  // onRemoveCard needs the true current list at the instant each queued removal runs).
+  const interimCardsRef = useRef<CardInfo[]>([]);
+  const setInterimCards = useCallback((updater: CardInfo[] | ((prev: CardInfo[]) => CardInfo[])) => {
+    const next = typeof updater === 'function'
+      ? (updater as (prev: CardInfo[]) => CardInfo[])(interimCardsRef.current)
+      : updater;
+    interimCardsRef.current = next;
+    setInterimCardsState(next);
+  }, []);
   const [dialogue, setDialogue] = useState<DialogueMessage[]>([]);
   const [parentMessage, setParentMessage] = useState('');
   const [exampleByGuideId, setExampleByGuideId] = useState<Record<string, string>>({});
@@ -53,6 +63,7 @@ export function SessionScreen() {
   const [showMenu, setShowMenu] = useState(false);
   const [showDialogue, setShowDialogue] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [scopedFolderPath, setScopedFolderPath] = useState<string[] | undefined>(undefined);
   const [lastParentMessage, setLastParentMessage] = useState<string | null>(null);
   const [lastChildSentence, setLastChildSentence] = useState<string | null>(null);
   const [inferredSentence, setInferredSentence] = useState<string | null>(null);
@@ -274,6 +285,11 @@ export function SessionScreen() {
   // pulled -- on touch screens an instant role flip felt like a crash.)
   const onCardClick = useCallback(async (card: CardInfo) => {
     if (!sessionId || role !== 'child') return;
+    if (card.is_folder && card.folder_path) {
+      setScopedFolderPath(card.folder_path.split(' > '));
+      setShowSearch(true);
+      return;
+    }
     analytics.cardTap(sessionId, card.label);
     speakCard(card);
     setInterimCards(prev => [...prev, card]); // optimistic -- instant UI update
@@ -305,15 +321,26 @@ export function SessionScreen() {
     }
   }, [sessionId, role]);
 
-  const onRemoveCard = useCallback(async (index: number) => {
-    if (!sessionId || index < 0) return;
-    setInterimCards(prev => prev.filter((_, i) => i !== index)); // optimistic
-    try {
-      const r = await api.removeCard(sessionId, index);
-      setInterimCards(r.interim_cards); // reconcile
-    } catch (e: any) {
-      setErrorMsg(e?.message || 'Failed to remove card');
-    }
+  // Removals are serialized through this queue and resolve the target card's index
+  // at execution time (not click time). Without this, tapping two cards in quick
+  // succession fires two requests carrying indices computed from the same stale
+  // render; by the time the second reaches the backend the array has already
+  // shrunk, so it either deletes the wrong card or lands out-of-range -> 500.
+  const removeQueueRef = useRef<Promise<void>>(Promise.resolve());
+
+  const onRemoveCard = useCallback((cardId: string) => {
+    removeQueueRef.current = removeQueueRef.current.then(async () => {
+      if (!sessionId) return;
+      const index = interimCardsRef.current.findIndex(c => c.id === cardId);
+      if (index === -1) return; // already removed by an earlier queued tap
+      setInterimCards(prev => prev.filter((_, i) => i !== index)); // optimistic
+      try {
+        const r = await api.removeCard(sessionId, index);
+        setInterimCards(r.interim_cards); // reconcile
+      } catch (e: any) {
+        setErrorMsg(e?.message || 'Failed to remove card');
+      }
+    });
   }, [sessionId]);
 
   // Step 1: infer sentence from selected cards, show approval overlay
@@ -491,7 +518,7 @@ export function SessionScreen() {
               onRefresh={onRefreshCards}
               onConfirm={onConfirm}
               busy={refreshingCards}
-              onSearchOpen={() => { analytics.cardSearchOpen(sessionId!); setShowSearch(true); }}
+              onSearchOpen={() => { analytics.cardSearchOpen(sessionId!); setScopedFolderPath(undefined); setShowSearch(true); }}
               onDone={onFinishTurn}
               doneEnabled={hasBankedSentence}
             />
@@ -578,8 +605,9 @@ export function SessionScreen() {
 
         {showSearch && (
           <CardSearchOverlay
+            initialPath={scopedFolderPath}
             onSelect={onSearchSelect}
-            onClose={() => setShowSearch(false)}
+            onClose={() => { setShowSearch(false); setScopedFolderPath(undefined); }}
           />
         )}
       </div>
@@ -695,7 +723,7 @@ interface ChildTurnProps {
   rec: ChildCardRecommendationResult;
   interim: CardInfo[];
   onCardClick: (c: CardInfo) => void;
-  onRemoveCard: (index: number) => void;
+  onRemoveCard: (cardId: string) => void;
   onRefresh: () => void;
   onConfirm: () => void;
   busy: boolean;
@@ -725,7 +753,7 @@ function ChildTurn({
 
       {/* Selected-card deck -- fixed height, horizontal scroll, text pills */}
       <div
-        className="flex-shrink-0 h-[72px] bg-amber-50/80 rounded-2xl px-3 py-2 shadow-sm flex flex-col justify-center gap-1.5"
+        className="flex-shrink-0 h-[84px] bg-amber-50/80 rounded-2xl px-3 py-2 shadow-sm flex flex-col justify-center gap-1.5"
         style={{ border: '2px solid #000', borderBottomWidth: 4, boxSizing: 'border-box' }}
       >
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-700 leading-none flex-shrink-0">
@@ -738,7 +766,7 @@ function ChildTurn({
             {interim.map((c, i) => (
               <button
                 key={`${c.id}-${i}`}
-                onClick={() => onRemoveCard(i)}
+                onClick={() => onRemoveCard(c.id)}
                 className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-b-4 border-black rounded-full text-sm font-bold text-slate-700 active:scale-95 transition-transform"
                 style={{ touchAction: 'manipulation' }}
               >
@@ -850,12 +878,12 @@ function SentenceAcceptance({
   return (
     <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-6">
       <div
-        className="w-full max-w-2xl rounded-[2.5rem] flex flex-col items-center gap-8 px-8 py-12 shadow-2xl"
-        style={{ background: '#f0ebe1', boxSizing: 'border-box', border: '3px solid #000', borderBottomWidth: 8 }}
+        className="w-full max-w-2xl rounded-[2.5rem] flex flex-col items-center gap-8 px-8 py-12 shadow-2xl overflow-y-auto"
+        style={{ background: '#f0ebe1', boxSizing: 'border-box', border: '3px solid #000', borderBottomWidth: 8, maxHeight: '90dvh' }}
       >
         <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-700">You said</h2>
 
-        <div className="w-full max-w-xl rounded-3xl p-8 bg-[#94c1c2]/10">
+        <div className="w-full max-w-xl rounded-3xl p-8 bg-[#94c1c2]/10 overflow-y-auto" style={{ maxHeight: '40vh' }}>
           <p className="text-3xl sm:text-4xl font-bold text-slate-700 text-center leading-snug">{sentence}</p>
         </div>
 

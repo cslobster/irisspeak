@@ -13,8 +13,16 @@ interface DefaultCard {
   image?: any;
 }
 
+export interface FolderCardOption {
+  path: string;
+  label: string;
+  icon: string;
+  words: string[];
+}
+
 let _emotion: DefaultCard[] | null = null;
 let _core: DefaultCard[] | null = null;
+let _folderCards: FolderCardOption[] | null = null;
 let _initialGuides: any | null = null;
 
 export function loadEmotionCards(): DefaultCard[] {
@@ -31,6 +39,14 @@ export function loadCoreCards(): DefaultCard[] {
     _core = YAML.parse(yml);
   }
   return _core!;
+}
+
+export function loadFolderCards(): FolderCardOption[] {
+  if (!_folderCards) {
+    const yml = fs.readFileSync(path.join(DATA_DIR, 'folder_cards.yml'), 'utf-8');
+    _folderCards = YAML.parse(yml);
+  }
+  return _folderCards!;
 }
 
 export function loadInitialGuidesYaml(): any {

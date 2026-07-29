@@ -156,7 +156,11 @@ describe('inferSentenceFromCards — passes last parent message to prompt', () =
     expect(result).toBe("I'm hungry");
   });
 
-  it('passes full dialogue XML as the user message', async () => {
+  it('puts the parent message in the system prompt, not the full dialogue history', async () => {
+    // Regression test: passing the full dialogue transcript as the user message let the model
+    // pull in words from *other* turns' card taps (e.g. inferring a previous turn's topic into
+    // the current turn's sentence). The parent message is already in the system prompt (via
+    // buildSentenceInferencePrompt) -- the user message must not also carry the transcript.
     mockInferSequence(
       [card('water', 'topic')],
       [
@@ -167,9 +171,11 @@ describe('inferSentenceFromCards — passes last parent message to prompt', () =
 
     await inferSentenceFromCards('sess-1', dyad);
 
+    const systemContent: string = mockChat.mock.calls[0][0][0].content;
     const userContent: string = mockChat.mock.calls[0][0][1].content;
-    expect(userContent).toContain('What do you need?');
-    expect(userContent).toContain('<dialogue>');
+    expect(systemContent).toContain('What do you need?');
+    expect(userContent).not.toContain('What do you need?');
+    expect(userContent).not.toContain('<dialogue>');
   });
 });
 

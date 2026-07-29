@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CloseIcon } from './Icons';
+import { labelSizeClass } from '../labelSize';
 
 interface CboardCard {
   word: string;
@@ -33,6 +34,9 @@ async function loadFolders(): Promise<FolderCard[]> {
 interface Props {
   onSelect: (word: string, category: string, image_url: string | null) => void;
   onClose: () => void;
+  // Opens the folder-browse view scoped directly into this path (e.g. ['numbers']) instead
+  // of the root — used when a folder card (e.g. "Numbers") is tapped from the session screen.
+  initialPath?: string[];
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -75,11 +79,11 @@ const FOLDER_ICONS: Record<string, string> = {
   weather: '/symbols/cboard/weather.svg',
 };
 
-export function CardSearchOverlay({ onSelect, onClose }: Props) {
+export function CardSearchOverlay({ onSelect, onClose, initialPath }: Props) {
   const [query, setQuery] = useState('');
   const [allCards, setAllCards] = useState<CboardCard[]>([]);
   const [folderCards, setFolderCards] = useState<FolderCard[]>([]);
-  const [path, setPath] = useState<string[]>([]);
+  const [path, setPath] = useState<string[]>(initialPath ?? []);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -143,7 +147,7 @@ export function CardSearchOverlay({ onSelect, onClose }: Props) {
       <div
         onClick={e => e.stopPropagation()}
         className="bg-white w-full sm:w-[90vw] sm:max-w-2xl rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col"
-        style={{ maxHeight: '85dvh' }}
+        style={{ height: '85dvh' }}
       >
         {/* Header */}
         <div className="flex items-center gap-3 px-5 pt-5 pb-3 border-b border-slate-100">
@@ -183,7 +187,7 @@ export function CardSearchOverlay({ onSelect, onClose }: Props) {
                     className={`aspect-square overflow-hidden flex flex-col items-center justify-center rounded-2xl border-2 border-slate-200 ${CATEGORY_COLORS[c.category] ?? 'bg-slate-100'} shadow-sm hover:shadow-md active:scale-95 transition-all p-2`}
                   >
                     <img src={c.image_url} alt="" className="w-1/2 h-1/2 object-contain mb-1" loading="lazy" draggable={false} />
-                    <span className="text-[10px] sm:text-xs font-bold text-slate-800 text-center line-clamp-2 leading-tight">
+                    <span className={`${labelSizeClass(c.word)} font-bold text-slate-800 text-center line-clamp-2 leading-tight`}>
                       {c.word}
                     </span>
                   </button>
@@ -224,7 +228,7 @@ export function CardSearchOverlay({ onSelect, onClose }: Props) {
                       className="aspect-square overflow-hidden flex flex-col items-center justify-center rounded-2xl border-2 border-slate-200 bg-card-topic shadow-sm hover:shadow-md active:scale-95 transition-all p-2"
                     >
                       <img src={cover} alt="" className="w-3/5 h-3/5 object-contain mb-1" loading="lazy" draggable={false} />
-                      <span className="text-[10px] sm:text-xs font-bold text-slate-800 text-center capitalize line-clamp-2 leading-tight">
+                      <span className={`${labelSizeClass(name)} font-bold text-slate-800 text-center capitalize line-clamp-2 leading-tight`}>
                         {name}
                       </span>
                     </button>
@@ -243,7 +247,7 @@ export function CardSearchOverlay({ onSelect, onClose }: Props) {
                         className={`aspect-square overflow-hidden flex flex-col items-center justify-center rounded-2xl border-2 border-slate-200 ${CATEGORY_COLORS[category] ?? 'bg-slate-100'} shadow-sm hover:shadow-md active:scale-95 transition-all p-2`}
                       >
                         <img src={c.image_url} alt="" className="w-1/2 h-1/2 object-contain mb-1" loading="lazy" draggable={false} />
-                        <span className="text-[10px] sm:text-xs font-bold text-slate-800 text-center line-clamp-2 leading-tight">
+                        <span className={`${labelSizeClass(c.word)} font-bold text-slate-800 text-center line-clamp-2 leading-tight`}>
                           {c.word}
                         </span>
                       </button>

@@ -29,6 +29,10 @@ export interface CardInfo {
   corpus_cosine?: number | null;
   corpus_mode?: 'exact' | 'word' | 'cos' | null;
   corpus_image_url?: string | null;
+  // Set when this card represents a folder of choices (e.g. "Numbers") rather
+  // than a single word; tapping it should open a picker scoped to folder_path.
+  is_folder?: boolean;
+  folder_path?: string;
 }
 
 export interface ChildCardRecommendationResult {

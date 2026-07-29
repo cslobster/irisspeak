@@ -1,0 +1,26 @@
+# Curated allow-list of Cboard folders the LLM/keyword logic may suggest as a folder card.
+# `icon` mirrors web-client's CardSearchOverlay.tsx FOLDER_ICONS map so the card shows the
+# same real Cboard cover image as the folder-browse view, not a generic placeholder.
+# `words` mirrors this folder's actual contents from web-client/public/cboard_folders.json —
+# used to exclude these words from the regular topic-word pool when the folder card itself is
+# already shown, so the child isn't offered the same word twice (once loose, once in-folder).
+- path: numbers
+  label: Numbers
+  icon: /symbols/mulberry/count_,_to.svg
+  words: [zero, one, two, three, four, five, six, seven, eight, nine]
+- path: describe > colours
+  label: Colors
+  icon: /symbols/mulberry/shapesorter.svg
+  words: [black, white, mauve, yellow, pink, blue, green, red, colour]
+- path: people > family
+  label: Family
+  icon: /symbols/cboard/people.svg
+  words: [my, your, family, grandfather, grandmother, mum, dad, sister, brother, daughter, son, baby]
+- path: time
+  label: Time
+  icon: /symbols/mulberry/clock.svg
+  words: [time, now, yesterday, today, tomorrow, morning, afternoon, night, day, 'this week', weekend, 'next week', 'this month', 'next month', 'last month', 'one hour', minute, second]
+- path: weather
+  label: Weather
+  icon: /symbols/cboard/weather.svg
+  words: [rain, sun, snow, 'thunder storm', cloudy, autumn, winter, spring, summer]
