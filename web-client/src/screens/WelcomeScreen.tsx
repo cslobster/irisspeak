@@ -73,7 +73,7 @@ export function WelcomeScreen() {
       {/* Center content */}
       <div
         className="relative z-10 flex flex-col items-center justify-center px-8"
-        style={{ minHeight: '60vh', paddingTop: '4vh' }}
+        style={{ minHeight: '75vh', paddingTop: '14vh' }}
       >
         {/* Greeting */}
         <h1
@@ -99,7 +99,7 @@ export function WelcomeScreen() {
             style={{
               width: 200,
               height: 200,
-              borderRadius: 40,
+              borderRadius: '50%',
               background: 'linear-gradient(135deg, #34d399 0%, #10b981 60%, #059669 100%)',
               boxShadow: '0 12px 40px rgba(16,185,129,0.45)',
             }}
