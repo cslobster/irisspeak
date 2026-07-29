@@ -554,7 +554,7 @@ export function SessionScreen() {
                                 className="ui-scale-transcript-chip inline-flex items-center bg-white border border-purple-200 rounded-lg px-2 py-1 text-xs font-bold text-purple-800 shadow-sm"
                                 title={c.corpus_name ? `corpus: ${c.corpus_name}` : c.category}
                               >
-                                {c.corpus_name || c.label}
+                                {c.category === 'emotion' ? c.label : (c.corpus_name || c.label)}
                               </span>
                             ))}
                           </div>
@@ -749,7 +749,7 @@ function ChildTurn({
                 className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-amber-300 rounded-full text-sm font-bold text-slate-700 shadow-sm active:scale-95 transition-transform"
                 style={{ touchAction: 'manipulation' }}
               >
-                {c.corpus_name ?? c.label}
+                {c.category === 'emotion' ? c.label : (c.corpus_name ?? c.label)}
                 <span className="text-[#f09281] text-[11px] font-extrabold">✕</span>
               </button>
             ))}

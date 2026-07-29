@@ -89,7 +89,7 @@ export function SessionEndScreen() {
                         <span key={j}
                               className="inline-flex items-center bg-white border border-purple-200 rounded-lg px-2 py-1 text-xs font-bold text-purple-800 shadow-sm"
                               title={c.corpus_name ? `corpus: ${c.corpus_name}` : c.category}>
-                          {c.corpus_name || c.label}
+                          {c.category === 'emotion' ? c.label : (c.corpus_name || c.label)}
                         </span>
                       ))}
                     </div>
