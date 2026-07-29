@@ -5,6 +5,7 @@ import { SessionScreen } from './screens/SessionScreen';
 import { SessionEndScreen } from './screens/SessionEndScreen';
 import { StarsScreen } from './screens/StarsScreen';
 import { MuteButton } from './components/MuteButton';
+import { SettingsButton } from './components/SettingsButton';
 import { useSelector } from './store';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -24,7 +25,10 @@ function RedirectIfAuthed({ children }: { children: JSX.Element }) {
 export default function App() {
   return (
     <>
-      <MuteButton />
+      <div className="fixed top-5 right-5 z-50 flex items-center gap-3">
+        <MuteButton />
+        <SettingsButton />
+      </div>
       <Routes>
         <Route path="/" element={<RedirectIfAuthed><SignInScreen /></RedirectIfAuthed>} />
         <Route path="/home" element={<RequireAuth><WelcomeScreen /></RequireAuth>} />

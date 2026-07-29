@@ -5,6 +5,7 @@ import { setFreeTopics, useDispatch, useSelector } from '../store';
 import { HillBackground } from '../components/HillBackground';
 import { CloseIcon, StarIcon } from '../components/Icons';
 import { emojiForCard } from '../cardEmoji';
+import { Spinner } from '../components/Spinner';
 
 export function FreeTopicScreen() {
   const nav = useNavigate();
@@ -74,7 +75,7 @@ export function FreeTopicScreen() {
 
         {loading ? (
           <div className="flex flex-col items-center gap-3 py-10">
-            <div className="w-12 h-12 border-4 border-slate-300 border-t-orange-400 rounded-full animate-spin motion-reduce:animate-none" />
+            <Spinner size={80} />
             <p className="text-sm font-bold text-slate-500">Loading favorite topics…</p>
             <button
               onClick={() => setAttempt(a => a + 1)}

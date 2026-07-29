@@ -10,14 +10,16 @@ export async function GET(req: Request, ctx: { params: { sessionId: string } }) 
   const dyad = await dyadFromRequest(req);
   if (!dyad) return unauthorized();
   const rows = (await sql`
-    SELECT role, content_type, content, turn_id, timestamp
-    FROM dialogue_message
-    WHERE session_id = ${ctx.params.sessionId}
-    ORDER BY timestamp ASC
+    SELECT m.role, m.content_type, m.content, m.turn_id, m.timestamp, t.inferred_sentence
+    FROM dialogue_message m
+    LEFT JOIN dialogue_turn t ON t.id = m.turn_id
+    WHERE m.session_id = ${ctx.params.sessionId}
+    ORDER BY m.timestamp ASC
   `) as any[];
   const dialogue = rows.map((r) => ({
     role: r.role,
     content: r.content_type === 'text' ? String(r.content) : r.content,
+    content_localized: r.content_type === 'cards' && r.inferred_sentence ? r.inferred_sentence : undefined,
     turn_id: r.turn_id,
     timestamp: Number(r.timestamp),
   }));

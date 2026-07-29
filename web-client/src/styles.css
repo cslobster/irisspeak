@@ -82,17 +82,30 @@ html.ui-scale-xl    { --ui-scale: 1.22; }
   .ui-scale-welcome-subtitle.sm\:text-3xl { font-size: calc(1.875rem * var(--ui-scale)); }
 }
 
+/* Shared "sticker" button look: a solid black outline plus an extra-thick
+ * black bottom edge standing in for a drop shadow (see WelcomeScreen's start
+ * button, where this was first tried). box-sizing: border-box keeps each
+ * button's outer size unchanged despite the uneven border widths. */
 @layer components {
   .pill-btn {
     @apply px-8 py-3 rounded-full font-bold text-white transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
     min-height: 48px;
+    box-sizing: border-box;
+    border: 2px solid #000;
+    border-bottom-width: 5px;
   }
   .topic-button {
-    @apply relative rounded-3xl text-white font-extrabold flex flex-col justify-end overflow-hidden cursor-pointer transition-transform active:scale-95 shadow-lg;
+    @apply relative rounded-3xl text-white font-extrabold flex flex-col justify-end overflow-hidden cursor-pointer transition-transform active:scale-95;
     min-height: 96px;
+    box-sizing: border-box;
+    border: 2px solid #000;
+    border-bottom-width: 6px;
   }
   .card-chip {
-    @apply px-4 py-3 rounded-2xl border border-black/5 font-bold cursor-pointer select-none transition shadow-sm active:scale-95 text-slate-800;
+    @apply px-4 py-3 rounded-2xl font-bold cursor-pointer select-none transition active:scale-95 text-slate-800;
+    box-sizing: border-box;
+    border: 2px solid #000;
+    border-bottom-width: 4px;
   }
   .guide-card {
     @apply bg-white rounded-2xl p-5 shadow-md border border-slate-200/60;
@@ -101,8 +114,11 @@ html.ui-scale-xl    { --ui-scale: 1.22; }
     @apply px-6 py-2 rounded-full font-bold text-white shadow;
   }
   .icon-btn {
-    @apply rounded-2xl bg-white/90 backdrop-blur shadow border border-slate-200 flex items-center justify-center;
+    @apply rounded-2xl bg-white/90 backdrop-blur flex items-center justify-center;
     min-width: 48px; min-height: 48px;
+    box-sizing: border-box;
+    border: 2px solid #000;
+    border-bottom-width: 4px;
   }
 }
 
@@ -145,6 +161,43 @@ html.ui-scale-xl    { --ui-scale: 1.22; }
   animation: mic-breathe 2.8s ease-in-out infinite;
 }
 
+/* Puzzle-piece loading indicator — the whole cluster turns slowly (one
+   rotation every 6s, well under the mic-ripple/breathe pace) while each piece
+   softly grows/shrinks out of phase with the others. Kept slow and staggered
+   rather than a fast spin so it reads as calm, not urgent. */
+@keyframes puzzle-spin {
+  to { transform: rotate(360deg); }
+}
+.puzzle-spin {
+  animation: puzzle-spin 6s linear infinite;
+}
+@keyframes puzzle-piece-breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.75; }
+  50%      { transform: scale(1.12); opacity: 1; }
+}
+.puzzle-piece {
+  animation: puzzle-piece-breathe 2s ease-in-out infinite;
+}
+
+/* Ring spinner (Spinner.tsx) — the ring spins at a constant rate while the
+   visible arc's length eases in and out, which is what makes it read as
+   "speeds up, slows down" rather than a plain constant spin. */
+@keyframes spinner-rotate {
+  100% { transform: rotate(360deg); }
+}
+.spinner-rotate {
+  transform-origin: 50% 50%;
+  animation: spinner-rotate 2s linear infinite;
+}
+@keyframes spinner-dash {
+  0%   { stroke-dasharray: 1, 200; stroke-dashoffset: 0; }
+  50%  { stroke-dasharray: 89, 200; stroke-dashoffset: -35px; }
+  100% { stroke-dasharray: 89, 200; stroke-dashoffset: -124px; }
+}
+.spinner-dash {
+  animation: spinner-dash 1.5s ease-in-out infinite;
+}
+
 /* Cloud floats */
 .cloud {
   position: absolute; width: 80px; height: 30px; background: white; border-radius: 999px; opacity: 0.85;
@@ -161,12 +214,23 @@ html.ui-scale-xl    { --ui-scale: 1.22; }
 @media (prefers-reduced-motion: reduce) {
   .mic-ripple::before,
   .mic-ripple::after,
-  .mic-breathe {
+  .mic-breathe,
+  .puzzle-spin,
+  .puzzle-piece,
+  .spinner-rotate,
+  .spinner-dash {
     animation: none !important;
   }
   .mic-ripple::before,
   .mic-ripple::after {
     opacity: 0 !important;
+  }
+  .puzzle-piece {
+    opacity: 1 !important;
+  }
+  .spinner-dash {
+    stroke-dasharray: 40, 200 !important;
+    stroke-dashoffset: -10px !important;
   }
 
   /* Shared press/tap feedback (pill-btn, topic-button, card-chip) — drop the
