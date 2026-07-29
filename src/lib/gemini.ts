@@ -29,6 +29,35 @@ export function stripFence(text: string): string {
   return (m ? m[1] : text).trim();
 }
 
+/**
+ * Pull a `key: [a, b, c]` or block-list `key:\n  - a\n  - b` value out of anywhere in the
+ * text, ignoring anything before/after it. Gemini occasionally writes its reasoning out as
+ * prose before the requested structured output despite "output only X" instructions, which
+ * breaks a strict whole-document YAML.parse — this scans for the line(s) that matter instead
+ * of requiring the entire response to be valid YAML.
+ */
+export function extractYamlList(text: string, key: string): string[] {
+  const inline = new RegExp(`^[ \\t]*${key}:[ \\t]*\\[(.*)\\][ \\t]*$`, 'm');
+  const inlineMatch = inline.exec(text);
+  if (inlineMatch) {
+    return inlineMatch[1]
+      .split(',')
+      .map((s) => s.trim().replace(/^["']|["']$/g, ''))
+      .filter(Boolean);
+  }
+
+  const block = new RegExp(`^[ \\t]*${key}:[ \\t]*\\r?\\n((?:[ \\t]*-[ \\t]*.+\\r?\\n?)+)`, 'm');
+  const blockMatch = block.exec(text);
+  if (blockMatch) {
+    return blockMatch[1]
+      .split(/\r?\n/)
+      .map((l) => l.replace(/^[ \t]*-[ \t]*/, '').trim().replace(/^["']|["']$/g, ''))
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
 export interface ChatTurn {
   role: 'system' | 'user' | 'assistant';
   content: string;
