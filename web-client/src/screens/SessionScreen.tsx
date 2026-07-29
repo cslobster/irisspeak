@@ -817,12 +817,12 @@ function SentenceAcceptance({
   return (
     <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-6">
       <div
-        className="w-full max-w-2xl rounded-[2.5rem] flex flex-col items-center gap-8 px-8 py-12 shadow-2xl"
-        style={{ background: '#f0ebe1', boxSizing: 'border-box', border: '3px solid #000', borderBottomWidth: 8 }}
+        className="w-full max-w-2xl rounded-[2.5rem] flex flex-col items-center gap-8 px-8 py-12 shadow-2xl overflow-y-auto"
+        style={{ background: '#f0ebe1', boxSizing: 'border-box', border: '3px solid #000', borderBottomWidth: 8, maxHeight: '90dvh' }}
       >
         <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-700">You said</h2>
 
-        <div className="w-full max-w-xl rounded-3xl p-8 bg-[#94c1c2]/10">
+        <div className="w-full max-w-xl rounded-3xl p-8 bg-[#94c1c2]/10 overflow-y-auto" style={{ maxHeight: '40vh' }}>
           <p className="text-3xl sm:text-4xl font-bold text-slate-700 text-center leading-snug">{sentence}</p>
         </div>
 
