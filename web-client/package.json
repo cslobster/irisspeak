@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/opendyslexic": "^5.3.0",
     "@huggingface/transformers": "^4.2.0",
     "@reduxjs/toolkit": "^2.2.3",
     "axios": "^1.6.8",

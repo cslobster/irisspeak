@@ -1,4 +1,5 @@
 // Browser Web Speech API wrapper for speaking card labels and example utterances.
+import { getMuted } from './mute';
 
 let voice: SpeechSynthesisVoice | null = null;
 
@@ -22,7 +23,7 @@ if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
 }
 
 export function speak(text: string, opts: { rate?: number; pitch?: number } = {}) {
-  if (!('speechSynthesis' in window)) return;
+  if (!('speechSynthesis' in window) || getMuted()) return;
   const synth = window.speechSynthesis;
   synth.cancel();
   const u = new SpeechSynthesisUtterance(text);

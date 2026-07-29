@@ -5,8 +5,8 @@
 html, body, #root { height: 100%; margin: 0; }
 html, body { overscroll-behavior-y: none; }
 body {
-  font-family: 'Fredoka', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 500;
+  font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   color: #2b2d31;
