@@ -127,7 +127,7 @@ export function WelcomeScreen() {
               width: 200,
               height: 200,
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #34d399 0%, #10b981 60%, #059669 100%)',
+              background: '#10b981',
             }}
             aria-label="Start a conversation"
           >
@@ -135,7 +135,14 @@ export function WelcomeScreen() {
               <div className="w-10 h-10 border-4 border-white/40 border-t-white rounded-full animate-spin motion-reduce:animate-none" />
             ) : (
               <svg width="80" height="80" viewBox="0 0 72 72" fill="none">
-                <path d="M18 12 L62 36 L18 60 Z" fill="white" />
+                <path
+                  d="M18 12 L62 36 L18 60 Z"
+                  fill="white"
+                  stroke="white"
+                  strokeWidth="8"
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                />
               </svg>
             )}
           </button>
