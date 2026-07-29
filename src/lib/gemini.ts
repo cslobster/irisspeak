@@ -55,6 +55,20 @@ export function extractYamlList(text: string, key: string): string[] {
       .filter(Boolean);
   }
 
+  // Fallback: a bare, bracket-less scalar (e.g. `folder: numbers` instead of the requested
+  // `folder: [numbers]`) — models occasionally drop the brackets despite instructions.
+  const bare = new RegExp(`^[ \\t]*${key}:[ \\t]*(.+)$`, 'm');
+  const bareMatch = bare.exec(text);
+  if (bareMatch) {
+    const val = bareMatch[1].trim();
+    if (!val.startsWith('[')) {
+      return val
+        .split(',')
+        .map((s) => s.trim().replace(/^["']|["']$/g, ''))
+        .filter(Boolean);
+    }
+  }
+
   return [];
 }
 

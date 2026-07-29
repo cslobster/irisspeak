@@ -6,6 +6,7 @@ Self-contained Next.js 14 backend that ports the FastAPI service:
 - **Cboard vocabulary** (738 words) — exact-match lookup, constrained directly in the LLM prompt
 - **JWT** auth, mirroring the prior contract
 - **OpenDyslexic** font + larger default text sizes on the web client for readability
+- **Cboard folder browsing** in the child's card-search overlay, restored from the original Cboard hierarchy
 
 ## Run locally
 
