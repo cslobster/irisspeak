@@ -140,6 +140,19 @@ export function buildSentenceInferencePrompt(
   const coreLabels = core.map(c => c.label);
   const hasCoreCard = core.length > 0;
 
+  // Collapse repeat taps of the same card into one entry with a tap count instead of showing
+  // the raw word multiple times — otherwise the model tends to echo it back literally
+  // ("felt happy and happy all day") rather than reading repetition as emphasis.
+  function summarizeWords(words: string[]): string {
+    const counts = new Map<string, number>();
+    const order: string[] = [];
+    for (const w of words) {
+      if (!counts.has(w)) order.push(w);
+      counts.set(w, (counts.get(w) || 0) + 1);
+    }
+    return order.map(w => (counts.get(w)! > 1 ? `${w} (tapped ${counts.get(w)}x)` : w)).join(', ');
+  }
+
   const lines: string[] = [
     `You interpret what a minimally-verbal autistic child named ${childName} is trying to say using AAC cards.`,
   ];
@@ -152,8 +165,8 @@ export function buildSentenceInferencePrompt(
     ``,
     `${childName} tapped these AAC cards (in order, first tapped = most emphasized):`,
   );
-  if (contentWords.length) lines.push(`  Content (topic/action): ${contentWords.join(', ')}`);
-  if (emotionWords.length) lines.push(`  Feeling: ${emotionWords.join(', ')}`);
+  if (contentWords.length) lines.push(`  Content (topic/action): ${summarizeWords(contentWords)}`);
+  if (emotionWords.length) lines.push(`  Feeling: ${summarizeWords(emotionWords)}`);
   if (coreLabels.length)   lines.push(`  Core (Yes/No/More/Help/etc): ${coreLabels.join(', ')}`);
 
   lines.push(
@@ -163,11 +176,12 @@ export function buildSentenceInferencePrompt(
     `RULES:`,
     `1. ${hasCoreCard ? `Core word "${coreLabels.join('/')}" goes at the very start and drives the tone.` : `No core card tapped — do NOT start with Yes, No, or any affirmation. Begin with "I".`}`,
     `2. Use the parent's question as context — if the parent asked about food, you don't need to re-explain food; just answer about it.`,
-    `3. Capture the MEANING of all the cards. Use natural prepositions (at, in, on, with) to connect them — don't just list words with "and".`,
-    `4. If a feeling card is present, weave it in naturally ("I feel X" or "I'm X").`,
+    `3. EVERY DISTINCT tapped card must be represented in the sentence — none may be dropped or left out, even if that makes the sentence a bit longer or less smooth. Build the sentence in tap order (first-tapped card's idea comes first), connected with natural prepositions/conjunctions (at, in, on, with, and, because, so) — don't just list words with "and".`,
+    `4. If a feeling card is present, weave it in naturally ("I feel X" or "I'm X") — do not let it replace or crowd out the other cards.`,
     `5. 4–10 words. ONE sentence only. First-person.`,
-    `6. Do NOT invent ideas that aren't in the cards or the parent's question.`,
-    `7. Output ONLY the sentence — no quotes, no explanation.`,
+    `6. Do NOT invent any idea, reason, person, place, or detail that isn't one of the tapped cards or explicitly in the parent's question. If you're unsure how two cards connect, use a plain "and" rather than inventing a connecting reason.`,
+    `7. A card marked "(tapped Nx)" means ${childName} tapped it multiple times for EMPHASIS — express that as intensity ("really", "so", "very") ONCE, not by repeating the word N times.`,
+    `8. Before answering, silently check your draft sentence against the card list — if any distinct card's word or clear meaning is missing, revise until every one is present, and make sure no word is repeated more than the emphasis in rule 7 calls for. Output ONLY the final sentence — no quotes, no explanation, no draft.`,
     ``,
     `Examples WITH parent context:`,
     `  Parent: "What do you want to eat?" | Cards: [pizza, want, more] → I want more pizza`,
@@ -182,6 +196,10 @@ export function buildSentenceInferencePrompt(
     `  Cards: [hungry, food] → I'm hungry and want food`,
     `  Cards: [sad, help] → I feel sad and need help`,
     `  Cards: [play, outside, happy] → I want to play outside and I feel happy`,
+    `  Cards: [want, sleep, confused] → I'm confused and want to sleep`,
+    `    (BAD — do not do this: "I'm confused about leaving" — drops "want"/"sleep" and invents "leaving")`,
+    `  Feeling: happy (tapped 3x) → I feel really happy`,
+    `    (BAD — do not do this: "I felt happy and happy all day" — repeats the word instead of using intensity)`,
   );
 
   return lines.join('\n');
