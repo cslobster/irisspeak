@@ -5,6 +5,7 @@ Self-contained Next.js 14 backend that ports the FastAPI service:
 - **Gemini Flash Lite** via the OpenAI-compat endpoint
 - **Cboard vocabulary** (738 words) — exact-match lookup, constrained directly in the LLM prompt
 - **JWT** auth, mirroring the prior contract
+- **OpenDyslexic** font + larger default text sizes on the web client for readability
 
 ## Run locally
 
