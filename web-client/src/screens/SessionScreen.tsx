@@ -10,6 +10,7 @@ import { CloseIcon, MenuIcon, MicIcon, StopIcon, StarIcon } from '../components/
 import { CardSearchOverlay } from '../components/CardSearchOverlay';
 import { MicRecorder } from '../audio/recorder';
 import { speak, speakCard, stopSpeaking } from '../audio/tts';
+import { getMuted } from '../audio/mute';
 import { WebSpeechRecognizer, isWebSpeechSupported } from '../audio/webspeech';
 // Whisper module is dynamic-imported only as a fallback when the browser lacks
 // Web Speech API (mainly Firefox), so the 23 MB onnx-runtime WASM isn't pulled
@@ -667,9 +668,6 @@ function ParentTurn({
               background: isRecording
                 ? 'linear-gradient(135deg, #fb7185, #e11d48)'
                 : `linear-gradient(135deg, ${accent.light}, ${accent.dark})`,
-              boxShadow: isRecording
-                ? '0 10px 32px rgba(225,29,72,0.4)'
-                : `0 12px 40px ${accent.shadow}`,
             }}
           >
             {isRecording
@@ -843,6 +841,7 @@ function SentenceAcceptance({
   function handlePlay() {
     if (playState === 'playing') return;
     window.speechSynthesis?.cancel();
+    if (getMuted()) { setPlayState('done'); return; }
     const utter = new SpeechSynthesisUtterance(sentence);
     utter.onend = () => setPlayState('done');
     utter.onerror = () => setPlayState('done');
@@ -866,7 +865,7 @@ function SentenceAcceptance({
         aria-label={playState === 'done' ? 'Play again' : 'Play sentence'}
       >
         <div
-          className="w-32 h-32 rounded-full flex items-center justify-center shadow-xl transition-colors duration-300 ease-in-out"
+          className="w-32 h-32 rounded-full flex items-center justify-center transition-colors duration-300 ease-in-out"
           style={{
             background: playState === 'playing'
               ? '#a78bfa'

@@ -4,6 +4,7 @@ import { WelcomeScreen } from './screens/WelcomeScreen';
 import { SessionScreen } from './screens/SessionScreen';
 import { SessionEndScreen } from './screens/SessionEndScreen';
 import { StarsScreen } from './screens/StarsScreen';
+import { MuteButton } from './components/MuteButton';
 import { useSelector } from './store';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -22,13 +23,16 @@ function RedirectIfAuthed({ children }: { children: JSX.Element }) {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<RedirectIfAuthed><SignInScreen /></RedirectIfAuthed>} />
-      <Route path="/home" element={<RequireAuth><WelcomeScreen /></RequireAuth>} />
-      <Route path="/session/:sessionId" element={<RequireAuth><SessionScreen /></RequireAuth>} />
-      <Route path="/session-end/:sessionId" element={<RequireAuth><SessionEndScreen /></RequireAuth>} />
-      <Route path="/stars" element={<RequireAuth><StarsScreen /></RequireAuth>} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <MuteButton />
+      <Routes>
+        <Route path="/" element={<RedirectIfAuthed><SignInScreen /></RedirectIfAuthed>} />
+        <Route path="/home" element={<RequireAuth><WelcomeScreen /></RequireAuth>} />
+        <Route path="/session/:sessionId" element={<RequireAuth><SessionScreen /></RequireAuth>} />
+        <Route path="/session-end/:sessionId" element={<RequireAuth><SessionEndScreen /></RequireAuth>} />
+        <Route path="/stars" element={<RequireAuth><StarsScreen /></RequireAuth>} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 }

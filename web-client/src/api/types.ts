@@ -106,4 +106,5 @@ export interface ExtendedSessionInfo {
   ended_timestamp: number | null;
   num_turns: number;
   rating?: number | null;
+  title?: string | null;
 }

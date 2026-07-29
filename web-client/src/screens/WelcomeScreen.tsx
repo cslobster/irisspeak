@@ -81,6 +81,12 @@ export function WelcomeScreen() {
               </div>
             </div>
             <button
+              onClick={() => nav('/stars')}
+              className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
+            >
+              Previous conversations
+            </button>
+            <button
               onClick={signOut}
               className="w-full text-left px-5 py-4 text-sm font-bold text-red-500 hover:bg-red-50 transition"
             >
@@ -97,7 +103,7 @@ export function WelcomeScreen() {
       >
         {/* Greeting */}
         <h1
-          className="ui-scale-welcome-heading text-5xl sm:text-7xl font-bold text-center mb-14 select-none leading-[1.25] pb-2"
+          className="ui-scale-welcome-heading text-5xl sm:text-7xl font-bold text-center mb-14 select-none leading-[1.25] pb-2 tracking-tight"
           style={{
             background: 'linear-gradient(135deg, #f43f5e 0%, #a855f7 45%, #0ea5e9 80%, #10b981 100%)',
             WebkitBackgroundClip: 'text',
@@ -116,13 +122,12 @@ export function WelcomeScreen() {
           <button
             onClick={startConversation}
             disabled={starting}
-            className="flex items-center justify-center shadow-2xl active:scale-95 disabled:opacity-60 transition-transform"
+            className="flex items-center justify-center active:scale-95 disabled:opacity-60 transition-transform"
             style={{
               width: 200,
               height: 200,
               borderRadius: '50%',
               background: 'linear-gradient(135deg, #34d399 0%, #10b981 60%, #059669 100%)',
-              boxShadow: '0 12px 40px rgba(16,185,129,0.45)',
             }}
             aria-label="Start a conversation"
           >
