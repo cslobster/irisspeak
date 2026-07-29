@@ -697,7 +697,7 @@ function ChildTurn({
 
       {/* Selected-card deck -- fixed height, horizontal scroll, text pills */}
       <div
-        className="flex-shrink-0 h-[72px] bg-amber-50/80 rounded-2xl px-3 py-2 shadow-sm flex flex-col justify-center gap-1.5"
+        className="flex-shrink-0 h-[84px] bg-amber-50/80 rounded-2xl px-3 py-2 shadow-sm flex flex-col justify-center gap-1.5"
         style={{ border: '2px solid #000', borderBottomWidth: 4, boxSizing: 'border-box' }}
       >
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-700 leading-none flex-shrink-0">

@@ -463,9 +463,14 @@ export async function inferSentenceFromCards(sessionId: string, dyad: Dyad): Pro
   const lastParent = [...dialogue].reverse().find(m => m.role === 'parent');
   const lastParentMsg = lastParent && typeof lastParent.content === 'string' ? lastParent.content : undefined;
 
+  // Deliberately NOT passing the full dialogue history here (unlike the other prompts in this
+  // file) — buildSentenceInferencePrompt is already self-contained with the tapped cards and
+  // the relevant parent message. Passing the whole transcript caused the model to pull in
+  // words from *previous* turns' card taps (e.g. inferring "teacher" from turn 1 into a turn-2
+  // sentence that only tapped "day"), since it couldn't tell current selection from history.
   const raw = await chat([
     { role: 'system', content: buildSentenceInferencePrompt(interim, dyad.child_name, lastParentMsg) },
-    { role: 'user',   content: dialogueToXml(dialogue) },
+    { role: 'user',   content: 'Generate the sentence now, following the rules above.' },
   ]);
   const sentence = raw.replace(/^["'](.*)["']$/s, '$1').trim();
   await sql`UPDATE dialogue_turn SET inferred_sentence = ${sentence} WHERE id = ${cur.id}`;
