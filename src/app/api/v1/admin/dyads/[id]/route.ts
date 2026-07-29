@@ -1,6 +1,7 @@
 import { sql, ensureSchema } from '@/lib/db';
 import { adminFromRequest } from '@/lib/auth';
 import { ok, badRequest, unauthorized, notFound } from '@/lib/responses';
+import { capitalizeName } from '@/lib/text';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -16,11 +17,13 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   const existing = await sql`SELECT id FROM dyad WHERE id = ${id} LIMIT 1`;
   if (!existing.length) return notFound('Dyad not found');
 
+  const childNameVal = child_name ? capitalizeName(child_name) : null;
+
   if (alias || child_name || child_gender || parent_type || locale) {
     await sql`
       UPDATE dyad SET
         alias        = COALESCE(${alias ?? null}, alias),
-        child_name   = COALESCE(${child_name ?? null}, child_name),
+        child_name   = COALESCE(${childNameVal}, child_name),
         child_gender = COALESCE(${child_gender ?? null}, child_gender),
         parent_type  = COALESCE(${parent_type ?? null}, parent_type),
         locale       = COALESCE(${locale ?? null}, locale)

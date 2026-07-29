@@ -1,6 +1,7 @@
 import { sql, ensureSchema } from '@/lib/db';
 import { adminFromRequest } from '@/lib/auth';
 import { ok, badRequest, unauthorized } from '@/lib/responses';
+import { capitalizeName } from '@/lib/text';
 import { nanoid } from 'nanoid';
 
 export const dynamic = 'force-dynamic';
@@ -31,17 +32,18 @@ export async function POST(req: Request) {
 
   const id = nanoid();
   const localeVal = locale || 'en';
+  const childNameVal = capitalizeName(child_name);
 
   await sql`
     INSERT INTO dyad (id, alias, child_name, child_gender, parent_type, locale)
-    VALUES (${id}, ${alias}, ${child_name}, ${child_gender}, ${parent_type}, ${localeVal})
+    VALUES (${id}, ${alias}, ${childNameVal}, ${child_gender}, ${parent_type}, ${localeVal})
   `;
   await sql`
     INSERT INTO dyad_login_code (code, dyad_id)
     VALUES (${login_code}, ${id})
   `;
 
-  return ok({ id, alias, child_name, child_gender, parent_type, locale: localeVal, login_code });
+  return ok({ id, alias, child_name: childNameVal, child_gender, parent_type, locale: localeVal, login_code });
 }
 
 export async function OPTIONS() {

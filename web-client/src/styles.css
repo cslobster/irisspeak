@@ -66,6 +66,22 @@ html.ui-scale-xl    { --ui-scale: 1.22; }
   .ui-scale-mic-label.sm\:text-2xl { font-size: calc(1.5rem * var(--ui-scale)); }
 }
 
+/* Transcript dialogue feed (SessionScreen.tsx's "Transcript" modal) -- the
+ * message bubbles, role labels, and card-word chips shown there weren't
+ * wired to --ui-scale at all previously. */
+.ui-scale-transcript-msg.text-sm   { font-size: calc(0.875rem * var(--ui-scale)); }
+.ui-scale-transcript-role.text-\[10px\] { font-size: calc(10px * var(--ui-scale)); }
+.ui-scale-transcript-chip.text-xs  { font-size: calc(0.75rem * var(--ui-scale)); }
+
+/* Welcome/home screen (WelcomeScreen.tsx) -- the greeting heading and
+ * "Start a conversation" subtitle weren't wired to --ui-scale either. */
+.ui-scale-welcome-heading.text-5xl   { font-size: calc(3rem * var(--ui-scale)); }
+.ui-scale-welcome-subtitle.text-2xl  { font-size: calc(1.5rem * var(--ui-scale)); }
+@media (min-width: 640px) {
+  .ui-scale-welcome-heading.sm\:text-7xl  { font-size: calc(4.5rem * var(--ui-scale)); }
+  .ui-scale-welcome-subtitle.sm\:text-3xl { font-size: calc(1.875rem * var(--ui-scale)); }
+}
+
 @layer components {
   .pill-btn {
     @apply px-8 py-3 rounded-full font-bold text-white transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
