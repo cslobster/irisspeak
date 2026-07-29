@@ -27,7 +27,9 @@ const sizeMap = {
 export function CardChip({ card, onClick, size = 'lg', selected = false, disabled = false }: Props) {
   const t = tile[card.category];
   const sz = sizeMap[size];
-  const displayLabel = card.corpus_name ?? card.label;
+  // Emotion cards show their "I'm X" phrase (label); other categories prefer the corpus's
+  // matched word (corpus_name) since that's the word actually confirmed against the vocab.
+  const displayLabel = card.category === 'emotion' ? card.label : (card.corpus_name ?? card.label);
 
   return (
     <button
@@ -51,7 +53,7 @@ export function CardChip({ card, onClick, size = 'lg', selected = false, disable
           src={card.corpus_image_url}
           alt=""
           draggable={false}
-          className="w-1/2 h-1/2 object-contain mb-1 pointer-events-none select-none"
+          className="w-3/4 h-3/4 object-contain mb-1 pointer-events-none select-none"
         />
       )}
       <div className="w-full px-0.5 text-center leading-tight">
