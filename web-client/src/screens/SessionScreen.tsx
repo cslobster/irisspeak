@@ -46,7 +46,17 @@ export function SessionScreen() {
   const [turnId, setTurnId] = useState<string | null>(null);
   const [parentGuide, setParentGuide] = useState<ParentGuideRecommendationResult | null>(null);
   const [childRec, setChildRec] = useState<ChildCardRecommendationResult | null>(null);
-  const [interimCards, setInterimCards] = useState<CardInfo[]>([]);
+  const [interimCards, setInterimCardsState] = useState<CardInfo[]>([]);
+  // Ref mirrors interimCards synchronously (state updates are batched/async, but
+  // onRemoveCard needs the true current list at the instant each queued removal runs).
+  const interimCardsRef = useRef<CardInfo[]>([]);
+  const setInterimCards = useCallback((updater: CardInfo[] | ((prev: CardInfo[]) => CardInfo[])) => {
+    const next = typeof updater === 'function'
+      ? (updater as (prev: CardInfo[]) => CardInfo[])(interimCardsRef.current)
+      : updater;
+    interimCardsRef.current = next;
+    setInterimCardsState(next);
+  }, []);
   const [dialogue, setDialogue] = useState<DialogueMessage[]>([]);
   const [parentMessage, setParentMessage] = useState('');
   const [exampleByGuideId, setExampleByGuideId] = useState<Record<string, string>>({});
@@ -54,6 +64,7 @@ export function SessionScreen() {
   const [showMenu, setShowMenu] = useState(false);
   const [showDialogue, setShowDialogue] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [scopedFolderPath, setScopedFolderPath] = useState<string[] | undefined>(undefined);
   const [lastParentMessage, setLastParentMessage] = useState<string | null>(null);
   const [lastChildSentence, setLastChildSentence] = useState<string | null>(null);
   const [inferredSentence, setInferredSentence] = useState<string | null>(null);
@@ -271,6 +282,11 @@ export function SessionScreen() {
   // pulled -- on touch screens an instant role flip felt like a crash.)
   const onCardClick = useCallback(async (card: CardInfo) => {
     if (!sessionId || role !== 'child') return;
+    if (card.is_folder && card.folder_path) {
+      setScopedFolderPath(card.folder_path.split(' > '));
+      setShowSearch(true);
+      return;
+    }
     analytics.cardTap(sessionId, card.label);
     speakCard(card);
     setInterimCards(prev => [...prev, card]); // optimistic -- instant UI update
@@ -302,15 +318,26 @@ export function SessionScreen() {
     }
   }, [sessionId, role]);
 
-  const onRemoveCard = useCallback(async (index: number) => {
-    if (!sessionId || index < 0) return;
-    setInterimCards(prev => prev.filter((_, i) => i !== index)); // optimistic
-    try {
-      const r = await api.removeCard(sessionId, index);
-      setInterimCards(r.interim_cards); // reconcile
-    } catch (e: any) {
-      setErrorMsg(e?.message || 'Failed to remove card');
-    }
+  // Removals are serialized through this queue and resolve the target card's index
+  // at execution time (not click time). Without this, tapping two cards in quick
+  // succession fires two requests carrying indices computed from the same stale
+  // render; by the time the second reaches the backend the array has already
+  // shrunk, so it either deletes the wrong card or lands out-of-range -> 500.
+  const removeQueueRef = useRef<Promise<void>>(Promise.resolve());
+
+  const onRemoveCard = useCallback((cardId: string) => {
+    removeQueueRef.current = removeQueueRef.current.then(async () => {
+      if (!sessionId) return;
+      const index = interimCardsRef.current.findIndex(c => c.id === cardId);
+      if (index === -1) return; // already removed by an earlier queued tap
+      setInterimCards(prev => prev.filter((_, i) => i !== index)); // optimistic
+      try {
+        const r = await api.removeCard(sessionId, index);
+        setInterimCards(r.interim_cards); // reconcile
+      } catch (e: any) {
+        setErrorMsg(e?.message || 'Failed to remove card');
+      }
+    });
   }, [sessionId]);
 
   // Step 1: infer sentence from selected cards, show approval overlay
@@ -467,7 +494,7 @@ export function SessionScreen() {
               onRefresh={onRefreshCards}
               onConfirm={onConfirm}
               busy={refreshingCards}
-              onSearchOpen={() => { analytics.cardSearchOpen(sessionId!); setShowSearch(true); }}
+              onSearchOpen={() => { analytics.cardSearchOpen(sessionId!); setScopedFolderPath(undefined); setShowSearch(true); }}
             />
           )}
         </div>
@@ -552,8 +579,9 @@ export function SessionScreen() {
 
         {showSearch && (
           <CardSearchOverlay
+            initialPath={scopedFolderPath}
             onSelect={onSearchSelect}
-            onClose={() => setShowSearch(false)}
+            onClose={() => { setShowSearch(false); setScopedFolderPath(undefined); }}
           />
         )}
       </div>
@@ -669,7 +697,7 @@ interface ChildTurnProps {
   rec: ChildCardRecommendationResult;
   interim: CardInfo[];
   onCardClick: (c: CardInfo) => void;
-  onRemoveCard: (index: number) => void;
+  onRemoveCard: (cardId: string) => void;
   onRefresh: () => void;
   onConfirm: () => void;
   busy: boolean;
@@ -710,7 +738,7 @@ function ChildTurn({
             {interim.map((c, i) => (
               <button
                 key={`${c.id}-${i}`}
-                onClick={() => onRemoveCard(i)}
+                onClick={() => onRemoveCard(c.id)}
                 className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-b-4 border-black rounded-full text-sm font-bold text-slate-700 active:scale-95 transition-transform"
                 style={{ touchAction: 'manipulation' }}
               >

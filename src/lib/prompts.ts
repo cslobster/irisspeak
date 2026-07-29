@@ -3,6 +3,7 @@
  * after the latest prompt-trimming pass.
  */
 import { TOPIC_DESCRIPTION } from './staticData';
+import type { FolderCardOption } from './staticData';
 import type {
   CardInfo, DialogueMessage, ParentType, TopicCategory,
 } from './types';
@@ -32,9 +33,32 @@ export function buildChildCardPrompt(args: {
   actionVocab: string[];
   seenLabels?: string[];
   interimCards?: CardInfo[];
+  folderOptions?: FolderCardOption[];
 }): string {
   const topicList = args.topicVocab.join(', ');
   const actionList = args.actionVocab.join(', ');
+
+  let folderInstructions = '';
+  if (args.folderOptions && args.folderOptions.length) {
+    const folderList = args.folderOptions.map((f) => f.path).join(', ');
+    folderInstructions = [
+      `\n\n4. Separately from steps 1-3, check whether the message is asking the child for one `,
+      `specific value out of a large open-ended set — a number/age/count, a color, a family `,
+      `member, a time, or a weather condition. This should be RARE — most messages don't need `,
+      `this at all, and the default is to output nothing here. Only when it's clearly one of `,
+      `these cases, you MUST ALSO output a \`folder\` line naming exactly one of: ${folderList} `,
+      `(name a second one, comma-separated in the same brackets, ONLY on the rare message that `,
+      `unambiguously asks for two of these at once — e.g. "what time and what day" — never pad `,
+      `it out otherwise). This opens a picker with the FULL set of choices for that category, `,
+      `which the fixed 6-word topic/action lists can never fully cover (e.g. "how old are you" `,
+      `could need any number, not just the ones that happen to be in the topic vocabulary) — add `,
+      `the folder line EVEN IF one or two topic/action words above already touch on it. Never `,
+      `invent a folder name outside this exact list. Decide this silently, like steps 1-3 — do `,
+      `NOT explain your reasoning for it. The \`folder\` line, if used, MUST be formatted exactly `,
+      `as \`folder: [path]\` or \`folder: [path1, path2]\` with square brackets, on a single line, `,
+      `and nothing else — the same as the topics/actions lines below.`,
+    ].join('');
+  }
 
   let prev = '';
   if (args.seenLabels && args.seenLabels.length) {
@@ -64,10 +88,15 @@ export function buildChildCardPrompt(args: {
     `associated filler. If a vocabulary doesn't contain enough strongly on-theme words, pick the `,
     `closest available ones rather than switching to a different theme. Do NOT repeat the same word `,
     `twice within a list.\n\n`,
-    `Do steps 1-2 silently — do NOT write out the theme or sentences. `,
-    `Output ONLY this YAML, nothing else, no text before or after it:\n`,
+    folderInstructions,
+    `\n\nDo ALL steps silently — do NOT write out the theme, sentences, or any reasoning about `,
+    `the folder decision. Output ONLY this YAML, nothing else, no text before or after it, no `,
+    `explanation:\n`,
     `topics: [w1, w2, w3, w4, w5, w6]\n`,
     `actions: [w1, w2, w3, w4, w5, w6]`,
+    args.folderOptions && args.folderOptions.length
+      ? `\n(include a third line \`folder: [path]\` only if step 4 applies — omit it entirely otherwise)`
+      : '',
     prev,
     interim,
   ].join('');

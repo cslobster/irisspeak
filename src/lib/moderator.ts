@@ -20,11 +20,40 @@ import {
   buildChildCardPrompt, buildParentGuidePrompt, buildSentenceInferencePrompt, buildSessionTitlePrompt,
   dialogueToXml,
 } from './prompts';
-import { buildInitialGuides, labelForParent, loadCoreCards } from './staticData';
+import { buildInitialGuides, labelForParent, loadCoreCards, loadFolderCards } from './staticData';
+import type { FolderCardOption } from './staticData';
 import type {
   CardInfo, CardSelectionResult, ChildCardRecommendationResult, DialogueMessage, Dyad,
   ParentGuideElement, ParentGuideRecommendationResult, SessionTopicInfo, TopicCategory,
 } from './types';
+
+// Deterministic backstop for the LLM's folder-card judgment call: even with a strongly-worded
+// prompt, Gemini doesn't reliably suggest a folder for the most obvious cases (empirically,
+// misses "How old are you?" a meaningful fraction of the time — see CONTEXT.md's Folder Card
+// entry). These keyword patterns catch the unambiguous canonical phrasings per allow-listed
+// folder so the feature isn't purely a coin flip for the cases it exists to solve.
+const FOLDER_KEYWORD_TRIGGERS: { pattern: RegExp; path: string }[] = [
+  { pattern: /\bhow old\b|\byour age\b|\bwhat age\b/i, path: 'numbers' },
+  { pattern: /\bcolor\b|\bcolour\b/i, path: 'describe > colours' },
+  { pattern: /\bfamily member\b|\bfavorite family\b/i, path: 'people > family' },
+  { pattern: /\bwhat time\b/i, path: 'time' },
+  { pattern: /\bweather\b/i, path: 'weather' },
+];
+
+// Every message gets at most this many folder cards — keeps folder suggestions rare and the
+// topic column mostly real words, per product intent (folders are for the clear-cut cases only).
+const MAX_FOLDER_CARDS = 2;
+
+function detectFoldersByKeyword(text: string, folderOptions: FolderCardOption[]): FolderCardOption[] {
+  const matches: FolderCardOption[] = [];
+  for (const { pattern, path } of FOLDER_KEYWORD_TRIGGERS) {
+    if (pattern.test(text)) {
+      const entry = folderOptions.find((f) => f.path === path);
+      if (entry) matches.push(entry);
+    }
+  }
+  return matches;
+}
 
 // Fixed feeling set — shown every turn, not LLM-generated, matched to real Cboard images.
 const FIXED_FEELINGS: { word: string; phrase: string }[] = [
@@ -168,6 +197,7 @@ async function generateChildCards(args: {
   const corpus = await getCorpusRetriever();
   const topicVocab = corpus.wordsByCategory('topic');
   const actionVocab = corpus.wordsByCategory('action');
+  const folderOptions = loadFolderCards();
 
   const sysPrompt = buildChildCardPrompt({
     parentType: dyad.parent_type,
@@ -176,6 +206,7 @@ async function generateChildCards(args: {
     actionVocab,
     seenLabels: [...seenLabels],
     interimCards: args.interimCards,
+    folderOptions,
   });
 
   const raw = await chat([
@@ -194,29 +225,67 @@ async function generateChildCards(args: {
   // arbitrary words.
   const topics  = extractYamlList(raw, 'topics').slice(0, 6);
   const actions = extractYamlList(raw, 'actions').slice(0, 6);
+  const folderPicks = extractYamlList(raw, 'folder').slice(0, MAX_FOLDER_CARDS);
 
   const recId = nanoid();
   const ts = now();
   const cards: CardInfo[] = [];
 
+  // Folder card(s) (e.g. "Numbers") — resolved BEFORE the topic words below because each one
+  // takes one of the 4 topic slots (rather than adding a 5th/6th tile), so the topic-word
+  // resolution needs to know how many slots are left. Sourced from whichever of the LLM's picks
+  // are actually in the curated allow-list (anything else, e.g. a hallucinated name, is dropped)
+  // PLUS a deterministic keyword match against the parent's last message (see
+  // FOLDER_KEYWORD_TRIGGERS) so obvious cases don't depend purely on the LLM remembering to
+  // suggest one. Deduped by path, capped at MAX_FOLDER_CARDS. Folders are meant to be rare — most
+  // turns should have zero — so this only ever trims topic slots down, never adds extra tiles.
+  const folderEntries: FolderCardOption[] = [];
+  const usedFolderPaths = new Set<string>();
+  for (const pick of folderPicks) {
+    const entry = folderOptions.find((f) => f.path.toLowerCase() === pick.toLowerCase());
+    if (!entry) {
+      console.warn(`[child-cards] folder "${pick}" not in allow-list — dropping`);
+      continue;
+    }
+    if (usedFolderPaths.has(entry.path)) continue;
+    usedFolderPaths.add(entry.path);
+    folderEntries.push(entry);
+  }
+  if (folderEntries.length < MAX_FOLDER_CARDS) {
+    const lastParentMsg = [...dialogue].reverse().find((m) => m.role === 'parent' && typeof m.content === 'string');
+    if (lastParentMsg) {
+      for (const entry of detectFoldersByKeyword(lastParentMsg.content as string, folderOptions)) {
+        if (folderEntries.length >= MAX_FOLDER_CARDS) break;
+        if (usedFolderPaths.has(entry.path)) continue;
+        usedFolderPaths.add(entry.path);
+        folderEntries.push(entry);
+      }
+    }
+  }
+  // A folder card already covers its own contents (e.g. "Numbers" covers "five", "six", ...) —
+  // don't also offer those same words loose in the topic column, or the child sees the same
+  // answer twice.
+  const folderExcludedWords = new Set(folderEntries.flatMap((f) => f.words.map((w) => w.toLowerCase())));
+  const topicSlotCount = Math.max(0, 4 - folderEntries.length);
+
   // The LLM was given the exact vocab list and 6 ranked slots per category, so it has room to
   // fall through to a real synonym when its top pick (e.g. "eat") isn't actually in the fixed
-  // vocab. Look each candidate up in rank order and take the first 4 valid ones; anything
+  // vocab. Look each candidate up in rank order and take the first N valid ones; anything
   // hallucinated gets dropped. Backfill from the vocab only covers the rare case where fewer
-  // than 4 of the 6 candidates resolved.
-  function resolveCategory(words: string[], vocab: string[], category: 'topic' | 'action') {
+  // than N of the 6 candidates resolved.
+  function resolveCategory(words: string[], vocab: string[], category: 'topic' | 'action', slotCount: number, exclude?: Set<string>) {
     const used = new Set<string>();
     const picked: CardInfo[] = [];
 
     for (const w of words) {
-      if (picked.length >= 4) break;
+      if (picked.length >= slotCount) break;
       const entry = corpus.lookup(w);
       if (!entry) {
         console.warn(`[child-cards] "${w}" not in corpus vocab — dropping`);
         continue;
       }
       const key = entry.name.toLowerCase();
-      if (used.has(key)) continue; // duplicate pick from the LLM
+      if (used.has(key) || exclude?.has(key)) continue; // duplicate pick from the LLM, or covered by a folder card
       used.add(key);
       picked.push({
         id: nanoid(), recommendation_id: recId,
@@ -225,11 +294,11 @@ async function generateChildCards(args: {
       });
     }
 
-    if (picked.length < 4) {
+    if (picked.length < slotCount) {
       for (const w of vocab) {
-        if (picked.length >= 4) break;
+        if (picked.length >= slotCount) break;
         const key = w.toLowerCase();
-        if (used.has(key) || seenLabels.has(key)) continue;
+        if (used.has(key) || seenLabels.has(key) || exclude?.has(key)) continue;
         const entry = corpus.lookup(w)!;
         used.add(key);
         picked.push({
@@ -243,8 +312,8 @@ async function generateChildCards(args: {
     return picked;
   }
 
-  cards.push(...resolveCategory(topics.map(String), topicVocab, 'topic'));
-  cards.push(...resolveCategory(actions.map(String), actionVocab, 'action'));
+  cards.push(...resolveCategory(topics.map(String), topicVocab, 'topic', topicSlotCount, folderExcludedWords));
+  cards.push(...resolveCategory(actions.map(String), actionVocab, 'action', 4));
 
   // 4 feelings — fixed set, not LLM-generated, so this can never come up short.
   FIXED_FEELINGS.forEach(({ word, phrase }) => {
@@ -269,6 +338,21 @@ async function generateChildCards(args: {
       label: labelForParent(c, dyad.parent_type),
       label_localized: labelForParent(c, dyad.parent_type),
       category: 'core',
+    });
+  });
+
+  // Folder cards themselves — resolved above (before the topic words) so the slot math is
+  // available in time; just render them into `cards` here.
+  folderEntries.forEach((entry) => {
+    cards.push({
+      id: nanoid(),
+      recommendation_id: recId,
+      label: entry.label,
+      label_localized: entry.label,
+      category: 'topic',
+      corpus_image_url: entry.icon,
+      is_folder: true,
+      folder_path: entry.path,
     });
   });
 
