@@ -3,7 +3,7 @@
 Self-contained Next.js 14 backend that ports the FastAPI service:
 - **Postgres (Neon)** for persistence
 - **Gemini Flash Lite** via the OpenAI-compat endpoint
-- **MiniLM-L6 (`@xenova/transformers`)** local corpus retrieval against 6,658 cards
+- **Cboard vocabulary** (738 words) — exact-match lookup, constrained directly in the LLM prompt
 - **JWT** auth, mirroring the prior contract
 
 ## Run locally
