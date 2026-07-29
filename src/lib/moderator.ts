@@ -14,7 +14,8 @@
 import { nanoid } from 'nanoid';
 import YAML from 'yaml';
 import { sql, ensureSchema } from './db';
-import { chat, stripFence } from './gemini';
+import { getCorpusRetriever } from './corpus';
+import { chat, extractYamlList, stripFence } from './gemini';
 import {
   buildChildCardPrompt, buildParentGuidePrompt, buildSentenceInferencePrompt, dialogueToXml,
 } from './prompts';
@@ -157,9 +158,15 @@ async function generateChildCards(args: {
       .forEach((c) => seenLabels.add((c.corpus_name || c.label).toLowerCase()));
   }
 
+  const corpus = await getCorpusRetriever();
+  const topicVocab = corpus.wordsByCategory('topic');
+  const actionVocab = corpus.wordsByCategory('action');
+
   const sysPrompt = buildChildCardPrompt({
     parentType: dyad.parent_type,
     topic: args.topic.category,
+    topicVocab,
+    actionVocab,
     seenLabels: [...seenLabels],
     interimCards: args.interimCards,
   });
@@ -169,16 +176,18 @@ async function generateChildCards(args: {
     { role: 'user',   content: dialogueToXml(dialogue) },
   ]);
 
-  // Parse YAML — strip code fence if Gemini wrapped it
-  const stripped = stripFence(raw);
-  let parsed: any = {};
-  try { parsed = YAML.parse(stripped) || {}; } catch (e) {
-    console.error('[child-cards] YAML parse failed:', e, '\nraw:', raw);
-  }
-
-  const topics  = Array.isArray(parsed.topics)   ? parsed.topics.slice(0, 4)   : [];
-  const actions = Array.isArray(parsed.actions)  ? parsed.actions.slice(0, 4)  : [];
-  const emotions = Array.isArray(parsed.emotions) ? parsed.emotions.slice(0, 4) : [];
+  // Extract the topics/actions/emotions lines directly rather than requiring the whole
+  // response to be valid YAML — Gemini sometimes writes its reasoning out as prose before the
+  // structured output despite being told not to, which would break a strict whole-document
+  // parse even though the YAML we actually want is sitting right there intact.
+  //
+  // Requested 6 ranked candidates per topic/action category (see buildChildCardPrompt) — the
+  // model's own theme-relevant 5th/6th choices backstop the common case where its top pick or
+  // two (e.g. "eat", "want") aren't actually in the fixed vocab, without falling back to
+  // arbitrary words.
+  const topics  = extractYamlList(raw, 'topics').slice(0, 6);
+  const actions = extractYamlList(raw, 'actions').slice(0, 6);
+  const emotions = extractYamlList(raw, 'emotions').slice(0, 4);
 
   // Match emotion words → fixed-list cards
   const emotionCards = loadEmotionCards();
@@ -186,27 +195,56 @@ async function generateChildCards(args: {
     .map((e: string) => emotionCards.find((c) => labelForParent(c, dyad.parent_type).toLowerCase() === String(e).toLowerCase().trim()))
     .filter(Boolean) as ReturnType<typeof loadEmotionCards>;
 
-  // Semantic corpus search is bypassed for now — the AI-generated words go straight to
-  // cards, unmatched against corpus entries (no corpus_name/image override).
-  const topicActionWords = [
-    ...topics.map((w: string) => ({ word: String(w), category: 'topic' })),
-    ...actions.map((w: string) => ({ word: String(w), category: 'action' })),
-  ];
-
   const recId = nanoid();
   const ts = now();
   const cards: CardInfo[] = [];
 
-  // 4 topics + 4 actions, straight from the LLM
-  topicActionWords.forEach((item) => {
-    cards.push({
-      id: nanoid(),
-      recommendation_id: recId,
-      label: item.word,
-      label_localized: item.word,
-      category: item.category as any,
-    });
-  });
+  // The LLM was given the exact vocab list and 6 ranked slots per category, so it has room to
+  // fall through to a real synonym when its top pick (e.g. "eat") isn't actually in the fixed
+  // vocab. Look each candidate up in rank order and take the first 4 valid ones; anything
+  // hallucinated gets dropped. Backfill from the vocab only covers the rare case where fewer
+  // than 4 of the 6 candidates resolved.
+  function resolveCategory(words: string[], vocab: string[], category: 'topic' | 'action') {
+    const used = new Set<string>();
+    const picked: CardInfo[] = [];
+
+    for (const w of words) {
+      if (picked.length >= 4) break;
+      const entry = corpus.lookup(w);
+      if (!entry) {
+        console.warn(`[child-cards] "${w}" not in corpus vocab — dropping`);
+        continue;
+      }
+      const key = entry.name.toLowerCase();
+      if (used.has(key)) continue; // duplicate pick from the LLM
+      used.add(key);
+      picked.push({
+        id: nanoid(), recommendation_id: recId,
+        label: entry.name, label_localized: entry.name,
+        category, corpus_name: entry.name, corpus_category: entry.category, corpus_image_url: entry.image_url,
+      });
+    }
+
+    if (picked.length < 4) {
+      for (const w of vocab) {
+        if (picked.length >= 4) break;
+        const key = w.toLowerCase();
+        if (used.has(key) || seenLabels.has(key)) continue;
+        const entry = corpus.lookup(w)!;
+        used.add(key);
+        picked.push({
+          id: nanoid(), recommendation_id: recId,
+          label: entry.name, label_localized: entry.name,
+          category, corpus_name: entry.name, corpus_category: entry.category, corpus_image_url: entry.image_url,
+        });
+      }
+    }
+
+    return picked;
+  }
+
+  cards.push(...resolveCategory(topics.map(String), topicVocab, 'topic'));
+  cards.push(...resolveCategory(actions.map(String), actionVocab, 'action'));
 
   // 4 emotions (constrained list, no corpus enrichment)
   matchedEmotions.forEach((c) => {
