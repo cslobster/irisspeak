@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CloseIcon } from './Icons';
+import { labelSizeClass } from '../labelSize';
 
 interface CboardCard {
   word: string;
@@ -183,7 +184,7 @@ export function CardSearchOverlay({ onSelect, onClose }: Props) {
                     className={`aspect-square overflow-hidden flex flex-col items-center justify-center rounded-2xl border-2 border-slate-200 ${CATEGORY_COLORS[c.category] ?? 'bg-slate-100'} shadow-sm hover:shadow-md active:scale-95 transition-all p-2`}
                   >
                     <img src={c.image_url} alt="" className="w-1/2 h-1/2 object-contain mb-1" loading="lazy" draggable={false} />
-                    <span className="text-[10px] sm:text-xs font-bold text-slate-800 text-center line-clamp-2 leading-tight">
+                    <span className={`${labelSizeClass(c.word)} font-bold text-slate-800 text-center line-clamp-2 leading-tight`}>
                       {c.word}
                     </span>
                   </button>
@@ -224,7 +225,7 @@ export function CardSearchOverlay({ onSelect, onClose }: Props) {
                       className="aspect-square overflow-hidden flex flex-col items-center justify-center rounded-2xl border-2 border-slate-200 bg-card-topic shadow-sm hover:shadow-md active:scale-95 transition-all p-2"
                     >
                       <img src={cover} alt="" className="w-3/5 h-3/5 object-contain mb-1" loading="lazy" draggable={false} />
-                      <span className="text-[10px] sm:text-xs font-bold text-slate-800 text-center capitalize line-clamp-2 leading-tight">
+                      <span className={`${labelSizeClass(name)} font-bold text-slate-800 text-center capitalize line-clamp-2 leading-tight`}>
                         {name}
                       </span>
                     </button>
@@ -243,7 +244,7 @@ export function CardSearchOverlay({ onSelect, onClose }: Props) {
                         className={`aspect-square overflow-hidden flex flex-col items-center justify-center rounded-2xl border-2 border-slate-200 ${CATEGORY_COLORS[category] ?? 'bg-slate-100'} shadow-sm hover:shadow-md active:scale-95 transition-all p-2`}
                       >
                         <img src={c.image_url} alt="" className="w-1/2 h-1/2 object-contain mb-1" loading="lazy" draggable={false} />
-                        <span className="text-[10px] sm:text-xs font-bold text-slate-800 text-center line-clamp-2 leading-tight">
+                        <span className={`${labelSizeClass(c.word)} font-bold text-slate-800 text-center line-clamp-2 leading-tight`}>
                           {c.word}
                         </span>
                       </button>

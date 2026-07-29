@@ -1,4 +1,5 @@
 import type { CardCategory, CardInfo } from '../api/types';
+import { labelSizeClass } from '../labelSize';
 
 // corpus_image_url is an exact 1:1 match to the card's word (see moderator.ts's corpus
 // lookup) — safe to render directly. Cards without a match (emotion/core, or a dropped
@@ -19,9 +20,9 @@ interface Props {
 }
 
 const sizeMap = {
-  sm: { card: 'w-16 h-20 sm:w-20 sm:h-24',                label: 'text-[10px] sm:text-xs' },
-  md: { card: 'w-[72px] h-24 sm:w-24 sm:h-28',            label: 'text-xs sm:text-sm' },
-  lg: { card: 'w-24 h-28 sm:w-28 sm:h-32 md:w-32 md:h-36', label: 'text-sm md:text-base' },
+  sm: { card: 'w-16 h-20 sm:w-20 sm:h-24' },
+  md: { card: 'w-[72px] h-24 sm:w-24 sm:h-28' },
+  lg: { card: 'w-24 h-28 sm:w-28 sm:h-32 md:w-32 md:h-36' },
 };
 
 export function CardChip({ card, onClick, size = 'lg', selected = false, disabled = false }: Props) {
@@ -30,6 +31,8 @@ export function CardChip({ card, onClick, size = 'lg', selected = false, disable
   // Emotion cards show their "I'm X" phrase (label); other categories prefer the corpus's
   // matched word (corpus_name) since that's the word actually confirmed against the vocab.
   const displayLabel = card.category === 'emotion' ? card.label : (card.corpus_name ?? card.label);
+  // Longer words/phrases (e.g. "spaghetti bolognaise") shrink to fit instead of clipping.
+  const labelClass = labelSizeClass(displayLabel, size);
 
   return (
     <button
@@ -57,7 +60,7 @@ export function CardChip({ card, onClick, size = 'lg', selected = false, disable
         />
       )}
       <div className="w-full px-0.5 text-center leading-tight">
-        <div className={`${sz.label} font-bold text-slate-800 line-clamp-2`}>
+        <div className={`${labelClass} font-bold text-slate-800 line-clamp-2`}>
           {displayLabel}
         </div>
       </div>
