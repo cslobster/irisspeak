@@ -144,7 +144,7 @@ export function CardSearchOverlay({ onSelect, onClose }: Props) {
       <div
         onClick={e => e.stopPropagation()}
         className="bg-white w-full sm:w-[90vw] sm:max-w-2xl rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col"
-        style={{ maxHeight: '85dvh' }}
+        style={{ height: '85dvh' }}
       >
         {/* Header */}
         <div className="flex items-center gap-3 px-5 pt-5 pb-3 border-b border-slate-100">
