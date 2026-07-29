@@ -6,7 +6,8 @@
  *   addChildCard(session, dyad, card) → CardSelectionResult
  *   refreshChildCards(session, dyad) → ChildCardRecommendationResult
  *   popLastChildCard(session, dyad) → CardSelectionResult
- *   confirmChildCardSelection(session, dyad) → ParentGuideRecommendationResult
+ *   confirmChildCardSelection(session, dyad) → ChildCardRecommendationResult (banks the sentence, stays child's turn)
+ *   finishChildTurn(session, dyad) → ParentGuideRecommendationResult (hands the turn to the parent)
  *   startSession(session, dyad) → ParentGuideRecommendationResult
  *
  * Persistence: Postgres (Neon) — see db.ts for schema.
@@ -48,24 +49,56 @@ async function getCurrentTurn(sessionId: string): Promise<{ id: string; role: 'p
   return r[0] || null;
 }
 
+// The Neon HTTP driver pays a full network round trip per query (measured ~75-100ms warm,
+// 200ms+ cold) with no pipelining, so every independent pair of queries collapsed into a
+// Promise.all below is a real, measured latency cut — not a stylistic change. newTurn's two
+// writes touch different rows (dialogue_turn insert, session update) so they're safe to fire
+// concurrently; same for switchTurn/continueTurnAsChild's "close old turn" + "open new turn".
 async function newTurn(sessionId: string, role: 'parent' | 'child'): Promise<{ id: string; role: 'parent' | 'child'; ended_timestamp: null }> {
   const id = nanoid();
   const ts = now();
-  await sql`
-    INSERT INTO dialogue_turn (id, session_id, role, started_timestamp)
-    VALUES (${id}, ${sessionId}, ${role}, ${ts})
-  `;
-  await sql`UPDATE session SET num_turns = num_turns + 1 WHERE id = ${sessionId}`;
+  await Promise.all([
+    sql`
+      INSERT INTO dialogue_turn (id, session_id, role, started_timestamp)
+      VALUES (${id}, ${sessionId}, ${role}, ${ts})
+    `,
+    sql`UPDATE session SET num_turns = num_turns + 1 WHERE id = ${sessionId}`,
+  ]);
   return { id, role, ended_timestamp: null };
 }
 
-async function switchTurn(sessionId: string): Promise<{ id: string; role: 'parent' | 'child'; ended_timestamp: null }> {
-  const cur = await getCurrentTurn(sessionId);
-  if (cur && cur.ended_timestamp == null) {
-    await sql`UPDATE dialogue_turn SET ended_timestamp = ${now()} WHERE id = ${cur.id}`;
-  }
+// `knownCur` lets callers that already fetched the current turn a moment ago (nothing that
+// would change it happened in between) skip re-querying it here.
+async function switchTurn(
+  sessionId: string,
+  knownCur?: { id: string; role: 'parent' | 'child'; ended_timestamp: number | null } | null,
+): Promise<{ id: string; role: 'parent' | 'child'; ended_timestamp: null }> {
+  const cur = knownCur !== undefined ? knownCur : await getCurrentTurn(sessionId);
   const nextRole = !cur || cur.role === 'child' ? 'parent' : 'child';
-  return newTurn(sessionId, nextRole);
+  const [nextTurn] = await Promise.all([
+    newTurn(sessionId, nextRole),
+    cur && cur.ended_timestamp == null
+      ? sql`UPDATE dialogue_turn SET ended_timestamp = ${now()} WHERE id = ${cur.id}`
+      : Promise.resolve(),
+  ]);
+  return nextTurn;
+}
+
+// Ends the current turn and starts a fresh one for the SAME role, instead of
+// flipping like switchTurn does — used when the child banks a sentence but
+// isn't done yet, so they can build another one without handing off to the parent.
+async function continueTurnAsChild(
+  sessionId: string,
+  knownCur?: { id: string; role: 'parent' | 'child'; ended_timestamp: number | null } | null,
+): Promise<{ id: string; role: 'child'; ended_timestamp: null }> {
+  const cur = knownCur !== undefined ? knownCur : await getCurrentTurn(sessionId);
+  const [nextTurn] = await Promise.all([
+    newTurn(sessionId, 'child'),
+    cur && cur.ended_timestamp == null
+      ? sql`UPDATE dialogue_turn SET ended_timestamp = ${now()} WHERE id = ${cur.id}`
+      : Promise.resolve(),
+  ]);
+  return nextTurn as { id: string; role: 'child'; ended_timestamp: null };
 }
 
 async function getDialogue(sessionId: string): Promise<DialogueMessage[]> {
@@ -149,14 +182,21 @@ async function generateChildCards(args: {
   interimCards?: CardInfo[];
 }): Promise<ChildCardRecommendationResult> {
   const { dyad } = args;
-  const dialogue = await getDialogue(args.sessionId);
+
+  // These three reads don't depend on each other, so fetch them concurrently instead of paying
+  // three sequential network round trips (getCorpusRetriever is in-memory-cached after the very
+  // first call anyway, but including it here costs nothing and keeps the shape uniform).
+  const [dialogue, prevRecsRows, corpus] = await Promise.all([
+    getDialogue(args.sessionId),
+    sql`
+      SELECT cards FROM child_card_recommendation
+      WHERE session_id = ${args.sessionId} AND turn_id = ${args.turnId}
+      ORDER BY timestamp ASC
+    ` as Promise<any[]>,
+    getCorpusRetriever(),
+  ]);
 
   // Collect ALL topic/action labels shown in any previous recommendation this turn → avoid repeating
-  const prevRecsRows = (await sql`
-    SELECT cards FROM child_card_recommendation
-    WHERE session_id = ${args.sessionId} AND turn_id = ${args.turnId}
-    ORDER BY timestamp ASC
-  `) as any[];
   const seenLabels = new Set<string>();
   for (const row of prevRecsRows) {
     const prevCards: CardInfo[] = row.cards || [];
@@ -165,7 +205,6 @@ async function generateChildCards(args: {
       .forEach((c) => seenLabels.add((c.corpus_name || c.label).toLowerCase()));
   }
 
-  const corpus = await getCorpusRetriever();
   const topicVocab = corpus.wordsByCategory('topic');
   const actionVocab = corpus.wordsByCategory('action');
 
@@ -283,16 +322,19 @@ async function generateChildCards(args: {
 // ---------- submit parent text → switch turn → generate child cards ----------
 export async function submitParentMessage(sessionId: string, dyad: Dyad, text: string): Promise<{ turn_id: string; recommendation: ChildCardRecommendationResult }> {
   await ensureSchema();
-  const session = (await sql`SELECT * FROM session WHERE id = ${sessionId} LIMIT 1`) as any[];
+  const [session, initialCur] = await Promise.all([
+    sql`SELECT * FROM session WHERE id = ${sessionId} LIMIT 1` as Promise<any[]>,
+    getCurrentTurn(sessionId),
+  ]);
   if (!session[0] || session[0].dyad_id !== dyad.id) throw new Error('forbidden');
 
-  let cur = await getCurrentTurn(sessionId);
+  let cur = initialCur;
   if (!cur || cur.role !== 'parent') {
     cur = await newTurn(sessionId, 'parent');
   }
 
   await persistMessage(sessionId, cur.id, 'parent', text, 'text');
-  const nextTurn = await switchTurn(sessionId);
+  const nextTurn = await switchTurn(sessionId, cur);
 
   const topic: SessionTopicInfo = {
     category: session[0].topic_category,
@@ -386,8 +428,10 @@ export async function refreshChildCards(sessionId: string, dyad: Dyad): Promise<
   const cur = await getCurrentTurn(sessionId);
   if (!cur || cur.role !== 'child') throw new Error('not child turn');
 
-  const session = (await sql`SELECT * FROM session WHERE id = ${sessionId} LIMIT 1`) as any[];
-  const interim = await getInterimCards(sessionId, cur.id);
+  const [session, interim] = await Promise.all([
+    sql`SELECT * FROM session WHERE id = ${sessionId} LIMIT 1` as Promise<any[]>,
+    getInterimCards(sessionId, cur.id),
+  ]);
 
   return generateChildCards({
     sessionId, turnId: cur.id, dyad,
@@ -458,8 +502,8 @@ export async function inferSentenceFromCards(sessionId: string, dyad: Dyad): Pro
 
   const interim = await getInterimCards(sessionId, cur.id);
   if (interim.length === 0) throw new Error('no cards selected');
-
   const dialogue = await getDialogue(sessionId);
+
   const lastParent = [...dialogue].reverse().find(m => m.role === 'parent');
   const lastParentMsg = lastParent && typeof lastParent.content === 'string' ? lastParent.content : undefined;
 
@@ -472,21 +516,13 @@ export async function inferSentenceFromCards(sessionId: string, dyad: Dyad): Pro
   return sentence;
 }
 
-// ---------- confirm child cards → switch turn → generate parent guides ----------
-export async function confirmChildCardSelection(sessionId: string, dyad: Dyad): Promise<{ turn_id: string; recommendation: ParentGuideRecommendationResult }> {
-  await ensureSchema();
-  const cur = await getCurrentTurn(sessionId);
-  if (!cur || cur.role !== 'child') throw new Error('not child turn');
-
-  const interim = await getInterimCards(sessionId, cur.id);
-  if (interim.length === 0) throw new Error('no cards selected');
-
-  await persistMessage(sessionId, cur.id, 'child', interim, 'cards');
-  const nextTurn = await switchTurn(sessionId);
-
-  // Generate parent guides
-  const dialogue = await getDialogue(sessionId);
-  const session = (await sql`SELECT * FROM session WHERE id = ${sessionId} LIMIT 1`) as any[];
+// Shared by finishChildTurn: asks the LLM for parent-guidance messages covering
+// everything the child has said so far and persists the recommendation row.
+async function generateParentGuidesForTurn(sessionId: string, dyad: Dyad, nextTurnId: string): Promise<ParentGuideRecommendationResult> {
+  const [dialogue, session] = await Promise.all([
+    getDialogue(sessionId),
+    sql`SELECT * FROM session WHERE id = ${sessionId} LIMIT 1` as Promise<any[]>,
+  ]);
   const sysPrompt = buildParentGuidePrompt({
     parentType: dyad.parent_type,
     topic: session[0].topic_category,
@@ -520,13 +556,50 @@ export async function confirmChildCardSelection(sessionId: string, dyad: Dyad): 
   const ts = now();
   await sql`
     INSERT INTO parent_guide_recommendation (id, session_id, turn_id, guides, timestamp)
-    VALUES (${recId}, ${sessionId}, ${nextTurn.id}, ${JSON.stringify(guides)}, ${ts})
+    VALUES (${recId}, ${sessionId}, ${nextTurnId}, ${JSON.stringify(guides)}, ${ts})
   `;
 
-  return {
-    turn_id: nextTurn.id,
-    recommendation: { id: recId, timestamp: ts, turn_id: nextTurn.id, guides },
+  return { id: recId, timestamp: ts, turn_id: nextTurnId, guides };
+}
+
+// ---------- confirm child cards → bank as one sentence → stay on child's turn ----------
+// The child can call this repeatedly (pick cards, generate, accept) to say several
+// sentences in a row; the turn only hands off to the parent once they tap "Done"
+// (see finishChildTurn below).
+export async function confirmChildCardSelection(sessionId: string, dyad: Dyad): Promise<{ turn_id: string; recommendation: ChildCardRecommendationResult }> {
+  await ensureSchema();
+  const cur = await getCurrentTurn(sessionId);
+  if (!cur || cur.role !== 'child') throw new Error('not child turn');
+
+  const [interim, session] = await Promise.all([
+    getInterimCards(sessionId, cur.id),
+    sql`SELECT * FROM session WHERE id = ${sessionId} LIMIT 1` as Promise<any[]>,
+  ]);
+  if (interim.length === 0) throw new Error('no cards selected');
+
+  await persistMessage(sessionId, cur.id, 'child', interim, 'cards');
+
+  const topic: SessionTopicInfo = {
+    category: session[0].topic_category,
+    subtopic: session[0].subtopic ?? undefined,
+    subtopic_description: session[0].subtopic_description ?? undefined,
   };
+
+  const nextTurn = await continueTurnAsChild(sessionId, cur);
+  const recommendation = await generateChildCards({ sessionId, turnId: nextTurn.id, dyad, topic });
+
+  return { turn_id: nextTurn.id, recommendation };
+}
+
+// ---------- finish child's turn(s) → switch to parent → generate parent guides ----------
+export async function finishChildTurn(sessionId: string, dyad: Dyad): Promise<{ turn_id: string; recommendation: ParentGuideRecommendationResult }> {
+  await ensureSchema();
+  const cur = await getCurrentTurn(sessionId);
+  if (!cur || cur.role !== 'child') throw new Error('not child turn');
+
+  const nextTurn = await switchTurn(sessionId, cur);
+  const recommendation = await generateParentGuidesForTurn(sessionId, dyad, nextTurn.id);
+  return { turn_id: nextTurn.id, recommendation };
 }
 
 // ---------- parent example utterance (per messaging guide) ----------

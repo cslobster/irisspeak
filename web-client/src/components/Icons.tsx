@@ -33,7 +33,7 @@ export function StarIcon({
   return (
     <svg
       width={size} height={size} viewBox="0 0 200 200" fill="none"
-      style={shadow ? { filter: 'drop-shadow(2px 3px 0 #000)' } : undefined}
+      style={shadow ? { filter: `drop-shadow(${size * 0.125}px ${size * 0.1875}px 0 #000)` } : undefined}
     >
       <path
         d="M100 14 L124 78 L192 86 L142 132 L156 198 L100 164 L44 198 L58 132 L8 86 L76 78 Z"
