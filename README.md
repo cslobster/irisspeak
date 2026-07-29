@@ -45,6 +45,6 @@ All routes live under `/api/v1/`:
 - Audio: parent voice → Whisper STT (Gemini compat doesn't expose audio anyway)
 - Korean translation (DeepL)
 - CLOVA Voice / Speech
-- Card-image PNG corpus retrieval (still missing the image zip)
+- ~~Card-image PNG corpus retrieval~~ — done (exact Cboard vocab match → SVG image)
 - `/parent/example` (parent example utterance) — easy to add when needed
 - DialogueInspector background task — easy to add
