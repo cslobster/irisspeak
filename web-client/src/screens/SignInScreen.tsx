@@ -36,7 +36,7 @@ export function SignInScreen() {
   return (
     <div
       className="relative min-h-screen overflow-hidden"
-      style={{ background: 'linear-gradient(160deg, #e0f7f4 0%, #eef4ff 55%, #f9f0ff 100%)' }}
+      style={{ background: '#f0ebe1' }}
     >
       {/* Decorative blobs */}
       <div className="absolute top-6 left-4 w-24 h-24 rounded-full bg-rose-300/30 blur-md pointer-events-none" />
@@ -74,7 +74,7 @@ export function SignInScreen() {
             </p>
           )}
           {error && (
-            <p className="mb-4 text-sm font-semibold text-red-600 bg-red-50 rounded-xl px-3 py-2">
+            <p className="mb-4 text-sm font-semibold text-[#f09281] bg-[#f09281]/10 rounded-xl px-3 py-2">
               {error === 'NoSuchUser' ? 'Incorrect username or password.' : 'Network error — check your connection.'}
             </p>
           )}

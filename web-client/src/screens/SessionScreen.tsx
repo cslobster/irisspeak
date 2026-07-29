@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { api } from '../api/client';
 import { analytics } from '../api/analytics';
-import { HillBackground } from '../components/HillBackground';
 import { TurnBanner } from '../components/TurnBanner';
 import { RecordingPill } from '../components/RecordingPill';
 import { CardChip } from '../components/CardChip';
@@ -430,7 +429,7 @@ export function SessionScreen() {
   const stars = useMemo(() => Array.from({ length: Math.floor((turnNumber - 1) / 2) }), [turnNumber]);
 
   return (
-    <HillBackground topic={topic.category} calm>
+    <div className="relative min-h-full w-full" style={{ backgroundColor: '#f0ebe1' }}>
       <div className="h-screen overflow-hidden px-3 sm:px-4 pt-3 flex flex-col items-center relative safe-top">
         <RecordingPill state={recState} level={recLevel} />
 
@@ -545,7 +544,7 @@ export function SessionScreen() {
                 ) : (
                   <div className="space-y-2">
                     {dialogue.map((m, i) => (
-                      <div key={i} className={`ui-scale-transcript-msg p-3 rounded-xl text-sm ${m.role === 'parent' ? 'bg-blue-50 border-l-4 border-blue-300' : 'bg-purple-50 border-l-4 border-purple-300'}`}>
+                      <div key={i} className={`ui-scale-transcript-msg p-3 rounded-xl text-sm ${m.role === 'parent' ? 'bg-[#94c1c2]/10 border-l-4 border-[#94c1c2]' : 'bg-purple-50 border-l-4 border-purple-300'}`}>
                         <div className="ui-scale-transcript-role text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-1">{m.role}</div>
                         {Array.isArray(m.content) ? (
                           <div className="flex flex-wrap gap-1.5 mt-1">
@@ -578,15 +577,15 @@ export function SessionScreen() {
                 <h2 className="text-xl font-extrabold">Session menu</h2>
                 <button onClick={() => setShowMenu(false)}><CloseIcon /></button>
               </div>
-              <button onClick={endSession} className="pill-btn bg-emerald-500 w-full mb-3">End conversation 🌟</button>
-              <button onClick={abortSession} className="pill-btn bg-red-400 w-full">Discard (don't save)</button>
+              <button onClick={endSession} className="pill-btn bg-[#94c1c2] w-full mb-3">End conversation 🌟</button>
+              <button onClick={abortSession} className="pill-btn bg-[#f09281] w-full">Discard (don't save)</button>
               <p className="mt-4 text-xs text-slate-500">End saves stars and transcript. Discard removes everything.</p>
             </div>
           </div>
         )}
 
         {errorMsg && (
-          <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-red-500 text-white px-5 py-3 rounded-xl shadow-xl text-sm font-bold flex items-center gap-3 max-w-md">
+          <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-[#f09281] text-white px-5 py-3 rounded-xl shadow-xl text-sm font-bold flex items-center gap-3 max-w-md">
             {errorMsg}
             <button onClick={() => setErrorMsg(null)}><CloseIcon color="#fff" /></button>
           </div>
@@ -599,7 +598,7 @@ export function SessionScreen() {
           />
         )}
       </div>
-    </HillBackground>
+    </div>
   );
 }
 
@@ -615,10 +614,10 @@ function Loader({ label }: { label: string }) {
 // Idle mic button borrows each topic's accent color so it reads as inviting
 // rather than alarming; red is reserved for the active-recording state, matching
 // the universal "REC" convention (camera/voice apps) instead of a "danger" cue.
-const MIC_ACCENT: Record<TopicCategory, { light: string; dark: string; shadow: string }> = {
-  plan:   { light: '#8AB8FF', dark: '#4C7EF0', shadow: 'rgba(76,126,240,0.45)' },
-  recall: { light: '#7BE065', dark: '#35B31C', shadow: 'rgba(53,179,28,0.45)' },
-  free:   { light: '#FFB273', dark: '#F3862B', shadow: 'rgba(243,134,43,0.45)' },
+const MIC_ACCENT: Record<TopicCategory, { color: string }> = {
+  plan:   { color: '#94c1c2' },
+  recall: { color: '#94c1c2' },
+  free:   { color: '#F3862B' },
 };
 
 interface ParentTurnProps {
@@ -656,7 +655,7 @@ function ParentTurn({
       <div className="flex flex-col items-center gap-4">
         <div className="relative flex items-center justify-center" style={{ width: 200, height: 200 }}>
           {isRecording && (
-            <span className="absolute inset-0 rounded-full mic-ripple" style={{ color: '#e11d48' }} />
+            <span className="absolute inset-0 rounded-full mic-ripple" style={{ color: '#f09281' }} />
           )}
           <button
             onClick={onMicTap}
@@ -665,9 +664,7 @@ function ParentTurn({
             style={{
               width: 170, height: 170,
               borderRadius: '50%',
-              background: isRecording
-                ? 'linear-gradient(135deg, #fb7185, #e11d48)'
-                : `linear-gradient(135deg, ${accent.light}, ${accent.dark})`,
+              background: isRecording ? '#f09281' : accent.color,
             }}
           >
             {isRecording
@@ -686,7 +683,7 @@ function ParentTurn({
 
       {/* Textbox */}
       <textarea
-        className="ui-scale-textarea w-full bg-white rounded-2xl p-5 border-2 border-slate-200 focus:border-red-400 focus:outline-none font-medium text-slate-700 resize-none text-xl placeholder-slate-300 shadow-sm"
+        className="ui-scale-textarea w-full bg-white rounded-2xl p-5 border-2 border-slate-200 focus:border-[#f09281] focus:outline-none font-medium text-slate-700 resize-none text-xl placeholder-slate-300 shadow-sm"
         style={{ height: 130 }}
         placeholder="Start typing here..."
         value={displayValue}
@@ -698,7 +695,7 @@ function ParentTurn({
       <button
         onClick={onSubmit}
         disabled={!canSend}
-        className="pill-btn bg-emerald-500 disabled:bg-slate-300 w-full text-2xl py-5"
+        className="pill-btn bg-[#94c1c2] disabled:bg-slate-300 w-full text-2xl py-5"
       >
         Send
       </button>
@@ -753,7 +750,7 @@ function ChildTurn({
                 style={{ touchAction: 'manipulation' }}
               >
                 {c.corpus_name ?? c.label}
-                <span className="text-red-400 text-[11px] font-extrabold">✕</span>
+                <span className="text-[#f09281] text-[11px] font-extrabold">✕</span>
               </button>
             ))}
           </div>
@@ -817,7 +814,7 @@ function ChildTurn({
         <button
           onClick={onConfirm}
           disabled={interim.length === 0 || busy}
-          className="pill-btn bg-emerald-500 disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg"
+          className="pill-btn bg-[#94c1c2] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg"
         >Generate sentence</button>
       </div>
     </div>
@@ -853,7 +850,7 @@ function SentenceAcceptance({
     <div className="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center gap-10 px-8">
       <h2 className="text-5xl font-extrabold text-slate-700">You said</h2>
 
-      <div className="w-full max-w-xl border-2 border-blue-200 rounded-3xl p-8 bg-blue-50/50 shadow-sm">
+      <div className="w-full max-w-xl border-2 border-[#94c1c2] rounded-3xl p-8 bg-[#94c1c2]/10 shadow-sm">
         <p className="text-4xl font-bold text-slate-700 text-center leading-snug">{sentence}</p>
       </div>
 
@@ -895,7 +892,7 @@ function SentenceAcceptance({
       <div className="flex gap-4 w-full max-w-xl">
         <button
           onClick={onReject}
-          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-red-300 text-red-500 bg-white active:bg-red-50 transition-colors duration-300 ease-in-out shadow-sm"
+          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-[#f09281] text-[#f09281] bg-white active:bg-[#f09281]/20 transition-colors duration-300 ease-in-out shadow-sm"
         >no</button>
         <button
           onClick={onRetry}
@@ -903,7 +900,7 @@ function SentenceAcceptance({
         >try again</button>
         <button
           onClick={onAccept}
-          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-green-300 text-green-600 bg-white active:bg-green-50 transition-colors duration-300 ease-in-out shadow-sm"
+          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-[#94c1c2] text-[#94c1c2] bg-white active:bg-[#94c1c2]/20 transition-colors duration-300 ease-in-out shadow-sm"
         >yes</button>
       </div>
     </div>

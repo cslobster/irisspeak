@@ -1,7 +1,7 @@
 import type { DialogueRole } from '../api/types';
 
 const roleColor: Record<DialogueRole, string> = {
-  parent: 'bg-blue-500 text-white',
+  parent: 'bg-[#94c1c2] text-white',
   child:  'bg-purple-500 text-white',
 };
 

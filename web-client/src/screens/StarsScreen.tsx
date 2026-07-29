@@ -6,7 +6,7 @@ import { CloseIcon, StarIcon } from '../components/Icons';
 import type { ExtendedSessionInfo, TopicCategory } from '../api/types';
 
 const topicLabels: Record<TopicCategory, string> = {
-  plan: "Today's plan",
+  plan: '',
   recall: "Today's day",
   free: 'Favorites',
 };
