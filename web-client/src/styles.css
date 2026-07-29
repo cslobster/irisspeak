@@ -24,6 +24,48 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
 .safe-bottom { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 .safe-top    { padding-top:    max(0.5rem, env(safe-area-inset-top)); }
 
+/* --------------------------------------------------------------------------
+ * Accessibility text/card-size setting (see src/uiScale.ts).
+ *
+ * `--ui-scale` defaults to 1 (a total no-op) and is bumped by a `ui-scale-*`
+ * class applied to <html>. This replaces free pinch-to-zoom (disabled in
+ * index.html) with a small number of pre-verified steps that are guaranteed
+ * to still fit the iPad viewport without causing scrolling.
+ * -------------------------------------------------------------------------- */
+:root { --ui-scale: 1; }
+html.ui-scale-large { --ui-scale: 1.12; }
+html.ui-scale-xl    { --ui-scale: 1.22; }
+
+/* CardChip's label text is scaled from here, not from CardChip.tsx itself
+ * (that file is intentionally left untouched). The selector below keys off
+ * CardChip's stable, unique class combination -- `font-bold text-slate-800
+ * line-clamp-2` only ever appears on the card label -- so this rule can't
+ * accidentally match other text elsewhere in the app. It mirrors the exact
+ * base/sm/md breakpoints CardChip's sizeMap already uses, so at --ui-scale:1
+ * this is byte-for-byte the same as before. */
+.line-clamp-2.font-bold.text-slate-800.text-\[10px\] { font-size: calc(10px * var(--ui-scale)); }
+.line-clamp-2.font-bold.text-slate-800.text-xs       { font-size: calc(0.75rem * var(--ui-scale)); }
+.line-clamp-2.font-bold.text-slate-800.text-sm       { font-size: calc(0.875rem * var(--ui-scale)); }
+@media (min-width: 640px) {
+  .line-clamp-2.font-bold.text-slate-800.sm\:text-xs { font-size: calc(0.75rem * var(--ui-scale)); }
+  .line-clamp-2.font-bold.text-slate-800.sm\:text-sm { font-size: calc(0.875rem * var(--ui-scale)); }
+}
+@media (min-width: 768px) {
+  .line-clamp-2.font-bold.text-slate-800.md\:text-base { font-size: calc(1rem * var(--ui-scale)); }
+}
+
+/* Parent-turn heading / mic status label / textarea (SessionScreen.tsx's
+ * ParentTurn) -- these carry their own `ui-scale-*` marker classes since that
+ * file is freely editable, so the selectors here are simple and exact. Sizes
+ * mirror the Tailwind classes already on each element at --ui-scale:1. */
+.ui-scale-heading.text-2xl    { font-size: calc(1.5rem * var(--ui-scale)); }
+.ui-scale-mic-label.text-xl   { font-size: calc(1.25rem * var(--ui-scale)); }
+.ui-scale-textarea.text-xl    { font-size: calc(1.25rem * var(--ui-scale)); }
+@media (min-width: 640px) {
+  .ui-scale-heading.sm\:text-3xl  { font-size: calc(1.875rem * var(--ui-scale)); }
+  .ui-scale-mic-label.sm\:text-2xl { font-size: calc(1.5rem * var(--ui-scale)); }
+}
+
 @layer components {
   .pill-btn {
     @apply px-8 py-3 rounded-full font-bold text-white transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
@@ -58,9 +100,12 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
 .hill-bg::before { bottom: -120px; height: 320px; }
 .hill-bg::after  { bottom: -180px; opacity: 0.6; }
 
-/* Outward ripple for mic recording state — thin outlined rings, not solid fading discs */
+/* Outward ripple for mic recording state — thin outlined rings, not solid fading discs.
+   Slowed down and eased more gently (vs. a sharp cubic-bezier "pop") so the SessionScreen
+   conversation task reads as calm rather than snappy — this is the child's focused-task
+   screen, unlike the decorative sign-in/welcome screens. */
 @keyframes mic-ripple {
-  0%   { transform: scale(1);    opacity: 0.5; }
+  0%   { transform: scale(1);    opacity: 0.45; }
   100% { transform: scale(1.65); opacity: 0; }
 }
 .mic-ripple::before,
@@ -70,18 +115,18 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
   inset: 0;
   border-radius: inherit;
   border: 3px solid currentColor;
-  animation: mic-ripple 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  animation: mic-ripple 2.6s ease-in-out infinite;
 }
-.mic-ripple::after { animation-delay: 0.9s; }
+.mic-ripple::after { animation-delay: 1.3s; }
 
 /* Gentle "listening" glow on the mic button itself — brightness only, so it never
-   fights the active:scale-95 tap-feedback transform. */
+   fights the active:scale-95 tap-feedback transform. Slowed for a calmer breathe. */
 @keyframes mic-breathe {
   0%, 100% { filter: brightness(1); }
-  50%      { filter: brightness(1.08); }
+  50%      { filter: brightness(1.06); }
 }
 .mic-breathe {
-  animation: mic-breathe 1.8s ease-in-out infinite;
+  animation: mic-breathe 2.8s ease-in-out infinite;
 }
 
 /* Cloud floats */
@@ -91,4 +136,29 @@ button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-colo
     20px -10px 0 -2px white,
     40px 0 0 -4px white,
     60px -8px 0 -2px white;
+}
+
+/* Respect the OS-level "reduce motion" accessibility preference app-wide.
+   Hand-written keyframe animations are fully disabled here (rather than merely
+   sped up) — the ripple/breathe rings are hidden outright instead of freezing
+   mid-frame, which would otherwise leave a stray ring/brightness shift on screen. */
+@media (prefers-reduced-motion: reduce) {
+  .mic-ripple::before,
+  .mic-ripple::after,
+  .mic-breathe {
+    animation: none !important;
+  }
+  .mic-ripple::before,
+  .mic-ripple::after {
+    opacity: 0 !important;
+  }
+
+  /* Shared press/tap feedback (pill-btn, topic-button, card-chip) — drop the
+     scale-down transform, keep a simple opacity change so taps still feel responsive. */
+  .pill-btn:active,
+  .topic-button:active,
+  .card-chip:active {
+    transform: none !important;
+    opacity: 0.85;
+  }
 }
