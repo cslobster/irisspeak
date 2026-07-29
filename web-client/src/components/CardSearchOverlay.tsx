@@ -96,7 +96,7 @@ export function CardSearchOverlay({ onSelect, onClose }: Props) {
               <button
                 key={c.word}
                 onClick={() => { onSelect(c.word, c.category, c.image_url); onClose(); }}
-                className="flex flex-col items-center gap-1 p-2 rounded-2xl border-2 border-slate-200 bg-white shadow-sm hover:shadow-md active:scale-95 transition-all"
+                className="flex flex-col items-center gap-1 p-2 rounded-2xl border-2 border-b-4 border-black bg-white hover:shadow-md active:scale-95 transition-all"
               >
                 <div className={`w-full aspect-square rounded-xl flex items-center justify-center ${CATEGORY_COLORS[c.category] ?? 'bg-slate-100'}`}>
                   <img

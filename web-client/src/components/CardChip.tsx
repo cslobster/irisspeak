@@ -39,7 +39,7 @@ export function CardChip({ card, onClick, size = 'lg', selected = false, disable
       className={`
         ${sz.card}
         relative flex flex-col items-center justify-center
-        rounded-2xl border-2 border-slate-200 ${t.bg}
+        rounded-2xl border-2 border-b-4 border-black ${t.bg}
         shadow-md hover:shadow-lg active:shadow-sm active:translate-y-1 active:scale-95
         transition-all duration-150 ease-out
         select-none cursor-pointer

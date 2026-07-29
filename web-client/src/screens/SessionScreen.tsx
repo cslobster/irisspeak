@@ -3,10 +3,12 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { api } from '../api/client';
 import { analytics } from '../api/analytics';
 import { TurnBanner } from '../components/TurnBanner';
-import { RecordingPill } from '../components/RecordingPill';
+import { TranscriptMessages } from '../components/Transcript';
 import { CardChip } from '../components/CardChip';
-import { CloseIcon, MenuIcon, MicIcon, StopIcon, StarIcon } from '../components/Icons';
+import { CloseIcon, MenuIcon, MicIcon, StopIcon } from '../components/Icons';
 import { CardSearchOverlay } from '../components/CardSearchOverlay';
+import { PuzzleLoaderSmall } from '../components/PuzzleLoader';
+import { Spinner } from '../components/Spinner';
 import { MicRecorder } from '../audio/recorder';
 import { speak, speakCard, stopSpeaking } from '../audio/tts';
 import { getMuted } from '../audio/mute';
@@ -52,8 +54,8 @@ export function SessionScreen() {
   const [showMenu, setShowMenu] = useState(false);
   const [showDialogue, setShowDialogue] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-  const [turnNumber, setTurnNumber] = useState(0);
   const [lastParentMessage, setLastParentMessage] = useState<string | null>(null);
+  const [lastChildSentence, setLastChildSentence] = useState<string | null>(null);
   const [inferredSentence, setInferredSentence] = useState<string | null>(null);
   const [micTapCount, setMicTapCount] = useState(0);
 
@@ -122,7 +124,6 @@ export function SessionScreen() {
         setTurnId(r.turn_id);
         setParentGuide(r.parent_guides);
         setRole('parent');
-        setTurnNumber(1);
         setPhase('idle');
       } catch (e: any) {
         // The session was already started in a prior page-load. Recovering an
@@ -225,7 +226,6 @@ export function SessionScreen() {
       setInterimCards([]);
       setLastParentMessage(text);
       setParentMessage('');
-      setTurnNumber(n => n + 1);
       setPhase('idle');
       refreshDialogue();
     } catch (e: any) {
@@ -332,6 +332,7 @@ export function SessionScreen() {
   // Step 2a: child approves → generate parent guides
   const onAcceptSentence = useCallback(async () => {
     if (!sessionId) return;
+    setLastChildSentence(inferredSentence);
     setInferredSentence(null);
     setPhase('thinking');
     setPhaseLabel('Generating parent guides…');
@@ -342,14 +343,13 @@ export function SessionScreen() {
       setParentGuide(r.payload);
       setInterimCards([]);
       setChildRec(null);
-      setTurnNumber(n => n + 1);
       setPhase('idle');
       refreshDialogue();
     } catch (e: any) {
       setErrorMsg(e?.message || 'Failed to confirm');
       setPhase('idle');
     }
-  }, [sessionId, refreshDialogue]);
+  }, [sessionId, refreshDialogue, inferredSentence]);
 
   // Step 2b: child rejects → stay on child turn, keep cards
   const onRejectSentence = useCallback(() => {
@@ -384,7 +384,7 @@ export function SessionScreen() {
     }
   }, [sessionId, parentGuide]);
 
-  // ----- End / discard -----
+  // ----- End session -----
   async function endSession() {
     if (!sessionId) { nav('/home', { replace: true }); return; }
     analytics.sessionEnd(sessionId);
@@ -394,14 +394,6 @@ export function SessionScreen() {
     setPhase('closing');
     try { await api.endSession(sessionId); } catch {}
     nav(`/session-end/${encodeURIComponent(sessionId)}`, { replace: true });
-  }
-  async function abortSession() {
-    if (!sessionId) { nav('/home', { replace: true }); return; }
-    analytics.sessionAbort(sessionId);
-    stopSpeaking();
-    if (recRef.current) await recRef.current.stop(true).catch(() => {});
-    try { await api.abortSession(sessionId); } catch {}
-    nav('/home', { replace: true });
   }
 
   // ----- Keyboard: Enter advances; Esc opens menu (or rejects sentence) -----
@@ -426,32 +418,22 @@ export function SessionScreen() {
     return () => window.removeEventListener('keydown', onKey);
   }, [phase, role, submitParent, onConfirm, interimCards, inferredSentence, onAcceptSentence, onRejectSentence]);
 
-  const stars = useMemo(() => Array.from({ length: Math.floor((turnNumber - 1) / 2) }), [turnNumber]);
-
   return (
     <div className="relative min-h-full w-full" style={{ backgroundColor: '#f0ebe1' }}>
       <div className="h-screen overflow-hidden px-3 sm:px-4 pt-3 flex flex-col items-center relative safe-top">
-        <RecordingPill state={recState} level={recLevel} />
-
         {/* Transcript toggle */}
         <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10">
           <button
             onClick={() => setShowDialogue(s => !s)}
-            className="text-sm sm:text-base font-bold px-4 py-2 rounded-full bg-white shadow-md border-2 border-slate-200 text-slate-700 hover:bg-slate-50 active:scale-95 motion-reduce:active:scale-100 transition-all duration-300 ease-in-out"
+            className="text-sm sm:text-base font-bold px-4 py-2 rounded-full bg-white border-2 border-b-4 border-black text-slate-700 hover:bg-slate-50 active:scale-95 motion-reduce:active:scale-100 transition-all duration-300 ease-in-out"
           >
             Transcript
           </button>
         </div>
 
-        {/* Turn banner + stars -- single horizontal row to save vertical space on iPad landscape */}
+        {/* Turn banner -- single horizontal row to save vertical space on iPad landscape */}
         <div className="mt-2 flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap z-10 flex-shrink-0">
-          <TurnBanner role={role} turnNumber={turnNumber} />
-          {stars.length > 0 && (
-            <div className="flex items-center gap-0.5">
-              {stars.slice(0, 6).map((_, i) => <StarIcon key={i} size={20} />)}
-              {stars.length > 6 && <span className="text-xs font-bold text-amber-700 ml-1">+{stars.length - 6}</span>}
-            </div>
-          )}
+          <TurnBanner role={role} parentText={lastParentMessage} childText={lastChildSentence} />
         </div>
 
         {/* Center content */}
@@ -490,13 +472,12 @@ export function SessionScreen() {
           )}
         </div>
 
-        {/* Sentence acceptance full-screen */}
+        {/* Sentence acceptance popup */}
         {inferredSentence && (
           <SentenceAcceptance
             sentence={inferredSentence}
             onAccept={onAcceptSentence}
             onReject={onRejectSentence}
-            onRetry={onConfirm}
           />
         )}
 
@@ -511,13 +492,6 @@ export function SessionScreen() {
           <MenuIcon size={28} />
         </button>
 
-
-        <div
-          className="fixed right-4 z-10 text-[10px] text-slate-500 bg-white/70 px-2 py-1 rounded shadow hidden md:block"
-          style={{ bottom: 'max(4.5rem, calc(env(safe-area-inset-bottom) + 3.5rem))' }}
-        >
-          ↵ to advance · Esc for menu
-        </div>
 
         {showDialogue && (
           <div
@@ -543,26 +517,12 @@ export function SessionScreen() {
                   <p className="text-slate-400 italic text-center py-8">Nothing said yet.</p>
                 ) : (
                   <div className="space-y-2">
-                    {dialogue.map((m, i) => (
-                      <div key={i} className={`ui-scale-transcript-msg p-3 rounded-xl text-sm ${m.role === 'parent' ? 'bg-[#94c1c2]/10 border-l-4 border-[#94c1c2]' : 'bg-purple-50 border-l-4 border-purple-300'}`}>
-                        <div className="ui-scale-transcript-role text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-1">{m.role}</div>
-                        {Array.isArray(m.content) ? (
-                          <div className="flex flex-wrap gap-1.5 mt-1">
-                            {m.content.map((c, j) => (
-                              <span
-                                key={j}
-                                className="ui-scale-transcript-chip inline-flex items-center bg-white border border-purple-200 rounded-lg px-2 py-1 text-xs font-bold text-purple-800 shadow-sm"
-                                title={c.corpus_name ? `corpus: ${c.corpus_name}` : c.category}
-                              >
-                                {c.corpus_name || c.label}
-                              </span>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="text-slate-800">{m.content}</div>
-                        )}
-                      </div>
-                    ))}
+                    <TranscriptMessages
+                      dialogue={dialogue}
+                      msgClassName="ui-scale-transcript-msg"
+                      roleClassName="ui-scale-transcript-role"
+                      chipClassName="ui-scale-transcript-chip"
+                    />
                   </div>
                 )}
               </div>
@@ -577,9 +537,8 @@ export function SessionScreen() {
                 <h2 className="text-xl font-extrabold">Session menu</h2>
                 <button onClick={() => setShowMenu(false)}><CloseIcon /></button>
               </div>
-              <button onClick={endSession} className="pill-btn bg-[#94c1c2] w-full mb-3">End conversation 🌟</button>
-              <button onClick={abortSession} className="pill-btn bg-[#f09281] w-full">Discard (don't save)</button>
-              <p className="mt-4 text-xs text-slate-500">End saves stars and transcript. Discard removes everything.</p>
+              <button onClick={endSession} className="pill-btn bg-[#94c1c2] w-full">End conversation</button>
+              <p className="mt-4 text-xs text-slate-500">Ends the session and saves stars and transcript.</p>
             </div>
           </div>
         )}
@@ -605,7 +564,7 @@ export function SessionScreen() {
 function Loader({ label }: { label: string }) {
   return (
     <div className="flex flex-col items-center gap-4 py-10">
-      <div className="w-16 h-16 border-4 border-slate-300 border-t-amber-400 rounded-full animate-spin motion-reduce:animate-none" />
+      <Spinner size={112} />
       <p className="text-base font-bold text-slate-600">{label}</p>
     </div>
   );
@@ -665,6 +624,9 @@ function ParentTurn({
               width: 170, height: 170,
               borderRadius: '50%',
               background: isRecording ? '#f09281' : accent.color,
+              boxSizing: 'border-box',
+              border: '3px solid #000',
+              borderBottomWidth: 8,
             }}
           >
             {isRecording
@@ -725,16 +687,19 @@ function ChildTurn({
   }, [rec]);
 
   const mainCats: Array<{ key: 'topic' | 'action' | 'emotion'; label: string; tint: string }> = [
-    { key: 'topic',   label: 'Topic',   tint: 'bg-card-topic/40   border-sky-200' },
-    { key: 'action',  label: 'Action',  tint: 'bg-card-action/40  border-orange-200' },
-    { key: 'emotion', label: 'Feeling', tint: 'bg-card-emotion/40 border-rose-200' },
+    { key: 'topic',   label: 'Topic',   tint: 'bg-card-topic/40' },
+    { key: 'action',  label: 'Action',  tint: 'bg-card-action/40' },
+    { key: 'emotion', label: 'Feeling', tint: 'bg-card-emotion/40' },
   ];
 
   return (
     <div className="flex-1 min-h-0 flex flex-col items-stretch gap-2">
 
       {/* Selected-card deck -- fixed height, horizontal scroll, text pills */}
-      <div className="flex-shrink-0 h-[72px] bg-amber-50/80 border-2 border-dashed border-amber-300 rounded-2xl px-3 py-2 shadow-sm flex flex-col justify-center gap-1.5">
+      <div
+        className="flex-shrink-0 h-[72px] bg-amber-50/80 rounded-2xl px-3 py-2 shadow-sm flex flex-col justify-center gap-1.5"
+        style={{ border: '2px solid #000', borderBottomWidth: 4, boxSizing: 'border-box' }}
+      >
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-700 leading-none flex-shrink-0">
           Your selection {interim.length > 0 && <span className="font-normal normal-case">(tap to remove)</span>}
         </span>
@@ -746,7 +711,7 @@ function ChildTurn({
               <button
                 key={`${c.id}-${i}`}
                 onClick={() => onRemoveCard(i)}
-                className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-amber-300 rounded-full text-sm font-bold text-slate-700 shadow-sm active:scale-95 transition-transform"
+                className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-b-4 border-black rounded-full text-sm font-bold text-slate-700 active:scale-95 transition-transform"
                 style={{ touchAction: 'manipulation' }}
               >
                 {c.corpus_name ?? c.label}
@@ -757,21 +722,25 @@ function ChildTurn({
         )}
       </div>
 
-      {/* Main: 3 category columns side-by-side, fills remaining space */}
-      <div className="relative flex-1 min-h-0">
+      {/* Main: 3 category columns side-by-side, sized to their content */}
+      <div className="relative flex-shrink-0">
         {busy && (
           <div className="absolute inset-0 z-10 bg-white/70 backdrop-blur-[1px] rounded-2xl flex items-center justify-center pointer-events-none">
             <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow border">
-              <div className="w-5 h-5 border-2 border-slate-300 border-t-amber-400 rounded-full animate-spin" />
+              <PuzzleLoaderSmall size={20} />
               <span className="text-sm font-bold text-slate-600">Regenerating…</span>
             </div>
           </div>
         )}
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 h-full">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           {mainCats.map(({ key, label, tint }) => (
-            <div key={key} className={`${tint} border rounded-2xl p-2 sm:p-3 flex flex-col`}>
+            <div
+              key={key}
+              className={`${tint} rounded-2xl p-2 sm:p-3 flex flex-col`}
+              style={{ border: '2px solid #000', borderBottomWidth: 4, boxSizing: 'border-box' }}
+            >
               <p className="text-center text-sm sm:text-base font-extrabold text-slate-700 mb-2 flex-shrink-0">{label}</p>
-              <div className="flex-1 grid grid-cols-2 gap-2 content-start justify-items-center">
+              <div className="grid grid-cols-2 gap-2 content-start justify-items-center">
                 {byCat[key].map(c => (
                   <CardChip key={c.id} card={c} size="lg" onClick={() => !busy && onCardClick(c)} />
                 ))}
@@ -792,7 +761,7 @@ function ChildTurn({
           <button
             onClick={onSearchOpen}
             style={{ touchAction: 'manipulation', WebkitTouchCallout: 'none' as any, WebkitUserSelect: 'none' }}
-            className="w-[72px] h-24 sm:w-24 sm:h-28 flex flex-col items-center justify-between rounded-2xl bg-white border-2 border-slate-200 shadow-md hover:shadow-lg active:shadow-sm active:translate-y-1 active:scale-95 transition-all duration-150 p-2 pt-1.5 pb-1.5 select-none cursor-pointer"
+            className="w-[72px] h-24 sm:w-24 sm:h-28 flex flex-col items-center justify-between rounded-2xl bg-white border-2 border-b-4 border-black hover:shadow-md active:scale-95 transition-all duration-150 p-2 pt-1.5 pb-1.5 select-none cursor-pointer"
           >
             <div className="flex-1 w-full rounded-xl flex items-center justify-center bg-slate-100">
               <span className="text-3xl leading-none" role="img" aria-label="Search all words">🔍</span>
@@ -822,12 +791,11 @@ function ChildTurn({
 }
 
 function SentenceAcceptance({
-  sentence, onAccept, onReject, onRetry,
+  sentence, onAccept, onReject,
 }: {
   sentence: string;
   onAccept: () => void;
   onReject: () => void;
-  onRetry: () => void;
 }) {
   const [playState, setPlayState] = useState<'idle' | 'playing' | 'done'>('idle');
 
@@ -847,61 +815,65 @@ function SentenceAcceptance({
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center gap-10 px-8">
-      <h2 className="text-5xl font-extrabold text-slate-700">You said</h2>
-
-      <div className="w-full max-w-xl border-2 border-[#94c1c2] rounded-3xl p-8 bg-[#94c1c2]/10 shadow-sm">
-        <p className="text-4xl font-bold text-slate-700 text-center leading-snug">{sentence}</p>
-      </div>
-
-      {/* Play / Replay button */}
-      <button
-        onClick={handlePlay}
-        disabled={playState === 'playing'}
-        className="flex flex-col items-center gap-3 active:scale-95 motion-reduce:active:scale-100 transition-transform duration-300 ease-in-out disabled:opacity-60"
-        aria-label={playState === 'done' ? 'Play again' : 'Play sentence'}
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-6">
+      <div
+        className="w-full max-w-2xl rounded-[2.5rem] flex flex-col items-center gap-8 px-8 py-12 shadow-2xl"
+        style={{ background: '#f0ebe1', boxSizing: 'border-box', border: '3px solid #000', borderBottomWidth: 8 }}
       >
-        <div
-          className="w-32 h-32 rounded-full flex items-center justify-center transition-colors duration-300 ease-in-out"
-          style={{
-            background: playState === 'playing'
-              ? '#a78bfa'
-              : 'linear-gradient(135deg, #8b5cf6, #6d28d9)',
-          }}
-        >
-          {playState === 'idle' && (
-            <span className="text-6xl text-white" style={{ paddingLeft: 6 }}>▶</span>
-          )}
-          {playState === 'playing' && (
-            <div className="flex gap-2 items-center">
-              <div className="w-3 h-10 bg-white rounded-full animate-bounce motion-reduce:animate-none" style={{ animationDelay: '0ms' }} />
-              <div className="w-3 h-10 bg-white rounded-full animate-bounce motion-reduce:animate-none" style={{ animationDelay: '150ms' }} />
-              <div className="w-3 h-10 bg-white rounded-full animate-bounce motion-reduce:animate-none" style={{ animationDelay: '300ms' }} />
-            </div>
-          )}
-          {playState === 'done' && (
-            <span className="text-5xl text-white">↺</span>
-          )}
-        </div>
-        <span className="text-2xl font-bold text-slate-500 select-none">
-          {playState === 'idle' ? 'Play' : playState === 'playing' ? 'Playing…' : 'Play again'}
-        </span>
-      </button>
+        <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-700">You said</h2>
 
-      {/* no / try again / yes */}
-      <div className="flex gap-4 w-full max-w-xl">
+        <div className="w-full max-w-xl rounded-3xl p-8 bg-[#94c1c2]/10">
+          <p className="text-3xl sm:text-4xl font-bold text-slate-700 text-center leading-snug">{sentence}</p>
+        </div>
+
+        {/* Play / Replay button */}
         <button
-          onClick={onReject}
-          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-[#f09281] text-[#f09281] bg-white active:bg-[#f09281]/20 transition-colors duration-300 ease-in-out shadow-sm"
-        >no</button>
-        <button
-          onClick={onRetry}
-          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-yellow-300 text-yellow-600 bg-white active:bg-yellow-50 transition-colors duration-300 ease-in-out shadow-sm"
-        >try again</button>
-        <button
-          onClick={onAccept}
-          className="flex-1 py-7 rounded-3xl text-3xl font-extrabold border-2 border-[#94c1c2] text-[#94c1c2] bg-white active:bg-[#94c1c2]/20 transition-colors duration-300 ease-in-out shadow-sm"
-        >yes</button>
+          onClick={handlePlay}
+          disabled={playState === 'playing'}
+          className="flex flex-col items-center gap-3 active:scale-95 motion-reduce:active:scale-100 transition-transform duration-300 ease-in-out disabled:opacity-60"
+          aria-label={playState === 'done' ? 'Play again' : 'Play sentence'}
+        >
+          <div
+            className="w-28 h-28 rounded-full flex items-center justify-center transition-colors duration-300 ease-in-out"
+            style={{
+              background: playState === 'playing' ? '#f4a998' : '#f09281',
+              boxSizing: 'border-box',
+              border: '3px solid #000',
+              borderBottomWidth: 7,
+            }}
+          >
+            {playState === 'idle' && (
+              <span className="text-5xl text-white" style={{ paddingLeft: 6 }}>▶</span>
+            )}
+            {playState === 'playing' && (
+              <div className="flex gap-2 items-center">
+                <div className="w-3 h-10 bg-white rounded-full animate-bounce motion-reduce:animate-none" style={{ animationDelay: '0ms' }} />
+                <div className="w-3 h-10 bg-white rounded-full animate-bounce motion-reduce:animate-none" style={{ animationDelay: '150ms' }} />
+                <div className="w-3 h-10 bg-white rounded-full animate-bounce motion-reduce:animate-none" style={{ animationDelay: '300ms' }} />
+              </div>
+            )}
+            {playState === 'done' && (
+              <span className="text-4xl text-white">↺</span>
+            )}
+          </div>
+          <span className="text-xl font-bold text-slate-500 select-none">
+            {playState === 'idle' ? 'Play' : playState === 'playing' ? 'Playing…' : 'Play again'}
+          </span>
+        </button>
+
+        {/* no / yes */}
+        <div className="flex gap-4 w-full max-w-xl">
+          <button
+            onClick={onReject}
+            className="flex-1 py-6 rounded-3xl text-3xl font-extrabold text-black active:brightness-95 transition-colors duration-300 ease-in-out"
+            style={{ background: '#f09281', boxSizing: 'border-box', border: '2px solid #000', borderBottomWidth: 6 }}
+          >No</button>
+          <button
+            onClick={onAccept}
+            className="flex-1 py-6 rounded-3xl text-3xl font-extrabold text-black active:brightness-95 transition-colors duration-300 ease-in-out"
+            style={{ background: '#94c1c2', boxSizing: 'border-box', border: '2px solid #000', borderBottomWidth: 6 }}
+          >Yes</button>
+        </div>
       </div>
     </div>
   );
