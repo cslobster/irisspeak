@@ -25,6 +25,10 @@ vi.mock('@/lib/staticData', () => ({
   TOPIC_DESCRIPTION: { plan: 'planning', recall: 'recalling', free: 'free topic' },
   loadEmotionCards: () => [],
   loadCoreCards: () => [],
+  loadFolderCards: () => [
+    { path: 'numbers', label: 'Numbers', icon: '/symbols/mulberry/count_,_to.svg', words: ['one', 'two', 'three'] },
+    { path: 'time', label: 'Time', icon: '/symbols/mulberry/clock.svg', words: ['today', 'tomorrow'] },
+  ],
   labelForParent: (c: any) => c?.label ?? String(c),
   buildInitialGuides: () => [],
 }));
@@ -167,5 +171,89 @@ describe('refreshChildCards — comprehensive seen-cards exclusion', () => {
     const userContent: string = mockChat.mock.calls[0][0][1].content;
     expect(userContent).toContain('first message');
     expect(userContent).toContain('second message');
+  });
+});
+
+// ─── Behavior 3: Optional folder card (e.g. "Numbers") ───────────────────────
+
+describe('generateChildCards — folder card suggestion', () => {
+  function mockRefreshSequence() {
+    mockSql
+      .mockResolvedValueOnce([{ id: 'turn-child-1', role: 'child', ended_timestamp: null }]) // 1 getCurrentTurn
+      .mockResolvedValueOnce([{ topic_category: 'plan', subtopic: null, subtopic_description: null }]) // 2 session
+      .mockResolvedValueOnce([{ cards: [] }]) // 3 getInterimCards
+      .mockResolvedValueOnce([]) // 4 dialogue
+      .mockResolvedValueOnce([]) // 5 allPrevRecs
+      .mockResolvedValueOnce(undefined); // 6 insert
+  }
+
+  it('appends a folder card when the LLM picks an allow-listed folder', async () => {
+    mockChat.mockResolvedValue('topics: [a, b, c, d]\nactions: [e, f, g, h]\nfolder: [numbers]');
+    mockRefreshSequence();
+
+    const result = await refreshChildCards('sess-1', fakeDyad);
+
+    const folderCard = result.cards.find(c => c.is_folder);
+    expect(folderCard).toBeDefined();
+    expect(folderCard?.folder_path).toBe('numbers');
+    expect(folderCard?.label).toBe('Numbers');
+  });
+
+  it('drops a hallucinated folder name not in the allow-list', async () => {
+    mockChat.mockResolvedValue('topics: [a, b, c, d]\nactions: [e, f, g, h]\nfolder: [nonexistent]');
+    mockRefreshSequence();
+
+    const result = await refreshChildCards('sess-1', fakeDyad);
+
+    expect(result.cards.some(c => c.is_folder)).toBe(false);
+  });
+
+  it('is unaffected when no folder line is present and the message has no obvious keyword', async () => {
+    mockChat.mockResolvedValue('topics: [a, b, c, d]\nactions: [e, f, g, h]');
+    mockRefreshSequence();
+
+    const result = await refreshChildCards('sess-1', fakeDyad);
+
+    expect(result.cards.some(c => c.is_folder)).toBe(false);
+  });
+
+  it('falls back to a keyword-matched folder when the LLM omits one for an obvious case', async () => {
+    // The LLM sometimes forgets to suggest a folder even for unambiguous cases like an age
+    // question — the deterministic keyword backstop should still surface it.
+    mockChat.mockResolvedValue('topics: [a, b, c, d]\nactions: [e, f, g, h]');
+    mockSql
+      .mockResolvedValueOnce([{ id: 'turn-child-1', role: 'child', ended_timestamp: null }]) // 1 getCurrentTurn
+      .mockResolvedValueOnce([{ topic_category: 'plan', subtopic: null, subtopic_description: null }]) // 2 session
+      .mockResolvedValueOnce([{ cards: [] }]) // 3 getInterimCards
+      .mockResolvedValueOnce([ // 4 dialogue
+        { role: 'parent', content: 'How old are you?', content_type: 'text', timestamp: 1, turn_id: 't1' },
+      ])
+      .mockResolvedValueOnce([]) // 5 allPrevRecs
+      .mockResolvedValueOnce(undefined); // 6 insert
+
+    const result = await refreshChildCards('sess-1', fakeDyad);
+
+    const folderCard = result.cards.find(c => c.is_folder);
+    expect(folderCard?.folder_path).toBe('numbers');
+  });
+
+  it('replaces one topic slot per folder card and excludes that folder\'s own words from the topic pool', async () => {
+    // "one" is in the mocked numbers folder's word list — it must not also appear loose.
+    mockGetCorpusRetriever.mockResolvedValue({
+      wordsByCategory: vi.fn().mockReturnValue([]),
+      lookup: vi.fn((w: string) => {
+        const known = ['one', 'park', 'zoo', 'home'];
+        return known.includes(w) ? { name: w, category: 'topic', image_url: null } : null;
+      }),
+    });
+    mockChat.mockResolvedValue('topics: [one, park, zoo, home]\nactions: [e, f, g, h]\nfolder: [numbers]');
+    mockRefreshSequence();
+
+    const result = await refreshChildCards('sess-1', fakeDyad);
+
+    const topicCards = result.cards.filter(c => c.category === 'topic');
+    expect(topicCards).toHaveLength(4); // 3 real words + 1 folder card, not 5
+    expect(topicCards.some(c => c.corpus_name === 'one')).toBe(false); // excluded — covered by the folder
+    expect(topicCards.some(c => c.is_folder)).toBe(true);
   });
 });

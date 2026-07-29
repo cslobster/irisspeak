@@ -51,6 +51,24 @@ export function CardChip({ card, onClick, size = 'lg', selected = false, disable
         ${selected ? 'ring-4 ring-amber-400' : ''}
       `}
     >
+      {card.is_folder && (
+        <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+          {/* Dog-eared folded-corner tab — a much more noticeable "this opens a folder,
+              it's not a single word" cue than a plain small icon. */}
+          <div
+            className="absolute top-0 right-0 w-0 h-0"
+            style={{
+              borderStyle: 'solid',
+              borderWidth: '0 40px 40px 0',
+              borderColor: 'transparent #f0ebe1 transparent transparent',
+              filter: 'drop-shadow(-1px 1px 1.5px rgba(0,0,0,0.4))',
+            }}
+          />
+          <span className="absolute top-1 right-1 text-base leading-none" aria-hidden="true">
+            📁
+          </span>
+        </div>
+      )}
       {card.corpus_image_url && (
         <img
           src={card.corpus_image_url}

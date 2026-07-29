@@ -34,6 +34,9 @@ async function loadFolders(): Promise<FolderCard[]> {
 interface Props {
   onSelect: (word: string, category: string, image_url: string | null) => void;
   onClose: () => void;
+  // Opens the folder-browse view scoped directly into this path (e.g. ['numbers']) instead
+  // of the root — used when a folder card (e.g. "Numbers") is tapped from the session screen.
+  initialPath?: string[];
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -76,11 +79,11 @@ const FOLDER_ICONS: Record<string, string> = {
   weather: '/symbols/cboard/weather.svg',
 };
 
-export function CardSearchOverlay({ onSelect, onClose }: Props) {
+export function CardSearchOverlay({ onSelect, onClose, initialPath }: Props) {
   const [query, setQuery] = useState('');
   const [allCards, setAllCards] = useState<CboardCard[]>([]);
   const [folderCards, setFolderCards] = useState<FolderCard[]>([]);
-  const [path, setPath] = useState<string[]>([]);
+  const [path, setPath] = useState<string[]>(initialPath ?? []);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
