@@ -714,7 +714,7 @@ function ChildTurn({
                 className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-b-4 border-black rounded-full text-sm font-bold text-slate-700 active:scale-95 transition-transform"
                 style={{ touchAction: 'manipulation' }}
               >
-                {c.corpus_name ?? c.label}
+                {c.category === 'emotion' ? c.label : (c.corpus_name ?? c.label)}
                 <span className="text-[#f09281] text-[11px] font-extrabold">✕</span>
               </button>
             ))}
