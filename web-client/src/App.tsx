@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { SignInScreen } from './screens/SignInScreen';
 import { WelcomeScreen } from './screens/WelcomeScreen';
-import { WhoFirstScreen } from './screens/WhoFirstScreen';
 import { SessionScreen } from './screens/SessionScreen';
 import { SessionEndScreen } from './screens/SessionEndScreen';
 import { StarsScreen } from './screens/StarsScreen';
@@ -26,7 +25,6 @@ export default function App() {
     <Routes>
       <Route path="/" element={<RedirectIfAuthed><SignInScreen /></RedirectIfAuthed>} />
       <Route path="/home" element={<RequireAuth><WelcomeScreen /></RequireAuth>} />
-      <Route path="/who-first" element={<RequireAuth><WhoFirstScreen /></RequireAuth>} />
       <Route path="/session/:sessionId" element={<RequireAuth><SessionScreen /></RequireAuth>} />
       <Route path="/session-end/:sessionId" element={<RequireAuth><SessionEndScreen /></RequireAuth>} />
       <Route path="/stars" element={<RequireAuth><StarsScreen /></RequireAuth>} />
