@@ -17,15 +17,22 @@ import { sql, ensureSchema } from './db';
 import { getCorpusRetriever } from './corpus';
 import { chat, extractYamlList, stripFence } from './gemini';
 import {
-  buildChildCardPrompt, buildParentGuidePrompt, buildSentenceInferencePrompt, dialogueToXml,
+  buildChildCardPrompt, buildParentGuidePrompt, buildSentenceInferencePrompt, buildSessionTitlePrompt,
+  dialogueToXml,
 } from './prompts';
-import {
-  EMOTION_LABELS, buildInitialGuides, labelForParent, loadCoreCards, loadEmotionCards,
-} from './staticData';
+import { buildInitialGuides, labelForParent, loadCoreCards } from './staticData';
 import type {
   CardInfo, CardSelectionResult, ChildCardRecommendationResult, DialogueMessage, Dyad,
   ParentGuideElement, ParentGuideRecommendationResult, SessionTopicInfo, TopicCategory,
 } from './types';
+
+// Fixed feeling set — shown every turn, not LLM-generated, matched to real Cboard images.
+const FIXED_FEELINGS: { word: string; phrase: string }[] = [
+  { word: 'angry', phrase: "I'm angry" },
+  { word: 'happy', phrase: "I'm happy" },
+  { word: 'confused', phrase: "I'm confused" },
+  { word: 'sad', phrase: "I'm sad" },
+];
 
 // ---------- helpers ----------
 function now(): number { return Date.now(); }
@@ -187,13 +194,6 @@ async function generateChildCards(args: {
   // arbitrary words.
   const topics  = extractYamlList(raw, 'topics').slice(0, 6);
   const actions = extractYamlList(raw, 'actions').slice(0, 6);
-  const emotions = extractYamlList(raw, 'emotions').slice(0, 4);
-
-  // Match emotion words → fixed-list cards
-  const emotionCards = loadEmotionCards();
-  const matchedEmotions = emotions
-    .map((e: string) => emotionCards.find((c) => labelForParent(c, dyad.parent_type).toLowerCase() === String(e).toLowerCase().trim()))
-    .filter(Boolean) as ReturnType<typeof loadEmotionCards>;
 
   const recId = nanoid();
   const ts = now();
@@ -246,14 +246,18 @@ async function generateChildCards(args: {
   cards.push(...resolveCategory(topics.map(String), topicVocab, 'topic'));
   cards.push(...resolveCategory(actions.map(String), actionVocab, 'action'));
 
-  // 4 emotions (constrained list, no corpus enrichment)
-  matchedEmotions.forEach((c) => {
+  // 4 feelings — fixed set, not LLM-generated, so this can never come up short.
+  FIXED_FEELINGS.forEach(({ word, phrase }) => {
+    const entry = corpus.lookup(word);
     cards.push({
       id: nanoid(),
       recommendation_id: recId,
-      label: labelForParent(c, dyad.parent_type),
-      label_localized: labelForParent(c, dyad.parent_type),
+      label: phrase,
+      label_localized: phrase,
       category: 'emotion',
+      corpus_name: word,
+      corpus_category: entry?.category ?? 'emotion',
+      corpus_image_url: entry?.image_url ?? null,
     });
   });
 
@@ -563,8 +567,25 @@ export async function requestParentExample(
 // ---------- session housekeeping ----------
 export async function endSession(sessionId: string, dyad: Dyad): Promise<void> {
   await ensureSchema();
+
+  // Best-effort AI caption for the history list — a failed/slow LLM call should never block
+  // ending the session, so title stays null and the UI falls back to the topic label.
+  let title: string | null = null;
+  try {
+    const dialogue = await getDialogue(sessionId);
+    if (dialogue.length > 0) {
+      const raw = await chat([
+        { role: 'system', content: buildSessionTitlePrompt(dyad.child_name) },
+        { role: 'user', content: dialogueToXml(dialogue) },
+      ]);
+      title = raw.replace(/^["'](.*)["']$/s, '$1').trim() || null;
+    }
+  } catch (e) {
+    console.error('[session-title] generation failed:', e);
+  }
+
   await sql`
-    UPDATE session SET status = 'terminated', ended_timestamp = ${now()}
+    UPDATE session SET status = 'terminated', ended_timestamp = ${now()}, title = COALESCE(${title}, title)
     WHERE id = ${sessionId} AND dyad_id = ${dyad.id}
   `;
 }

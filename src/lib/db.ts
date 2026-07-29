@@ -80,6 +80,7 @@ export async function ensureSchema(): Promise<void> {
     `;
     await sql`CREATE INDEX IF NOT EXISTS idx_session_dyad ON session(dyad_id, created_at DESC)`;
     await sql`ALTER TABLE session ADD COLUMN IF NOT EXISTS rating INTEGER`;
+    await sql`ALTER TABLE session ADD COLUMN IF NOT EXISTS title TEXT`;
 
     // ---------- DIALOGUE TURN (parent or child) ----------
     await sql`

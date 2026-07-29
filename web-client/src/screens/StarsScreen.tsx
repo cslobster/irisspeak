@@ -61,7 +61,7 @@ export function StarsScreen() {
               <div key={s.id} className={`p-4 rounded-2xl border-l-4 ${topicTint[cat]} bg-white/80 flex items-center justify-between`}>
                 <div>
                   <div className="font-bold text-slate-800">
-                    {topicLabels[cat]}{s.topic?.subtopic ? ` · ${s.topic.subtopic}` : ''}
+                    {s.title || `${topicLabels[cat]}${s.topic?.subtopic ? ` · ${s.topic.subtopic}` : ''}`}
                   </div>
                   <div className="text-xs text-slate-500 mt-1">
                     {fmtDate(s.started_timestamp)} · {s.num_turns || 0} turn{s.num_turns === 1 ? '' : 's'} · {s.status}

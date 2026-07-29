@@ -71,6 +71,24 @@ export function CloseIcon({ size = 24, color = '#575757' }) {
   );
 }
 
+export function SoundOnIcon({ size = 24, color = '#575757' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M4 9v6h4l5 4V5L8 9H4z" fill={color}/>
+      <path d="M16.5 8.5a4.5 4.5 0 0 1 0 7M19 6a8 8 0 0 1 0 12" stroke={color} strokeWidth="2" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+}
+
+export function SoundOffIcon({ size = 24, color = '#575757' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M4 9v6h4l5 4V5L8 9H4z" fill={color}/>
+      <path d="M16 9l6 6M22 9l-6 6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
 export function GearIcon({ size = 24, color = '#575757' }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
