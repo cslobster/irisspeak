@@ -7,7 +7,6 @@ import { TranscriptMessages } from '../components/Transcript';
 import { CardChip } from '../components/CardChip';
 import { CloseIcon, MenuIcon, MicIcon, StopIcon } from '../components/Icons';
 import { CardSearchOverlay } from '../components/CardSearchOverlay';
-import { PuzzleLoaderSmall } from '../components/PuzzleLoader';
 import { Spinner } from '../components/Spinner';
 import { MicRecorder } from '../audio/recorder';
 import { speak, speakCard, stopSpeaking } from '../audio/tts';
@@ -57,6 +56,9 @@ export function SessionScreen() {
   const [lastParentMessage, setLastParentMessage] = useState<string | null>(null);
   const [lastChildSentence, setLastChildSentence] = useState<string | null>(null);
   const [inferredSentence, setInferredSentence] = useState<string | null>(null);
+  // Whether the child has banked at least one sentence since their turn started --
+  // gates the "Done" button (no point handing off to the parent with nothing said).
+  const [hasBankedSentence, setHasBankedSentence] = useState(false);
   const [micTapCount, setMicTapCount] = useState(0);
 
   // Recording
@@ -224,6 +226,7 @@ export function SessionScreen() {
       setRole('child');
       setChildRec(result.payload);
       setInterimCards([]);
+      setHasBankedSentence(false);
       setLastParentMessage(text);
       setParentMessage('');
       setPhase('idle');
@@ -329,20 +332,20 @@ export function SessionScreen() {
     }
   }, [sessionId, interimCards]);
 
-  // Step 2a: child approves → generate parent guides
+  // Step 2a: child approves → bank the sentence, stay on the child's turn with
+  // fresh cards so they can say another one (Done is a separate explicit action).
   const onAcceptSentence = useCallback(async () => {
     if (!sessionId) return;
     setLastChildSentence(inferredSentence);
     setInferredSentence(null);
     setPhase('thinking');
-    setPhaseLabel('Generating parent guides…');
+    setPhaseLabel('Getting your next cards…');
     try {
       const r = await api.confirmCards(sessionId);
       setTurnId(r.next_turn_id);
-      setRole('parent');
-      setParentGuide(r.payload);
+      setChildRec(r.payload);
       setInterimCards([]);
-      setChildRec(null);
+      setHasBankedSentence(true);
       setPhase('idle');
       refreshDialogue();
     } catch (e: any) {
@@ -356,6 +359,27 @@ export function SessionScreen() {
     setInferredSentence(null);
   }, []);
 
+  // Done: hand the turn to the parent once the child is happy with everything said.
+  const onFinishTurn = useCallback(async () => {
+    if (!sessionId || !hasBankedSentence) return;
+    analytics.cardConfirm(sessionId);
+    setPhase('thinking');
+    setPhaseLabel('Generating parent guides…');
+    try {
+      const r = await api.finishChildTurn(sessionId);
+      setTurnId(r.next_turn_id);
+      setRole('parent');
+      setParentGuide(r.payload);
+      setInterimCards([]);
+      setChildRec(null);
+      setPhase('idle');
+      refreshDialogue();
+    } catch (e: any) {
+      setErrorMsg(e?.message || 'Failed to finish turn');
+      setPhase('idle');
+    }
+  }, [sessionId, hasBankedSentence, refreshDialogue]);
+
   const onRefreshCards = useCallback(async () => {
     if (!sessionId || refreshingCards) return;
     analytics.cardRefresh(sessionId);
@@ -364,7 +388,7 @@ export function SessionScreen() {
       const r = await api.refreshCards(sessionId);
       setChildRec(r);
     } catch (e: any) {
-      setErrorMsg(e?.message || 'Failed to refresh');
+      setErrorMsg(e?.code === 'ECONNABORTED' ? 'Taking too long — try refreshing again.' : (e?.message || 'Failed to refresh'));
     } finally {
       setRefreshingCards(false);
     }
@@ -468,6 +492,8 @@ export function SessionScreen() {
               onConfirm={onConfirm}
               busy={refreshingCards}
               onSearchOpen={() => { analytics.cardSearchOpen(sessionId!); setShowSearch(true); }}
+              onDone={onFinishTurn}
+              doneEnabled={hasBankedSentence}
             />
           )}
         </div>
@@ -674,11 +700,13 @@ interface ChildTurnProps {
   onConfirm: () => void;
   busy: boolean;
   onSearchOpen: () => void;
+  onDone: () => void;
+  doneEnabled: boolean;
 }
 
 function ChildTurn({
   rec, interim, onCardClick, onRemoveCard, onRefresh, onConfirm,
-  busy, onSearchOpen,
+  busy, onSearchOpen, onDone, doneEnabled,
 }: ChildTurnProps) {
   const byCat = useMemo(() => {
     const groups: Record<CardInfo['category'], CardInfo[]> = { topic: [], action: [], emotion: [], core: [] };
@@ -727,7 +755,7 @@ function ChildTurn({
         {busy && (
           <div className="absolute inset-0 z-10 bg-white/70 backdrop-blur-[1px] rounded-2xl flex items-center justify-center pointer-events-none">
             <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow border">
-              <PuzzleLoaderSmall size={20} />
+              <Spinner size={20} strokeWidth={6} />
               <span className="text-sm font-bold text-slate-600">Regenerating…</span>
             </div>
           </div>
@@ -785,6 +813,11 @@ function ChildTurn({
           disabled={interim.length === 0 || busy}
           className="pill-btn bg-[#94c1c2] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg"
         >Generate sentence</button>
+        <button
+          onClick={onDone}
+          disabled={!doneEnabled || busy}
+          className="pill-btn bg-[#f09281] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg"
+        >Done</button>
       </div>
     </div>
   );

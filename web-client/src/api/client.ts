@@ -19,7 +19,11 @@ class ApiClient {
   private _jwt: string | null = null;
 
   constructor() {
-    this.http = axios.create({ baseURL: BASE_URL });
+    // Without this, axios defaults to no timeout at all — a slow/stuck LLM call or a Neon
+    // reconnect hiccup would leave "Regenerating…"-style busy spinners spinning forever with no
+    // way to recover, since the request that's supposed to clear them never resolves or rejects.
+    // 20s comfortably covers a cold LLM call (~7s measured) plus DB round trips with headroom.
+    this.http = axios.create({ baseURL: BASE_URL, timeout: 20000 });
     this._jwt = localStorage.getItem(JWT_KEY);
     this.http.interceptors.request.use((cfg) => {
       if (this._jwt) cfg.headers.Authorization = `Bearer ${this._jwt}`;
@@ -137,9 +141,18 @@ class ApiClient {
     return r.data;
   }
 
-  async confirmCards(sessionId: string): Promise<ResponseWithTurnId<ParentGuideRecommendationResult>> {
-    const r = await this.http.post<ResponseWithTurnId<ParentGuideRecommendationResult>>(
+  // Banks the just-approved sentence and returns a fresh card set so the child can
+  // keep building more sentences in the same turn (see finishChildTurn to end it).
+  async confirmCards(sessionId: string): Promise<ResponseWithTurnId<ChildCardRecommendationResult>> {
+    const r = await this.http.post<ResponseWithTurnId<ChildCardRecommendationResult>>(
       `/dyad/session/${sessionId}/message/child/confirm_cards`
+    );
+    return r.data;
+  }
+
+  async finishChildTurn(sessionId: string): Promise<ResponseWithTurnId<ParentGuideRecommendationResult>> {
+    const r = await this.http.post<ResponseWithTurnId<ParentGuideRecommendationResult>>(
+      `/dyad/session/${sessionId}/message/child/finish_turn`
     );
     return r.data;
   }

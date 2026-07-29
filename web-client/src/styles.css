@@ -161,24 +161,6 @@ html.ui-scale-xl    { --ui-scale: 1.22; }
   animation: mic-breathe 2.8s ease-in-out infinite;
 }
 
-/* Puzzle-piece loading indicator — the whole cluster turns slowly (one
-   rotation every 6s, well under the mic-ripple/breathe pace) while each piece
-   softly grows/shrinks out of phase with the others. Kept slow and staggered
-   rather than a fast spin so it reads as calm, not urgent. */
-@keyframes puzzle-spin {
-  to { transform: rotate(360deg); }
-}
-.puzzle-spin {
-  animation: puzzle-spin 6s linear infinite;
-}
-@keyframes puzzle-piece-breathe {
-  0%, 100% { transform: scale(1);    opacity: 0.75; }
-  50%      { transform: scale(1.12); opacity: 1; }
-}
-.puzzle-piece {
-  animation: puzzle-piece-breathe 2s ease-in-out infinite;
-}
-
 /* Ring spinner (Spinner.tsx) — the ring spins at a constant rate while the
    visible arc's length eases in and out, which is what makes it read as
    "speeds up, slows down" rather than a plain constant spin. */
@@ -215,8 +197,6 @@ html.ui-scale-xl    { --ui-scale: 1.22; }
   .mic-ripple::before,
   .mic-ripple::after,
   .mic-breathe,
-  .puzzle-spin,
-  .puzzle-piece,
   .spinner-rotate,
   .spinner-dash {
     animation: none !important;
@@ -224,9 +204,6 @@ html.ui-scale-xl    { --ui-scale: 1.22; }
   .mic-ripple::before,
   .mic-ripple::after {
     opacity: 0 !important;
-  }
-  .puzzle-piece {
-    opacity: 1 !important;
   }
   .spinner-dash {
     stroke-dasharray: 40, 200 !important;

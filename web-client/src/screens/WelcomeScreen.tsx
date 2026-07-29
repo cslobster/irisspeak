@@ -47,18 +47,18 @@ export function WelcomeScreen() {
               Start a conversation
             </p>
             <div className="relative">
-              {/* Playful pointer — sits above the button, arrow curls down into it */}
+              {/* Playful pointer — sits above the button, arrow bends left and down into it */}
               <div className="absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+8px)] pointer-events-none select-none">
-                <svg width="50" height="86" viewBox="0 0 50 86" fill="none">
+                <svg width="68" height="86" viewBox="0 0 78 90" fill="none">
                   <path
-                    d="M25 6 C 5 22, 25 52, 25 78"
+                    d="M55 8 C 70 25, 55 55, 18 76"
                     stroke="#000"
                     strokeWidth="4"
                     strokeLinecap="round"
                     fill="none"
                   />
                   <path
-                    d="M25 78 L15 64 M25 78 L35 64"
+                    d="M18 76 L34 73 M18 76 L28 64"
                     stroke="#000"
                     strokeWidth="4"
                     strokeLinecap="round"
