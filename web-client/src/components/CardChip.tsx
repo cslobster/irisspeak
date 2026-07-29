@@ -1,7 +1,8 @@
 import type { CardCategory, CardInfo } from '../api/types';
 
-// Pictures are hidden for now — semantic-search image matching is bypassed, so cards
-// show only their colored category tile and label.
+// corpus_image_url is an exact 1:1 match to the card's word (see moderator.ts's corpus
+// lookup) — safe to render directly. Cards without a match (emotion/core, or a dropped
+// hallucination) fall back to just the colored tile + label.
 const tile: Record<CardCategory, { bg: string }> = {
   topic:   { bg: 'bg-card-topic' },
   action:  { bg: 'bg-card-action' },
@@ -45,6 +46,14 @@ export function CardChip({ card, onClick, size = 'lg', selected = false, disable
         ${selected ? 'ring-4 ring-amber-400' : ''}
       `}
     >
+      {card.corpus_image_url && (
+        <img
+          src={card.corpus_image_url}
+          alt=""
+          draggable={false}
+          className="w-1/2 h-1/2 object-contain mb-1 pointer-events-none select-none"
+        />
+      )}
       <div className="w-full px-0.5 text-center leading-tight">
         <div className={`${sz.label} font-bold text-slate-800 line-clamp-2`}>
           {displayLabel}
