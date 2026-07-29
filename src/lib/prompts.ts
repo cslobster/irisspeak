@@ -28,10 +28,14 @@ function escapeXml(s: string): string {
 export function buildChildCardPrompt(args: {
   parentType: ParentType;
   topic: TopicCategory;
+  topicVocab: string[];
+  actionVocab: string[];
   seenLabels?: string[];
   interimCards?: CardInfo[];
 }): string {
   const emotionList = EMOTION_LABELS.join(', ');
+  const topicList = args.topicVocab.join(', ');
+  const actionList = args.actionVocab.join(', ');
 
   let prev = '';
   if (args.seenLabels && args.seenLabels.length) {
@@ -44,15 +48,28 @@ export function buildChildCardPrompt(args: {
   }
 
   return [
-    `Child age 5–7 with ASD, talking with their ${args.parentType.toLowerCase()}. `,
-    `Conversation: ${TOPIC_DESCRIPTION[args.topic]}\n`,
-    `Silently consider what the child's next sentence or question would be, and the key nouns `,
-    `and verbs they'd need to say it. Do not write out this reasoning.\n`,
-    `Given the dialogue's last parent message, output 4 topic nouns, 4 action verbs, `,
-    `and 4 emotions chosen from this fixed list: ${emotionList}.\n`,
-    `Output ONLY the YAML below, nothing else — no reasoning, no bullet points, no explanation:\n`,
-    `topics: [w1, w2, w3, w4]\n`,
-    `actions: [w1, w2, w3, w4]\n`,
+    `You suggest AAC card words for a child age 5–7 with ASD, talking with their ${args.parentType.toLowerCase()}. `,
+    `Conversation: ${TOPIC_DESCRIPTION[args.topic]}\n\n`,
+    `Given the dialogue's last parent message:\n`,
+    `1. Identify the specific theme of that message — what kind of answer is it actually asking for `,
+    `(e.g. a food, an activity, a place, a person, a time)? Stay locked onto that theme; do not drift `,
+    `into unrelated topics unless the message is actually about them.\n`,
+    `2. Think of 2-3 short sentences the child might want to say that directly and specifically answer `,
+    `the message, staying strictly on that theme.\n`,
+    `3. From those sentences, pick 6 topic nouns and 6 action verbs, chosen ONLY from the fixed `,
+    `vocabularies below — do not invent new words or use words outside these lists. List each set of `,
+    `6 in order from most-fitting to least-fitting, since only the first few valid ones may get shown:\n`,
+    `   Topic vocabulary: ${topicList}\n`,
+    `   Action vocabulary: ${actionList}\n`,
+    `4. Also pick 4 emotions chosen ONLY from this fixed list: ${emotionList}.\n\n`,
+    `Every topic/action word must relate directly to the theme from step 1, not just loosely `,
+    `associated filler. If a vocabulary doesn't contain enough strongly on-theme words, pick the `,
+    `closest available ones rather than switching to a different theme. Do NOT repeat the same word `,
+    `twice within a list.\n\n`,
+    `Do steps 1-2 silently — do NOT write out the theme or sentences. `,
+    `Output ONLY this YAML, nothing else, no text before or after it:\n`,
+    `topics: [w1, w2, w3, w4, w5, w6]\n`,
+    `actions: [w1, w2, w3, w4, w5, w6]\n`,
     `emotions: [w1, w2, w3, w4]`,
     prev,
     interim,

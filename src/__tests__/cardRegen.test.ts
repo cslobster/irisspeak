@@ -5,14 +5,18 @@ vi.mock('@/lib/db', () => ({
   sql: vi.fn(),
 }));
 
-vi.mock('@/lib/gemini', () => ({
-  chat: vi.fn(),
-  stripFence: (s: string) => s,
-}));
+vi.mock('@/lib/gemini', async () => {
+  const actual = await vi.importActual<typeof import('@/lib/gemini')>('@/lib/gemini');
+  return {
+    ...actual,
+    chat: vi.fn(),
+  };
+});
 
 vi.mock('@/lib/corpus', () => ({
   getCorpusRetriever: vi.fn().mockResolvedValue({
-    matchBatch: vi.fn().mockResolvedValue([]),
+    wordsByCategory: vi.fn().mockReturnValue([]),
+    lookup: vi.fn().mockReturnValue(null),
   }),
 }));
 
@@ -28,10 +32,12 @@ vi.mock('@/lib/staticData', () => ({
 import { addChildCard, refreshChildCards } from '@/lib/moderator';
 import { sql, ensureSchema } from '@/lib/db';
 import { chat } from '@/lib/gemini';
+import { getCorpusRetriever } from '@/lib/corpus';
 
 const mockSql = sql as unknown as ReturnType<typeof vi.fn>;
 const mockChat = chat as unknown as ReturnType<typeof vi.fn>;
 const mockEnsureSchema = ensureSchema as unknown as ReturnType<typeof vi.fn>;
+const mockGetCorpusRetriever = getCorpusRetriever as unknown as ReturnType<typeof vi.fn>;
 
 const fakeDyad = {
   id: 'dyad-1', alias: 'test', child_name: 'Sammy',
@@ -66,6 +72,10 @@ beforeEach(() => {
   vi.resetAllMocks();
   mockEnsureSchema.mockResolvedValue(undefined);
   mockChat.mockResolvedValue('topics: [a, b, c, d]\nactions: [e, f, g, h]\nemotions: [happy, sad, happy, sad]');
+  mockGetCorpusRetriever.mockResolvedValue({
+    wordsByCategory: vi.fn().mockReturnValue([]),
+    lookup: vi.fn().mockReturnValue(null),
+  });
 });
 
 // ─── Behavior 1: No auto-regen on card tap ───────────────────────────────────
