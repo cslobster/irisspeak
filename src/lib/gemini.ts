@@ -77,11 +77,35 @@ export interface ChatTurn {
   content: string;
 }
 
-export async function chat(messages: ChatTurn[], opts: { model?: string; temperature?: number } = {}): Promise<string> {
-  const resp = await client().chat.completions.create({
+// Every prompt in this codebase asks for a short YAML block or a single short sentence/
+// utterance -- 500 tokens is generous headroom over the largest of those, and caps the
+// worst case where Gemini rambles reasoning prose before the actual output (see
+// extractYamlList's doc comment) instead of letting generation run unbounded.
+const DEFAULT_MAX_TOKENS = 500;
+// Per-request timeout well under the 60s Vercel function ceiling, so a stuck/slow call
+// fails fast enough to retry within the same request instead of eating the whole budget.
+const DEFAULT_TIMEOUT_MS = 20_000;
+
+export async function chat(
+  messages: ChatTurn[],
+  opts: { model?: string; temperature?: number; maxTokens?: number; timeoutMs?: number } = {},
+): Promise<string> {
+  const params = {
     model: opts.model || MODEL,
     messages,
     temperature: opts.temperature,
-  });
-  return resp.choices[0]?.message?.content || '';
+    max_tokens: opts.maxTokens ?? DEFAULT_MAX_TOKENS,
+  };
+  const timeout = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  try {
+    const resp = await client().chat.completions.create(params, { timeout });
+    return resp.choices[0]?.message?.content || '';
+  } catch (e) {
+    // One retry on timeout/transient failure -- covers the common case (a single slow
+    // generation) without masking a genuinely broken request (which will fail the same
+    // way twice and then surface to the caller).
+    console.warn('[gemini] chat() failed, retrying once:', e);
+    const resp = await client().chat.completions.create(params, { timeout });
+    return resp.choices[0]?.message?.content || '';
+  }
 }
