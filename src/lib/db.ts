@@ -15,7 +15,14 @@ let _ready: Promise<void> | null = null;
 export async function ensureSchema(): Promise<void> {
   if (_ready) return _ready;
   _ready = (async () => {
-    // ---------- USER (DYAD) ----------
+    // Each `sql` call is its own network round trip (~75-100ms warm, 200ms+ cold — see
+    // moderator.ts), and on a cold serverless instance this whole function runs before the
+    // first request can proceed. Statements below are grouped into phases by their actual FK/
+    // migration dependencies (a table must exist before you ALTER it, index it, or reference it
+    // via FOREIGN KEY) and run in parallel within each phase via Promise.all, instead of one
+    // long fully-sequential chain — cuts the cold-start round-trip count roughly in half.
+
+    // ---------- Phase 1: root table everything else depends on ----------
     await sql`
       CREATE TABLE IF NOT EXISTS dyad (
         id            TEXT PRIMARY KEY,
@@ -27,160 +34,184 @@ export async function ensureSchema(): Promise<void> {
         created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
     `;
-    // Personalization core (see CONTEXT.md's Profile Fact / Custom Vocabulary Word entries):
-    // age/notes are the non-word-shaped profile context; status gates the self-serve signup
-    // wizard behind admin approval — existing admin-created/seeded dyads default to 'active' so
-    // they're unaffected.
-    await sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS age INTEGER`;
-    await sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS notes TEXT`;
-    await sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS communication_style TEXT`;
-    await sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS parent_email TEXT`;
-    await sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active'`;
-    await sql`
-      CREATE TABLE IF NOT EXISTS dyad_login_code (
-        code      TEXT NOT NULL,
-        dyad_id   TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
-        active    BOOLEAN NOT NULL DEFAULT TRUE,
-        issued_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        PRIMARY KEY (code, dyad_id)
-      )
-    `;
-    // Migration: if the old PK was only on `code`, upgrade it to composite (code, dyad_id)
-    // so multiple users can share the same login code.
-    await sql`
-      DO $$ BEGIN
-        IF NOT EXISTS (
-          SELECT 1 FROM pg_constraint c
-          JOIN pg_attribute a ON a.attrelid = c.conrelid AND a.attnum = ANY(c.conkey)
-          WHERE c.conrelid = 'dyad_login_code'::regclass
-            AND c.contype = 'p'
-            AND a.attname = 'dyad_id'
-        ) THEN
-          ALTER TABLE dyad_login_code DROP CONSTRAINT IF EXISTS dyad_login_code_pkey;
-          ALTER TABLE dyad_login_code ADD PRIMARY KEY (code, dyad_id);
-        END IF;
-      END $$
-    `;
-    await sql`
-      CREATE TABLE IF NOT EXISTS free_topic (
-        id                    TEXT PRIMARY KEY,
-        dyad_id               TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
-        subtopic              TEXT NOT NULL,
-        subtopic_description  TEXT,
-        created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `;
 
-    // ---------- CUSTOM VOCABULARY WORD (per-dyad words not in the shared corpus) ----------
-    // is_preference_pointer: true when `word` already exists in the shared corpus and this row
-    // just marks it as this child's known favorite (e.g. "red") — no image of its own needed,
-    // it resolves via the normal corpus lookup. False means a genuinely new word (a name, a
-    // school) that needs image_data/emoji since no corpus image exists for it.
-    // image_data is base64, stored directly (no blob storage provider set up) — null falls
-    // through to the emoji fallback, itself nullable (both null just means no image yet).
-    await sql`
-      CREATE TABLE IF NOT EXISTS dyad_custom_word (
-        id                     TEXT PRIMARY KEY,
-        dyad_id                TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
-        word                   TEXT NOT NULL,
-        category               TEXT NOT NULL,
-        is_preference_pointer  BOOLEAN NOT NULL DEFAULT FALSE,
-        image_data             TEXT,
-        emoji                  TEXT,
-        source                 TEXT NOT NULL DEFAULT 'parent',
-        created_at             TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `;
-    await sql`CREATE INDEX IF NOT EXISTS idx_custom_word_dyad ON dyad_custom_word(dyad_id)`;
+    // ---------- Phase 2: only depend on `dyad` existing ----------
+    await Promise.all([
+      // Personalization core (see CONTEXT.md's Profile Fact / Custom Vocabulary Word entries):
+      // age/notes are the non-word-shaped profile context; status gates the self-serve signup
+      // wizard behind admin approval — existing admin-created/seeded dyads default to 'active'
+      // so they're unaffected.
+      sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS age INTEGER`,
+      sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS notes TEXT`,
+      sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS communication_style TEXT`,
+      sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS parent_email TEXT`,
+      sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active'`,
+      sql`
+        CREATE TABLE IF NOT EXISTS dyad_login_code (
+          code      TEXT NOT NULL,
+          dyad_id   TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
+          active    BOOLEAN NOT NULL DEFAULT TRUE,
+          issued_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          PRIMARY KEY (code, dyad_id)
+        )
+      `,
+      sql`
+        CREATE TABLE IF NOT EXISTS free_topic (
+          id                    TEXT PRIMARY KEY,
+          dyad_id               TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
+          subtopic              TEXT NOT NULL,
+          subtopic_description  TEXT,
+          created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
+      // ---------- CUSTOM VOCABULARY WORD (per-dyad words not in the shared corpus) ----------
+      // is_preference_pointer: true when `word` already exists in the shared corpus and this row
+      // just marks it as this child's known favorite (e.g. "red") — no image of its own needed,
+      // it resolves via the normal corpus lookup. False means a genuinely new word (a name, a
+      // school) that needs image_data/emoji since no corpus image exists for it.
+      // image_data is base64, stored directly (no blob storage provider set up) — null falls
+      // through to the emoji fallback, itself nullable (both null just means no image yet).
+      sql`
+        CREATE TABLE IF NOT EXISTS dyad_custom_word (
+          id                     TEXT PRIMARY KEY,
+          dyad_id                TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
+          word                   TEXT NOT NULL,
+          category               TEXT NOT NULL,
+          is_preference_pointer  BOOLEAN NOT NULL DEFAULT FALSE,
+          image_data             TEXT,
+          emoji                  TEXT,
+          source                 TEXT NOT NULL DEFAULT 'parent',
+          created_at             TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
+      sql`
+        CREATE TABLE IF NOT EXISTS session (
+          id                     TEXT PRIMARY KEY,
+          dyad_id                TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
+          topic_category         TEXT NOT NULL,
+          subtopic               TEXT,
+          subtopic_description   TEXT,
+          local_timezone         TEXT,
+          status                 TEXT NOT NULL DEFAULT 'initial',
+          started_timestamp      BIGINT,
+          ended_timestamp        BIGINT,
+          num_turns              INTEGER NOT NULL DEFAULT 0,
+          created_at             TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
+      sql`
+        CREATE TABLE IF NOT EXISTS user_event (
+          id          TEXT PRIMARY KEY,
+          dyad_id     TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
+          session_id  TEXT,
+          screen      TEXT NOT NULL,
+          element     TEXT NOT NULL,
+          event_type  TEXT NOT NULL DEFAULT 'tap',
+          metadata    JSONB,
+          ts          BIGINT NOT NULL,
+          created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
+    ]);
 
-    // ---------- SESSION (one full conversation) ----------
-    await sql`
-      CREATE TABLE IF NOT EXISTS session (
-        id                     TEXT PRIMARY KEY,
-        dyad_id                TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
-        topic_category         TEXT NOT NULL,
-        subtopic               TEXT,
-        subtopic_description   TEXT,
-        local_timezone         TEXT,
-        status                 TEXT NOT NULL DEFAULT 'initial',
-        started_timestamp      BIGINT,
-        ended_timestamp        BIGINT,
-        num_turns              INTEGER NOT NULL DEFAULT 0,
-        created_at             TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `;
-    await sql`CREATE INDEX IF NOT EXISTS idx_session_dyad ON session(dyad_id, created_at DESC)`;
-    await sql`ALTER TABLE session ADD COLUMN IF NOT EXISTS rating INTEGER`;
-    await sql`ALTER TABLE session ADD COLUMN IF NOT EXISTS title TEXT`;
+    // ---------- Phase 3: depend on a phase-2 table existing ----------
+    await Promise.all([
+      // Migration: if the old PK was only on `code`, upgrade it to composite (code, dyad_id)
+      // so multiple users can share the same login code.
+      sql`
+        DO $$ BEGIN
+          IF NOT EXISTS (
+            SELECT 1 FROM pg_constraint c
+            JOIN pg_attribute a ON a.attrelid = c.conrelid AND a.attnum = ANY(c.conkey)
+            WHERE c.conrelid = 'dyad_login_code'::regclass
+              AND c.contype = 'p'
+              AND a.attname = 'dyad_id'
+          ) THEN
+            ALTER TABLE dyad_login_code DROP CONSTRAINT IF EXISTS dyad_login_code_pkey;
+            ALTER TABLE dyad_login_code ADD PRIMARY KEY (code, dyad_id);
+          END IF;
+        END $$
+      `,
+      sql`CREATE INDEX IF NOT EXISTS idx_custom_word_dyad ON dyad_custom_word(dyad_id)`,
+      sql`CREATE INDEX IF NOT EXISTS idx_session_dyad ON session(dyad_id, created_at DESC)`,
+      sql`ALTER TABLE session ADD COLUMN IF NOT EXISTS rating INTEGER`,
+      sql`ALTER TABLE session ADD COLUMN IF NOT EXISTS title TEXT`,
+      sql`
+        CREATE TABLE IF NOT EXISTS dialogue_turn (
+          id                  TEXT PRIMARY KEY,
+          session_id          TEXT NOT NULL REFERENCES session(id) ON DELETE CASCADE,
+          role                TEXT NOT NULL,
+          started_timestamp   BIGINT NOT NULL,
+          ended_timestamp     BIGINT,
+          created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
+      sql`CREATE INDEX IF NOT EXISTS idx_event_dyad ON user_event(dyad_id, created_at DESC)`,
+      sql`CREATE INDEX IF NOT EXISTS idx_event_screen ON user_event(screen, element)`,
+    ]);
 
-    // ---------- DIALOGUE TURN (parent or child) ----------
-    await sql`
-      CREATE TABLE IF NOT EXISTS dialogue_turn (
-        id                  TEXT PRIMARY KEY,
-        session_id          TEXT NOT NULL REFERENCES session(id) ON DELETE CASCADE,
-        role                TEXT NOT NULL,
-        started_timestamp   BIGINT NOT NULL,
-        ended_timestamp     BIGINT,
-        created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `;
-    await sql`CREATE INDEX IF NOT EXISTS idx_turn_session ON dialogue_turn(session_id, started_timestamp)`;
-    await sql`ALTER TABLE dialogue_turn ADD COLUMN IF NOT EXISTS inferred_sentence TEXT`;
+    // ---------- Phase 4: depend on `dialogue_turn` (phase 3) existing ----------
+    await Promise.all([
+      sql`CREATE INDEX IF NOT EXISTS idx_turn_session ON dialogue_turn(session_id, started_timestamp)`,
+      sql`ALTER TABLE dialogue_turn ADD COLUMN IF NOT EXISTS inferred_sentence TEXT`,
+      sql`
+        CREATE TABLE IF NOT EXISTS dialogue_message (
+          id            TEXT PRIMARY KEY,
+          session_id    TEXT NOT NULL REFERENCES session(id) ON DELETE CASCADE,
+          turn_id       TEXT NOT NULL REFERENCES dialogue_turn(id) ON DELETE CASCADE,
+          role          TEXT NOT NULL,
+          content_type  TEXT NOT NULL,        -- 'text' | 'cards'
+          content       JSONB NOT NULL,        -- string or CardInfo[]
+          timestamp     BIGINT NOT NULL,
+          created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
+      sql`
+        CREATE TABLE IF NOT EXISTS child_card_recommendation (
+          id            TEXT PRIMARY KEY,
+          session_id    TEXT NOT NULL REFERENCES session(id) ON DELETE CASCADE,
+          turn_id       TEXT NOT NULL REFERENCES dialogue_turn(id) ON DELETE CASCADE,
+          cards         JSONB NOT NULL,
+          timestamp     BIGINT NOT NULL,
+          created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
+      sql`
+        CREATE TABLE IF NOT EXISTS parent_guide_recommendation (
+          id            TEXT PRIMARY KEY,
+          session_id    TEXT NOT NULL REFERENCES session(id) ON DELETE CASCADE,
+          turn_id       TEXT NOT NULL REFERENCES dialogue_turn(id) ON DELETE CASCADE,
+          guides        JSONB NOT NULL,
+          timestamp     BIGINT NOT NULL,
+          created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
+      sql`
+        CREATE TABLE IF NOT EXISTS interim_card_selection (
+          id          TEXT PRIMARY KEY,
+          session_id  TEXT NOT NULL REFERENCES session(id) ON DELETE CASCADE,
+          turn_id     TEXT NOT NULL REFERENCES dialogue_turn(id) ON DELETE CASCADE,
+          cards       JSONB NOT NULL,         -- list of CardIdentity
+          timestamp   BIGINT NOT NULL,
+          created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
+    ]);
 
-    // ---------- DIALOGUE MESSAGE (parent text/audio, or child confirmed cards) ----------
-    await sql`
-      CREATE TABLE IF NOT EXISTS dialogue_message (
-        id            TEXT PRIMARY KEY,
-        session_id    TEXT NOT NULL REFERENCES session(id) ON DELETE CASCADE,
-        turn_id       TEXT NOT NULL REFERENCES dialogue_turn(id) ON DELETE CASCADE,
-        role          TEXT NOT NULL,
-        content_type  TEXT NOT NULL,        -- 'text' | 'cards'
-        content       JSONB NOT NULL,        -- string or CardInfo[]
-        timestamp     BIGINT NOT NULL,
-        created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `;
-    await sql`CREATE INDEX IF NOT EXISTS idx_message_session ON dialogue_message(session_id, timestamp)`;
+    // ---------- Phase 5: depend on `dialogue_message` / `interim_card_selection` (phase 4) ----------
+    await Promise.all([
+      sql`CREATE INDEX IF NOT EXISTS idx_message_session ON dialogue_message(session_id, timestamp)`,
+      // Migration: collapse any pre-existing duplicate rows per (session_id, turn_id) — the old
+      // DELETE+INSERT update pattern could leave two rows behind under concurrent requests —
+      // before adding the uniqueness constraint that lets card taps upsert atomically.
+      sql`
+        DELETE FROM interim_card_selection a USING interim_card_selection b
+        WHERE a.session_id = b.session_id AND a.turn_id = b.turn_id
+          AND (a.timestamp, a.id) < (b.timestamp, b.id)
+      `,
+    ]);
 
-    // ---------- LLM RECOMMENDATIONS (cards / guides) ----------
-    await sql`
-      CREATE TABLE IF NOT EXISTS child_card_recommendation (
-        id            TEXT PRIMARY KEY,
-        session_id    TEXT NOT NULL REFERENCES session(id) ON DELETE CASCADE,
-        turn_id       TEXT NOT NULL REFERENCES dialogue_turn(id) ON DELETE CASCADE,
-        cards         JSONB NOT NULL,
-        timestamp     BIGINT NOT NULL,
-        created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `;
-    await sql`
-      CREATE TABLE IF NOT EXISTS parent_guide_recommendation (
-        id            TEXT PRIMARY KEY,
-        session_id    TEXT NOT NULL REFERENCES session(id) ON DELETE CASCADE,
-        turn_id       TEXT NOT NULL REFERENCES dialogue_turn(id) ON DELETE CASCADE,
-        guides        JSONB NOT NULL,
-        timestamp     BIGINT NOT NULL,
-        created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `;
-    await sql`
-      CREATE TABLE IF NOT EXISTS interim_card_selection (
-        id          TEXT PRIMARY KEY,
-        session_id  TEXT NOT NULL REFERENCES session(id) ON DELETE CASCADE,
-        turn_id     TEXT NOT NULL REFERENCES dialogue_turn(id) ON DELETE CASCADE,
-        cards       JSONB NOT NULL,         -- list of CardIdentity
-        timestamp   BIGINT NOT NULL,
-        created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `;
-    // Migration: collapse any pre-existing duplicate rows per (session_id, turn_id) — the old
-    // DELETE+INSERT update pattern could leave two rows behind under concurrent requests —
-    // before adding the uniqueness constraint that lets card taps upsert atomically.
-    await sql`
-      DELETE FROM interim_card_selection a USING interim_card_selection b
-      WHERE a.session_id = b.session_id AND a.turn_id = b.turn_id
-        AND (a.timestamp, a.id) < (b.timestamp, b.id)
-    `;
+    // ---------- Phase 6: must run after the dedup DELETE (phase 5) completes ----------
     await sql`
       DO $$ BEGIN
         IF NOT EXISTS (
@@ -191,23 +222,6 @@ export async function ensureSchema(): Promise<void> {
         END IF;
       END $$
     `;
-
-    // ---------- USER ANALYTICS EVENTS ----------
-    await sql`
-      CREATE TABLE IF NOT EXISTS user_event (
-        id          TEXT PRIMARY KEY,
-        dyad_id     TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
-        session_id  TEXT,
-        screen      TEXT NOT NULL,
-        element     TEXT NOT NULL,
-        event_type  TEXT NOT NULL DEFAULT 'tap',
-        metadata    JSONB,
-        ts          BIGINT NOT NULL,
-        created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `;
-    await sql`CREATE INDEX IF NOT EXISTS idx_event_dyad ON user_event(dyad_id, created_at DESC)`;
-    await sql`CREATE INDEX IF NOT EXISTS idx_event_screen ON user_event(screen, element)`;
 
     // ---------- SEED TEST DYAD ----------
     const code = process.env.TEST_LOGIN_CODE || '12345';
