@@ -65,7 +65,7 @@ export function SessionScreen() {
   const [showSearch, setShowSearch] = useState(false);
   const [scopedFolderPath, setScopedFolderPath] = useState<string[] | undefined>(undefined);
   const [lastParentMessage, setLastParentMessage] = useState<string | null>(null);
-  const [lastChildSentence, setLastChildSentence] = useState<string | null>(null);
+  const [bankedChildSentences, setBankedChildSentences] = useState<string[]>([]);
   const [inferredSentence, setInferredSentence] = useState<string | null>(null);
   // Whether the child has banked at least one sentence since their turn started --
   // gates the "Done" button (no point handing off to the parent with nothing said).
@@ -238,6 +238,7 @@ export function SessionScreen() {
       setChildRec(result.payload);
       setInterimCards([]);
       setHasBankedSentence(false);
+      setBankedChildSentences([]);
       setLastParentMessage(text);
       setParentMessage('');
       setPhase('idle');
@@ -363,7 +364,7 @@ export function SessionScreen() {
   // fresh cards so they can say another one (Done is a separate explicit action).
   const onAcceptSentence = useCallback(async () => {
     if (!sessionId) return;
-    setLastChildSentence(inferredSentence);
+    if (inferredSentence) setBankedChildSentences(prev => [...prev, inferredSentence]);
     setInferredSentence(null);
     setPhase('thinking');
     setPhaseLabel('Getting your next cards…');
@@ -484,7 +485,7 @@ export function SessionScreen() {
 
         {/* Turn banner -- single horizontal row to save vertical space on iPad landscape */}
         <div className="mt-2 flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap z-10 flex-shrink-0">
-          <TurnBanner role={role} parentText={lastParentMessage} childText={lastChildSentence} />
+          <TurnBanner role={role} parentText={lastParentMessage} childText={bankedChildSentences} />
         </div>
 
         {/* Center content */}
