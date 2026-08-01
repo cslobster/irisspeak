@@ -67,6 +67,18 @@ export function SettingsButton() {
               Previous conversations
             </button>
             <button
+              onClick={() => { setOpen(false); nav('/vocabulary'); }}
+              className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
+            >
+              Vocabulary
+            </button>
+            <button
+              onClick={() => { setOpen(false); nav('/profile'); }}
+              className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
+            >
+              Profile
+            </button>
+            <button
               onClick={signOut}
               className="w-full text-left px-5 py-4 text-sm font-bold text-[#f09281] hover:bg-[#f09281]/10 transition"
             >

@@ -34,9 +34,19 @@ export function buildChildCardPrompt(args: {
   seenLabels?: string[];
   interimCards?: CardInfo[];
   folderOptions?: FolderCardOption[];
+  profileFacts?: string;
 }): string {
   const topicList = args.topicVocab.join(', ');
   const actionList = args.actionVocab.join(', ');
+
+  // Always included in full when present — never conditionally retrieved or gated behind
+  // keyword matching (see CONTEXT.md's Profile Fact entry for why: a missed fact still falls
+  // back to the "View all words" search overlay, so it doesn't need Folder Card's
+  // hardcoded-backstop-level reliability). Placed before theme identification so the model can
+  // naturally connect an implied reference to a stored fact without needing literal keywords.
+  const profileContext = args.profileFacts
+    ? `What you know about this child: ${args.profileFacts}\n\n`
+    : '';
 
   let folderInstructions = '';
   if (args.folderOptions && args.folderOptions.length) {
@@ -73,6 +83,7 @@ export function buildChildCardPrompt(args: {
   return [
     `You suggest AAC card words for a child age 5–7 with ASD, talking with their ${args.parentType.toLowerCase()}. `,
     `Conversation: ${TOPIC_DESCRIPTION[args.topic]}\n\n`,
+    profileContext,
     `Given the dialogue's last parent message:\n`,
     `1. Identify the specific theme of that message — what kind of answer is it actually asking for `,
     `(e.g. a food, an activity, a place, a person, a time)? Stay locked onto that theme; do not drift `,

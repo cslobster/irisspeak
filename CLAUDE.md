@@ -4,11 +4,12 @@ Next.js 14 API backend for an AAC (Augmentative and Alternative Communication) p
 
 ## Repo structure
 
-This repo has two parts:
+This repo has three parts:
 - **`/` (root)** — Next.js backend, API only, runs on `localhost:3000`
-- **`/web-client/`** — React + Vite frontend, runs on `localhost:4200`
+- **`/web-client/`** — React + Vite child/parent-facing frontend, runs on `localhost:4200`
+- **`/admin/`** — React + Vite admin dashboard, runs on `localhost:4201`. Password-gated (`/api/v1/admin/auth/login`), talks to the same backend's `/api/v1/admin/*` routes. Already has: dyad list/create/update/delete (`Dashboard.tsx`, `UserModal.tsx`), stats, analytics, session transcripts (`TranscriptPanel.tsx`, `ConversationsView.tsx`). ~1000 lines total as of 2026-07-31 — small enough to read in full before extending.
 
-Both must be running simultaneously for the full app to work.
+Backend + web-client must both run for the main app to work; `/admin` is optional unless you're doing admin-facing work.
 
 ## Running locally
 
@@ -66,7 +67,7 @@ Uses the OpenAI SDK pointed at Google's OpenAI-compatible endpoint:
 
 ## Frontend (`web-client/`)
 
-React 18 + Vite + Redux + Tailwind CSS + TypeScript. Calls `localhost:3000/api/v1` by default. JWT stored in `localStorage`. Key screens: sign-in, home (topic picker), session (main conversation UI), session-end (transcript), stars (history).
+React 18 + Vite + Redux + Tailwind CSS + TypeScript. Calls `localhost:3000/api/v1` by default. JWT stored in `localStorage`. Key screens: sign-in, home (`WelcomeScreen` — a single "Start a conversation" button, hardcodes every session to `topic.category: 'plan'`, no topic picker shown), session (main conversation UI), session-end (transcript), stars (history). `HomeScreen.tsx`/`FreeTopicScreen.tsx`/`TopicButton.tsx` still exist in the repo but aren't wired into `App.tsx`'s router — dead code, not reachable from the live app. `recall`/`free` topic categories are still supported by the backend and `TopicCategory` type but have no current UI path to reach them.
 
 ## Testing
 
@@ -79,8 +80,10 @@ Tests live in `src/__tests__/`. Uses Vitest with mocked DB and Gemini dependenci
 
 ## Branch context
 
-- `main` — stable branch
-- `feature/new-vocab` — active development branch for new vocabulary features
+- `main` — stable branch, and the only active branch as of 2026-08-01. `feature/new-vocab`
+  (previously documented here as the vocabulary-work branch) was deleted — it had zero commits
+  ahead of `main` and nothing unique in it; all vocabulary/personalization work now lands
+  directly on `main`.
 
 ## Keeping domain docs current
 

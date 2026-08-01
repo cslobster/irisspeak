@@ -27,6 +27,15 @@ export async function ensureSchema(): Promise<void> {
         created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
     `;
+    // Personalization core (see CONTEXT.md's Profile Fact / Custom Vocabulary Word entries):
+    // age/notes are the non-word-shaped profile context; status gates the self-serve signup
+    // wizard behind admin approval — existing admin-created/seeded dyads default to 'active' so
+    // they're unaffected.
+    await sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS age INTEGER`;
+    await sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS notes TEXT`;
+    await sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS communication_style TEXT`;
+    await sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS parent_email TEXT`;
+    await sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active'`;
     await sql`
       CREATE TABLE IF NOT EXISTS dyad_login_code (
         code      TEXT NOT NULL,
@@ -61,6 +70,28 @@ export async function ensureSchema(): Promise<void> {
         created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
     `;
+
+    // ---------- CUSTOM VOCABULARY WORD (per-dyad words not in the shared corpus) ----------
+    // is_preference_pointer: true when `word` already exists in the shared corpus and this row
+    // just marks it as this child's known favorite (e.g. "red") — no image of its own needed,
+    // it resolves via the normal corpus lookup. False means a genuinely new word (a name, a
+    // school) that needs image_data/emoji since no corpus image exists for it.
+    // image_data is base64, stored directly (no blob storage provider set up) — null falls
+    // through to the emoji fallback, itself nullable (both null just means no image yet).
+    await sql`
+      CREATE TABLE IF NOT EXISTS dyad_custom_word (
+        id                     TEXT PRIMARY KEY,
+        dyad_id                TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
+        word                   TEXT NOT NULL,
+        category               TEXT NOT NULL,
+        is_preference_pointer  BOOLEAN NOT NULL DEFAULT FALSE,
+        image_data             TEXT,
+        emoji                  TEXT,
+        source                 TEXT NOT NULL DEFAULT 'parent',
+        created_at             TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      )
+    `;
+    await sql`CREATE INDEX IF NOT EXISTS idx_custom_word_dyad ON dyad_custom_word(dyad_id)`;
 
     // ---------- SESSION (one full conversation) ----------
     await sql`

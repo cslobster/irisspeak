@@ -182,6 +182,40 @@ class ApiClient {
     );
     return r.data.details;
   }
+
+  // ---- Personalization core: Custom Vocabulary Word + Profile Fact (see CONTEXT.md) ----
+
+  async listVocabulary(): Promise<import('./types').CustomVocabularyWord[]> {
+    const r = await this.http.get<import('./types').CustomVocabularyWord[]>('/dyad/vocabulary');
+    return r.data;
+  }
+
+  async addVocabularyWord(word: {
+    word: string; category: 'topic' | 'action'; is_preference_pointer?: boolean;
+    image_data?: string | null; emoji?: string | null;
+  }): Promise<import('./types').CustomVocabularyWord> {
+    const r = await this.http.post<import('./types').CustomVocabularyWord>('/dyad/vocabulary', word);
+    return r.data;
+  }
+
+  async deleteVocabularyWord(id: string): Promise<void> {
+    await this.http.delete(`/dyad/vocabulary/${id}`);
+  }
+
+  async getProfile(): Promise<import('./types').DyadProfile> {
+    const r = await this.http.get<import('./types').DyadProfile>('/dyad/profile');
+    return r.data;
+  }
+
+  async updateProfile(profile: import('./types').DyadProfile): Promise<import('./types').DyadProfile> {
+    const r = await this.http.patch<import('./types').DyadProfile>('/dyad/profile', profile);
+    return r.data;
+  }
+
+  async signup(payload: import('./types').SignupPayload): Promise<{ id: string; alias: string; status: string }> {
+    const r = await this.http.post('/dyad/account/signup', payload);
+    return r.data;
+  }
 }
 
 export const api = new ApiClient();

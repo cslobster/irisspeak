@@ -18,6 +18,10 @@ export function UserModal({ dyad, onSave, onClose }: Props) {
   const [childGender, setChildGender] = useState<'girl' | 'boy'>(dyad?.child_gender ?? 'girl');
   const [parentType, setParentType] = useState<'mother' | 'father'>(dyad?.parent_type ?? 'mother');
   const [locale, setLocale] = useState<'en' | 'kr'>(dyad?.locale ?? 'en');
+  const [age, setAge] = useState(dyad?.age != null ? String(dyad.age) : '');
+  const [communicationStyle, setCommunicationStyle] = useState(dyad?.communication_style ?? '');
+  const [notes, setNotes] = useState(dyad?.notes ?? '');
+  const [parentEmail, setParentEmail] = useState(dyad?.parent_email ?? '');
   const [loginCode, setLoginCode] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -31,6 +35,10 @@ export function UserModal({ dyad, onSave, onClose }: Props) {
       const data: Partial<Dyad & { login_code: string }> = {
         alias, child_name: childName, child_gender: childGender,
         parent_type: parentType, locale,
+        age: age ? Number(age) : undefined,
+        communication_style: communicationStyle || undefined,
+        notes: notes || undefined,
+        parent_email: parentEmail || undefined,
       };
       if (loginCode) data.login_code = loginCode;
       await onSave(data);
@@ -70,6 +78,27 @@ export function UserModal({ dyad, onSave, onClose }: Props) {
 
           <Field label="Locale">
             <SegmentedControl options={LOCALES} value={locale} onChange={v => setLocale(v as any)} />
+          </Field>
+
+          {/* Personalization core profile fields — see CONTEXT.md's Profile Fact entry.
+              Editable here too, not just via the parent's own Settings → Profile page, so
+              staff can fill these in for admin-created accounts that skip the signup wizard. */}
+          <Field label="Age">
+            <input type="number" value={age} onChange={e => setAge(e.target.value)} className="input" />
+          </Field>
+
+          <Field label="Preferred communication style">
+            <input value={communicationStyle} onChange={e => setCommunicationStyle(e.target.value)}
+              className="input" placeholder="e.g. mostly AAC, some verbal words" />
+          </Field>
+
+          <Field label="Parent email">
+            <input type="email" value={parentEmail} onChange={e => setParentEmail(e.target.value)} className="input" />
+          </Field>
+
+          <Field label="Notes">
+            <textarea value={notes} onChange={e => setNotes(e.target.value)}
+              className="input" rows={3} placeholder="Interests, sensory preferences, what helps them stay calm…" />
           </Field>
 
           <Field label={isEdit ? 'New login code (leave blank to keep)' : 'Login code'}>

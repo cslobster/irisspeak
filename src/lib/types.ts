@@ -8,6 +8,8 @@ export type DialogueRole = 'parent' | 'child';
 export type TopicCategory = 'plan' | 'recall' | 'free';
 export type SessionStatus = 'initial' | 'started' | 'conversation' | 'terminated';
 
+export type DyadStatus = 'pending' | 'active';
+
 export interface Dyad {
   id: string;
   alias: string;
@@ -15,6 +17,13 @@ export interface Dyad {
   child_gender: ChildGender;
   parent_type: ParentType;
   locale: UserLocale;
+  // Personalization core (see CONTEXT.md's Profile Fact entry) — the non-word-shaped profile
+  // context, always optional since existing dyads predate these columns.
+  age?: number | null;
+  notes?: string | null;
+  communication_style?: string | null;
+  parent_email?: string | null;
+  status?: DyadStatus;
 }
 
 export interface CardInfo {
@@ -29,6 +38,10 @@ export interface CardInfo {
   corpus_cosine?: number | null;
   corpus_mode?: 'exact' | 'word' | 'cos' | null;
   corpus_image_url?: string | null;
+  // Only set for a Custom Vocabulary Word using the emoji fallback (no corpus image, no parent
+  // upload) — CardChip renders this as text instead of <img>, since an emoji character isn't a
+  // valid image URL. See CONTEXT.md's Custom Vocabulary Word entry.
+  emoji?: string | null;
   // Set when this card represents a folder of choices (e.g. "Numbers") rather
   // than a single word; tapping it should open a picker scoped to folder_path.
   is_folder?: boolean;

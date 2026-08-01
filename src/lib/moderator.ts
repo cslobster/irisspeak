@@ -15,7 +15,8 @@
 import { nanoid } from 'nanoid';
 import YAML from 'yaml';
 import { sql, ensureSchema } from './db';
-import { getCorpusRetriever } from './corpus';
+import { getCorpusRetriever, mergeDyadWords, lookupDyadWord } from './corpus';
+import type { DyadCustomWord } from './corpus';
 import { chat, extractYamlList, stripFence } from './gemini';
 import {
   buildChildCardPrompt, buildParentGuidePrompt, buildSentenceInferencePrompt, buildSessionTitlePrompt,
@@ -212,10 +213,10 @@ async function generateChildCards(args: {
 }): Promise<ChildCardRecommendationResult> {
   const { dyad } = args;
 
-  // These three reads don't depend on each other, so fetch them concurrently instead of paying
-  // three sequential network round trips (getCorpusRetriever is in-memory-cached after the very
+  // These reads don't depend on each other, so fetch them concurrently instead of paying
+  // sequential network round trips (getCorpusRetriever is in-memory-cached after the very
   // first call anyway, but including it here costs nothing and keeps the shape uniform).
-  const [dialogue, prevRecsRows, corpus] = await Promise.all([
+  const [dialogue, prevRecsRows, corpus, customWordRows] = await Promise.all([
     getDialogue(args.sessionId),
     sql`
       SELECT cards FROM child_card_recommendation
@@ -223,6 +224,10 @@ async function generateChildCards(args: {
       ORDER BY timestamp ASC
     ` as Promise<any[]>,
     getCorpusRetriever(),
+    sql`
+      SELECT word, category, is_preference_pointer, image_data, emoji
+      FROM dyad_custom_word WHERE dyad_id = ${dyad.id}
+    ` as unknown as Promise<DyadCustomWord[]>,
   ]);
 
   // Collect ALL topic/action labels shown in any previous recommendation this turn → avoid repeating
@@ -234,9 +239,21 @@ async function generateChildCards(args: {
       .forEach((c) => seenLabels.add((c.corpus_name || c.label).toLowerCase()));
   }
 
-  const topicVocab = corpus.wordsByCategory('topic');
-  const actionVocab = corpus.wordsByCategory('action');
+  const topicVocab = mergeDyadWords(corpus.wordsByCategory('topic'), customWordRows, 'topic');
+  const actionVocab = mergeDyadWords(corpus.wordsByCategory('action'), customWordRows, 'action');
   const folderOptions = loadFolderCards();
+
+  // See CONTEXT.md's Profile Fact entry — always included in full, never gated, so the model
+  // can connect an implied reference (e.g. "which hue do you like") to a stored fact without
+  // literal keyword matching. Preference-pointer custom words (e.g. "favorite color: red") are
+  // folded in here rather than the vocab list, since the word itself already exists there.
+  const preferencePointers = customWordRows.filter((w) => w.is_preference_pointer).map((w) => w.word);
+  const factParts: string[] = [];
+  if (dyad.age != null) factParts.push(`age ${dyad.age}`);
+  if (dyad.communication_style) factParts.push(`communicates via ${dyad.communication_style}`);
+  if (preferencePointers.length) factParts.push(`known favorites: ${preferencePointers.join(', ')}`);
+  if (dyad.notes) factParts.push(dyad.notes);
+  const profileFacts = factParts.length ? factParts.join('; ') : undefined;
 
   const sysPrompt = buildChildCardPrompt({
     parentType: dyad.parent_type,
@@ -246,6 +263,7 @@ async function generateChildCards(args: {
     seenLabels: [...seenLabels],
     interimCards: args.interimCards,
     folderOptions,
+    profileFacts,
   });
 
   const raw = await chat([
@@ -318,7 +336,12 @@ async function generateChildCards(args: {
 
     for (const w of words) {
       if (picked.length >= slotCount) break;
-      const entry = corpus.lookup(w);
+      // Falls through to this dyad's Custom Vocabulary Words before giving up — otherwise a
+      // word the LLM correctly picked from the vocab list it was given would get silently
+      // dropped as "hallucinated" just because the shared corpus doesn't recognize it (see
+      // CONTEXT.md's Custom Vocabulary Word entry — this is the exact gotcha flagged at design
+      // time, not a hypothetical).
+      const entry = lookupDyadWord(corpus, w, customWordRows);
       if (!entry) {
         console.warn(`[child-cards] "${w}" not in corpus vocab — dropping`);
         continue;
@@ -330,6 +353,7 @@ async function generateChildCards(args: {
         id: nanoid(), recommendation_id: recId,
         label: entry.name, label_localized: entry.name,
         category, corpus_name: entry.name, corpus_category: entry.category, corpus_image_url: entry.image_url,
+        emoji: entry.emoji ?? undefined,
       });
     }
 
@@ -338,12 +362,13 @@ async function generateChildCards(args: {
         if (picked.length >= slotCount) break;
         const key = w.toLowerCase();
         if (used.has(key) || seenLabels.has(key) || exclude?.has(key)) continue;
-        const entry = corpus.lookup(w)!;
+        const entry = lookupDyadWord(corpus, w, customWordRows)!;
         used.add(key);
         picked.push({
           id: nanoid(), recommendation_id: recId,
           label: entry.name, label_localized: entry.name,
           category, corpus_name: entry.name, corpus_category: entry.category, corpus_image_url: entry.image_url,
+          emoji: entry.emoji ?? undefined,
         });
       }
     }

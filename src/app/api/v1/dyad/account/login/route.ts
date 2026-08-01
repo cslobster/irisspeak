@@ -21,6 +21,11 @@ export async function POST(req: Request) {
   if (!rows[0]) return badRequest('NoSuchUser');
 
   const dyad = rows[0];
+  // Signup-wizard accounts start 'pending' until an admin approves them (see
+  // CONTEXT.md's Custom Vocabulary Word / Profile Fact design session and
+  // docs/prd-personalization-core.md) — admin-created/seeded dyads default to
+  // 'active' via the ALTER TABLE default, so this doesn't affect existing accounts.
+  if (dyad.status && dyad.status !== 'active') return badRequest('AccountPendingApproval');
   const jwt = await issueDyadJwt(dyad);
 
   const topics = (await sql`
