@@ -1,6 +1,8 @@
 // Mirrors libs/ts-core/src/lib/model-types.ts (subset).
 
 export type TopicCategory = 'plan' | 'recall' | 'free';
+export type ChildGender = 'boy' | 'girl';
+export type ParentType = 'mother' | 'father';
 export type DialogueRole = 'parent' | 'child';
 export type CardCategory = 'topic' | 'action' | 'emotion' | 'core';
 export type ParentGuideType = 'messaging' | 'feedback';
@@ -21,10 +23,43 @@ export interface CardInfo {
   corpus_cosine?: number | null;
   corpus_mode?: 'exact' | 'word' | 'cos' | null;
   corpus_image_url?: string | null;
+  // Only set for a Custom Vocabulary Word using the emoji fallback (no corpus image, no parent
+  // upload) — CardChip renders this as text instead of <img>.
+  emoji?: string | null;
   // Set when this card represents a folder of choices (e.g. "Numbers") rather
   // than a single word; tapping it should open a picker scoped to folder_path.
   is_folder?: boolean;
   folder_path?: string;
+}
+
+export interface CustomVocabularyWord {
+  id: string;
+  word: string;
+  category: 'topic' | 'action';
+  is_preference_pointer: boolean;
+  image_data?: string | null;
+  emoji?: string | null;
+  source: 'parent' | 'ai_detected';
+  created_at?: string;
+}
+
+export interface DyadProfile {
+  age?: number | null;
+  notes?: string | null;
+  communication_style?: string | null;
+}
+
+export interface SignupPayload {
+  child_name: string;
+  child_gender: 'boy' | 'girl';
+  parent_type: 'mother' | 'father';
+  login_code: string;
+  locale?: string;
+  age?: number;
+  communication_style?: string;
+  notes?: string;
+  parent_email?: string;
+  interests?: string[];
 }
 
 export interface ChildCardRecommendationResult {

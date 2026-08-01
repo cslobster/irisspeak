@@ -12,21 +12,29 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 
   const { id } = params;
   const body = await req.json().catch(() => ({}));
-  const { alias, child_name, child_gender, parent_type, locale, login_code } = body;
+  const {
+    alias, child_name, child_gender, parent_type, locale, login_code,
+    age, communication_style, notes, parent_email,
+  } = body;
 
   const existing = await sql`SELECT id FROM dyad WHERE id = ${id} LIMIT 1`;
   if (!existing.length) return notFound('Dyad not found');
 
   const childNameVal = child_name ? capitalizeName(child_name) : null;
 
-  if (alias || child_name || child_gender || parent_type || locale) {
+  if (alias || child_name || child_gender || parent_type || locale
+      || age !== undefined || communication_style || notes || parent_email) {
     await sql`
       UPDATE dyad SET
-        alias        = COALESCE(${alias ?? null}, alias),
-        child_name   = COALESCE(${childNameVal}, child_name),
-        child_gender = COALESCE(${child_gender ?? null}, child_gender),
-        parent_type  = COALESCE(${parent_type ?? null}, parent_type),
-        locale       = COALESCE(${locale ?? null}, locale)
+        alias                = COALESCE(${alias ?? null}, alias),
+        child_name           = COALESCE(${childNameVal}, child_name),
+        child_gender         = COALESCE(${child_gender ?? null}, child_gender),
+        parent_type          = COALESCE(${parent_type ?? null}, parent_type),
+        locale               = COALESCE(${locale ?? null}, locale),
+        age                  = COALESCE(${age ?? null}, age),
+        communication_style  = COALESCE(${communication_style ?? null}, communication_style),
+        notes                = COALESCE(${notes ?? null}, notes),
+        parent_email         = COALESCE(${parent_email ?? null}, parent_email)
       WHERE id = ${id}
     `;
   }

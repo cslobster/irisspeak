@@ -1,4 +1,4 @@
-import type { Dyad, DyadStats, UserEventStat } from './types';
+import type { Dyad, DyadStats, UserEventStat, CustomVocabularyWord } from './types';
 
 const BASE = '/api/v1/admin';
 const TOKEN_KEY = 'aac_admin_token';
@@ -58,6 +58,15 @@ export const adminApi = {
 
   getTranscripts: (dyadId: string) =>
     req<{ sessions: SessionRow[]; messages: MessageRow[] }>('GET', `/dyads/${dyadId}/transcripts`),
+
+  // Read-only admin visibility into a dyad's Custom Vocabulary Words (see CONTEXT.md).
+  getDyadVocabulary: (dyadId: string) =>
+    req<CustomVocabularyWord[]>('GET', `/dyads/${dyadId}/vocabulary`),
+
+  // Signup wizard approval — listDyads() already returns `status`, filtered client-side rather
+  // than adding a second list endpoint for what's the same underlying query.
+  approveDyad: (id: string, loginCode?: string) =>
+    req<{ id: string; status: string; login_code: string }>('POST', `/dyads/${id}/approve`, loginCode ? { login_code: loginCode } : undefined),
 };
 
 export interface SessionRow {

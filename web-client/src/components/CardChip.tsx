@@ -34,54 +34,81 @@ export function CardChip({ card, onClick, size = 'lg', selected = false, disable
   // Longer words/phrases (e.g. "spaghetti bolognaise") shrink to fit instead of clipping.
   const labelClass = labelSizeClass(displayLabel, size);
 
+  // Folder cards keep their category's Fitzgerald-Key fill color (that color-to-word-type
+  // mapping is itself an accessibility convention — changing it would cost more than it gains)
+  // but need to read as visibly different at a glance, from across a row of 4 tiles, without
+  // relying on text. Three redundant, literal cues instead of one subtle one: a stack of card
+  // edges peeking out behind (the concrete "there's more behind this" metaphor), a bold
+  // non-black border color used nowhere else in the deck, and a solid high-contrast badge
+  // (replacing the old small dog-ear, which testing-in-practice showed wasn't noticeable
+  // enough — see CONTEXT.md's Folder Card entry). No motion/animation, since that can be
+  // over-stimulating rather than clarifying.
+  const folderAccent = '#6D5BD0';
+
   return (
-    <button
-      onClick={onClick}
-      disabled={!onClick || disabled}
-      style={{ touchAction: 'manipulation', WebkitTouchCallout: 'none' as any, WebkitUserSelect: 'none' }}
-      className={`
-        ${sz.card}
-        relative flex flex-col items-center justify-center
-        rounded-2xl border-2 border-b-4 border-black ${t.bg}
-        shadow-md hover:shadow-lg active:shadow-sm active:translate-y-1 active:scale-95
-        transition-all duration-150 ease-out
-        select-none cursor-pointer
-        disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 disabled:active:translate-y-0
-        p-2
-        ${selected ? 'ring-4 ring-amber-400' : ''}
-      `}
-    >
+    <div className={`relative ${sz.card}`}>
       {card.is_folder && (
-        <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-          {/* Dog-eared folded-corner tab — a much more noticeable "this opens a folder,
-              it's not a single word" cue than a plain small icon. */}
+        <>
           <div
-            className="absolute top-0 right-0 w-0 h-0"
-            style={{
-              borderStyle: 'solid',
-              borderWidth: '0 40px 40px 0',
-              borderColor: 'transparent #f0ebe1 transparent transparent',
-              filter: 'drop-shadow(-1px 1px 1.5px rgba(0,0,0,0.4))',
-            }}
+            className="absolute inset-0 rounded-2xl border-2 bg-white translate-x-2 translate-y-2"
+            style={{ borderColor: folderAccent }}
+            aria-hidden="true"
           />
-          <span className="absolute top-1 right-1 text-base leading-none" aria-hidden="true">
-            📁
-          </span>
+          <div
+            className="absolute inset-0 rounded-2xl border-2 bg-white translate-x-1 translate-y-1"
+            style={{ borderColor: folderAccent }}
+            aria-hidden="true"
+          />
+        </>
+      )}
+      <button
+        onClick={onClick}
+        disabled={!onClick || disabled}
+        style={{
+          touchAction: 'manipulation', WebkitTouchCallout: 'none' as any, WebkitUserSelect: 'none',
+          ...(card.is_folder ? { borderColor: folderAccent, borderBottomColor: folderAccent } : {}),
+        }}
+        className={`
+          ${sz.card}
+          relative flex flex-col items-center justify-center
+          rounded-2xl border-2 border-b-4 ${card.is_folder ? '' : 'border-black'} ${t.bg}
+          shadow-md hover:shadow-lg active:shadow-sm active:translate-y-1 active:scale-95
+          transition-all duration-150 ease-out
+          select-none cursor-pointer
+          disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 disabled:active:translate-y-0
+          p-2
+          ${selected ? 'ring-4 ring-amber-400' : ''}
+        `}
+      >
+      {card.is_folder && (
+        <div
+          className="absolute -top-2.5 -right-2.5 w-8 h-8 rounded-full flex items-center justify-center border-2 border-black shadow-md"
+          style={{ background: folderAccent }}
+          aria-hidden="true"
+        >
+          <span className="text-base leading-none">📂</span>
         </div>
       )}
-      {card.corpus_image_url && (
+      {card.corpus_image_url ? (
         <img
           src={card.corpus_image_url}
           alt=""
           draggable={false}
           className="w-3/4 h-3/4 object-contain mb-1 pointer-events-none select-none"
         />
-      )}
+      ) : card.emoji ? (
+        // Custom Vocabulary Word using the emoji fallback (no corpus image, no parent
+        // upload) — an emoji character isn't a valid <img src>, so it renders as text.
+        <span className="text-4xl mb-1 pointer-events-none select-none" aria-hidden="true">
+          {card.emoji}
+        </span>
+      ) : null}
       <div className="w-full px-0.5 text-center leading-tight">
         <div className={`${labelClass} font-bold text-slate-800 line-clamp-2`}>
           {displayLabel}
         </div>
       </div>
-    </button>
+      </button>
+    </div>
   );
 }

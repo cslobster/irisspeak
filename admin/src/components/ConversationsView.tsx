@@ -3,6 +3,7 @@ import type { Dyad } from '../types';
 import { adminApi } from '../api';
 import { UserModal } from './UserModal';
 import { TranscriptPanel } from './TranscriptPanel';
+import { DyadVocabularyPanel } from './DyadVocabularyPanel';
 
 export function ConversationsView() {
   const [dyads, setDyads] = useState<Dyad[]>([]);
@@ -11,6 +12,7 @@ export function ConversationsView() {
   const [modal, setModal] = useState<'add' | Dyad | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [detailTab, setDetailTab] = useState<'conversations' | 'vocabulary'>('conversations');
 
   const load = useCallback(async () => {
     setLoading(true); setError('');
@@ -106,9 +108,31 @@ export function ConversationsView() {
         </div>
       </div>
 
-      {/* Selected user's conversations */}
+      {/* Selected user's conversations, or their profile + Custom Vocabulary Words
+          (see CONTEXT.md's Profile Fact / Custom Vocabulary Word entries) */}
       {selected ? (
-        <TranscriptPanel key={selected.id} dyad={selected} />
+        <div className="flex-1 flex flex-col min-w-0">
+          <div className="bg-white border-b border-slate-200 px-6 flex items-center gap-1 flex-shrink-0">
+            {(['conversations', 'vocabulary'] as const).map(t => (
+              <button
+                key={t}
+                onClick={() => setDetailTab(t)}
+                className={`px-4 py-3 text-sm font-bold transition border-b-2 -mb-px ${
+                  detailTab === t
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                {t === 'conversations' ? 'Conversations' : 'Profile & Vocabulary'}
+              </button>
+            ))}
+          </div>
+          {detailTab === 'conversations' ? (
+            <TranscriptPanel key={selected.id} dyad={selected} />
+          ) : (
+            <DyadVocabularyPanel key={selected.id} dyad={selected} />
+          )}
+        </div>
       ) : (
         <div className="flex-1 flex items-center justify-center text-slate-400 font-semibold text-sm">
           Select a user to view their conversations.

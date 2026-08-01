@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../api/client';
 import { analytics } from '../api/analytics';
 import { authError, authStart, authSuccess, logout, useDispatch, useSelector } from '../store';
@@ -115,6 +115,10 @@ export function SignInScreen() {
             </div>
           )}
         </div>
+
+        <Link to="/signup" className="text-sm font-semibold text-slate-500 mt-5 hover:text-slate-700 transition">
+          New here? Sign up →
+        </Link>
       </div>
     </div>
   );

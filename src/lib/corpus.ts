@@ -17,6 +17,20 @@ export interface CorpusEntry {
   name: string;
   category: string;
   image_url: string | null;
+  // Only ever set for a dyad-scoped Custom Vocabulary Word resolved via lookupDyadWord below —
+  // the shared corpus never has this (see CONTEXT.md's Custom Vocabulary Word entry for why
+  // emoji is a narrow last-resort fallback here, not a general corpus image source).
+  emoji?: string | null;
+}
+
+// A row from the dyad_custom_word table (see db.ts) — kept separate from CsvRow since custom
+// words carry fields (image_data/emoji/is_preference_pointer) the shared corpus never has.
+export interface DyadCustomWord {
+  word: string;
+  category: string;
+  is_preference_pointer: boolean;
+  image_data?: string | null;
+  emoji?: string | null;
 }
 
 interface CsvRow {
@@ -72,4 +86,47 @@ export async function getCorpusRetriever(): Promise<_CorpusRetriever> {
   if (!_ready) _ready = _retriever.load();
   await _ready;
   return _retriever;
+}
+
+/**
+ * Appends a dyad's Custom Vocabulary Words to a base vocab list (topicVocab/actionVocab),
+ * scoped to the given category. Deliberately a standalone function, not a method on
+ * _CorpusRetriever — the shared retriever stays global/immutable, so there's no code path for
+ * one dyad's words to leak into another's (isolation comes from the caller passing only that
+ * dyad's rows in, not from any shared mutable state). Preference-pointer words are excluded
+ * here since the word they point to already exists in the base vocab — duplicating it would
+ * just show the LLM the same word twice; preference is instead signaled via prompt context
+ * (see buildChildCardPrompt's profileFacts param), not a second vocab-list entry.
+ */
+export function mergeDyadWords(baseVocab: string[], customWords: DyadCustomWord[], category: string): string[] {
+  const extra = customWords
+    .filter((w) => w.category === category && !w.is_preference_pointer)
+    .map((w) => w.word);
+  return [...baseVocab, ...extra];
+}
+
+/** Dyad-scoped fallback for corpus.lookup() — checks the shared corpus first via the passed-in
+ * retriever, then this dyad's custom words, so a Custom Vocabulary Word isn't silently dropped
+ * as "hallucinated" the way any other unrecognized word is (see CONTEXT.md's Custom Vocabulary
+ * Word entry). image_data becomes a data: URI directly usable in an <img src>; emoji is carried
+ * separately since it isn't a valid image URL — CardChip branches on it.
+ */
+export function lookupDyadWord(
+  retriever: _CorpusRetriever,
+  word: string,
+  customWords: DyadCustomWord[],
+): CorpusEntry | null {
+  const fromCorpus = retriever.lookup(word);
+  if (fromCorpus) return fromCorpus;
+
+  const needle = (word || '').toLowerCase().trim();
+  const match = customWords.find((w) => w.word.toLowerCase().trim() === needle);
+  if (!match) return null;
+
+  return {
+    name: match.word,
+    category: match.category,
+    image_url: match.image_data ? `data:image/png;base64,${match.image_data}` : null,
+    emoji: match.emoji ?? null,
+  };
 }

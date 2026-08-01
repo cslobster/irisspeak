@@ -4,6 +4,9 @@ import { WelcomeScreen } from './screens/WelcomeScreen';
 import { SessionScreen } from './screens/SessionScreen';
 import { SessionEndScreen } from './screens/SessionEndScreen';
 import { StarsScreen } from './screens/StarsScreen';
+import { VocabularySettingsScreen } from './screens/VocabularySettingsScreen';
+import { ProfileSettingsScreen } from './screens/ProfileSettingsScreen';
+import { SignupWizardScreen } from './screens/SignupWizardScreen';
 import { MuteButton } from './components/MuteButton';
 import { SettingsButton } from './components/SettingsButton';
 import { useSelector } from './store';
@@ -31,10 +34,13 @@ export default function App() {
       </div>
       <Routes>
         <Route path="/" element={<RedirectIfAuthed><SignInScreen /></RedirectIfAuthed>} />
+        <Route path="/signup" element={<RedirectIfAuthed><SignupWizardScreen /></RedirectIfAuthed>} />
         <Route path="/home" element={<RequireAuth><WelcomeScreen /></RequireAuth>} />
         <Route path="/session/:sessionId" element={<RequireAuth><SessionScreen /></RequireAuth>} />
         <Route path="/session-end/:sessionId" element={<RequireAuth><SessionEndScreen /></RequireAuth>} />
         <Route path="/stars" element={<RequireAuth><StarsScreen /></RequireAuth>} />
+        <Route path="/vocabulary" element={<RequireAuth><VocabularySettingsScreen /></RequireAuth>} />
+        <Route path="/profile" element={<RequireAuth><ProfileSettingsScreen /></RequireAuth>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
