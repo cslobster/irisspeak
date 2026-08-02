@@ -29,8 +29,10 @@ import type {
   ParentGuideElement, ParentGuideRecommendationResult, SessionTopicInfo, TopicCategory,
 } from './types';
 
-// Every message gets at most this many folder cards — keeps folder suggestions rare and the
-// topic column mostly real words, per product intent (folders are for the clear-cut cases only).
+// Every message gets at most this many folder cards — a ceiling so the topic column doesn't
+// become all-folders on a message that genuinely touches several open-ended categories at once,
+// not a signal that folders should be rare (see buildChildCardPrompt: the LLM is told to prefer
+// a folder over an approximate fixed word whenever the theme is an open-ended set).
 const MAX_FOLDER_CARDS = 2;
 
 // Deterministic backstop for the LLM's folder-card judgment call: even with a strongly-worded
