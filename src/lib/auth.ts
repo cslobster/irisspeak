@@ -11,7 +11,6 @@ export interface JwtPayload {
   alias: string;
   child_name: string;
   child_gender: string;
-  parent_type: string;
   locale: string;
 }
 
@@ -20,7 +19,6 @@ export async function issueDyadJwt(dyad: Dyad): Promise<string> {
     alias: dyad.alias,
     child_name: dyad.child_name,
     child_gender: dyad.child_gender,
-    parent_type: dyad.parent_type,
     locale: dyad.locale,
   })
     .setProtectedHeader({ alg: ALG })

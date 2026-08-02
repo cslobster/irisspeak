@@ -14,13 +14,6 @@
   category: core
   image: 'card_core/eUCdvU-_z1.png'
 - id: hby
-  label:
-    father: How about you, dad?
-    mother: How about you, mom?
-  label_localized: 
-    father: 아빠는요?
-    mother: 엄마는요?
+  label: How about you?
+  label_localized: 당신은요?
   category: core
-  image:
-    father: 'card_core/xutZT392SX.png'
-    mother: 'card_core/Aa2p2WUs98.png'

@@ -1,7 +1,6 @@
 // Mirrors libs/py_core/py_core/system/model.py + the slim types the web client uses.
 
 export type CardCategory = 'topic' | 'action' | 'emotion' | 'core';
-export type ParentType = 'mother' | 'father';
 export type ChildGender = 'boy' | 'girl';
 export type UserLocale = 'en' | 'kr';
 export type DialogueRole = 'parent' | 'child';
@@ -15,7 +14,6 @@ export interface Dyad {
   alias: string;
   child_name: string;
   child_gender: ChildGender;
-  parent_type: ParentType;
   locale: UserLocale;
   // Personalization core (see CONTEXT.md's Profile Fact entry) — the non-word-shaped profile
   // context, always optional since existing dyads predate these columns.

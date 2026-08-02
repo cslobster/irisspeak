@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api/client';
-import type { ChildGender, ParentType } from '../api/types';
+import type { ChildGender } from '../api/types';
 
 // Field list grounded in the camp's real intake form but deliberately narrower — see
 // docs/prd-personalization-core.md for what was excluded and why (camp logistics stay in the
@@ -12,10 +12,8 @@ export function SignupWizardScreen() {
   const [childName, setChildName] = useState('');
   const [age, setAge] = useState('');
   const [childGender, setChildGender] = useState<ChildGender>('girl');
-  const [parentType, setParentType] = useState<ParentType>('mother');
   const [loginCode, setLoginCode] = useState('');
   const [parentEmail, setParentEmail] = useState('');
-  const [communicationStyle, setCommunicationStyle] = useState('');
   const [interests, setInterests] = useState('');
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -30,10 +28,8 @@ export function SignupWizardScreen() {
       const r = await api.signup({
         child_name: childName.trim(),
         child_gender: childGender,
-        parent_type: parentType,
         login_code: loginCode.trim(),
         age: age ? Number(age) : undefined,
-        communication_style: communicationStyle.trim() || undefined,
         notes: notes.trim() || undefined,
         parent_email: parentEmail.trim() || undefined,
         interests: interests.split(',').map((s) => s.trim()).filter(Boolean),
@@ -93,12 +89,6 @@ export function SignupWizardScreen() {
                 </select>
               </Field>
             </div>
-            <Field label="Your relationship">
-              <select className={inputClass} value={parentType} onChange={(e) => setParentType(e.target.value as ParentType)}>
-                <option value="mother">Mother</option>
-                <option value="father">Father</option>
-              </select>
-            </Field>
             <Field label="Your email">
               <input type="email" className={inputClass} value={parentEmail} onChange={(e) => setParentEmail(e.target.value)} />
             </Field>
@@ -108,14 +98,6 @@ export function SignupWizardScreen() {
                 placeholder="e.g. 12345"
                 value={loginCode}
                 onChange={(e) => setLoginCode(e.target.value)}
-              />
-            </Field>
-            <Field label="Preferred method of communication">
-              <input
-                className={inputClass}
-                placeholder="e.g. mostly AAC, some verbal words"
-                value={communicationStyle}
-                onChange={(e) => setCommunicationStyle(e.target.value)}
               />
             </Field>
             <Field label="Interests (comma separated)">

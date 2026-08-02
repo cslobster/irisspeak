@@ -5,7 +5,7 @@
 import { TOPIC_DESCRIPTION } from './staticData';
 import type { FolderCardOption } from './staticData';
 import type {
-  CardInfo, DialogueMessage, ParentType, TopicCategory,
+  CardInfo, DialogueMessage, TopicCategory,
 } from './types';
 
 // ---------- dialogue → XML transcript ----------
@@ -27,7 +27,6 @@ function escapeXml(s: string): string {
 
 // ---------- ChildCardRecommendationGenerator ----------
 export function buildChildCardPrompt(args: {
-  parentType: ParentType;
   topic: TopicCategory;
   topicVocab: string[];
   actionVocab: string[];
@@ -53,8 +52,9 @@ export function buildChildCardPrompt(args: {
     const folderList = args.folderOptions.map((f) => f.path).join(', ');
     folderInstructions = [
       `\n\n4. Separately from steps 1-3, check whether the message is asking the child for one `,
-      `specific value out of a large open-ended set — a number/age/count, a color, a family `,
-      `member, a time, or a weather condition. This should be RARE — most messages don't need `,
+      `specific item out of a themed, open-ended set that the fixed 6-word topic/action lists `,
+      `can't fully cover — e.g. a specific number, color, animal, sport, food, drink, toy, place, `,
+      `family member, time, or weather condition. This should be RARE — most messages don't need `,
       `this at all, and the default is to output nothing here. Only when it's clearly one of `,
       `these cases, you MUST ALSO output a \`folder\` line naming exactly one of: ${folderList} `,
       `(name a second one, comma-separated in the same brackets, ONLY on the rare message that `,
@@ -81,7 +81,7 @@ export function buildChildCardPrompt(args: {
   }
 
   return [
-    `You suggest AAC card words for a child age 5–7 with ASD, talking with their ${args.parentType.toLowerCase()}. `,
+    `You suggest AAC card words for a child age 5–7 with ASD, talking with their parent. `,
     `Conversation: ${TOPIC_DESCRIPTION[args.topic]}\n\n`,
     profileContext,
     `Given the dialogue's last parent message:\n`,
@@ -90,9 +90,10 @@ export function buildChildCardPrompt(args: {
     `into unrelated topics unless the message is actually about them.\n`,
     `2. Think of 2-3 short sentences the child might want to say that directly and specifically answer `,
     `the message, staying strictly on that theme.\n`,
-    `3. From those sentences, pick 6 topic nouns and 6 action verbs, chosen ONLY from the fixed `,
+    `3. From those sentences, pick 12 topic nouns and 12 action verbs, chosen ONLY from the fixed `,
     `vocabularies below — do not invent new words or use words outside these lists. List each set of `,
-    `6 in order from most-fitting to least-fitting, since only the first few valid ones may get shown:\n`,
+    `12 in order from most-fitting to least-fitting, since only the first few valid ones may get shown `,
+    `now and the rest are kept in reserve for a later refresh:\n`,
     `   Topic vocabulary: ${topicList}\n`,
     `   Action vocabulary: ${actionList}\n\n`,
     `Every topic/action word must relate directly to the theme from step 1, not just loosely `,
@@ -103,8 +104,8 @@ export function buildChildCardPrompt(args: {
     `\n\nDo ALL steps silently — do NOT write out the theme, sentences, or any reasoning about `,
     `the folder decision. Output ONLY this YAML, nothing else, no text before or after it, no `,
     `explanation:\n`,
-    `topics: [w1, w2, w3, w4, w5, w6]\n`,
-    `actions: [w1, w2, w3, w4, w5, w6]`,
+    `topics: [w1, w2, ..., w12]\n`,
+    `actions: [w1, w2, ..., w12]`,
     args.folderOptions && args.folderOptions.length
       ? `\n(include a third line \`folder: [path]\` only if step 4 applies — omit it entirely otherwise)`
       : '',
@@ -115,18 +116,17 @@ export function buildChildCardPrompt(args: {
 
 // ---------- ParentGuideRecommendationGenerator ----------
 export function buildParentGuidePrompt(args: {
-  parentType: ParentType;
   topic: TopicCategory;
   dialogueLength: number;
   hasFeedback: boolean;
 }): string {
   const guideCount = args.hasFeedback ? 2 : 3;
   const taskLine = args.dialogueLength > 0
-    ? `Suggest guides for how the ${args.parentType} should respond to the child's last keyword message.`
-    : `Suggest opening guides for the ${args.parentType}.`;
+    ? `Suggest guides for how the parent should respond to the child's last keyword message.`
+    : `Suggest opening guides for the parent.`;
 
   return [
-    `You help a ${args.parentType} talk with their minimally-verbal autistic child.\n`,
+    `You help a parent talk with their minimally-verbal autistic child.\n`,
     `Topic: ${TOPIC_DESCRIPTION[args.topic]}\n`,
     `${taskLine}\n\n`,
     `Rules:\n`,
@@ -146,7 +146,7 @@ export function buildParentGuidePrompt(args: {
     `  - "terminate": Wrap up the topic gently.\n\n`,
     `Output ONLY a YAML list, nothing else. Each item:\n`,
     `- category: <one of the categories above>\n`,
-    `  guide: <short guide for the ${args.parentType}>`,
+    `  guide: <short guide for the parent>`,
   ].join('');
 }
 

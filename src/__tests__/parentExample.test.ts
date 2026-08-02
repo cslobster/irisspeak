@@ -23,7 +23,6 @@ const fakeDyad = {
   alias: 'test',
   child_name: 'Sammy',
   child_gender: 'girl',
-  parent_type: 'mother',
   locale: 'en',
 };
 

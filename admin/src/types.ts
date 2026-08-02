@@ -3,7 +3,6 @@ export interface Dyad {
   alias: string;
   child_name: string;
   child_gender: 'boy' | 'girl';
-  parent_type: 'mother' | 'father';
   locale: 'en' | 'kr';
   created_at: string;
   login_code?: string;
@@ -21,7 +20,6 @@ export interface DyadStats {
   alias: string;
   child_name: string;
   child_gender: string;
-  parent_type: string;
   locale: string;
   created_at: string;
   session_count: number;

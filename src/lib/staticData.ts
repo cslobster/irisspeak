@@ -1,14 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
-import type { CardCategory, ParentGuideElement, ParentType, TopicCategory } from './types';
+import type { CardCategory, ParentGuideElement, TopicCategory } from './types';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
 interface DefaultCard {
   id: string;
-  label: string | { mother: string; father: string };
-  label_localized?: string | { mother: string; father: string };
+  label: string;
+  label_localized?: string;
   category: CardCategory;
   image?: any;
 }
@@ -18,6 +18,10 @@ export interface FolderCardOption {
   label: string;
   icon: string;
   words: string[];
+  // Literal, narrow phrases (case-insensitive, word-boundary matched) that deterministically
+  // trigger this folder — the data-driven replacement for a hardcoded per-folder regex in
+  // moderator.ts. See CONTEXT.md's Folder Card entry for why a keyword backstop exists at all.
+  triggers?: string[];
 }
 
 let _emotion: DefaultCard[] | null = null;
@@ -62,11 +66,6 @@ export const EMOTION_LABELS = [
   'surprised', 'bored', 'tired', 'afraid', 'worried', 'tough',
 ];
 
-export function labelForParent(card: DefaultCard, parentType: ParentType): string {
-  if (typeof card.label === 'string') return card.label;
-  return card.label[parentType] || card.label.mother;
-}
-
 export const TOPIC_DESCRIPTION: Record<TopicCategory, string> = {
   plan:   "The dyad shares today's todos or plans.",
   recall: "The dyad gets to know what the child did on that day.",
@@ -77,7 +76,6 @@ export const TOPIC_DESCRIPTION: Record<TopicCategory, string> = {
 export function buildInitialGuides(
   topic: TopicCategory,
   childName: string,
-  parentType: ParentType,
 ): ParentGuideElement[] {
   // YAML root is a map { plan: [...], recall: [...], free: [...] }
   const root = loadInitialGuidesYaml() as unknown as Record<string, any[]>;

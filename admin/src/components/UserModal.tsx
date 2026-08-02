@@ -8,7 +8,6 @@ interface Props {
 }
 
 const GENDERS = ['girl', 'boy'] as const;
-const PARENTS = ['mother', 'father'] as const;
 const LOCALES = ['en', 'kr'] as const;
 
 export function UserModal({ dyad, onSave, onClose }: Props) {
@@ -16,7 +15,6 @@ export function UserModal({ dyad, onSave, onClose }: Props) {
   const [alias, setAlias] = useState(dyad?.alias ?? '');
   const [childName, setChildName] = useState(dyad?.child_name ?? '');
   const [childGender, setChildGender] = useState<'girl' | 'boy'>(dyad?.child_gender ?? 'girl');
-  const [parentType, setParentType] = useState<'mother' | 'father'>(dyad?.parent_type ?? 'mother');
   const [locale, setLocale] = useState<'en' | 'kr'>(dyad?.locale ?? 'en');
   const [age, setAge] = useState(dyad?.age != null ? String(dyad.age) : '');
   const [communicationStyle, setCommunicationStyle] = useState(dyad?.communication_style ?? '');
@@ -34,7 +32,7 @@ export function UserModal({ dyad, onSave, onClose }: Props) {
     try {
       const data: Partial<Dyad & { login_code: string }> = {
         alias, child_name: childName, child_gender: childGender,
-        parent_type: parentType, locale,
+        locale,
         age: age ? Number(age) : undefined,
         communication_style: communicationStyle || undefined,
         notes: notes || undefined,
@@ -70,10 +68,6 @@ export function UserModal({ dyad, onSave, onClose }: Props) {
 
           <Field label="Child gender">
             <SegmentedControl options={GENDERS} value={childGender} onChange={v => setChildGender(v as any)} />
-          </Field>
-
-          <Field label="Parent type">
-            <SegmentedControl options={PARENTS} value={parentType} onChange={v => setParentType(v as any)} />
           </Field>
 
           <Field label="Locale">

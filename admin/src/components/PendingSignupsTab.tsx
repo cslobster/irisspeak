@@ -56,7 +56,7 @@ export function PendingSignupsTab() {
           {pending.map((d) => (
             <div key={d.id} className="px-5 py-4 flex items-center justify-between">
               <div>
-                <div className="font-bold text-slate-700">{d.child_name} <span className="text-slate-400 font-semibold">· {d.child_gender}, {d.parent_type}</span></div>
+                <div className="font-bold text-slate-700">{d.child_name} <span className="text-slate-400 font-semibold">· {d.child_gender}</span></div>
                 <div className="text-xs text-slate-400 mt-0.5">
                   {d.age != null ? `age ${d.age} · ` : ''}
                   {d.communication_style ? `${d.communication_style} · ` : ''}

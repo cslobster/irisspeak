@@ -29,7 +29,6 @@ export async function ensureSchema(): Promise<void> {
         alias         TEXT UNIQUE NOT NULL,
         child_name    TEXT NOT NULL,
         child_gender  TEXT NOT NULL,
-        parent_type   TEXT NOT NULL,
         locale        TEXT NOT NULL DEFAULT 'en',
         created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
@@ -46,6 +45,7 @@ export async function ensureSchema(): Promise<void> {
       sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS communication_style TEXT`,
       sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS parent_email TEXT`,
       sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active'`,
+      sql`ALTER TABLE dyad DROP COLUMN IF EXISTS parent_type`,
       sql`
         CREATE TABLE IF NOT EXISTS dyad_login_code (
           code      TEXT NOT NULL,
@@ -201,6 +201,10 @@ export async function ensureSchema(): Promise<void> {
     // ---------- Phase 5: depend on `dialogue_message` / `interim_card_selection` (phase 4) ----------
     await Promise.all([
       sql`CREATE INDEX IF NOT EXISTS idx_message_session ON dialogue_message(session_id, timestamp)`,
+      // Ranked, corpus-resolved candidate pool for the turn (topics/actions/folder decision) —
+      // lets refreshChildCards page through pre-ranked candidates instead of re-calling the LLM
+      // every time (see moderator.ts's generateChildCards).
+      sql`ALTER TABLE child_card_recommendation ADD COLUMN IF NOT EXISTS pool JSONB`,
       // Migration: collapse any pre-existing duplicate rows per (session_id, turn_id) — the old
       // DELETE+INSERT update pattern could leave two rows behind under concurrent requests —
       // before adding the uniqueness constraint that lets card taps upsert atomically.
@@ -228,7 +232,6 @@ export async function ensureSchema(): Promise<void> {
     const alias = process.env.TEST_DYAD_ALIAS || 'abcde';
     const childName = capitalizeName(process.env.TEST_CHILD_NAME || 'Sammy');
     const childGender = process.env.TEST_CHILD_GENDER || 'girl';
-    const parentType = process.env.TEST_PARENT_TYPE || 'mother';
     const locale = process.env.TEST_LOCALE || 'en';
 
     // Rename legacy 'test' alias to the current configured alias on existing DBs
@@ -241,8 +244,8 @@ export async function ensureSchema(): Promise<void> {
       const { nanoid } = await import('nanoid');
       const dyadId = nanoid();
       await sql`
-        INSERT INTO dyad (id, alias, child_name, child_gender, parent_type, locale)
-        VALUES (${dyadId}, ${alias}, ${childName}, ${childGender}, ${parentType}, ${locale})
+        INSERT INTO dyad (id, alias, child_name, child_gender, locale)
+        VALUES (${dyadId}, ${alias}, ${childName}, ${childGender}, ${locale})
       `;
       await sql`
         INSERT INTO dyad_login_code (code, dyad_id) VALUES (${code}, ${dyadId})
