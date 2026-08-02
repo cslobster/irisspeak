@@ -35,7 +35,6 @@ vi.mock('@/lib/staticData', () => ({
   TOPIC_DESCRIPTION: { plan: 'planning activities', recall: 'recalling events', free: 'free topic' },
   loadEmotionCards: () => [],
   loadCoreCards: () => [],
-  labelForParent: (c: any) => c?.label ?? String(c),
   buildInitialGuides: () => [],
 }));
 
@@ -51,7 +50,7 @@ const mockEnsureSchema = ensureSchema as unknown as ReturnType<typeof vi.fn>;
 
 const dyad = {
   id: 'dyad-1', alias: 'test', child_name: 'Sammy',
-  child_gender: 'girl' as const, parent_type: 'mother' as const, locale: 'en' as const,
+  child_gender: 'girl' as const, locale: 'en' as const,
 };
 
 function card(label: string, category: CardInfo['category'], corpus_name?: string): CardInfo {

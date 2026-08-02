@@ -4,23 +4,182 @@
 # `words` mirrors this folder's actual contents from web-client/public/cboard_folders.json —
 # used to exclude these words from the regular topic-word pool when the folder card itself is
 # already shown, so the child isn't offered the same word twice (once loose, once in-folder).
+# `triggers` is a list of literal, narrow phrases (case-insensitive, word-boundary matched)
+# that deterministically surface this folder — see moderator.ts's detectFoldersByKeyword,
+# which now reads this field generically instead of a hardcoded regex per folder. Adding folder
+# coverage going forward is a pure edit to this file — no code changes needed.
 - path: numbers
   label: Numbers
   icon: /symbols/mulberry/count_,_to.svg
   words: [zero, one, two, three, four, five, six, seven, eight, nine]
+  triggers: ['how old', 'your age', 'what age']
 - path: describe > colours
   label: Colors
   icon: /symbols/mulberry/shapesorter.svg
   words: [black, white, mauve, yellow, pink, blue, green, red, colour]
+  triggers: [color, colour]
 - path: people > family
   label: Family
   icon: /symbols/cboard/people.svg
   words: [my, your, family, grandfather, grandmother, mum, dad, sister, brother, daughter, son, baby]
+  triggers: ['family member', 'favorite family', 'favourite family']
 - path: time
   label: Time
   icon: /symbols/mulberry/clock.svg
   words: [time, now, yesterday, today, tomorrow, morning, afternoon, night, day, 'this week', weekend, 'next week', 'this month', 'next month', 'last month', 'one hour', minute, second]
+  triggers: ['what time']
 - path: weather
   label: Weather
   icon: /symbols/cboard/weather.svg
   words: [rain, sun, snow, 'thunder storm', cloudy, autumn, winter, spring, summer]
+  triggers: [weather]
+- path: sports
+  label: Sports
+  icon: /symbols/cboard/sports.svg
+  words: [judo, tennis, basketball, cricket, 'baseball bat', badminton, golf, archery, 'to ski', 'to swim', darts, 'pool snooker', 'to ride horse', bowling, boccia, volleyball, 'olympic rings', 'para olympic games', 'olympic torch', 'race athletics']
+  triggers: ['favorite sport', 'favourite sport', 'which sport', 'what sport', 'play sports']
+- path: snacks
+  label: Snacks
+  icon: /symbols/mulberry/jelly_beans.svg
+  words: ['ice cream', chocolate, crisps, marshmallows, biscuits, 'jelly beans', 'candy cane', nuts, 'cake slice', 'chocolate chip biscuit', yogurt, 'ice lolly', pretzel, peanut]
+  triggers: ['ice cream', 'favorite snack', 'favourite snack', 'favorite dessert', 'favourite dessert', 'what flavor', 'what flavour']
+- path: drinks
+  label: Drinks
+  icon: /symbols/mulberry/drinks.svg
+  words: [drink, water, 'orange juice', 'apple juice', 'grape juice', 'cranberry juice', 'pineapple juice', lemonade, milk, milkshake, 'hot chocolate', tea, coffee, wine, beer, straw]
+  triggers: ['favorite drink', 'favourite drink', 'want to drink', 'thirsty']
+- path: animals
+  label: Animals
+  icon: /symbols/cboard/animals.svg
+  words: [dog, cat, hamster, rabbit, hedgehog, horse, donkey, toad, sheep, 'dog kennel', cage, stable, frog, chick, fish, 'chicken live', mouse, rat, parrot, nest, goose, cow, tortoise, camel, piglet]
+  triggers: ['favorite animal', 'favourite animal', 'favorite pet', 'favourite pet']
+- path: toys
+  label: Toys
+  icon: /symbols/mulberry/toys.svg
+  words: ['teddy bear', doll, 'shape puzzle', 'toy car', 'toy soldier', 'toy telephone', bricks, ball, bubbles, kite, playdough, puppet, beads, lego, trampoline, toys, 'colouring book', 'toy box', stickers]
+  triggers: ['favorite toy', 'favourite toy', 'want to play with']
+- path: food
+  label: Food
+  icon: /symbols/mulberry/food.svg
+  words: [pizza, bread, 'boiled egg', 'fried egg', croissant, cereal, porridge, pancakes, pasta, poultry, beef, fish, 'spaghetti bolognaise', hamburger, 'hot dog', pie, 'pepper mill', salt, 'tomato sauce', vinegar, sandwich, bagel, toast, cheese, noodles, chips]
+  triggers: ['favorite food', 'favourite food', 'want to eat', 'want for lunch', 'want for dinner', 'want for breakfast']
+- path: transport
+  label: Transport
+  icon: /symbols/mulberry/travel.svg
+  words: [car, bicycle, wheelchair, motorcycle, bus, taxi, aeroplane, helicopter, train, 'mini bus', ferry, boat, tractor, skateboard, 'army tank', 'hot air balloon', 'fire engine', spaceship, rocket, jeep, ambulance, 'police car', van, transport, lorry, 'refuse lorry']
+  triggers: ['get to school', 'favorite vehicle', 'favourite vehicle']
+- path: places
+  label: Places
+  icon: /symbols/mulberry/globe.svg
+  words: [house, shop, bank, 'office block', outside, beach, gym, church, field, 'back garden', school, 'surgery health centre', garage, aquarium]
+  triggers: ['favorite place', 'favourite place', 'want to go']
+- path: clothing
+  label: Clothing
+  icon: /symbols/mulberry/generic_clothes.svg
+  words: [shirt, 't-shirt', trousers, shorts, jacket, coat, blouse, dress, jumper, hoodie, skirt, vest, pyjamas]
+  triggers: ['want to wear', 'favorite clothes', 'favourite clothes']
+- path: technology
+  label: Technology
+  icon: /symbols/mulberry/technology.svg
+  words: [computer, laptop, 'electric charger', battery, camera, headphones, playstation, 'usb stick', printer, 'computer mouse', ipod, iphone, stereo, 'dvd player', wii, 'remote control', 'computer keyboard', 'extension lead']
+  triggers: ['favorite gadget', 'favourite gadget', 'electronic device']
+- path: furniture
+  label: Furniture
+  icon: /symbols/mulberry/furniture.svg
+  words: [chair, table, 'high chair', 'rocking chair', 'coffee table', rug, 'corner cabinet', dresser, drawer, door, window, 'book shelf', bookcase, stool, beanbag, 'dining table', curtains, 'single bed', blanket, lamp, picture]
+  triggers: ['what furniture', 'favorite furniture', 'favourite furniture']
+- path: hygiene
+  label: Hygiene
+  icon: /symbols/cboard/personal_hygiene.svg
+  words: [toothbrush, toothpaste, soap, towel, comb, 'nail clippers', 'paper towel', 'sanitary towel', tissues, shampoo, aftershave, 'electric razor', 'hair conditioner', 'make up', deodorant, 'toilet roll', hairdryer, 'hair dye']
+  triggers: ['get ready for bed', 'brush your teeth', 'take a shower', 'take a bath']
+- path: kitchen
+  label: Kitchen
+  icon: /symbols/cboard/kitchen_items.svg
+  words: [fork, knife, spoon, plate, 'drinking glass', mug, straw, serviette, bowl, 'place mat', cooker, fridge, apron]
+  triggers: ['set the table', 'what do you need for dinner']
+- path: plants
+  label: Plants
+  icon: /symbols/cboard/plants.svg
+  words: ['potted plant', tree, branch, leaf, 'tree trunk', grass, hedge, bush, flower, daffodil, daisy, rose, tulip, petal, seedling, seeds, stick, roots, vine, holly, weeds, ivy, 'palm tree', 'dead plant', acorn, cactus, 'pine cone']
+  triggers: ['favorite plant', 'favourite plant', 'favorite flower', 'favourite flower']
+- path: school
+  label: School Supplies
+  icon: /symbols/mulberry/school.svg
+  words: [pen, pencil, 'pencil sharpener', 'pencil case', 'school bag', notebook, 'ring binder', calculator, scissors, blackboard, teacher, tippex, crayon, glue, stapler]
+  triggers: ['what do you need for school', 'school supplies']
+- path: activities
+  label: Activities
+  icon: /symbols/cboard/activities.svg
+  words: ['to cycle', 'to play basketball', 'to go bowling', 'to play computer games', 'to watch TV', 'to solve jigsaw puzzle', 'to play soccer', 'to play bingo', 'to bathe', 'to work', 'to cook', 'to exercise', 'to run', 'to armwrestle', 'to celebrate', 'to swim', 'to fish', 'to play darts', 'to play cards']
+  triggers: ['what do you want to do', 'what do you want to play']
+- path: body
+  label: Body
+  icon: /symbols/mulberry/body_outline.svg
+  words: [itch, head, neck, shoulder, arms, 'right hand', 'left hand', elbow, back, stomach, finger, leg, foot, throat, hip, bottom, thumb, 'toe nail', fingernail, muscles, skin, bone, knee]
+  triggers: ['where does it hurt', 'what hurts', 'where do you hurt']
+- path: people
+  label: People
+  icon: /symbols/cboard/people.svg
+  words: [dad, mum, teacher, doctor, nurse, 'speech language therapist', police, 'delivery person', 'post person', dentist, carpenter, secretary, 'taxi driver', gardener, 'IT assistant']
+  triggers: ['who do you want to see']
+- path: people > characters
+  label: Characters
+  icon: /symbols/cboard/people.svg
+  words: [fairy, ghost, elf, witch, monster]
+  triggers: ['favorite character', 'favourite character', 'favorite monster', 'favourite monster']
+- path: places > countries
+  label: Countries
+  icon: /symbols/mulberry/globe.svg
+  words: ['flag argentina', 'flag israel', 'flag united states of america', 'flag india', 'flag united kingdom', 'flag france', 'flag spain', 'flag indonesia', 'flag russian federation', 'flag poland', 'flag brazil', 'flag canada', 'flag germany', 'flag lebanon', 'flag jordan', 'flag syria', 'flag egypt', 'flag iraq', 'flag italy', 'flag sweden', 'flag the netherlands', 'flag china']
+  triggers: ['favorite country', 'favourite country', 'which country']
+- path: animals > birds
+  label: Birds
+  icon: /symbols/cboard/animals.svg
+  words: [owl, vulture, seagull, dove, parrot, chick, 'chicken live', duck, goose, swan, robin, turkey, ostrich, bird, penguin, flamingo, peacock, cockerel, cockatiel]
+  triggers: ['favorite bird', 'favourite bird']
+- path: animals > insects
+  label: Insects
+  icon: /symbols/cboard/animals.svg
+  words: [snail, beetle, 'honey bee', ant, cricket, moth, butterfly, fly, dragonfly, earwig, slug, wasp, beehive, 'bees nest', caterpillar]
+  triggers: ['favorite insect', 'favourite insect', 'favorite bug', 'favourite bug']
+- path: animals > marine animals
+  label: Sea Animals
+  icon: /symbols/cboard/animals.svg
+  words: [seahorse, penguin, starfish, dolphin, seal, 'killer whale', crab, goldfish, oyster, shrimp, crocodile, jellyfish, walrus, 'tropical fish', 'fish koi carp', fish]
+  triggers: ['favorite sea animal', 'favourite sea animal', 'favorite ocean animal', 'favourite ocean animal']
+- path: animals > wild animals
+  label: Wild Animals
+  icon: /symbols/cboard/animals.svg
+  words: [tiger, elephant, giraffe, gorilla, snake, 'rattle snake', panda, hippopotamus, bear, 'polar bear', fox, lion, wolf, chimpanzee, deer, zebra, kangaroo, bat, koala, rhinoceros, dinosaur, cheetah, 'ant eater', antelope, chameleon]
+  triggers: ['favorite wild animal', 'favourite wild animal', 'favorite zoo animal', 'favourite zoo animal']
+- path: food > fruit
+  label: Fruit
+  icon: /symbols/mulberry/food.svg
+  words: [strawberry, apple, apricot, peach, mango, pear, orange, melon, banana, kiwi, pineapple, watermelon, cherry, grapefruit, grapes]
+  triggers: ['favorite fruit', 'favourite fruit']
+- path: food > vegetables
+  label: Vegetables
+  icon: /symbols/mulberry/food.svg
+  words: [vegetables, salad, potato, 'mash potato', 'sweet potato', rice, 'baked beans', sweetcorn, beetroot, carrot, tomato, cucumber, cabbage, onion, 'spring onions', pepper, 'chilli pepper', lettuce, asparagus, radish, aubergine, broccoli, peas, avocado, 'green beans', spinach, pumpkin, 'brussel sprouts']
+  triggers: ['favorite vegetable', 'favourite vegetable', 'favorite veggie', 'favourite veggie']
+- path: food > soup
+  label: Soup
+  icon: /symbols/mulberry/food.svg
+  words: [soup, 'carrot soup', 'chicken soup', 'mushroom soup', 'onion soup', 'pea soup', 'tomato soup', 'vegetable soup']
+  triggers: ['favorite soup', 'favourite soup']
+- path: clothing > clothing accessories
+  label: Accessories
+  icon: /symbols/mulberry/generic_clothes.svg
+  words: [glasses, sunglasses, 'bobble hat', cap, 'bow tie', tie, socks, gloves, boots, bra, 'boxer shorts', pants, purse, jewellery, sandals, trainers, scarf, umbrella, watch]
+  triggers: ['favorite accessory', 'favourite accessory']
+- path: describe > shapes
+  label: Shapes
+  icon: /symbols/mulberry/shapesorter.svg
+  words: [circle, oval, 'triangle equilateral', square, rectangle, pentagon, hexagon, octagon, star, diamond, 'pyramid triangular base']
+  triggers: ['favorite shape', 'favourite shape', 'what shape']
+- path: school > class room
+  label: Class Room
+  icon: /symbols/mulberry/school.svg
+  words: ['algebra class', 'art class', 'drama class', 'english class', 'geography class', 'history class', 'maths class', 'IT class', 'music class', 'science class', 'no class']
+  triggers: ['favorite class', 'favourite class', 'favorite subject', 'favourite subject']

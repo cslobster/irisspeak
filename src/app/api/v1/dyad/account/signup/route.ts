@@ -20,13 +20,13 @@ export async function POST(req: Request) {
 
   const body = await req.json().catch(() => ({}));
   const {
-    child_name, child_gender, parent_type, locale, login_code,
-    age, communication_style, notes, parent_email,
+    child_name, child_gender, locale, login_code,
+    age, notes, parent_email,
     interests, // string[] — each becomes an auto-approved Custom Vocabulary Word at signup time
   } = body;
 
-  if (!child_name || !child_gender || !parent_type || !login_code) {
-    return badRequest('child_name, child_gender, parent_type, and login_code are required');
+  if (!child_name || !child_gender || !login_code) {
+    return badRequest('child_name, child_gender, and login_code are required');
   }
 
   const id = nanoid();
@@ -34,8 +34,8 @@ export async function POST(req: Request) {
   const alias = `${childNameVal.toLowerCase().replace(/[^a-z0-9]/g, '')}-${nanoid(5)}`;
 
   await sql`
-    INSERT INTO dyad (id, alias, child_name, child_gender, parent_type, locale, age, communication_style, notes, parent_email, status)
-    VALUES (${id}, ${alias}, ${childNameVal}, ${child_gender}, ${parent_type}, ${locale || 'en'}, ${age ?? null}, ${communication_style ?? null}, ${notes ?? null}, ${parent_email ?? null}, 'pending')
+    INSERT INTO dyad (id, alias, child_name, child_gender, locale, age, notes, parent_email, status)
+    VALUES (${id}, ${alias}, ${childNameVal}, ${child_gender}, ${locale || 'en'}, ${age ?? null}, ${notes ?? null}, ${parent_email ?? null}, 'pending')
   `;
   await sql`
     INSERT INTO dyad_login_code (code, dyad_id, active) VALUES (${String(login_code)}, ${id}, FALSE)

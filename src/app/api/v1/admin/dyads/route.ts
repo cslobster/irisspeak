@@ -24,10 +24,10 @@ export async function POST(req: Request) {
   await ensureSchema();
 
   const body = await req.json().catch(() => ({}));
-  const { alias, child_name, child_gender, parent_type, locale, login_code } = body;
+  const { alias, child_name, child_gender, locale, login_code } = body;
 
-  if (!alias || !child_name || !child_gender || !parent_type || !login_code) {
-    return badRequest('alias, child_name, child_gender, parent_type, and login_code are required');
+  if (!alias || !child_name || !child_gender || !login_code) {
+    return badRequest('alias, child_name, child_gender, and login_code are required');
   }
 
   const id = nanoid();
@@ -35,15 +35,15 @@ export async function POST(req: Request) {
   const childNameVal = capitalizeName(child_name);
 
   await sql`
-    INSERT INTO dyad (id, alias, child_name, child_gender, parent_type, locale)
-    VALUES (${id}, ${alias}, ${childNameVal}, ${child_gender}, ${parent_type}, ${localeVal})
+    INSERT INTO dyad (id, alias, child_name, child_gender, locale)
+    VALUES (${id}, ${alias}, ${childNameVal}, ${child_gender}, ${localeVal})
   `;
   await sql`
     INSERT INTO dyad_login_code (code, dyad_id)
     VALUES (${login_code}, ${id})
   `;
 
-  return ok({ id, alias, child_name: childNameVal, child_gender, parent_type, locale: localeVal, login_code });
+  return ok({ id, alias, child_name: childNameVal, child_gender, locale: localeVal, login_code });
 }
 
 export async function OPTIONS() {

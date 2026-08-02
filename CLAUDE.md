@@ -31,7 +31,7 @@ GEMINI_API_KEY=     # Google AI Studio key (aistudio.google.com)
 AUTH_SECRET=        # Random string for JWT signing
 ```
 
-DB tables auto-create on first request. Test login code is `12345` (seeds a dyad: Sammy/girl/mother/en).
+DB tables auto-create on first request. Test login code is `12345` (seeds a dyad: Sammy/girl/en).
 
 ## Architecture
 

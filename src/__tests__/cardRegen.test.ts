@@ -33,10 +33,9 @@ vi.mock('@/lib/staticData', () => ({
   loadEmotionCards: () => [],
   loadCoreCards: () => [],
   loadFolderCards: () => [
-    { path: 'numbers', label: 'Numbers', icon: '/symbols/mulberry/count_,_to.svg', words: ['one', 'two', 'three'] },
-    { path: 'time', label: 'Time', icon: '/symbols/mulberry/clock.svg', words: ['today', 'tomorrow'] },
+    { path: 'numbers', label: 'Numbers', icon: '/symbols/mulberry/count_,_to.svg', words: ['one', 'two', 'three'], triggers: ['how old', 'your age', 'what age'] },
+    { path: 'time', label: 'Time', icon: '/symbols/mulberry/clock.svg', words: ['today', 'tomorrow'], triggers: ['what time'] },
   ],
-  labelForParent: (c: any) => c?.label ?? String(c),
   buildInitialGuides: () => [],
 }));
 
@@ -52,7 +51,7 @@ const mockGetCorpusRetriever = getCorpusRetriever as unknown as ReturnType<typeo
 
 const fakeDyad = {
   id: 'dyad-1', alias: 'test', child_name: 'Sammy',
-  child_gender: 'girl' as const, parent_type: 'mother' as const, locale: 'en' as const,
+  child_gender: 'girl' as const, locale: 'en' as const,
 };
 
 const existingCard = {

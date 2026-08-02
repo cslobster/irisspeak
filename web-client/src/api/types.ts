@@ -2,7 +2,6 @@
 
 export type TopicCategory = 'plan' | 'recall' | 'free';
 export type ChildGender = 'boy' | 'girl';
-export type ParentType = 'mother' | 'father';
 export type DialogueRole = 'parent' | 'child';
 export type CardCategory = 'topic' | 'action' | 'emotion' | 'core';
 export type ParentGuideType = 'messaging' | 'feedback';
@@ -52,11 +51,9 @@ export interface DyadProfile {
 export interface SignupPayload {
   child_name: string;
   child_gender: 'boy' | 'girl';
-  parent_type: 'mother' | 'father';
   login_code: string;
   locale?: string;
   age?: number;
-  communication_style?: string;
   notes?: string;
   parent_email?: string;
   interests?: string[];

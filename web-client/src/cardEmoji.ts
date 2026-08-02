@@ -102,8 +102,6 @@ const CORE: Record<string, string> = {
   yes: '✅',
   no: '❌',
   "i don't know": '🤷',
-  "how about you, mom?": '🫵',
-  "how about you, dad?": '🫵',
   "how about you?": '🫵',
 };
 

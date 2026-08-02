@@ -15,7 +15,6 @@ export async function GET(req: Request) {
       d.alias,
       d.child_name,
       d.child_gender,
-      d.parent_type,
       d.locale,
       d.created_at,
       COUNT(DISTINCT s.id)::int          AS session_count,
@@ -25,7 +24,7 @@ export async function GET(req: Request) {
     FROM dyad d
     LEFT JOIN session s ON s.dyad_id = d.id
     LEFT JOIN dialogue_message dm ON dm.session_id = s.id
-    GROUP BY d.id, d.alias, d.child_name, d.child_gender, d.parent_type, d.locale, d.created_at
+    GROUP BY d.id, d.alias, d.child_name, d.child_gender, d.locale, d.created_at
     ORDER BY last_active DESC NULLS LAST
   `;
   return ok(rows);
