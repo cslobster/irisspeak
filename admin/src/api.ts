@@ -55,6 +55,7 @@ export const adminApi = {
 
   getAnalytics: () => req<UserEventStat[]>('GET', '/analytics?view=summary'),
   getAnalyticsByUser: () => req<UserEventStat[]>('GET', '/analytics?view=by_user'),
+  getDAU: (days = 30) => req<DauRow[]>('GET', `/analytics?view=dau&days=${days}`),
 
   getTranscripts: (dyadId: string) =>
     req<{ sessions: SessionRow[]; messages: MessageRow[] }>('GET', `/dyads/${dyadId}/transcripts`),
@@ -68,6 +69,11 @@ export const adminApi = {
   approveDyad: (id: string, loginCode?: string) =>
     req<{ id: string; status: string; login_code: string }>('POST', `/dyads/${id}/approve`, loginCode ? { login_code: loginCode } : undefined),
 };
+
+export interface DauRow {
+  date: string;
+  active_users: number;
+}
 
 export interface SessionRow {
   id: string;

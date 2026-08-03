@@ -166,11 +166,50 @@ export function buildSessionTitlePrompt(childName: string): string {
 }
 
 // ---------- SentenceInferenceGenerator ----------
+const DIGIT_WORDS: Record<string, string> = {
+  zero: '0', one: '1', two: '2', three: '3', four: '4',
+  five: '5', six: '6', seven: '7', eight: '8', nine: '9',
+};
+
+// A child building a number on the AAC "Numbers" folder taps single digits in sequence
+// (e.g. one → four) meaning the multi-digit number 14, not two separate ideas "one" and
+// "four" — so consecutive digit-word taps are collapsed into one numeral before the rest
+// of the prompt logic (which otherwise treats every distinct tapped card as a separate
+// thing that must appear in the sentence) ever sees them.
+function mergeConsecutiveDigitTaps(cards: CardInfo[]): CardInfo[] {
+  const result: CardInfo[] = [];
+  let i = 0;
+  while (i < cards.length) {
+    const card = cards[i];
+    const word = (card.corpus_name || card.label || '').toLowerCase().trim();
+    if (card.category === 'topic' && DIGIT_WORDS[word] !== undefined) {
+      let j = i;
+      let digits = '';
+      while (j < cards.length) {
+        const w = (cards[j].corpus_name || cards[j].label || '').toLowerCase().trim();
+        if (cards[j].category !== 'topic' || DIGIT_WORDS[w] === undefined) break;
+        digits += DIGIT_WORDS[w];
+        j++;
+      }
+      if (digits.length > 1) {
+        result.push({ ...card, corpus_name: digits, label: digits, label_localized: digits });
+        i = j;
+        continue;
+      }
+    }
+    result.push(card);
+    i++;
+  }
+  return result;
+}
+
 export function buildSentenceInferencePrompt(
-  cards: CardInfo[],
+  rawCards: CardInfo[],
   childName: string,
   lastParentMessage?: string,
+  profileFacts?: string,
 ): string {
+  const cards = mergeConsecutiveDigitTaps(rawCards);
   const content = cards.filter(c => c.category === 'topic' || c.category === 'action');
   const emotions = cards.filter(c => c.category === 'emotion');
   const core = cards.filter(c => c.category === 'core');
@@ -196,6 +235,14 @@ export function buildSentenceInferencePrompt(
   const lines: string[] = [
     `You interpret what a minimally-verbal autistic child named ${childName} is trying to say using AAC cards.`,
   ];
+
+  // See CONTEXT.md's Profile Fact entry — the same age/communication-style/notes/known-favorites
+  // context that already informs which cards are offered also helps interpret what a given tap
+  // sequence means (e.g. an age fact turns a lone "birthday" card into "It's my birthday" rather
+  // than a request for one, or a known favorite disambiguates a vague card combination).
+  if (profileFacts) {
+    lines.push(``, `What you know about ${childName}: ${profileFacts}`);
+  }
 
   if (lastParentMessage) {
     lines.push(``, `The parent just said: "${lastParentMessage}"`);
@@ -228,6 +275,7 @@ export function buildSentenceInferencePrompt(
     `  Parent: "Are you okay?" | Cards: [No, hurt, stomach] → No, my stomach hurts`,
     `  Parent: "Do you want to go out?" | Cards: [Yes, park, swing, play] → Yes, I want to play on the swings at the park`,
     `  Parent: "How was school today?" | Cards: [friend, play, happy] → I played with a friend and felt happy`,
+    `  Parent: "How old are you?" | Cards: [23] → I am 23`,
     `  Parent: "Are you done eating?" | Cards: [No, more, cookie] → No, I want more cookies`,
     `  Parent: "Where does it hurt?" | Cards: [hurt, tummy] → My tummy hurts`,
     `  Parent: "What do you want to do?" | Cards: [home, go, tired] → I'm tired and want to go home`,

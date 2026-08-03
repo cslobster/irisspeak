@@ -58,18 +58,21 @@ function card(label: string, category: CardInfo['category'], corpus_name?: strin
 }
 
 /** Set up mockSql for inferSentenceFromCards:
- *  1. getCurrentTurn → child turn
- *  2. getInterimCards → provided cards
- *  3. getDialogue     → provided dialogue rows
+ *  1. getCurrentTurn      → child turn
+ *  2. getInterimCards     → provided cards
+ *  3. getDialogue         → provided dialogue rows
+ *  4. preference pointers → provided custom-word rows (defaults to none)
  */
 function mockInferSequence(
   cards: CardInfo[],
   dialogueRows: { role: string; content: string; content_type: string }[] = [],
+  preferenceWords: string[] = [],
 ) {
   mockSql
     .mockResolvedValueOnce([{ id: 'turn-child-1', role: 'child', ended_timestamp: null }])
     .mockResolvedValueOnce(cards.length ? [{ cards }] : [])
-    .mockResolvedValueOnce(dialogueRows.map((r, i) => ({ ...r, timestamp: i + 1, turn_id: 't1' })));
+    .mockResolvedValueOnce(dialogueRows.map((r, i) => ({ ...r, timestamp: i + 1, turn_id: 't1' })))
+    .mockResolvedValueOnce(preferenceWords.map((word) => ({ word })));
 }
 
 beforeEach(() => {
@@ -178,6 +181,51 @@ describe('inferSentenceFromCards — passes last parent message to prompt', () =
   });
 });
 
+// ─── Section 2b: Profile facts (age/communication style/notes/known favorites) ───
+
+describe('inferSentenceFromCards — surfaces dyad profile facts to the prompt', () => {
+  it('includes age and communication style from the dyad row', async () => {
+    mockInferSequence([card('pizza', 'topic')]);
+    mockChat.mockResolvedValue('I want pizza');
+
+    await inferSentenceFromCards('sess-1', { ...dyad, age: 7, communication_style: 'single words' });
+
+    const systemPrompt: string = mockChat.mock.calls[0][0][0].content;
+    expect(systemPrompt).toContain('age 7');
+    expect(systemPrompt).toContain('communicates via single words');
+  });
+
+  it('includes freeform notes', async () => {
+    mockInferSequence([card('pizza', 'topic')]);
+    mockChat.mockResolvedValue('I want pizza');
+
+    await inferSentenceFromCards('sess-1', { ...dyad, notes: 'loves dinosaurs' });
+
+    const systemPrompt: string = mockChat.mock.calls[0][0][0].content;
+    expect(systemPrompt).toContain('loves dinosaurs');
+  });
+
+  it('includes known-favorite preference-pointer words fetched from dyad_custom_word', async () => {
+    mockInferSequence([card('pizza', 'topic')], [], ['red', 'Bluey']);
+    mockChat.mockResolvedValue('I want pizza');
+
+    await inferSentenceFromCards('sess-1', dyad);
+
+    const systemPrompt: string = mockChat.mock.calls[0][0][0].content;
+    expect(systemPrompt).toContain('known favorites: red, Bluey');
+  });
+
+  it('omits the profile-facts line entirely when the dyad has no profile data', async () => {
+    mockInferSequence([card('pizza', 'topic')]);
+    mockChat.mockResolvedValue('I want pizza');
+
+    await inferSentenceFromCards('sess-1', dyad);
+
+    const systemPrompt: string = mockChat.mock.calls[0][0][0].content;
+    expect(systemPrompt).not.toContain('What you know about');
+  });
+});
+
 // ─── Section 3: Prompt builder — card categories and child name ───────────────
 
 describe('buildSentenceInferencePrompt — prompt content', () => {
@@ -239,11 +287,87 @@ describe('buildSentenceInferencePrompt — prompt content', () => {
     expect(prompt).not.toContain('The parent just said');
   });
 
+  it('includes profileFacts when provided', () => {
+    const prompt = buildSentenceInferencePrompt(
+      [card('pizza', 'topic')],
+      'Sammy',
+      undefined,
+      'age 7; known favorites: red',
+    );
+    expect(prompt).toContain('What you know about Sammy: age 7; known favorites: red');
+  });
+
+  it('omits the profile-facts line when not provided', () => {
+    const prompt = buildSentenceInferencePrompt([card('pizza', 'topic')], 'Sammy');
+    expect(prompt).not.toContain('What you know about');
+  });
+
   it('uses corpus_name over label when available', () => {
     const c = card('hungry', 'topic');
     c.corpus_name = 'hunger';
     const prompt = buildSentenceInferencePrompt([c], 'Sammy');
     expect(prompt).toContain('hunger');
+  });
+});
+
+describe('buildSentenceInferencePrompt — consecutive digit taps merge into one number', () => {
+  function contentLine(prompt: string): string {
+    return prompt.split('\n').find(l => l.includes('Content (topic/action):')) ?? '';
+  }
+
+  it('merges two consecutive digit-word taps into a single multi-digit number', () => {
+    const prompt = buildSentenceInferencePrompt(
+      [card('one', 'topic'), card('four', 'topic')],
+      'Sammy',
+    );
+    const line = contentLine(prompt);
+    expect(line).toContain('14');
+    expect(line).not.toContain('one');
+    expect(line).not.toContain('four');
+  });
+
+  it('merges three consecutive digit-word taps in tap order', () => {
+    const prompt = buildSentenceInferencePrompt(
+      [card('two', 'topic'), card('zero', 'topic'), card('three', 'topic')],
+      'Sammy',
+    );
+    expect(contentLine(prompt)).toContain('203');
+  });
+
+  it('does NOT merge a single isolated digit tap', () => {
+    const prompt = buildSentenceInferencePrompt([card('four', 'topic')], 'Sammy');
+    expect(contentLine(prompt)).toContain('four');
+  });
+
+  it('does NOT merge digit taps separated by a non-digit card', () => {
+    const prompt = buildSentenceInferencePrompt(
+      [card('one', 'topic'), card('happy', 'emotion'), card('four', 'topic')],
+      'Sammy',
+    );
+    const line = contentLine(prompt);
+    expect(line).toContain('one');
+    expect(line).toContain('four');
+    expect(line).not.toContain('14');
+  });
+
+  it('does not merge a digit word tapped as an emotion/core card', () => {
+    // "one" appearing outside the topic/action category (e.g. a hypothetical core/emotion
+    // card that happens to share a digit word) must never be swept into a merged number.
+    const prompt = buildSentenceInferencePrompt(
+      [card('one', 'core'), card('four', 'topic')],
+      'Sammy',
+    );
+    expect(contentLine(prompt)).not.toContain('14');
+  });
+
+  it('merges same-digit repeats in a row into the multi-digit number, not emphasis', () => {
+    // Same digit tapped twice in a row is still a valid multi-digit number (e.g. "11"),
+    // so it merges rather than falling into the repeat-tap emphasis path.
+    const prompt = buildSentenceInferencePrompt(
+      [card('one', 'topic'), card('one', 'topic')],
+      'Sammy',
+    );
+    expect(contentLine(prompt)).toContain('11');
   });
 });
 

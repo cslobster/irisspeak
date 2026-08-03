@@ -65,6 +65,19 @@ const FIXED_FEELINGS: { word: string; phrase: string }[] = [
 // ---------- helpers ----------
 function now(): number { return Date.now(); }
 
+// See CONTEXT.md's Profile Fact entry — shared between card generation and sentence inference
+// so a child's age/communication style/notes/known favorites inform BOTH what words they're
+// offered and how the LLM turns their taps into a sentence, not just the former. Always
+// included in full, never gated behind keyword matching (same rationale as Profile Fact).
+function buildProfileFacts(dyad: Dyad, preferencePointers: string[] = []): string | undefined {
+  const factParts: string[] = [];
+  if (dyad.age != null) factParts.push(`age ${dyad.age}`);
+  if (dyad.communication_style) factParts.push(`communicates via ${dyad.communication_style}`);
+  if (preferencePointers.length) factParts.push(`known favorites: ${preferencePointers.join(', ')}`);
+  if (dyad.notes) factParts.push(dyad.notes);
+  return factParts.length ? factParts.join('; ') : undefined;
+}
+
 async function getCurrentTurn(sessionId: string): Promise<{ id: string; role: 'parent' | 'child'; ended_timestamp: number | null } | null> {
   const r = (await sql`
     SELECT id, role, ended_timestamp
@@ -329,17 +342,10 @@ async function generateChildCards(args: {
     || pool.smallTalk === null;
 
   if (needsTopUp) {
-    // See CONTEXT.md's Profile Fact entry — always included in full, never gated, so the model
-    // can connect an implied reference (e.g. "which hue do you like") to a stored fact without
-    // literal keyword matching. Preference-pointer custom words (e.g. "favorite color: red") are
-    // folded in here rather than the vocab list, since the word itself already exists there.
+    // Preference-pointer custom words (e.g. "favorite color: red") are folded in here rather
+    // than the vocab list, since the word itself already exists there.
     const preferencePointers = customWordRows.filter((w) => w.is_preference_pointer).map((w) => w.word);
-    const factParts: string[] = [];
-    if (dyad.age != null) factParts.push(`age ${dyad.age}`);
-    if (dyad.communication_style) factParts.push(`communicates via ${dyad.communication_style}`);
-    if (preferencePointers.length) factParts.push(`known favorites: ${preferencePointers.join(', ')}`);
-    if (dyad.notes) factParts.push(dyad.notes);
-    const profileFacts = factParts.length ? factParts.join('; ') : undefined;
+    const profileFacts = buildProfileFacts(dyad, preferencePointers);
 
     const sysPrompt = buildChildCardPrompt({
       topic: args.topic.category,
@@ -833,7 +839,16 @@ export async function inferSentenceFromCards(sessionId: string, dyad: Dyad): Pro
 
   const interim = await getInterimCards(sessionId, cur.id);
   if (interim.length === 0) throw new Error('no cards selected');
-  const dialogue = await getDialogue(sessionId);
+
+  // dialogue and the preference-pointer lookup don't depend on each other — fetch concurrently.
+  const [dialogue, preferenceRows] = await Promise.all([
+    getDialogue(sessionId),
+    sql`
+      SELECT word FROM dyad_custom_word
+      WHERE dyad_id = ${dyad.id} AND is_preference_pointer = TRUE
+    ` as unknown as Promise<{ word: string }[]>,
+  ]);
+  const profileFacts = buildProfileFacts(dyad, preferenceRows.map((r) => r.word));
 
   const lastParent = [...dialogue].reverse().find(m => m.role === 'parent');
   const lastParentMsg = lastParent && typeof lastParent.content === 'string' ? lastParent.content : undefined;
@@ -844,7 +859,7 @@ export async function inferSentenceFromCards(sessionId: string, dyad: Dyad): Pro
   // words from *previous* turns' card taps (e.g. inferring "teacher" from turn 1 into a turn-2
   // sentence that only tapped "day"), since it couldn't tell current selection from history.
   const raw = await chat([
-    { role: 'system', content: buildSentenceInferencePrompt(interim, dyad.child_name, lastParentMsg) },
+    { role: 'system', content: buildSentenceInferencePrompt(interim, dyad.child_name, lastParentMsg, profileFacts) },
     { role: 'user',   content: 'Generate the sentence now, following the rules above.' },
   ]);
   const sentence = raw.replace(/^["'](.*)["']$/s, '$1').trim();

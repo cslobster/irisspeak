@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { DyadStats } from '../types';
 import { adminApi } from '../api';
+import { DauChart } from './DauChart';
 
 export function StatsTab() {
   const [stats, setStats] = useState<DyadStats[]>([]);
@@ -27,6 +28,10 @@ export function StatsTab() {
 
   return (
     <div>
+      <div className="mb-6">
+        <DauChart />
+      </div>
+
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-extrabold text-slate-700">Usage Stats</h2>
         <button onClick={load} className="text-xs font-bold px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-600 transition">

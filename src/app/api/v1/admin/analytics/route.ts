@@ -12,6 +12,27 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const view = url.searchParams.get('view') || 'summary';
 
+  if (view === 'dau') {
+    // Clamped so a bad/huge query param can't force an expensive generate_series scan.
+    const days = Math.min(Math.max(parseInt(url.searchParams.get('days') || '30', 10) || 30, 1), 90);
+    // generate_series + LEFT JOIN so a day with zero activity still shows up as 0 rather than
+    // being silently skipped — a gap in the line would otherwise look like missing data.
+    const rows = await sql`
+      SELECT
+        gs.day::date                      AS date,
+        COUNT(DISTINCT e.dyad_id)::int    AS active_users
+      FROM generate_series(
+        CURRENT_DATE - (${days} - 1) * INTERVAL '1 day',
+        CURRENT_DATE,
+        INTERVAL '1 day'
+      ) AS gs(day)
+      LEFT JOIN user_event e ON date_trunc('day', e.created_at) = gs.day
+      GROUP BY gs.day
+      ORDER BY gs.day
+    `;
+    return ok(rows);
+  }
+
   if (view === 'by_user') {
     // Per-user breakdown: dyad × screen × element
     const rows = await sql`
