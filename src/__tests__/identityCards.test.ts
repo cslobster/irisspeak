@@ -231,6 +231,25 @@ describe('small talk — greeting/farewell answer cards', () => {
     expect(card?.label).toBe('Thank you!');
   });
 
+  it('shows a "Thank you!" card for an everyday appearance/belongings compliment ("Nice shoes!")', async () => {
+    mockChat.mockResolvedValueOnce('topics: [a, b, c, d]\nactions: [e, f, g, h]');
+    mockSequence({ dialogue: [{ role: 'parent', content: 'Nice shoes!', content_type: 'text', timestamp: 1, turn_id: 't1' }] });
+
+    const result = await refreshChildCards('sess-1', dyadWithAge);
+
+    const card = result.cards.find(c => c.corpus_name === 'thank you');
+    expect(card?.label).toBe('Thank you!');
+  });
+
+  it('shows a "Thank you!" card for "I like your shirt" and "You look great" phrasing', async () => {
+    mockChat.mockResolvedValueOnce('topics: [a, b, c, d]\nactions: [e, f, g, h]');
+    mockSequence({ dialogue: [{ role: 'parent', content: 'I like your shirt today', content_type: 'text', timestamp: 1, turn_id: 't1' }] });
+
+    const result = await refreshChildCards('sess-1', dyadWithAge);
+
+    expect(result.cards.some(c => c.corpus_name === 'thank you')).toBe(true);
+  });
+
   it('shows only one small-talk card even if a message could plausibly match more than one trigger', async () => {
     mockChat.mockResolvedValueOnce('topics: [a, b, c, d]\nactions: [e, f, g, h]');
     // Starts with a greeting AND contains a compliment phrase — greeting wins (checked first).
@@ -241,5 +260,89 @@ describe('small talk — greeting/farewell answer cards', () => {
     const smallTalkCards = result.cards.filter(c => ['hello', 'goodbye', 'thank you'].includes(c.corpus_name || ''));
     expect(smallTalkCards).toHaveLength(1);
     expect(smallTalkCards[0].corpus_name).toBe('hello');
+  });
+});
+
+describe('small talk — wellbeing answer cards', () => {
+  it('shows a "Good!"/"Bad!" pair for "How was your day?"', async () => {
+    mockChat.mockResolvedValueOnce('topics: [a, b, c, d]\nactions: [e, f, g, h]');
+    mockSequence({ dialogue: [{ role: 'parent', content: 'How was your day?', content_type: 'text', timestamp: 1, turn_id: 't1' }] });
+
+    const result = await refreshChildCards('sess-1', dyadWithAge);
+
+    expect(result.cards.some(c => c.corpus_name === 'good' && c.label === 'Good!')).toBe(true);
+    expect(result.cards.some(c => c.corpus_name === 'bad' && c.label === 'Bad!')).toBe(true);
+  });
+
+  it('also triggers on "How are you doing?" and "How\'s it going?" phrasing', async () => {
+    mockChat.mockResolvedValueOnce('topics: [a, b, c, d]\nactions: [e, f, g, h]');
+    mockSequence({ dialogue: [{ role: 'parent', content: "How are you doing today?", content_type: 'text', timestamp: 1, turn_id: 't1' }] });
+
+    const result = await refreshChildCards('sess-1', dyadWithAge);
+
+    expect(result.cards.some(c => c.corpus_name === 'good')).toBe(true);
+    expect(result.cards.some(c => c.corpus_name === 'bad')).toBe(true);
+  });
+
+  it('generalizes beyond "day" — triggers on "How was your trip to the park?"', async () => {
+    mockChat.mockResolvedValueOnce('topics: [a, b, c, d]\nactions: [e, f, g, h]');
+    mockSequence({ dialogue: [{ role: 'parent', content: 'How was your trip to the park?', content_type: 'text', timestamp: 1, turn_id: 't1' }] });
+
+    const result = await refreshChildCards('sess-1', dyadWithAge);
+
+    expect(result.cards.some(c => c.corpus_name === 'good')).toBe(true);
+    expect(result.cards.some(c => c.corpus_name === 'bad')).toBe(true);
+  });
+
+  it('triggers on a direct check like "Was this good?"', async () => {
+    mockChat.mockResolvedValueOnce('topics: [a, b, c, d]\nactions: [e, f, g, h]');
+    mockSequence({ dialogue: [{ role: 'parent', content: 'Was this good?', content_type: 'text', timestamp: 1, turn_id: 't1' }] });
+
+    const result = await refreshChildCards('sess-1', dyadWithAge);
+
+    expect(result.cards.some(c => c.corpus_name === 'good')).toBe(true);
+    expect(result.cards.some(c => c.corpus_name === 'bad')).toBe(true);
+  });
+
+  it('does NOT trigger wellbeing on an unrelated message', async () => {
+    mockChat.mockResolvedValueOnce('topics: [a, b, c, d]\nactions: [e, f, g, h]');
+    mockSequence({ dialogue: [{ role: 'parent', content: 'What do you want to eat?', content_type: 'text', timestamp: 1, turn_id: 't1' }] });
+
+    const result = await refreshChildCards('sess-1', dyadWithAge);
+
+    expect(result.cards.some(c => c.corpus_name === 'good' || c.corpus_name === 'bad')).toBe(false);
+  });
+
+  it('lets a greeting win over wellbeing when both could plausibly match', async () => {
+    mockChat.mockResolvedValueOnce('topics: [a, b, c, d]\nactions: [e, f, g, h]');
+    // Message-initial greeting, but also asks "how are you" — greeting is checked first.
+    mockSequence({ dialogue: [{ role: 'parent', content: 'Hi! How are you?', content_type: 'text', timestamp: 1, turn_id: 't1' }] });
+
+    const result = await refreshChildCards('sess-1', dyadWithAge);
+
+    expect(result.cards.some(c => c.corpus_name === 'hello')).toBe(true);
+    expect(result.cards.some(c => c.corpus_name === 'good' || c.corpus_name === 'bad')).toBe(false);
+  });
+
+  it('freezes the wellbeing decision across a refresh within the same turn', async () => {
+    mockChat.mockResolvedValueOnce(
+      'topics: [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12]\nactions: [a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12]'
+    );
+    mockSequence({ dialogue: [{ role: 'parent', content: 'How was your day?', content_type: 'text', timestamp: 1, turn_id: 't1' }] });
+
+    const first = await refreshChildCards('sess-1', dyadWithAge);
+    expect(first.cards.some(c => c.corpus_name === 'good')).toBe(true);
+
+    const poolRow = { topics: Array.from({ length: 12 }, (_, i) => `t${i + 1}`), actions: Array.from({ length: 12 }, (_, i) => `a${i + 1}`), folderPaths: [], showAgeCard: false, smallTalk: 'wellbeing' as const };
+    const seenCards = first.cards.filter(c => c.category === 'topic' || c.category === 'action').map(c => ({ category: c.category, corpus_name: c.corpus_name, label: c.label }));
+    mockSequence({
+      dialogue: [{ role: 'parent', content: 'What do you want to eat?', content_type: 'text', timestamp: 2, turn_id: 't2' }],
+      prevRecs: [{ cards: seenCards, pool: poolRow }],
+    });
+
+    const second = await refreshChildCards('sess-1', dyadWithAge);
+    expect(second.cards.some(c => c.corpus_name === 'good')).toBe(true);
+    expect(second.cards.some(c => c.corpus_name === 'bad')).toBe(true);
+    expect(mockChat).toHaveBeenCalledTimes(1);
   });
 });
