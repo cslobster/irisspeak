@@ -1,6 +1,6 @@
 // Global sound-mute toggle. Persisted like the uiScale setting (see ../uiScale.ts).
 
-const STORAGE_KEY = 'aacesstalk:muted';
+const STORAGE_KEY = 'irisspeak:muted';
 
 export function getMuted(): boolean {
   try {

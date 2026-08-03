@@ -4,7 +4,7 @@
 
 ## Problem Statement
 
-AACessTalk's card generation and parent guidance are the same for every child — a parent's stated goal for the project (see `CONTEXT.md`'s **Personalization** entry) is that they should adapt to the specific child instead. Concretely: a child's favorite color, a pet's name, a school, or a friend's name has no way to become an answerable card today, and the parent has no way to tell the app anything about their child beyond a name, gender, and locale set once at account creation by an admin. Going into a 5-day beta with real autistic kids, families will notice when the app can't represent things specific to their child (a friend's name, a favorite show) even though it's marketed as a "smart" AAC.
+Iris Speak's card generation and parent guidance are the same for every child — a parent's stated goal for the project (see `CONTEXT.md`'s **Personalization** entry) is that they should adapt to the specific child instead. Concretely: a child's favorite color, a pet's name, a school, or a friend's name has no way to become an answerable card today, and the parent has no way to tell the app anything about their child beyond a name, gender, and locale set once at account creation by an admin. Going into a 5-day beta with real autistic kids, families will notice when the app can't represent things specific to their child (a friend's name, a favorite show) even though it's marketed as a "smart" AAC.
 
 ## Solution
 

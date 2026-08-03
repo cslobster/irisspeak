@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main style={{ fontFamily: 'system-ui, sans-serif', padding: 32, maxWidth: 720 }}>
-      <h1>AACessTalk Backend (Next.js)</h1>
+      <h1>Iris Speak Backend (Next.js)</h1>
       <p>API base: <code>/api/v1</code></p>
       <ul>
         <li><code>HEAD /api/v1/ping</code> — health</li>

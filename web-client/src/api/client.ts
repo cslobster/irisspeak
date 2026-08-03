@@ -12,7 +12,7 @@ declare const __BACKEND_URL__: string;
 // Set VITE_BACKEND_ADDRESS to override for production deploys.
 const _backendBase = (typeof __BACKEND_URL__ !== 'undefined' ? __BACKEND_URL__ : '') || '';
 const BASE_URL = _backendBase + '/api/v1';
-const JWT_KEY = 'aacesstalk:jwt';
+const JWT_KEY = 'irisspeak:jwt';
 
 class ApiClient {
   private http: AxiosInstance;

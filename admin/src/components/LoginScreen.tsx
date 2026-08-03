@@ -24,7 +24,7 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center p-6">
       <div className="bg-white rounded-3xl shadow-2xl p-10 w-full max-w-sm">
-        <h1 className="text-3xl font-extrabold text-slate-800 mb-1">AACessTalk</h1>
+        <h1 className="text-3xl font-extrabold text-slate-800 mb-1">Iris Speak</h1>
         <p className="text-slate-500 text-sm font-semibold mb-8">Admin Portal</p>
 
         {error && (

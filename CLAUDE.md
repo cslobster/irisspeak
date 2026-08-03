@@ -1,4 +1,4 @@
-# AACessTalk Backend
+# Iris Speak Backend
 
 Next.js 14 API backend for an AAC (Augmentative and Alternative Communication) platform. Helps minimally-verbal people with autism (any age) communicate with caregivers via AI-generated card suggestions and parent guidance messages.
 

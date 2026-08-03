@@ -2,7 +2,7 @@ import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch as useReduxDispatch, useSelector as useReduxSelector } from 'react-redux';
 import type { FreeTopicDetail } from '../api/types';
 
-const FREE_TOPICS_KEY = 'aacesstalk:freeTopics';
+const FREE_TOPICS_KEY = 'irisspeak:freeTopics';
 
 function loadCachedFreeTopics(): FreeTopicDetail[] {
   try {
@@ -22,9 +22,9 @@ interface AuthState {
 }
 
 const initialAuth: AuthState = {
-  jwt: localStorage.getItem('aacesstalk:jwt'),
+  jwt: localStorage.getItem('irisspeak:jwt'),
   freeTopics: loadCachedFreeTopics(),
-  childName: localStorage.getItem('aacesstalk:childName'),
+  childName: localStorage.getItem('irisspeak:childName'),
   isAuthorizing: false,
   error: null,
 };
@@ -40,7 +40,7 @@ const auth = createSlice({
       try { localStorage.setItem(FREE_TOPICS_KEY, JSON.stringify(a.payload.freeTopics)); } catch {}
       if (a.payload.childName) {
         state.childName = a.payload.childName;
-        localStorage.setItem('aacesstalk:childName', a.payload.childName);
+        localStorage.setItem('irisspeak:childName', a.payload.childName);
       }
       state.isAuthorizing = false;
     },
@@ -53,8 +53,8 @@ const auth = createSlice({
       state.jwt = null;
       state.freeTopics = [];
       state.childName = null;
-      localStorage.removeItem('aacesstalk:jwt');
-      localStorage.removeItem('aacesstalk:childName');
+      localStorage.removeItem('irisspeak:jwt');
+      localStorage.removeItem('irisspeak:childName');
       localStorage.removeItem(FREE_TOPICS_KEY);
     },
   },

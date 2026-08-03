@@ -1,4 +1,4 @@
-# ai_aactalk — Next.js backend for AACessTalk
+# iris_speak — Next.js backend for Iris Speak
 
 Self-contained Next.js 14 backend that ports the FastAPI service:
 - **Postgres (Neon)** for persistence

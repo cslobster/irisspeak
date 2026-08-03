@@ -13,7 +13,7 @@
 
 export type UiScaleLevel = 'normal' | 'large' | 'xl';
 
-const STORAGE_KEY = 'aacesstalk:uiScale';
+const STORAGE_KEY = 'irisspeak:uiScale';
 
 export const UI_SCALE_LEVELS: UiScaleLevel[] = ['normal', 'large', 'xl'];
 
