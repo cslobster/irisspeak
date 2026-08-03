@@ -286,7 +286,7 @@ async function generateChildCards(args: {
     const prevCards: CardInfo[] = row.cards || [];
     prevCards
       .filter((c) => c.category === 'topic' || c.category === 'action')
-      .forEach((c) => seenLabels.add((c.corpus_name || c.label).toLowerCase()));
+      .forEach((c) => seenLabels.add((c.corpus_name || c.label || '').toLowerCase()));
   }
 
   const topicVocab = mergeDyadWords(corpus.wordsByCategory('topic'), customWordRows, 'topic');
@@ -305,7 +305,7 @@ async function generateChildCards(args: {
     smallTalk: lastPool.smallTalk ?? null,
   };
 
-  const unseen = (words: string[]) => words.filter((w) => !seenLabels.has(w.toLowerCase()));
+  const unseen = (words: string[]) => words.filter((w) => !seenLabels.has((w || '').toLowerCase()));
 
   // Folder/age/small-talk decisions must each happen exactly once per turn (see CardPool doc
   // comment), so top up whenever any hasn't run yet, even if the pool otherwise has plenty of depth.
@@ -361,14 +361,14 @@ async function generateChildCards(args: {
     // Backfills straight from the vocab list if the LLM response resolved too few to guarantee a
     // full display batch, same guarantee the old single-shot resolveCategory used to provide.
     function topUpCategory(words: string[], vocab: string[], into: string[]) {
-      const already = new Set(into.map((w) => w.toLowerCase()));
+      const already = new Set(into.map((w) => (w || '').toLowerCase()));
       for (const w of words) {
         const entry = lookupDyadWord(corpus, w, customWordRows);
         if (!entry) {
           console.warn(`[child-cards] "${w}" not in corpus vocab — dropping`);
           continue;
         }
-        const key = entry.name.toLowerCase();
+        const key = (entry.name || '').toLowerCase();
         if (already.has(key) || seenLabels.has(key)) continue;
         already.add(key);
         into.push(entry.name);
@@ -376,7 +376,7 @@ async function generateChildCards(args: {
       if (unseen(into).length < MIN_POOL_DEPTH) {
         for (const w of vocab) {
           if (unseen(into).length >= MIN_POOL_DEPTH) break;
-          const key = w.toLowerCase();
+          const key = (w || '').toLowerCase();
           if (already.has(key) || seenLabels.has(key)) continue;
           already.add(key);
           into.push(w);
@@ -398,7 +398,7 @@ async function generateChildCards(args: {
       const decided: FolderCardOption[] = [];
       const usedFolderPaths = new Set<string>();
       for (const pick of folderPicks) {
-        const entry = folderOptions.find((f) => f.path.toLowerCase() === pick.toLowerCase());
+        const entry = folderOptions.find((f) => (f.path || '').toLowerCase() === (pick || '').toLowerCase());
         if (!entry) {
           console.warn(`[child-cards] folder "${pick}" not in allow-list — dropping`);
           continue;
@@ -446,7 +446,7 @@ async function generateChildCards(args: {
   // A folder card already covers its own contents (e.g. "Numbers" covers "five", "six", ...) —
   // don't also offer those same words loose in the topic column, or the child sees the same
   // answer twice.
-  const folderExcludedWords = new Set(folderEntries.flatMap((f) => f.words.map((w) => w.toLowerCase())));
+  const folderExcludedWords = new Set(folderEntries.flatMap((f) => (f.words || []).map((w) => (w || '').toLowerCase())));
   // The age card takes a topic slot the same way a folder card does (see CardPool.showAgeCard).
   const topicSlotCount = Math.max(0, 4 - folderEntries.length
     - (pool.showAgeCard ? 1 : 0) - (pool.smallTalk !== 'none' && pool.smallTalk !== null ? 1 : 0));
@@ -464,7 +464,7 @@ async function generateChildCards(args: {
 
     for (const w of pooled) {
       if (picked.length >= slotCount) break;
-      const key = w.toLowerCase();
+      const key = (w || '').toLowerCase();
       if (seenLabels.has(key) || used.has(key) || exclude?.has(key)) continue;
       const entry = lookupDyadWord(corpus, w, customWordRows);
       if (!entry) continue; // already validated when appended to the pool; stay defensive anyway
@@ -480,9 +480,10 @@ async function generateChildCards(args: {
     if (picked.length < slotCount) {
       for (const w of vocab) {
         if (picked.length >= slotCount) break;
-        const key = w.toLowerCase();
+        const key = (w || '').toLowerCase();
         if (used.has(key) || seenLabels.has(key) || exclude?.has(key)) continue;
-        const entry = lookupDyadWord(corpus, w, customWordRows)!;
+        const entry = lookupDyadWord(corpus, w, customWordRows);
+        if (!entry) continue; // defensive — vocab should always resolve, but never crash if it doesn't
         used.add(key);
         picked.push({
           id: nanoid(), recommendation_id: recId,
@@ -502,9 +503,10 @@ async function generateChildCards(args: {
     if (picked.length < slotCount) {
       for (const w of vocab) {
         if (picked.length >= slotCount) break;
-        const key = w.toLowerCase();
+        const key = (w || '').toLowerCase();
         if (used.has(key) || exclude?.has(key)) continue;
-        const entry = lookupDyadWord(corpus, w, customWordRows)!;
+        const entry = lookupDyadWord(corpus, w, customWordRows);
+        if (!entry) continue; // defensive — vocab should always resolve, but never crash if it doesn't
         used.add(key);
         picked.push({
           id: nanoid(), recommendation_id: recId,
