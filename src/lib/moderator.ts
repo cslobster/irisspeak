@@ -213,7 +213,7 @@ interface CardPool {
   showAgeCard: boolean | null;
   // Small-talk answer card — 'none' once decided-and-negative (never re-rolled, same freezing
   // rationale as folderPaths/showAgeCard); null only before the first decision.
-  smallTalk: 'hi' | 'bye' | 'thanks' | 'none' | null;
+  smallTalk: 'hi' | 'bye' | 'thanks' | 'wellbeing' | 'none' | null;
 }
 const EMPTY_POOL: CardPool = {
   topics: [], actions: [], folderPaths: null, showAgeCard: null, smallTalk: null,
@@ -243,9 +243,24 @@ const GREETING_TRIGGER = /^\s*(hi|hello|hey)\b/i;
 // Not anchored, unlike GREETING_TRIGGER — farewells are commonly NOT message-initial
 // ("Okay, goodbye!", "See you later, bye!"), so anchoring here would miss the common case.
 const FAREWELL_TRIGGER = /\b(bye|goodbye)\b|\bsee you\b|\bgood night\b/i;
-// A parent complimenting the child ("Good job!", "I'm so proud of you") — "thank you" is the
-// natural response, and (like hello/goodbye) already exists in the corpus with a real image.
-const COMPLIMENT_TRIGGER = /\bgood job\b|\bgreat job\b|\bwell done\b|\bproud of you\b|\bnice work\b|\byou did it\b/i;
+// A parent complimenting the child — not just effort-praise ("Good job!", "I'm so proud of
+// you") but everyday compliments about appearance/belongings ("Nice shoes!", "I like your
+// shirt", "You look great"), which are at least as common in practice. "Thank you" is the
+// natural response to all of these, and (like hello/goodbye) already exists in the corpus with
+// a real image. `(?:nice|cool|pretty|beautiful|lovely|awesome|amazing)\s+\w+` deliberately
+// requires a following word (so bare "nice" doesn't false-fire on e.g. "that's nice, okay") —
+// this also reuses "nice work"/"nice job" for free instead of needing its own literal entries.
+const COMPLIMENT_TRIGGER = /\bgood job\b|\bgreat job\b|\bwell done\b|\bproud of you\b|\byou did it\b|\b(?:nice|cool|pretty|beautiful|lovely|awesome|amazing)\s+\w+\b|\bi like your\b|\blove your\b|\byou look (?:nice|great|good|beautiful|handsome|cool|pretty|amazing)\b|\bthat looks (?:nice|great|good|beautiful|cool|amazing)\b/i;
+// A parent asking the child to rate/recap how something went — "How was your day?", but just as
+// often "How was your trip/the party/school today?", or a direct yes/no-shaped check like "Was
+// this good?"/"Was that fun?". Deliberately NOT anchored to "day" specifically — in real use the
+// parent asks about whatever just happened, so this matches the general "how was your ___"/
+// "how's your ___" shape rather than one literal sentence. "good"/"bad" are the natural direct
+// answers, and (like hello/goodbye/thank you) already exist in the corpus tagged `core` with
+// real images, just never surfaced. Unlike the other small-talk cases this answers with a PAIR
+// of cards (good AND bad), since — unlike a greeting or a compliment — there isn't one
+// obviously-correct response.
+const WELLBEING_TRIGGER = /\bhow('?s| was| is) your\b|\bhow are you\b|\bhow'?s it going\b|\bhow (do|are) you feel(ing)?\b|\bwas (this|that|it) (good|fun|okay|ok)\b/i;
 
 // Below this many unseen ranked candidates left in the pool, a refresh needs to top up via a
 // fresh LLM call rather than just paging through what's already ranked.
@@ -428,12 +443,14 @@ async function generateChildCards(args: {
     }
 
     // Small-talk answer card — "Hi!" for a greeting, "Bye!" for a farewell, "Thank you!" for a
-    // compliment, never more than one at a time.
+    // compliment, or a "Good!"/"Bad!" pair for a wellbeing question; never more than one
+    // category at a time.
     if (pool.smallTalk === null) {
       const msg = lastParentMsg && typeof lastParentMsg.content === 'string' ? lastParentMsg.content : '';
       if (GREETING_TRIGGER.test(msg)) pool.smallTalk = 'hi';
       else if (FAREWELL_TRIGGER.test(msg)) pool.smallTalk = 'bye';
       else if (COMPLIMENT_TRIGGER.test(msg)) pool.smallTalk = 'thanks';
+      else if (WELLBEING_TRIGGER.test(msg)) pool.smallTalk = 'wellbeing';
       else pool.smallTalk = 'none';
     }
   }
@@ -446,8 +463,11 @@ async function generateChildCards(args: {
   // answer twice.
   const folderExcludedWords = new Set(folderEntries.flatMap((f) => f.words.map((w) => w.toLowerCase())));
   // The age card takes a topic slot the same way a folder card does (see CardPool.showAgeCard).
+  // Wellbeing takes two slots (a Good/Bad pair); the other small-talk kinds take one.
+  const smallTalkSlots = pool.smallTalk === 'wellbeing' ? 2
+    : (pool.smallTalk === 'hi' || pool.smallTalk === 'bye' || pool.smallTalk === 'thanks') ? 1 : 0;
   const topicSlotCount = Math.max(0, 4 - folderEntries.length
-    - (pool.showAgeCard ? 1 : 0) - (pool.smallTalk !== 'none' && pool.smallTalk !== null ? 1 : 0));
+    - (pool.showAgeCard ? 1 : 0) - smallTalkSlots);
 
   const recId = nanoid();
   const ts = now();
@@ -604,6 +624,21 @@ async function generateChildCards(args: {
       corpus_name: word,
       corpus_category: entry?.category ?? 'core',
       corpus_image_url: entry?.image_url ?? null,
+    });
+  } else if (pool.smallTalk === 'wellbeing') {
+    (['good', 'bad'] as const).forEach((word) => {
+      const label = word === 'good' ? 'Good!' : 'Bad!';
+      const entry = corpus.lookup(word);
+      cards.push({
+        id: nanoid(),
+        recommendation_id: recId,
+        label,
+        label_localized: label,
+        category: 'topic',
+        corpus_name: word,
+        corpus_category: entry?.category ?? 'core',
+        corpus_image_url: entry?.image_url ?? null,
+      });
     });
   }
 
