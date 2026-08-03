@@ -85,6 +85,12 @@ Tests live in `src/__tests__/`. Uses Vitest with mocked DB and Gemini dependenci
   ahead of `main` and nothing unique in it; all vocabulary/personalization work now lands
   directly on `main`.
 
+## Git workflow
+
+- **At the start of every new session**, before doing any work: `git fetch origin main`, then check whether local `main` is behind (`git log --oneline HEAD..origin/main`). If it is, pull/rebase it in before making changes, so work never starts from a stale base. If local `main` has unpushed commits of its own, prefer `git pull --rebase origin main` over a merge to keep history linear (this repo doesn't use `--no-verify`/force-push shortcuts — see the Git Safety Protocol in your system instructions).
+- **After committing a change the user asked for**, push it to `origin main` in the same turn rather than leaving it local — don't wait for a separate explicit "push it" each time. This repo has no other active branches (see Branch context below), so there's no PR review step being skipped by pushing straight to `main`.
+- If a push is rejected (remote has commits you don't), fetch and compare — don't force-push. If the trees are actually identical (e.g. a revert netted back to the same content), a plain rebase resolves it with no real conflict; if they differ, read what changed before merging.
+
 ## Keeping domain docs current
 
 This repo has more than one contributor and no enforced process for keeping `CONTEXT.md` in sync with reality (vocabulary files, pipeline decisions, etc. have changed multiple times without doc updates). If you're a Claude Code session working in this repo and a conversation surfaces a core project fact — a decision, a domain concept, a changed data source — that isn't already reflected in `CONTEXT.md`, add it. If something already in `CONTEXT.md` turns out to be stale or wrong, correct or remove it rather than leaving it to mislead the next session (human or AI) that reads it.
