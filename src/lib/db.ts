@@ -10,11 +10,20 @@ if (!process.env.DATABASE_URL) {
 export const sql = neon(process.env.DATABASE_URL, { fetchOptions: { cache: 'no-store' } });
 
 // First-call lazy init: ensure all tables exist. Idempotent.
-let _ready: Promise<void> | null = null;
+//
+// Cached on globalThis rather than a module-level variable: Next.js dev mode compiles each
+// API route as its own module graph, so a plain `let` here would NOT be shared across routes —
+// every route would re-run the full CREATE TABLE/ALTER TABLE sequence (dozens of sequential
+// round trips to Neon) on its own first hit, making unrelated endpoints randomly slow.
+// globalThis is the one thing Next dev actually shares across route bundles in the same process.
+declare global {
+  // eslint-disable-next-line no-var
+  var __dbSchemaReady: Promise<void> | undefined;
+}
 
 export async function ensureSchema(): Promise<void> {
-  if (_ready) return _ready;
-  _ready = (async () => {
+  if (globalThis.__dbSchemaReady) return globalThis.__dbSchemaReady;
+  globalThis.__dbSchemaReady = (async () => {
     // Each `sql` call is its own network round trip (~75-100ms warm, 200ms+ cold — see
     // moderator.ts), and on a cold serverless instance this whole function runs before the
     // first request can proceed. Statements below are grouped into phases by their actual FK/
@@ -266,5 +275,5 @@ export async function ensureSchema(): Promise<void> {
       console.log(`[db] seeded test dyad: alias=${alias}, code=${code}, child_name=${childName}`);
     }
   })();
-  return _ready;
+  return globalThis.__dbSchemaReady;
 }

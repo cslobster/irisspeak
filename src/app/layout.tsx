@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'AACessTalk Backend',
-  description: 'Next.js backend for the AACessTalk AAC tool',
+  title: 'Iris Speak Backend',
+  description: 'Next.js backend for the Iris Speak AAC tool',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
