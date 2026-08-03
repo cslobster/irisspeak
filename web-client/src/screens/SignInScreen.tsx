@@ -47,7 +47,7 @@ export function SignInScreen() {
           className="text-5xl sm:text-7xl font-bold tracking-tight text-center mb-1 select-none"
           style={{ color: '#94c1c2' }}
         >
-          AACessTalk
+          Iris Speak
         </h1>
         <p className="text-slate-600 font-semibold mb-7 text-sm sm:text-base">
           Welcome! Sign in to continue.

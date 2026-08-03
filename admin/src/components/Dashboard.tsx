@@ -24,7 +24,7 @@ export function Dashboard({ onLogout }: { onLogout: () => void }) {
     <div className="h-screen bg-slate-50 flex flex-col">
       <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm flex-shrink-0">
         <div>
-          <h1 className="text-xl font-extrabold text-slate-800">AACessTalk Admin</h1>
+          <h1 className="text-xl font-extrabold text-slate-800">Iris Speak Admin</h1>
           <p className="text-xs text-slate-400 font-semibold mt-0.5">Conversations by user</p>
         </div>
         <div className="flex items-center gap-2">

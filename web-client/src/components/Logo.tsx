@@ -1,4 +1,4 @@
-// Inline SVG approximation of the AACessTalk wordmark.
+// Inline SVG approximation of the Iris Speak wordmark.
 export function Logo({ width = 360, height = 130 }: { width?: number; height?: number }) {
   return (
     <svg width={width} height={height} viewBox="0 0 360 130" xmlns="http://www.w3.org/2000/svg">
@@ -9,7 +9,7 @@ export function Logo({ width = 360, height = 130 }: { width?: number; height?: n
         </linearGradient>
       </defs>
       <text x="180" y="75" textAnchor="middle" fontFamily="Nunito, sans-serif" fontWeight="800" fontSize="56" fill="url(#g1)">
-        AACessTalk
+        Iris Speak
       </text>
       <text x="180" y="106" textAnchor="middle" fontFamily="Nunito, sans-serif" fontWeight="600" fontSize="14" fill="#666">
         Cards · Conversation · Care
