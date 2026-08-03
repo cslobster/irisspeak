@@ -100,7 +100,7 @@ export async function getCorpusRetriever(): Promise<_CorpusRetriever> {
  */
 export function mergeDyadWords(baseVocab: string[], customWords: DyadCustomWord[], category: string): string[] {
   const extra = customWords
-    .filter((w) => w.category === category && !w.is_preference_pointer && typeof w.word === 'string' && w.word.trim())
+    .filter((w) => w.category === category && !w.is_preference_pointer)
     .map((w) => w.word);
   return [...baseVocab, ...extra];
 }
@@ -120,7 +120,7 @@ export function lookupDyadWord(
   if (fromCorpus) return fromCorpus;
 
   const needle = (word || '').toLowerCase().trim();
-  const match = customWords.find((w) => (w.word || '').toLowerCase().trim() === needle);
+  const match = customWords.find((w) => w.word.toLowerCase().trim() === needle);
   if (!match) return null;
 
   return {
