@@ -18,12 +18,12 @@ export function SignInScreen() {
     if (expired) dispatch(logout());
   }, [expired, dispatch]);
 
-  async function submit() {
-    if (!username.trim() || !password.trim() || isAuthorizing) return;
+  async function doLogin(user: string, pass: string) {
+    if (isAuthorizing) return;
     analytics.signInAttempt();
     dispatch(authStart());
     try {
-      const r = await api.login(username.trim(), password.trim());
+      const r = await api.login(user, pass);
       dispatch(authSuccess({ jwt: r.jwt, freeTopics: r.free_topics, childName: r.child_name }));
       analytics.signInSuccess();
       setSearchParams({});
@@ -31,6 +31,18 @@ export function SignInScreen() {
     } catch (e: any) {
       dispatch(authError(e?.response?.status === 400 ? 'NoSuchUser' : 'Network'));
     }
+  }
+
+  function submit() {
+    if (!username.trim() || !password.trim()) return;
+    doLogin(username.trim(), password.trim());
+  }
+
+  // Guest/demo account (seeded in db.ts alongside the primary test dyad) — a one-tap way for
+  // anyone trying the app (reviewers, curious parents) to see it working without needing a
+  // real invite/signup.
+  function continueAsGuest() {
+    doLogin('guest', '12345');
   }
 
   return (
@@ -119,6 +131,13 @@ export function SignInScreen() {
         <Link to="/signup" className="text-sm font-semibold text-slate-500 mt-5 hover:text-slate-700 transition">
           New here? Sign up →
         </Link>
+        <button
+          onClick={continueAsGuest}
+          disabled={isAuthorizing}
+          className="text-sm font-semibold text-slate-400 mt-2 hover:text-slate-600 transition disabled:opacity-40"
+        >
+          Just want to try it? Continue as Guest →
+        </button>
       </div>
     </div>
   );

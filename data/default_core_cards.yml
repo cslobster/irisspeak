@@ -17,3 +17,7 @@
   label: How about you?
   label_localized: 당신은요?
   category: core
+- id: iwant
+  label: I want
+  label_localized: 원해요
+  category: core

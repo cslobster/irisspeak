@@ -43,7 +43,7 @@ export function WelcomeScreen() {
         {/* Big play button */}
         <div className="flex flex-col items-center gap-5">
           <div className="flex flex-col items-center gap-24">
-            <p className="ui-scale-welcome-subtitle text-2xl sm:text-3xl font-bold text-slate-600 select-none tracking-tight">
+            <p className="ui-scale-welcome-subtitle text-2xl sm:text-3xl font-bold text-slate-800 select-none tracking-tight">
               Start a conversation
             </p>
             <div className="relative">

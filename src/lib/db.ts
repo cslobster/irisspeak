@@ -21,6 +21,38 @@ declare global {
   var __dbSchemaReady: Promise<void> | undefined;
 }
 
+// Inserts a dyad + login code + starter free topics, only if the alias doesn't already exist.
+// Shared by the primary (env-configurable) test dyad and the hardcoded guest dyad below.
+async function seedDyadIfMissing(opts: {
+  alias: string; code: string; childName: string; childGender: string; locale: string;
+}): Promise<void> {
+  const existing = await sql`SELECT id FROM dyad WHERE alias = ${opts.alias} LIMIT 1`;
+  if (existing.length > 0) return;
+
+  const { nanoid } = await import('nanoid');
+  const dyadId = nanoid();
+  await sql`
+    INSERT INTO dyad (id, alias, child_name, child_gender, locale)
+    VALUES (${dyadId}, ${opts.alias}, ${opts.childName}, ${opts.childGender}, ${opts.locale})
+  `;
+  await sql`
+    INSERT INTO dyad_login_code (code, dyad_id) VALUES (${opts.code}, ${dyadId})
+    ON CONFLICT (code, dyad_id) DO NOTHING
+  `;
+  const topics = [
+    { sub: 'Bluey', desc: "About Bluey, the child's favorite animated TV show." },
+    { sub: 'Dinosaurs', desc: 'About dinosaurs that the child likes.' },
+    { sub: 'Lego', desc: 'About Lego toy brick series that the child likes.' },
+  ];
+  for (const t of topics) {
+    await sql`
+      INSERT INTO free_topic (id, dyad_id, subtopic, subtopic_description)
+      VALUES (${nanoid()}, ${dyadId}, ${t.sub}, ${t.desc})
+    `;
+  }
+  console.log(`[db] seeded dyad: alias=${opts.alias}, code=${opts.code}, child_name=${opts.childName}`);
+}
+
 export async function ensureSchema(): Promise<void> {
   if (globalThis.__dbSchemaReady) return globalThis.__dbSchemaReady;
   globalThis.__dbSchemaReady = (async () => {
@@ -248,32 +280,14 @@ export async function ensureSchema(): Promise<void> {
       await sql`UPDATE dyad SET alias = ${alias} WHERE alias = 'test'`;
     }
 
-    const existing = await sql`SELECT id FROM dyad WHERE alias = ${alias} LIMIT 1`;
-    if (existing.length === 0) {
-      const { nanoid } = await import('nanoid');
-      const dyadId = nanoid();
-      await sql`
-        INSERT INTO dyad (id, alias, child_name, child_gender, locale)
-        VALUES (${dyadId}, ${alias}, ${childName}, ${childGender}, ${locale})
-      `;
-      await sql`
-        INSERT INTO dyad_login_code (code, dyad_id) VALUES (${code}, ${dyadId})
-        ON CONFLICT (code, dyad_id) DO NOTHING
-      `;
-      // Default free topics
-      const topics = [
-        { sub: 'Bluey', desc: "About Bluey, the child's favorite animated TV show." },
-        { sub: 'Dinosaurs', desc: 'About dinosaurs that the child likes.' },
-        { sub: 'Lego', desc: 'About Lego toy brick series that the child likes.' },
-      ];
-      for (const t of topics) {
-        await sql`
-          INSERT INTO free_topic (id, dyad_id, subtopic, subtopic_description)
-          VALUES (${nanoid()}, ${dyadId}, ${t.sub}, ${t.desc})
-        `;
-      }
-      console.log(`[db] seeded test dyad: alias=${alias}, code=${code}, child_name=${childName}`);
-    }
+    await seedDyadIfMissing({ alias, code, childName, childGender, locale });
+
+    // ---------- SEED GUEST DYAD ----------
+    // Backs the "Continue as Guest" link on the sign-in screen (SignInScreen.tsx) — a one-tap
+    // way for anyone trying the app (reviewers, curious parents) to see it working without a
+    // real invite/signup. Hardcoded credentials, not env-configurable like the primary test
+    // dyad above, since the frontend button also hardcodes them.
+    await seedDyadIfMissing({ alias: 'guest', code: '12345', childName: 'Guest', childGender: 'girl', locale: 'en' });
   })();
   return globalThis.__dbSchemaReady;
 }
