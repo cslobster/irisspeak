@@ -5,6 +5,17 @@
   "installCommand": "npm install --no-audit --no-fund",
   "framework": null,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/aac",
+      "destination": "/aac/index.html"
+    },
+    {
+      "source": "/aac/",
+      "destination": "/aac/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }

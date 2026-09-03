@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iris Speak · The AAC Problem</title>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;padding:12px;font-family:"Inter","Helvetica Neue",Arial,sans-serif;background:#eceff3;color:#1b2430;}
+  .slide{max-width:none;margin:0;background:#fff;border:1px solid #dde2e8;border-radius:10px;padding:24px 28px 20px;}
+  h1{font-size:23px;margin:0 0 3px;letter-spacing:-.3px;}
+  .sub{font-size:12.5px;color:#5b6672;margin:0 0 16px;}
+  .main{display:flex;flex-direction:column;gap:22px;align-items:stretch;}
+  .left{min-width:0;}
+  .right{min-width:0;max-width:1200px;margin:0 auto;width:100%;}
+  .panel{border:1px solid #e0e4e9;border-radius:8px;padding:12px 14px;}
+  .ph{font-size:12px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#2f6fb5;margin:0 0 9px;}
+  .task{background:#fff8e6;border:1px solid #f0dca8;border-radius:6px;padding:10px 14px;font-size:15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .task b{color:#8a6410;}
+  button{font-family:inherit;font-size:14px;font-weight:600;padding:6px 13px;border-radius:5px;border:1px solid #2f6fb5;background:#2f6fb5;color:#fff;cursor:pointer;white-space:nowrap;}
+  button.ghost{background:#fff;color:#2f6fb5;}
+  .metrics{display:flex;gap:8px;margin-bottom:9px;}
+  .m{flex:1;background:#f5f7f9;border:1px solid #e4e8ec;border-radius:6px;padding:6px 8px;text-align:center;}
+  .m .v{font-size:22px;font-weight:700;color:#1b2430;line-height:1.1;}
+  .m .l{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:#78828d;margin-top:2px;}
+  #bc{font-size:13px;color:#78828d;margin-bottom:6px;height:13px;font-weight:600;}
+  #bc.warn{color:#c25550;}
+  .demo{min-height:calc(100vh - 24px - 48px);display:flex;flex-direction:column;}
+  .demo .grid{flex:1;}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(44px,1fr);gap:3px;background:#c9d0d8;padding:2px;border-radius:4px;}
+  .c{background:#fdfdfd;border:1px solid #b9c2cc;border-radius:3px;min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:clamp(8px,1.05vw,16px);line-height:1.1;text-align:center;cursor:pointer;overflow:hidden;padding:1px;color:#2b3440;user-select:none;}
+  .c .ic{font-size:clamp(12px,2.2vw,34px);line-height:1;margin-bottom:2px;}
+  .c:hover{outline:1.5px solid #2f6fb5;}
+  .c.folder{background:#fdf3dc;border-color:#d9c48d;font-weight:600;}
+  .c.home{background:#e4edf7;border-color:#a9c2dc;font-weight:600;}
+  .c.hit{background:#d8f0e0;border-color:#2f9c5f;}
+  .c.miss{background:#fadedd;border-color:#c25550;}
+  .verdict{margin-top:10px;font-size:14px;line-height:1.5;padding:10px 12px;border-radius:6px;display:none;}
+  .verdict.show{display:block;}
+  .verdict.ok{background:#eef7f1;border-left:3px solid #2f9c5f;}
+  ul{margin:0;padding-left:17px;font-size:12.1px;line-height:1.5;color:#333e4b;}
+  li{margin-bottom:8px;}
+  li b{color:#1b2430;}
+  .cmp{width:100%;border-collapse:collapse;font-size:11px;margin-top:10px;}
+  .cmp th,.cmp td{border:1px solid #e2e6ea;padding:5px 7px;text-align:left;}
+  .cmp thead th{background:#1b2430;color:#fff;font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;}
+  .cmp thead th.us{background:#2f6fb5;}
+  .cmp tbody th{background:#f4f6f8;font-weight:600;font-size:10.5px;width:33%;}
+  .cmp td.us{background:#f4f9ff;font-weight:600;color:#1d4d80;}
+  .callout{margin-top:14px;background:#1b2430;color:#fff;border-radius:7px;padding:11px 15px;font-size:12.5px;line-height:1.5;}
+  .callout b{color:#8fc0f0;}
+  .takeaways{margin-top:22px;max-width:1200px;margin-left:auto;margin-right:auto;}
+  .takeaways ul{columns:2;column-gap:28px;}
+  .takeaways li{break-inside:avoid;}
+  @media(max-width:860px){.takeaways ul{columns:1;} .demo{min-height:0;}}
+  .foot{max-width:1200px;margin:11px auto 0;font-size:9.6px;color:#828b95;border-top:1px solid #eceff2;padding-top:8px;line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="slide">
+
+  <div class="main">
+    <div class="left">
+      <div class="panel demo">
+        <p class="ph">Live Demo · 84-Cell Static Grid · 12 Category Folders</p>
+        <div class="task">
+          <span>Your task: say <b>"I want juice"</b> — tap the cards in order.</span>
+          <span style="display:flex;gap:6px;">
+            <button id="start">Start</button>
+            <button id="reset" class="ghost">Reset</button>
+          </span>
+        </div>
+        <div class="metrics">
+          <div class="m"><div class="v" id="t">0.0s</div><div class="l">Time</div></div>
+          <div class="m"><div class="v" id="tap">0</div><div class="l">Taps</div></div>
+          <div class="m"><div class="v" id="err">0</div><div class="l">Wrong taps</div></div>
+          <div class="m"><div class="v" id="nav">0</div><div class="l">Page changes</div></div>
+          <div class="m"><div class="v" id="scan">84</div><div class="l">Cells to scan</div></div>
+        </div>
+        <div id="bc"></div>
+        <div class="grid" id="grid"></div>
+        <div class="verdict" id="verdict"></div>
+      </div>
+    </div>
+
+    <div class="right">
+
+      <table class="cmp">
+        <thead>
+          <tr><th>Same utterance</th><th>Static 84-cell grid</th><th class="us">Iris Speak</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Cells to visually scan</th><td>84 per page, 168+ typical</td><td class="us">6–12</td></tr>
+          <tr><th>Taps required</th><td>3–4 + backtracking</td><td class="us">2</td></tr>
+          <tr><th>Layout learning needed</th><td>Category taxonomy</td><td class="us">None</td></tr>
+          <tr><th>Cost of a wrong guess</th><td>84 new cells, thought lost</td><td class="us">None — no folders</td></tr>
+          <tr><th>Adapts to context</th><td>No</td><td class="us">Yes — parent's speech drives display</td></tr>
+          <tr><th>Partner training</th><td>Hours of modeling</td><td class="us">Just talk normally</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        The barrier isn't vocabulary size — it's <b>the work between the thought and the word</b>. Iris Speak removes the search.
+      </div>
+    </div>
+  </div>
+
+    <div class="panel takeaways">
+    <p class="ph">What The Demo Just Demonstrated</p>
+    <ul>
+      <li><b>Visual overwhelm.</b> 84 targets at once. You are a literate adult and it still took effort — for a child with visual hyper-responsivity, this screen can trigger shutdown before communication begins.</li>
+      <li><b>Buried vocabulary.</b> "Juice" isn't on the home page. The child must first learn that drinks live under an abstract <i>category taxonomy</i> — a cognitive prerequisite to speaking.</li>
+      <li><b>Wrong guesses are expensive.</b> Open FOOD instead of DRINKS and you get 84 <i>different</i> cells to scan, none of them the word you wanted.</li>
+      <li><b>Navigation cost, not language cost.</b> Most taps are spent <i>getting to</i> the word, not choosing it. Every tap is a chance to lose the thought.</li>
+      <li><b>Tiny motor targets.</b> These cells are ~10&nbsp;mm. Children with dyspraxia or tremor hit neighbors constantly — and one mis-tap can jump pages.</li>
+      <li><b>No context awareness.</b> The grid is identical at breakfast, at the doctor, and mid-meltdown. It never helps.</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    Grid mock is illustrative, modeled on common 84-location layouts used in dedicated SGDs and tablet AAC apps; cell counts, folder structure and depth vary considerably by product and configuration. Claims about partner-training burden and abandonment reflect recurring themes in AAC clinical literature and are directional, not measured figures. Metrics shown are from your own interaction with this mock, not from a clinical study.
+  </div>
+</div>
+
+<script>
+/* ---------- shared rows (appear on every category page, as on real devices) ---------- */
+var CORE=[["I","\uD83D\uDE4B"],["want","\uD83E\uDD32"],["more","\u2795"],["not","\uD83D\uDEAB"],["all done","\u2705"],["please","\uD83D\uDE4F"],["yes","\u2714\uFE0F"],["no","\u274C"],["like","\uD83D\uDC4D"],["help","\uD83C\uDD98"],["stop","\u270B"],["again","\uD83D\uDD01"]];
+var DESC=[["big","\uD83D\uDD35"],["little","\uD83D\uDD39"],["mine","\uD83E\uDEF2"],["some","\uD83E\uDD44"],["other","\u2194\uFE0F"],["same","\uD83D\uDFF0"],["favorite","\u2B50"],["yucky","\uD83E\uDD22"],["yummy","\uD83D\uDE0B"],["hungry","\uD83C\uDF7D\uFE0F"],["messy","\uD83C\uDF00"],["clean","\uD83E\uDDFD"]];
+var ACTS=[["go","\u27A1\uFE0F"],["get","\uD83E\uDEF1"],["give","\uD83C\uDF81"],["put","\uD83D\uDCE6"],["open","\uD83D\uDCC2"],["look","\uD83D\uDC40"],["see","\uD83D\uDC41\uFE0F"],["make","\uD83D\uDD28"],["eat","\uD83C\uDF7D\uFE0F"],["drink","\uD83E\uDD5B"],["play","\uD83E\uDDE9"],["feel","\uD83D\uDC97"]];
+
+/* ---------- home page: 6 rows of core/fringe vocabulary ---------- */
+var HOME=[
+ ["I","\uD83D\uDE4B"],["you","\uD83D\uDC49"],["it","\uD83D\uDD35"],["my","\u270B"],["want","\uD83E\uDD32"],["go","\u27A1\uFE0F"],["stop","\u270B"],["more","\u2795"],["help","\uD83C\uDD98"],["like","\uD83D\uDC4D"],["not","\uD83D\uDEAB"],["is","\uD83D\uDFF0"],
+ ["the","\u25AB\uFE0F"],["a","\u25AB\uFE0F"],["what","\u2753"],["where","\uD83D\uDCCD"],["who","\uD83D\uDC64"],["when","\uD83D\uDD50"],["how","\uD83D\uDD27"],["why","\uD83D\uDCAD"],["here","\uD83D\uDCCC"],["there","\uD83D\uDC49"],["this","\uD83D\uDC47"],["that","\uD83D\uDC46"],
+ ["big","\uD83D\uDD35"],["little","\uD83D\uDD39"],["up","\u2B06\uFE0F"],["down","\u2B07\uFE0F"],["in","\uD83D\uDCE5"],["out","\uD83D\uDCE4"],["on","\uD83D\uDD1B"],["off","\u2B55"],["good","\uD83D\uDE0A"],["bad","\uD83D\uDE1E"],["hot","\uD83D\uDD25"],["cold","\u2744\uFE0F"],
+ ["all done","\u2705"],["again","\uD83D\uDD01"],["please","\uD83D\uDE4F"],["thank you","\uD83D\uDC90"],["yes","\u2714\uFE0F"],["no","\u274C"],["mine","\uD83E\uDEF2"],["some","\uD83E\uDD44"],["my turn","\uD83D\uDD04"],["look","\uD83D\uDC40"],["see","\uD83D\uDC41\uFE0F"],["make","\uD83D\uDD28"],
+ ["put","\uD83D\uDCE6"],["get","\uD83E\uDEF1"],["give","\uD83C\uDF81"],["come","\uD83D\uDC4B"],["open","\uD83D\uDCC2"],["close","\uD83D\uDCC1"],["eat","\uD83C\uDF7D\uFE0F"],["drink","\uD83E\uDD5B"],["play","\uD83E\uDDE9"],["read","\uD83D\uDCD6"],["write","\u270F\uFE0F"],["sleep","\uD83D\uDECF\uFE0F"],
+ ["wash","\uD83E\uDDF4"],["feel","\uD83D\uDC97"],["happy","\uD83D\uDE00"],["sad","\uD83D\uDE22"],["mad","\uD83D\uDE20"],["tired","\uD83D\uDE34"],["hurt","\uD83E\uDD15"],["sick","\uD83E\uDD12"],["scared","\uD83D\uDE28"],["wait","\u23F3"],["fast","\uD83D\uDCA8"],["slow","\uD83D\uDC22"]
+];
+
+/* ---------- 12 categories, each with 36 genuinely distinct words ---------- */
+var CATS={
+"FOOD":[["apple","\uD83C\uDF4E"],["banana","\uD83C\uDF4C"],["bread","\uD83C\uDF5E"],["rice","\uD83C\uDF5A"],["pasta","\uD83C\uDF5D"],["pizza","\uD83C\uDF55"],["egg","\uD83E\uDD5A"],["cheese","\uD83E\uDDC0"],["chicken","\uD83C\uDF57"],["fish","\uD83D\uDC1F"],["soup","\uD83C\uDF72"],["salad","\uD83E\uDD57"],["sandwich","\uD83E\uDD6A"],["cereal","\uD83E\uDD63"],["yogurt","\uD83C\uDF66"],["cracker","\uD83C\uDF58"],["cookie","\uD83C\uDF6A"],["cake","\uD83C\uDF70"],["candy","\uD83C\uDF6C"],["ice cream","\uD83C\uDF68"],["grapes","\uD83C\uDF47"],["orange","\uD83C\uDF4A"],["strawberry","\uD83C\uDF53"],["carrot","\uD83E\uDD55"],["broccoli","\uD83E\uDD66"],["corn","\uD83C\uDF3D"],["potato","\uD83E\uDD54"],["tomato","\uD83C\uDF45"],["beans","\uD83E\uDED8"],["nuts","\uD83E\uDD5C"],["butter","\uD83E\uDDC8"],["jam","\uD83C\uDF6F"],["pancake","\uD83E\uDD5E"],["waffle","\uD83E\uDDC7"],["taco","\uD83C\uDF2E"],["noodles","\uD83C\uDF5C"]],
+"DRINKS":[["juice","\uD83E\uDDC3"],["water","\uD83D\uDCA7"],["milk","\uD83E\uDD5B"],["apple juice","\uD83C\uDF4E"],["orange juice","\uD83C\uDF4A"],["grape juice","\uD83C\uDF47"],["lemonade","\uD83C\uDF4B"],["soda","\uD83E\uDD64"],["smoothie","\uD83E\uDDCB"],["hot cocoa","\u2615"],["tea","\uD83C\uDF75"],["coffee","\u2615"],["milkshake","\uD83E\uDD5B"],["fruit punch","\uD83C\uDF79"],["cider","\uD83C\uDF4E"],["ice water","\uD83E\uDDCA"],["warm milk","\u2668\uFE0F"],["straw","\uD83E\uDD62"],["cup","\uD83E\uDD43"],["bottle","\uD83C\uDF7C"],["sippy cup","\uD83C\uDF7C"],["lid","\u2B55"],["ice","\uD83E\uDDCA"],["thirsty","\uD83D\uDC45"],["sip","\uD83E\uDD64"],["gulp","\uD83D\uDE0B"],["refill","\uD83D\uDD04"],["spill","\uD83D\uDCA6"],["empty","\uD83C\uDE33"],["full","\uD83C\uDE35"],["sweet","\uD83C\uDF6C"],["sour","\uD83D\uDE16"],["fizzy","\uD83E\uDEE7"],["cold","\u2744\uFE0F"],["hot","\uD83D\uDD25"],["napkin","\uD83E\uDDFB"]],
+"PEOPLE":[["Mom","\uD83D\uDC69"],["Dad","\uD83D\uDC68"],["brother","\uD83D\uDC66"],["sister","\uD83D\uDC67"],["baby","\uD83D\uDC76"],["Grandma","\uD83D\uDC75"],["Grandpa","\uD83D\uDC74"],["aunt","\uD83D\uDC69"],["uncle","\uD83D\uDC68"],["cousin","\uD83E\uDDD2"],["me","\uD83D\uDE4B"],["you","\uD83D\uDC49"],["friend","\uD83E\uDD1D"],["teacher","\uD83D\uDC69\u200D\uD83C\uDFEB"],["therapist","\uD83E\uDDE9"],["doctor","\uD83D\uDC68\u200D\u2695\uFE0F"],["nurse","\uD83D\uDC69\u200D\u2695\uFE0F"],["dentist","\uD83E\uDDB7"],["bus driver","\uD83D\uDE8C"],["coach","\uD83C\uDFC3"],["neighbor","\uD83C\uDFE0"],["classmate","\uD83C\uDF92"],["boy","\uD83D\uDC66"],["girl","\uD83D\uDC67"],["man","\uD83D\uDC68"],["woman","\uD83D\uDC69"],["everyone","\uD83D\uDC65"],["nobody","\uD83D\uDEAB"],["dog","\uD83D\uDC15"],["cat","\uD83D\uDC08"],["pet","\uD83D\uDC3E"],["family","\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67"],["stranger","\u2753"],["helper","\uD83E\uDD1D"],["principal","\uD83C\uDFEB"],["babysitter","\uD83E\uDDD1"]],
+"PLACES":[["home","\uD83C\uDFE0"],["school","\uD83C\uDFEB"],["park","\uD83C\uDFDE\uFE0F"],["store","\uD83D\uDED2"],["car","\uD83D\uDE97"],["bus","\uD83D\uDE8C"],["bathroom","\uD83D\uDEBD"],["bedroom","\uD83D\uDECF\uFE0F"],["kitchen","\uD83C\uDF73"],["outside","\uD83C\uDF33"],["inside","\uD83D\uDEAA"],["playground","\uD83D\uDEDD\uFE0F"],["library","\uD83D\uDCDA"],["pool","\uD83C\uDFCA"],["beach","\uD83C\uDFD6\uFE0F"],["restaurant","\uD83C\uDF7D\uFE0F"],["hospital","\uD83C\uDFE5"],["dentist","\uD83E\uDDB7"],["church","\u26EA"],["Grandma's","\uD83C\uDFE1"],["gym","\uD83C\uDFCB\uFE0F"],["classroom","\uD83D\uDCDD"],["hallway","\uD83D\uDEAA"],["cafeteria","\uD83C\uDF74"],["yard","\uD83C\uDF31"],["zoo","\uD83E\uDD81"],["movies","\uD83C\uDFAC"],["mall","\uD83C\uDFEC"],["farm","\uD83D\uDE9C"],["airport","\u2708\uFE0F"],["hotel","\uD83C\uDFE8"],["camp","\u26FA"],["therapy","\uD83E\uDDE9"],["bus stop","\uD83D\uDE8F"],["upstairs","\u2B06\uFE0F"],["downstairs","\u2B07\uFE0F"]],
+"TOYS":[["ball","\u26BD"],["blocks","\uD83E\uDDF1"],["toy car","\uD83D\uDE97"],["train","\uD83D\uDE82"],["truck","\uD83D\uDE9A"],["doll","\uD83E\uDDF8"],["teddy bear","\uD83E\uDDF8"],["puzzle","\uD83E\uDDE9"],["book","\uD83D\uDCD6"],["crayon","\uD83D\uDD8D\uFE0F"],["paint","\uD83C\uDFA8"],["play dough","\uD83C\uDFAD"],["bubbles","\uD83E\uDEE7"],["slide","\uD83D\uDEDD\uFE0F"],["swing","\uD83C\uDFA0"],["bike","\uD83D\uDEB2"],["scooter","\uD83D\uDEF4"],["kite","\uD83E\uDE81"],["balloon","\uD83C\uDF88"],["tablet","\uD83D\uDCF1"],["video game","\uD83C\uDFAE"],["TV","\uD83D\uDCFA"],["music","\uD83C\uDFB5"],["drum","\uD83E\uDD41"],["piano","\uD83C\uDFB9"],["dinosaur","\uD83E\uDD95"],["robot","\uD83E\uDD16"],["Lego","\uD83E\uDDF1"],["sand","\uD83C\uDFD6\uFE0F"],["water toy","\uD83D\uDCA7"],["jump rope","\uD83E\uDEA2"],["sticker","\u2B50"],["marker","\uD83D\uDD8A\uFE0F"],["scissors","\u2702\uFE0F"],["glue","\uD83E\uDDF4"],["spinner","\uD83C\uDF00"]],
+"CLOTHES":[["shirt","\uD83D\uDC55"],["pants","\uD83D\uDC56"],["shorts","\uD83E\uDE73"],["dress","\uD83D\uDC57"],["skirt","\uD83D\uDC5A"],["socks","\uD83E\uDDE6"],["shoes","\uD83D\uDC5F"],["boots","\uD83E\uDD7E"],["sandals","\uD83E\uDE74"],["jacket","\uD83E\uDDE5"],["coat","\uD83E\uDDE5"],["sweater","\uD83E\uDDF6"],["hat","\uD83E\uDDE2"],["gloves","\uD83E\uDDE4"],["scarf","\uD83E\uDDE3"],["pajamas","\uD83D\uDECF\uFE0F"],["underwear","\uD83E\uDE72"],["diaper","\uD83D\uDC76"],["swimsuit","\uD83E\uDE71"],["raincoat","\u2614"],["belt","\uD83C\uDF97\uFE0F"],["zipper","\uD83D\uDD17"],["button","\uD83D\uDD18"],["tag","\uD83C\uDFF7\uFE0F"],["itchy","\uD83D\uDE16"],["too tight","\uD83D\uDE23"],["too loose","\uD83C\uDF00"],["wet","\uD83D\uDCA7"],["dry","\u2600\uFE0F"],["dirty","\uD83D\uDFE4"],["clean","\uD83E\uDDFD"],["too hot","\uD83D\uDD25"],["too cold","\u2744\uFE0F"],["put on","\uD83D\uDD1B"],["take off","\u2B55"],["change","\uD83D\uDD04"]],
+"BODY":[["head","\uD83E\uDDE0"],["hair","\uD83D\uDC87"],["eyes","\uD83D\uDC40"],["ears","\uD83D\uDC42"],["nose","\uD83D\uDC43"],["mouth","\uD83D\uDC44"],["teeth","\uD83E\uDDB7"],["tongue","\uD83D\uDC45"],["throat","\uD83D\uDDE3\uFE0F"],["neck","\uD83E\uDDE3"],["shoulder","\uD83D\uDCAA"],["arm","\uD83D\uDCAA"],["hand","\u270B"],["finger","\u261D\uFE0F"],["tummy","\uD83E\uDEC3"],["back","\uD83D\uDD19"],["leg","\uD83E\uDDB5"],["knee","\uD83E\uDDB5"],["foot","\uD83E\uDDB6"],["toe","\uD83E\uDDB6"],["chest","\uD83E\uDEC1"],["skin","\uD83D\uDD90\uFE0F"],["hurt","\uD83E\uDD15"],["itchy","\uD83D\uDE16"],["sick","\uD83E\uDD12"],["dizzy","\uD83D\uDE35"],["tired","\uD83D\uDE34"],["hungry","\uD83C\uDF7D\uFE0F"],["thirsty","\uD83D\uDC45"],["too hot","\uD83D\uDD25"],["too cold","\u2744\uFE0F"],["potty","\uD83D\uDEBD"],["pee","\uD83D\uDCA7"],["poop","\uD83D\uDCA9"],["blood","\uD83E\uDE78"],["bandaid","\uD83E\uDE79"]],
+"SCHOOL":[["teacher","\uD83D\uDC69\u200D\uD83C\uDFEB"],["desk","\uD83E\uDE91"],["chair","\uD83E\uDE91"],["book","\uD83D\uDCD6"],["pencil","\u270F\uFE0F"],["paper","\uD83D\uDCC4"],["crayon","\uD83D\uDD8D\uFE0F"],["scissors","\u2702\uFE0F"],["glue","\uD83E\uDDF4"],["backpack","\uD83C\uDF92"],["lunchbox","\uD83C\uDF71"],["computer","\uD83D\uDCBB"],["tablet","\uD83D\uDCF1"],["whiteboard","\uD83D\uDCCB"],["circle time","\u2B55"],["recess","\uD83D\uDEDD\uFE0F"],["lunch","\uD83C\uDF74"],["bus","\uD83D\uDE8C"],["line up","\uD83D\uDEB6"],["centers","\uD83E\uDDE9"],["reading","\uD83D\uDCDA"],["writing","\u270F\uFE0F"],["math","\uD83D\uDD22"],["art","\uD83C\uDFA8"],["music","\uD83C\uDFB5"],["PE","\uD83C\uDFC3"],["science","\uD83D\uDD2C"],["homework","\uD83D\uDCDD"],["test","\uD83D\uDCDD"],["helper","\uD83E\uDD1D"],["quiet","\uD83E\uDD2C"],["too loud","\uD83D\uDCE3"],["finished","\u2705"],["break","\u23F8\uFE0F"],["sit down","\uD83E\uDE91"],["stand up","\uD83E\uDDCD"]],
+"TIME":[["now","\u23F0"],["later","\u23F3"],["soon","\uD83D\uDD1C"],["wait","\u23F3"],["before","\u2B05\uFE0F"],["after","\u27A1\uFE0F"],["today","\uD83D\uDCC5"],["tomorrow","\uD83D\uDCC6"],["yesterday","\uD83D\uDDD3\uFE0F"],["morning","\uD83C\uDF05"],["afternoon","\u2600\uFE0F"],["night","\uD83C\uDF19"],["bedtime","\uD83D\uDECF\uFE0F"],["breakfast","\uD83E\uDD5E"],["lunch","\uD83E\uDD6A"],["dinner","\uD83C\uDF5D"],["snack","\uD83C\uDF6A"],["school day","\uD83C\uDFEB"],["weekend","\uD83C\uDF89"],["minute","\u23F1\uFE0F"],["hour","\uD83D\uDD50"],["day","\u2600\uFE0F"],["week","\uD83D\uDCC5"],["month","\uD83D\uDCC6"],["birthday","\uD83C\uDF82"],["holiday","\uD83C\uDF84"],["first","1\uFE0F\u20E3"],["next","2\uFE0F\u20E3"],["last","\uD83D\uDD1A"],["again","\uD83D\uDD01"],["all done","\u2705"],["hurry","\uD83D\uDCA8"],["slow down","\uD83D\uDC22"],["start","\u25B6\uFE0F"],["almost","\u23F3"],["never","\uD83D\uDEAB"]],
+"COLORS":[["red","\uD83D\uDD34"],["blue","\uD83D\uDD35"],["yellow","\uD83D\uDFE1"],["green","\uD83D\uDFE2"],["orange","\uD83D\uDFE0"],["purple","\uD83D\uDFE3"],["pink","\uD83C\uDF38"],["brown","\uD83D\uDFE4"],["black","\u26AA"],["white","\u26AB"],["gray","\uD83C\uDF11"],["gold","\uD83E\uDD47"],["silver","\uD83E\uDD48"],["rainbow","\uD83C\uDF08"],["light","\uD83D\uDCA1"],["dark","\uD83C\uDF11"],["bright","\u2728"],["same","\uD83D\uDFF0"],["different","\u2194\uFE0F"],["circle","\u2B55"],["square","\uD83D\uDFE5"],["triangle","\uD83D\uDD3A"],["star","\u2B50"],["heart","\u2764\uFE0F"],["line","\u2796"],["dot","\uD83D\uDD35"],["one","1\uFE0F\u20E3"],["two","2\uFE0F\u20E3"],["three","3\uFE0F\u20E3"],["four","4\uFE0F\u20E3"],["five","5\uFE0F\u20E3"],["ten","\uD83D\uDD1F"],["count","\uD83D\uDD22"],["how many","\u2753"],["more","\u2795"],["less","\u2796"]],
+"VERBS":[["go","\u27A1\uFE0F"],["stop","\u270B"],["come","\uD83D\uDC4B"],["sit","\uD83E\uDE91"],["stand","\uD83E\uDDCD"],["walk","\uD83D\uDEB6"],["run","\uD83C\uDFC3"],["jump","\uD83E\uDD38"],["climb","\uD83E\uDDD7"],["swim","\uD83C\uDFCA"],["sleep","\uD83D\uDECF\uFE0F"],["wake up","\u23F0"],["eat","\uD83C\uDF7D\uFE0F"],["drink","\uD83E\uDD5B"],["wash","\uD83E\uDDF4"],["brush","\uD83E\uDDB7"],["get dressed","\uD83D\uDC55"],["open","\uD83D\uDCC2"],["close","\uD83D\uDCC1"],["push","\uD83D\uDC50"],["pull","\uD83E\uDEF2"],["throw","\uD83E\uDD3E"],["catch","\uD83E\uDDE4"],["give","\uD83C\uDF81"],["take","\uD83E\uDEF1"],["help","\uD83C\uDD98"],["look","\uD83D\uDC40"],["listen","\uD83D\uDC42"],["talk","\uD83D\uDDE3\uFE0F"],["sing","\uD83C\uDFA4"],["dance","\uD83D\uDC83"],["read","\uD83D\uDCD6"],["write","\u270F\uFE0F"],["draw","\uD83C\uDFA8"],["play","\uD83E\uDDE9"],["finish","\u2705"]],
+"SOCIAL":[["hi","\uD83D\uDC4B"],["bye","\uD83D\uDC4B"],["thank you","\uD83D\uDC90"],["sorry","\uD83D\uDE14"],["excuse me","\uD83D\uDE47"],["please","\uD83D\uDE4F"],["my turn","\uD83D\uDD04"],["your turn","\uD83D\uDD01"],["share","\uD83E\uDD1D"],["wait","\u23F3"],["ready","\u2705"],["maybe","\uD83E\uDD14"],["don't know","\uD83E\uDD37"],["I think","\uD83D\uDCAD"],["guess","\u2753"],["why","\uD83D\uDCAD"],["what","\u2753"],["where","\uD83D\uDCCD"],["who","\uD83D\uDC64"],["when","\uD83D\uDD50"],["how","\uD83D\uDD27"],["which","\u2194\uFE0F"],["because","\u27A1\uFE0F"],["and","\u2795"],["but","\u2696\uFE0F"],["or","\u2194\uFE0F"],["if","\u2753"],["very","\u2B06\uFE0F"],["really","\u203C\uFE0F"],["too much","\u2B06\uFE0F"],["a little","\uD83D\uDD39"],["nothing","\uD83D\uDEAB"],["something","\uD83D\uDD35"],["everything","\uD83C\uDF10"],["again","\uD83D\uDD01"],["different","\u2194\uFE0F"]]
+};
+var ORDER=["FOOD","DRINKS","PEOPLE","PLACES","TOYS","CLOTHES","BODY","SCHOOL","TIME","COLORS","VERBS","SOCIAL"];
+
+var g=document.getElementById('grid'),bc=document.getElementById('bc'),vd=document.getElementById('verdict');
+var running=false,t0=0,timer=null,taps=0,errs=0,navs=0,scanned=84,step=0,cur='HOME';
+var TARGET=["I","want","juice"];
+
+function buildHome(){
+  var cells=HOME.slice();
+  ORDER.forEach(function(k){cells.push([k,"\uD83D\uDCC1","folder"]);});
+  return cells;
+}
+function buildCat(name){
+  var cells=CATS[name].slice();
+  CORE.forEach(function(w){cells.push(w);});
+  DESC.forEach(function(w){cells.push(w);});
+  ACTS.forEach(function(w){cells.push(w);});
+  cells.push(["HOME","\uD83C\uDFE0","home"]);
+  ORDER.forEach(function(k){ if(k!==name) cells.push([k,"\uD83D\uDCC1","folder"]); });
+  return cells;
+}
+function render(cells){
+  g.innerHTML='';
+  cells.forEach(function(w){
+    var d=document.createElement('div');
+    d.className='c'+(w[2]?' '+w[2]:'');
+    d.innerHTML='<span class="ic">'+w[1]+'</span><span>'+w[0]+'</span>';
+    d.onclick=function(){click(w,d);};
+    g.appendChild(d);
+  });
+}
+function fmt(){document.getElementById('t').textContent=((Date.now()-t0)/1000).toFixed(1)+'s';}
+function upd(){
+  document.getElementById('tap').textContent=taps;
+  document.getElementById('err').textContent=errs;
+  document.getElementById('nav').textContent=navs;
+  document.getElementById('scan').textContent=scanned;
+}
+function msg(){return TARGET.slice(0,step).join(' ');}
+function say(txt,warn){bc.textContent=txt;bc.className=warn?'warn':'';}
+
+function click(w,el){
+  if(!running){flash(el,'miss');return;}
+  taps++;
+  var word=w[0],kind=w[2];
+
+  if(kind==='home'){
+    navs++;scanned+=84;cur='HOME';render(buildHome());
+    say('Home  \u00B7  Message: "'+msg()+'"  \u00B7  84 more cells to scan');upd();return;
+  }
+  if(kind==='folder'){
+    navs++;scanned+=84;cur=word;render(buildCat(word));
+    if(word==='DRINKS'){
+      say('Home \u25B8 DRINKS  \u00B7  Message: "'+msg()+'"  \u00B7  "juice" is on this page \u2014 84 cells to scan');
+    }else{
+      errs++;
+      say('Wrong folder: '+word+' \u2014 no drinks here. 84 NEW cells to scan, and the thought is fading.',true);
+    }
+    upd();return;
+  }
+  if(word===TARGET[step]){
+    step++;
+    if(step===TARGET.length){finish(el);return;}
+    flash(el,'hit');
+    say((cur==='HOME'?'Home':'Home \u25B8 '+cur)+'  \u00B7  Message: "'+msg()+'"  \u00B7  still need "'+TARGET[step]+'"');
+  }else{
+    errs++;flash(el,'miss');
+    say((cur==='HOME'?'Home':'Home \u25B8 '+cur)+'  \u00B7  "'+word+'" is not what you meant  \u00B7  still need "'+TARGET[step]+'"',true);
+  }
+  upd();
+}
+function flash(el,c){el.classList.add(c);setTimeout(function(){el.classList.remove(c);},320);}
+
+function finish(el){
+  running=false;clearInterval(timer);el.classList.add('hit');
+  var s=((Date.now()-t0)/1000).toFixed(1);
+  vd.className='verdict show ok';
+  vd.innerHTML='<b>Completed in '+s+'s \u00B7 '+taps+' taps \u00B7 '+errs+' wrong taps \u00B7 '+navs+' page changes \u00B7 '+scanned+' cells scanned.</b><br>'+
+   'You are a literate adult with intact motor planning, fluent reading, and a full grasp of how categories work \u2014 and you still needed '+taps+' taps across '+scanned+' visual targets to say three words. '+
+   'Now imagine doing this pre-literate, with 10&nbsp;mm targets, reduced fine-motor accuracy, and visual sensitivity \u2014 while the reason you wanted juice is fading.';
+  upd();
+}
+document.getElementById('start').onclick=function(){
+  if(running)return;
+  running=true;taps=0;errs=0;navs=0;scanned=84;step=0;cur='HOME';t0=Date.now();
+  render(buildHome());vd.className='verdict';
+  say('Home  \u00B7  84 cells  \u00B7  find "I" first');
+  upd();fmt();timer=setInterval(fmt,100);
+};
+document.getElementById('reset').onclick=function(){
+  running=false;clearInterval(timer);taps=0;errs=0;navs=0;scanned=84;step=0;cur='HOME';
+  render(buildHome());vd.className='verdict';say('');document.getElementById('t').textContent='0.0s';upd();
+};
+render(buildHome());
+</script>
+</body>
+</html>
