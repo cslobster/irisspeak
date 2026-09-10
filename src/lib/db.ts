@@ -88,6 +88,10 @@ export async function ensureSchema(): Promise<void> {
       sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active'`,
       // irisspeak.org (on-device model client): the conversation place the parent picked (home, school, ...)
       sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS setting TEXT`,
+      // Sign in with Google (src/lib/google.ts): Google's stable account id + the verified email it gave us
+      sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS google_sub TEXT`,
+      sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS google_email TEXT`,
+      sql`CREATE UNIQUE INDEX IF NOT EXISTS dyad_google_sub_idx ON dyad(google_sub)`,
       sql`ALTER TABLE dyad DROP COLUMN IF EXISTS parent_type`,
       sql`
         CREATE TABLE IF NOT EXISTS dyad_login_code (

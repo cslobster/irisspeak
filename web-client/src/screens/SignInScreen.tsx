@@ -4,6 +4,7 @@ import { api } from '../api/client';
 import { analytics } from '../api/analytics';
 import { authError, authStart, authSuccess, logout, useDispatch, useSelector } from '../store';
 import { Spinner } from '../components/Spinner';
+import { GoogleButton } from '../components/GoogleButton';
 
 export function SignInScreen() {
   const [username, setUsername] = useState('');
@@ -14,9 +15,11 @@ export function SignInScreen() {
   const expired = searchParams.get('expired') === '1';
   const { isAuthorizing, error } = useSelector(s => s.auth);
 
+  const googleError = searchParams.get('error');
   useEffect(() => {
     if (expired) dispatch(logout());
-  }, [expired, dispatch]);
+    if (googleError) dispatch(authError(googleError === 'AccountPendingApproval' ? 'Pending' : 'Google'));
+  }, [expired, googleError, dispatch]);
 
   async function doLogin(user: string, pass: string) {
     if (isAuthorizing) return;
@@ -77,7 +80,7 @@ export function SignInScreen() {
           )}
           {error && (
             <p className="mb-4 text-sm font-semibold text-[#f09281] bg-[#f09281]/10 rounded-xl px-3 py-2">
-              {error === 'NoSuchUser' ? 'Incorrect username or password.' : 'Network error — check your connection.'}
+              {error === 'NoSuchUser' ? 'Incorrect username or password.' : error === 'Pending' ? 'This account is waiting for approval.' : error === 'Google' ? 'Google sign-in failed — please try again.' : 'Network error — check your connection.'}
             </p>
           )}
 
@@ -124,6 +127,10 @@ export function SignInScreen() {
               >
                 Sign in →
               </button>
+              <div className="flex items-center gap-3 text-xs font-bold text-slate-300 uppercase tracking-widest">
+                <span className="flex-1 border-t-2 border-slate-100" />or<span className="flex-1 border-t-2 border-slate-100" />
+              </div>
+              <GoogleButton href={api.googleSignInUrl()} />
             </div>
           )}
         </div>

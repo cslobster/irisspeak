@@ -7,6 +7,8 @@ import { StarsScreen } from './screens/StarsScreen';
 import { VocabularySettingsScreen } from './screens/VocabularySettingsScreen';
 import { ProfileSettingsScreen } from './screens/ProfileSettingsScreen';
 import { SignupWizardScreen } from './screens/SignupWizardScreen';
+import { GoogleCallbackScreen } from './screens/GoogleCallbackScreen';
+import { PrivacyScreen, TermsScreen } from './screens/LegalScreens';
 import { MuteButton } from './components/MuteButton';
 import { SettingsButton } from './components/SettingsButton';
 import { useSelector } from './store';
@@ -35,6 +37,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<RedirectIfAuthed><SignInScreen /></RedirectIfAuthed>} />
         <Route path="/signup" element={<RedirectIfAuthed><SignupWizardScreen /></RedirectIfAuthed>} />
+        <Route path="/google" element={<GoogleCallbackScreen />} />
+        <Route path="/privacy" element={<PrivacyScreen />} />
+        <Route path="/terms" element={<TermsScreen />} />
         <Route path="/home" element={<RequireAuth><WelcomeScreen /></RequireAuth>} />
         <Route path="/session/:sessionId" element={<RequireAuth><SessionScreen /></RequireAuth>} />
         <Route path="/session-end/:sessionId" element={<RequireAuth><SessionEndScreen /></RequireAuth>} />

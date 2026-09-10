@@ -55,6 +55,22 @@ class ApiClient {
     try { await this.http.head('/ping'); return true; } catch { return false; }
   }
 
+  /** Where "Continue with Google" sends the browser; the API returns to /google#jwt=… (see src/lib/google.ts on the API). */
+  googleSignInUrl(): string {
+    const back = `${window.location.origin}/google`;
+    return `${BASE_URL}/dyad/account/google/start?redirect=${encodeURIComponent(back)}`;
+  }
+
+  /** Finish a Google sign-in with the JWT the API handed back; same result shape as login(). */
+  async loginWithToken(jwt: string): Promise<AuthResponse> {
+    this.setJwt(jwt);
+    const [topics, profile] = await Promise.all([
+      this.http.get<{ details: AuthResponse['free_topics'] }>('/dyad/data/freetopics').then(r => r.data.details).catch(() => []),
+      this.getProfile().catch(() => null),
+    ]);
+    return { jwt, free_topics: topics, child_name: profile?.child_name };
+  }
+
   async login(username: string, password: string): Promise<AuthResponse> {
     const r = await this.http.post<AuthResponse>('/dyad/account/login', { username, password });
     this.setJwt(r.data.jwt);

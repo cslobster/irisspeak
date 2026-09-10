@@ -22,6 +22,8 @@ export interface Dyad {
   communication_style?: string | null;
   parent_email?: string | null;
   status?: DyadStatus;
+  google_sub?: string | null;
+  google_email?: string | null;
 }
 
 export interface CardInfo {
