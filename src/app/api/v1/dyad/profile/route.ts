@@ -22,7 +22,8 @@ export async function PATCH(req: Request) {
   await ensureSchema();
 
   const body = await req.json().catch(() => ({}));
-  const { age, notes, communication_style, setting, child_name } = body;
+  const { age, notes, communication_style, setting, child_name, child_gender } = body;
+  const gender = child_gender === 'boy' || child_gender === 'girl' ? child_gender : null;   // first-run setup on the apps
 
   await sql`
     UPDATE dyad SET
@@ -30,7 +31,8 @@ export async function PATCH(req: Request) {
       notes                = COALESCE(${notes ?? null}, notes),
       communication_style  = COALESCE(${communication_style ?? null}, communication_style),
       setting              = COALESCE(${setting ?? null}, setting),
-      child_name           = COALESCE(${child_name ? String(child_name).trim() || null : null}, child_name)
+      child_name           = COALESCE(${child_name ? String(child_name).trim() || null : null}, child_name),
+      child_gender         = COALESCE(${gender}, child_gender)
     WHERE id = ${dyad.id}
   `;
 
