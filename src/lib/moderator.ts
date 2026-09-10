@@ -78,6 +78,13 @@ function buildProfileFacts(dyad: Dyad, preferencePointers: string[] = []): strin
   return factParts.length ? factParts.join('; ') : undefined;
 }
 
+/** Every session route must act only on the caller's own sessions. */
+async function assertOwner(sessionId: string, dyad: Dyad): Promise<void> {
+  const rows = (await sql`SELECT dyad_id FROM session WHERE id = ${sessionId} LIMIT 1`) as any[];
+  if (!rows[0]) throw new Error('not found');
+  if (rows[0].dyad_id !== dyad.id) throw new Error('forbidden');
+}
+
 async function getCurrentTurn(sessionId: string): Promise<{ id: string; role: 'parent' | 'child'; ended_timestamp: number | null } | null> {
   const r = (await sql`
     SELECT id, role, ended_timestamp
@@ -732,6 +739,7 @@ async function getLastChildRec(sessionId: string, turnId: string): Promise<CardI
 
 export async function addChildCard(sessionId: string, dyad: Dyad, cardIdentity: { id: string; recommendation_id: string }): Promise<CardSelectionResult> {
   await ensureSchema();
+  await assertOwner(sessionId, dyad);
   const cur = await getCurrentTurn(sessionId);
   if (!cur || cur.role !== 'child') throw new Error('not child turn');
 
@@ -762,6 +770,7 @@ export async function addChildCard(sessionId: string, dyad: Dyad, cardIdentity: 
 
 export async function refreshChildCards(sessionId: string, dyad: Dyad): Promise<ChildCardRecommendationResult> {
   await ensureSchema();
+  await assertOwner(sessionId, dyad);
   const cur = await getCurrentTurn(sessionId);
   if (!cur || cur.role !== 'child') throw new Error('not child turn');
 
@@ -779,6 +788,7 @@ export async function refreshChildCards(sessionId: string, dyad: Dyad): Promise<
 
 export async function removeChildCardAtIndex(sessionId: string, dyad: Dyad, index: number): Promise<CardSelectionResult> {
   await ensureSchema();
+  await assertOwner(sessionId, dyad);
   const cur = await getCurrentTurn(sessionId);
   if (!cur || cur.role !== 'child') throw new Error('not child turn');
 
@@ -804,6 +814,7 @@ export async function addFreeCard(
   card: { label: string; category: string; image_url: string | null },
 ): Promise<CardSelectionResult> {
   await ensureSchema();
+  await assertOwner(sessionId, dyad);
   const cur = await getCurrentTurn(sessionId);
   if (!cur || cur.role !== 'child') throw new Error('not child turn');
 
@@ -834,6 +845,7 @@ export async function addFreeCard(
 // ---------- infer full sentence from selected cards ----------
 export async function inferSentenceFromCards(sessionId: string, dyad: Dyad): Promise<string> {
   await ensureSchema();
+  await assertOwner(sessionId, dyad);
   const cur = await getCurrentTurn(sessionId);
   if (!cur || cur.role !== 'child') throw new Error('not child turn');
 
@@ -918,6 +930,7 @@ async function generateParentGuidesForTurn(sessionId: string, dyad: Dyad, nextTu
 // (see finishChildTurn below).
 export async function confirmChildCardSelection(sessionId: string, dyad: Dyad): Promise<{ turn_id: string; recommendation: ChildCardRecommendationResult }> {
   await ensureSchema();
+  await assertOwner(sessionId, dyad);
   const cur = await getCurrentTurn(sessionId);
   if (!cur || cur.role !== 'child') throw new Error('not child turn');
 
@@ -944,6 +957,7 @@ export async function confirmChildCardSelection(sessionId: string, dyad: Dyad): 
 // ---------- finish child's turn(s) → switch to parent → generate parent guides ----------
 export async function finishChildTurn(sessionId: string, dyad: Dyad): Promise<{ turn_id: string; recommendation: ParentGuideRecommendationResult }> {
   await ensureSchema();
+  await assertOwner(sessionId, dyad);
   const cur = await getCurrentTurn(sessionId);
   if (!cur || cur.role !== 'child') throw new Error('not child turn');
 

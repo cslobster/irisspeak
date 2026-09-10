@@ -17,9 +17,13 @@ export async function POST(req: Request) {
 
   const id = nanoid();
   await sql`
-    INSERT INTO session (id, dyad_id, topic_category, subtopic, subtopic_description, local_timezone, status)
-    VALUES (${id}, ${dyad.id}, ${topic.category}, ${topic.subtopic ?? null}, ${topic.subtopic_description ?? null}, ${body.timezone ?? null}, 'initial')
+    INSERT INTO session (id, dyad_id, topic_category, subtopic, subtopic_description, local_timezone, status, client)
+    VALUES (${id}, ${dyad.id}, ${topic.category}, ${topic.subtopic ?? null}, ${topic.subtopic_description ?? null}, ${body.timezone ?? null}, 'initial', ${body.client ?? null})
   `;
   // Backend's old contract: returns the session id as a JSON string.
   return ok(id);
+}
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204 });
 }

@@ -35,5 +35,9 @@ export async function POST(req: Request) {
     ORDER BY created_at ASC
   `) as FreeTopicDetail[];
 
-  return ok({ jwt, free_topics: topics, child_name: dyad.child_name });
+  return ok({ jwt, free_topics: topics, child_name: dyad.child_name, alias: dyad.alias });
+}
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204 });
 }

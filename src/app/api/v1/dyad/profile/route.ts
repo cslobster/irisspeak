@@ -11,7 +11,7 @@ export async function GET(req: Request) {
   await ensureSchema();
 
   const [row] = await sql`
-    SELECT age, notes, communication_style FROM dyad WHERE id = ${dyad.id} LIMIT 1
+    SELECT age, notes, communication_style, setting, child_name, child_gender, alias FROM dyad WHERE id = ${dyad.id} LIMIT 1
   `;
   return ok(row);
 }
@@ -22,18 +22,20 @@ export async function PATCH(req: Request) {
   await ensureSchema();
 
   const body = await req.json().catch(() => ({}));
-  const { age, notes, communication_style } = body;
+  const { age, notes, communication_style, setting, child_name } = body;
 
   await sql`
     UPDATE dyad SET
       age                  = COALESCE(${age ?? null}, age),
       notes                = COALESCE(${notes ?? null}, notes),
-      communication_style  = COALESCE(${communication_style ?? null}, communication_style)
+      communication_style  = COALESCE(${communication_style ?? null}, communication_style),
+      setting              = COALESCE(${setting ?? null}, setting),
+      child_name           = COALESCE(${child_name ? String(child_name).trim() || null : null}, child_name)
     WHERE id = ${dyad.id}
   `;
 
   const [row] = await sql`
-    SELECT age, notes, communication_style FROM dyad WHERE id = ${dyad.id} LIMIT 1
+    SELECT age, notes, communication_style, setting, child_name, child_gender, alias FROM dyad WHERE id = ${dyad.id} LIMIT 1
   `;
   return ok(row);
 }

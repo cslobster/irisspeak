@@ -86,6 +86,8 @@ export async function ensureSchema(): Promise<void> {
       sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS communication_style TEXT`,
       sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS parent_email TEXT`,
       sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active'`,
+      // irisspeak.org (on-device model client): the conversation place the parent picked (home, school, ...)
+      sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS setting TEXT`,
       sql`ALTER TABLE dyad DROP COLUMN IF EXISTS parent_type`,
       sql`
         CREATE TABLE IF NOT EXISTS dyad_login_code (
@@ -177,6 +179,8 @@ export async function ensureSchema(): Promise<void> {
       sql`CREATE INDEX IF NOT EXISTS idx_session_dyad ON session(dyad_id, created_at DESC)`,
       sql`ALTER TABLE session ADD COLUMN IF NOT EXISTS rating INTEGER`,
       sql`ALTER TABLE session ADD COLUMN IF NOT EXISTS title TEXT`,
+      // which client wrote the session: NULL / 'irisspeak.com' for the web client, 'irisspeak.org' for the on-device app
+      sql`ALTER TABLE session ADD COLUMN IF NOT EXISTS client TEXT`,
       sql`
         CREATE TABLE IF NOT EXISTS dialogue_turn (
           id                  TEXT PRIMARY KEY,
