@@ -8,7 +8,7 @@ export const runtime = 'nodejs';
 /**
  * The child's recent confirmed turns across every session, newest first, for a client that keeps a
  * personal history on the device (irisspeak.org feeds it to its reranker and prompt).
- *   GET /api/v1/dyad/history?limit=50 -> { turns: [{ partner, answer, cards: [card ids], t, session_id }] }
+ *   GET /api/v1/dyad/history?limit=50 -> { turns: [{ partner, answer, cards: [card ids], labels: [card words], t, session_id }] }
  */
 export async function GET(req: Request) {
   await ensureSchema();
@@ -33,6 +33,7 @@ export async function GET(req: Request) {
       partner: r.partner ? String(r.partner) : '',
       answer: r.inferred_sentence || cards.map((c: any) => c.corpus_name || c.label).join(' '),
       cards: cards.map((c: any) => c.id).filter((x: any) => typeof x === 'string'),
+      labels: cards.map((c: any) => c.corpus_name || c.label || '').filter((x: any) => typeof x === 'string'),
       t: Number(r.timestamp), session_id: r.session_id,
     };
   });
