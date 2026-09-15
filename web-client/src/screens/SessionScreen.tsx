@@ -655,9 +655,10 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
 
       {/* Selected-card deck -- fixed height, horizontal scroll, text pills */}
       <div
-        className="flex-shrink-0 h-[84px] bg-amber-50/80 rounded-2xl px-3 py-2 shadow-sm flex flex-col justify-center gap-1.5"
+        className="flex-shrink-0 h-[84px] bg-amber-50/80 rounded-2xl px-3 py-2 shadow-sm flex items-center gap-3"
         style={{ border: '2px solid #000', borderBottomWidth: 4, boxSizing: 'border-box' }}
       >
+       <div className="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-700 leading-none flex-shrink-0">
           Your selection {interim.length > 0 && <span className="font-normal normal-case">(tap to remove)</span>}
         </span>
@@ -678,6 +679,14 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
             ))}
           </div>
         )}
+       </div>
+        {/* Say it: right where the chosen words are, not down in the action bar */}
+        <button
+          onClick={onConfirm}
+          disabled={interim.length === 0 || busy}
+          className="pill-btn bg-[#94c1c2] disabled:opacity-40 text-sm sm:text-base px-5 sm:px-8 py-2.5 shadow-lg shrink-0"
+          title="Turn the chosen cards into a sentence"
+        >Speak</button>
       </div>
 
       {/* Main: 3 category panels side-by-side, widths 3 : 2 : 1 */}
@@ -757,11 +766,6 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
           disabled={busy || interim.length === 0}
           className="pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3"
         >✕ Clear</button>
-        <button
-          onClick={onConfirm}
-          disabled={interim.length === 0 || busy}
-          className="pill-btn bg-[#94c1c2] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg"
-        >Generate sentence</button>
         <button
           onClick={onDone}
           disabled={busy}

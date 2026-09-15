@@ -178,12 +178,12 @@ function ChildCompact(p: CompactProps & { rec: ChildCardRecommendationResult }) 
   );
 }
 
-// Refresh / Generate sentence / Done drawn as tiles so they share the grid with the cards (landscape phones).
+// Refresh / Speak / Done drawn as tiles so they share the grid with the cards (landscape phones).
 function ActionTile({ kind, p }: { kind: 'refresh' | 'clear' | 'confirm' | 'done'; p: CompactProps }) {
   const spec = {
     refresh: { label: 'Refresh', icon: '↻', bg: '#64748b', fg: '#fff', onClick: p.onRefresh, disabled: p.busy },
     clear: { label: 'Clear', icon: '✕', bg: '#ffffff', fg: '#475569', onClick: p.onClear, disabled: p.busy || p.interim.length === 0 },
-    confirm: { label: 'Generate sentence', icon: '💬', bg: '#94c1c2', fg: '#fff', onClick: p.onConfirm, disabled: p.interim.length === 0 || p.busy },
+    confirm: { label: 'Speak', icon: '💬', bg: '#94c1c2', fg: '#fff', onClick: p.onConfirm, disabled: p.interim.length === 0 || p.busy },
     done: { label: 'Done', icon: '✓', bg: '#f09281', fg: '#fff', onClick: p.onDone, disabled: p.busy },
   }[kind];
   return (
