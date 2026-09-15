@@ -1,0 +1,632 @@
+{"setting": "unknown", "question": "What do you need?", "cards": ["water", "drink"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["bathroom"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["jacket", "cold"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["mom"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["snack", "hungry"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "What do you need right now?", "cards": ["quiet", "break"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["hug", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "What can I get for you?", "cards": ["headphones", "loud"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["help", "shoes"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "What do you need right now?", "cards": ["tablet", "bored"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["sleep", "tired"], "source_pass": "per-question pass", "_batch": "q:unknown:4:0"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["grandma", "house"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["park", "swing"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["not", "here", "go", "beach"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["store", "buy", "toy"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["too", "loud"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["dog", "outside"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["friend", "house", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["scared", "dark"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "Can you tell me more?", "cards": ["pool", "swim"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "Can you show me what you mean?", "cards": ["car", "ride"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What are you trying to say?", "cards": ["library", "books"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "Tell me more about that.", "cards": ["zoo", "see", "elephant"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What do you mean, somewhere else?", "cards": ["quiet", "room"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "Can you explain that to me?", "cards": ["tired", "bed"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What are you telling me?", "cards": ["restaurant", "eat", "pizza"], "source_pass": "per-question pass", "_batch": "q:unknown:2:3"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["break", "quiet"], "source_pass": "per-question pass", "_batch": "q:unknown:4:2"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["help", "shoe"], "source_pass": "per-question pass", "_batch": "q:unknown:4:2"}
+{"setting": "unknown", "question": "What do you need right now?", "cards": ["tired", "sit"], "source_pass": "per-question pass", "_batch": "q:unknown:4:2"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["tablet"], "source_pass": "per-question pass", "_batch": "q:unknown:4:2"}
+{"setting": "unknown", "question": "What can I get for you?", "cards": ["hug"], "source_pass": "per-question pass", "_batch": "q:unknown:4:2"}
+{"setting": "unknown", "question": "Do you need something?", "cards": ["bandaid", "hurt", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:4:2"}
+{"setting": "unknown", "question": "What do you need right now?", "cards": ["blanket", "sleep"], "source_pass": "per-question pass", "_batch": "q:unknown:4:2"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["teddy", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:4:2"}
+{"setting": "unknown", "question": "What happened?", "cards": ["fell", "down", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What happened?", "cards": ["dog", "bark", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What happened?", "cards": ["car", "broke"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What happened?", "cards": ["lost", "mom"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What happened?", "cards": ["rain", "wet"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What happened?", "cards": ["balloon", "pop"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What happened?", "cards": ["ice cream", "drop"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What happened?", "cards": ["boy", "push", "me"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What happened there?", "cards": ["loud", "noise", "ears"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What went on?", "cards": ["bee", "sting", "arm"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["shoe", "fall off"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What happened while you were out?", "cards": ["grandma", "hug"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What happened when we were away?", "cards": ["toy", "broke", "sad"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "Did something happen?", "cards": ["too many", "people", "crowd"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "What was going on?", "cards": ["fire truck", "siren"], "source_pass": "per-question pass", "_batch": "q:unknown:0:1"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["tired", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["fun", "playground"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["hungry", "snack"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["too", "loud"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How are things going over there?", "cards": ["play", "friend"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["miss", "mom"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["scared", "dog"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How's everything going?", "cards": ["grandma", "house", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["bored", "wait"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How are you doing out here?", "cards": ["feet", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["new", "place", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How are things?", "cards": ["bathroom", "now"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["like", "swing"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How's it going so far?", "cards": ["car", "long", "sleepy"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["tired", "walk", "far"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How's everything going?", "cards": ["loud", "ears", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["fun", "play", "friend"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How are you doing over here?", "cards": ["bored", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["dog", "pet", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How's it going so far?", "cards": ["too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["car", "ride", "long"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How are you feeling?", "cards": ["tummy", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How's it going?", "cards": ["grandma", "hug"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How's it going here?", "cards": ["want", "ipad", "break"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "What do you mean?", "cards": ["not", "here"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["car", "ride"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "Can you tell me more?", "cards": ["beach", "sand"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "Where do you mean?", "cards": ["library", "books"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["dad", "work"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "Show me what you mean.", "cards": ["pool", "swim"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["scared", "dog"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "What are you trying to tell me?", "cards": ["friend", "house", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "What do you mean by that?", "cards": ["store", "snack"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "Can you show me more?", "cards": ["doctor", "ouch"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "Tell me what you mean.", "cards": ["zoo", "animals"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "What happened?", "cards": ["fell", "knee", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What happened?", "cards": ["ice cream", "dropped"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What happened?", "cards": ["balloon", "fly away"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What happened out there?", "cards": ["bee", "sting", "arm"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What's wrong?", "cards": ["loud", "noise", "ears"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["shoe", "lost"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What happened while we were out?", "cards": ["saw", "fire truck"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What went on?", "cards": ["friend", "share", "toy"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "Why are you upset? What happened?", "cards": ["tired", "legs", "walk"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What happened over there?", "cards": ["spill", "juice", "shirt"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What do you mean?", "cards": ["car", "trip"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "Can you tell me more?", "cards": ["new", "place", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "What are you trying to say?", "cards": ["friend", "house", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "Show me what you mean.", "cards": ["doctor", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "What do you mean?", "cards": ["miss", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "Tell me more about that.", "cards": ["pool", "swim"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "What are you telling me?", "cards": ["tired", "bed"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "How are you doing out here?", "cards": ["too", "loud"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "How are things going so far?", "cards": ["hungry", "snack"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "How are you feeling here?", "cards": ["bored", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "Everything going alright?", "cards": ["bathroom", "now"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "How are you holding up?", "cards": ["hot", "sun", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "How's it going so far?", "cards": ["dog", "pet", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["happy", "park"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["tired", "long", "car"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["scared", "new", "place"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["excited", "zoo"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["miss", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["loud", "ears", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["hungry", "snack"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["sad", "mom", "gone"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "Are you feeling okay here?", "cards": ["too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How's your body feeling?", "cards": ["tummy", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you doing today?", "cards": ["calm", "grandma", "house"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How do you feel being here?", "cards": ["bored", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "Feeling alright today?", "cards": ["sleepy", "nap"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you feeling right now?", "cards": ["proud", "swim", "pool"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["headphones", "loud"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "What can I get you?", "cards": ["tablet"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "Do you need something?", "cards": ["help", "shoes"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "What would help you right now?", "cards": ["hug"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["sit", "tired"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "What are you missing?", "cards": ["teddy", "bear"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["tissue", "nose"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "What do you need from me?", "cards": ["hold", "hand", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["tired", "long", "drive"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["happy", "see", "grandma"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["excited", "playground"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How are you feeling today?", "cards": ["sick", "tummy", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["bored", "waiting"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How are you doing today?", "cards": ["sad", "no", "dog"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How's your body feeling?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "Are you feeling okay here?", "cards": ["shy", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How do you feel being here?", "cards": ["angry", "go", "home", "now"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How are you doing right now?", "cards": ["sleepy", "bed"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How do you feel today, buddy?", "cards": ["calm", "hold", "mom", "hand"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["swing"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["grandma", "house"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "What's your favorite thing here?", "cards": ["ice cream"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["dog"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Which one do you like best?", "cards": ["red", "car"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["slide", "big"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "What do you like most here?", "cards": ["fish", "tank"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["music"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Do you have a favorite?", "cards": ["cousin", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["balloon", "blue"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "What's your favorite part?", "cards": ["bus", "ride"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["sand", "dig"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Which do you like the most?", "cards": ["train", "toy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["pizza"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "What's the best thing here?", "cards": ["bubbles", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["zoo", "lion"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["park", "swing"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["beach", "sand", "castle"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "Any favorites?", "cards": ["library", "dinosaur", "book"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "What's your favorite part?", "cards": ["ice cream", "truck"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "What did you like best there?", "cards": ["aquarium", "shark"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "Which one do you like most?", "cards": ["playground", "slide", "fast"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "What's your favorite thing there?", "cards": ["store", "toy", "car"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "Anything you really liked?", "cards": ["cousin", "play", "together"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "What's the best part?", "cards": ["camping", "fire", "marshmallow"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "Tell me your favorite.", "cards": ["airport", "plane", "big"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["miss", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "How are things?", "cards": ["bored", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "How are you doing over there?", "cards": ["like", "dog", "pet"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "Everything alright?", "cards": ["lost", "mom", "where"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "How are you feeling?", "cards": ["tummy", "sick"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "You doing okay?", "cards": ["sleepy", "car", "nap"], "source_pass": "per-question pass", "_batch": "q:unknown:5:3"}
+{"setting": "unknown", "question": "Can you tell me more?", "cards": ["too", "loud"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "What are you trying to say?", "cards": ["pool", "swim"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "Can you show me what you mean?", "cards": ["outside", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "What do you mean?", "cards": ["library", "books"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "Tell me more about that.", "cards": ["tired", "bed"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "What are you saying?", "cards": ["zoo", "animals"], "source_pass": "per-question pass", "_batch": "q:unknown:2:0"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["hungry", "snack"], "source_pass": "per-question pass", "_batch": "q:unknown:1:0"}
+{"setting": "unknown", "question": "Are you feeling okay here?", "cards": ["cold", "want", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:1:0"}
+{"setting": "unknown", "question": "How's your body feeling?", "cards": ["legs", "tired", "walk"], "source_pass": "per-question pass", "_batch": "q:unknown:1:0"}
+{"setting": "unknown", "question": "How are you doing today?", "cards": ["shy", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:1:0"}
+{"setting": "unknown", "question": "How do you feel being here?", "cards": ["want", "my", "bed"], "source_pass": "per-question pass", "_batch": "q:unknown:1:0"}
+{"setting": "unknown", "question": "Tell me how you're feeling.", "cards": ["mad", "no", "tablet"], "source_pass": "per-question pass", "_batch": "q:unknown:1:0"}
+{"setting": "unknown", "question": "How are you feeling right now?", "cards": ["calm", "quiet", "room"], "source_pass": "per-question pass", "_batch": "q:unknown:1:0"}
+{"setting": "unknown", "question": "What are you trying to say?", "cards": ["outside", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:1"}
+{"setting": "unknown", "question": "Show me what you mean.", "cards": ["car", "ride"], "source_pass": "per-question pass", "_batch": "q:unknown:2:1"}
+{"setting": "unknown", "question": "What do you mean, somewhere else?", "cards": ["zoo", "animals"], "source_pass": "per-question pass", "_batch": "q:unknown:2:1"}
+{"setting": "unknown", "question": "Can you show me what you mean?", "cards": ["store", "toys"], "source_pass": "per-question pass", "_batch": "q:unknown:2:1"}
+{"setting": "unknown", "question": "What did you like best there?", "cards": ["animals", "zoo"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "Which part was your favorite?", "cards": ["sand", "dig"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "What was the best thing?", "cards": ["cousin", "friend"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "Did you have a favorite thing?", "cards": ["balloon", "red"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "What did you like most?", "cards": ["pizza", "eat"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "Anything you really loved?", "cards": ["music", "dance"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "Which one was your favorite?", "cards": ["bus", "window"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "What was your favorite part?", "cards": ["quiet", "blanket", "cozy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["bored", "wait", "doctor"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["cold", "coat"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "Are you feeling okay here?", "cards": ["want", "mom"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How's your body feeling?", "cards": ["sleepy", "bed", "hotel"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "How's your body feeling?", "cards": ["hot", "sun", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "What kind of feeling do you have today?", "cards": ["proud", "swim", "pool"], "source_pass": "per-question pass", "_batch": "q:unknown:1:3"}
+{"setting": "unknown", "question": "What happened?", "cards": ["fall", "down", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What's wrong?", "cards": ["too", "loud", "ears"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["toy", "gone"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What went on while you were there?", "cards": ["see", "fire truck"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "Why are you upset?", "cards": ["balloon", "fly", "away"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "Did something happen?", "cards": ["new", "friend", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What's the matter?", "cards": ["tummy", "hurt", "sick"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What happened out there?", "cards": ["bus", "late", "wait"], "source_pass": "per-question pass", "_batch": "q:unknown:0:2"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["quiet", "break"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "What are you needing?", "cards": ["blanket", "teddy"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "What do you need, buddy?", "cards": ["hurt", "band-aid"], "source_pass": "per-question pass", "_batch": "q:unknown:4:1"}
+{"setting": "unknown", "question": "What did you like best there?", "cards": ["animals"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "What was your favorite part?", "cards": ["train", "ride"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "Which one did you like most?", "cards": ["big", "slide"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "What was the best thing?", "cards": ["pizza"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "Did you have a favorite thing there?", "cards": ["music", "dance"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "What did you love the most?", "cards": ["cousin", "play", "ball"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "Which part was your favorite?", "cards": ["sand", "castle"], "source_pass": "per-question pass", "_batch": "q:unknown:3:2"}
+{"setting": "unknown", "question": "How are you doing out here?", "cards": ["hungry", "snack"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "How's everything going?", "cards": ["miss", "mom"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "How are things?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "How are you doing so far?", "cards": ["want", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "How's it going over there?", "cards": ["found", "friend"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "How you holding up?", "cards": ["shoes", "hurt", "feet"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "How are you feeling here?", "cards": ["happy", "see", "dog"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "What happened over there?", "cards": ["boy", "push", "me"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "What happened while you were out?", "cards": ["saw", "fire truck", "loud"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["bee", "sting", "arm"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "What went on?", "cards": ["grandma", "hug", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "Did something happen?", "cards": ["toy", "forgot", "bus"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "What happened out there?", "cards": ["bike", "flat", "tire"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "What's wrong, what happened?", "cards": ["too", "noisy", "ears"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "Can you show me what happened?", "cards": ["friend", "share", "snack"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "How are you doing here?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "How are you doing here?", "cards": ["bathroom", "now"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "You doing alright?", "cards": ["lost", "toy"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "You doing alright?", "cards": ["hot", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "How are things so far?", "cards": ["like", "swing"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "How are things so far?", "cards": ["too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "Everything okay over here?", "cards": ["shoes", "hurt", "feet"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "How are you feeling right now?", "cards": ["sleepy", "car", "go"], "source_pass": "per-question pass", "_batch": "q:unknown:5:2"}
+{"setting": "unknown", "question": "What do you mean?", "cards": ["not", "here", "go", "beach"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "Can you tell me more?", "cards": ["swimming", "pool"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "Show me what you mean.", "cards": ["library", "books"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "What do you mean?", "cards": ["scared", "dog"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "Can you show me more?", "cards": ["doctor", "hurt", "arm"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "Tell me more about that.", "cards": ["tired", "home", "bed"], "source_pass": "per-question pass", "_batch": "q:unknown:2:2"}
+{"setting": "unknown", "question": "Do you have a favorite thing here?", "cards": ["fish", "tank"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "What do you like best here?", "cards": ["pool", "splash"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "Which one is your favorite?", "cards": ["red", "balloon"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "What's your favorite part?", "cards": ["cousin", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "Got a favorite spot here?", "cards": ["tree", "climb"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "What do you like most about this place?", "cards": ["quiet", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "Anything you really love here?", "cards": ["duck", "feed", "bread"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "Is there something you like best?", "cards": ["bus", "window", "look"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["bored", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["happy", "see", "grandma"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "You doing alright?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "You doing alright?", "cards": ["feet", "hurt", "sit"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How are things?", "cards": ["too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How are things?", "cards": ["lost", "toy"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "How are you feeling here?", "cards": ["like", "dog"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "Everything okay?", "cards": ["sleepy", "car", "nap"], "source_pass": "per-question pass", "_batch": "q:unknown:5:0"}
+{"setting": "unknown", "question": "What's your favorite thing here?", "cards": ["animals"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "What did you like the most?", "cards": ["train", "ride"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "Do you have a favorite here?", "cards": ["fish", "tank"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "What's your favorite part?", "cards": ["water", "splash"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "Which one do you like best?", "cards": ["music", "dance"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "Anything you really like here?", "cards": ["bubbles"], "source_pass": "per-question pass", "_batch": "q:unknown:3:3"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["loud", "noise", "ears", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "Are you feeling okay out here?", "cards": ["sick", "tummy"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "How's your body feeling today?", "cards": ["hot", "sun", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "How are you doing today, buddy?", "cards": ["proud", "swimming", "pool"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "What kind of feeling do you have today?", "cards": ["nervous", "new", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "How do you feel being at Grandma's?", "cards": ["calm", "grandma", "hug"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "Tell me how you're feeling today.", "cards": ["angry", "store", "crowded"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "Are you feeling okay here?", "cards": ["want", "my", "blanket"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "How do you feel about being here?", "cards": ["sad", "friend", "not", "here"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "Tell me how you're feeling today.", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "How are you doing today, buddy?", "cards": ["proud", "climb", "big", "slide"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "What kind of feeling do you have today?", "cards": ["angry", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:1:2"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["help", "shoes"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "What do you need right now?", "cards": ["sit", "tired"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["hug", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "What would help you?", "cards": ["blanket", "sleep"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "Do you need something?", "cards": ["bandage", "hurt", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "What are you needing?", "cards": ["teddy", "sad"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "How are you doing here?", "cards": ["miss", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How are things going?", "cards": ["loud", "ears", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How are you doing so far?", "cards": ["bored", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How's it going over here?", "cards": ["bathroom", "now"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How are you feeling here?", "cards": ["sad", "mom", "where"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How are things going for you?", "cards": ["too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "How's everything going?", "cards": ["feet", "hurt", "sit"], "source_pass": "per-question pass", "_batch": "q:unknown:5:1"}
+{"setting": "unknown", "question": "What happened out there?", "cards": ["bee", "sting", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["grandma", "hug", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "What went on while you were out?", "cards": ["loud", "noise", "cry"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "What happened when you were away?", "cards": ["doctor", "shot", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "Did something happen?", "cards": ["shoe", "fall off", "bus"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "Tell me what happened there.", "cards": ["friend", "share", "toy"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "What happened while you were out?", "cards": ["see", "fire truck"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "What happened to you?", "cards": ["bee", "sting", "arm"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["toy", "break", "sad"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "What went on?", "cards": ["see", "fire truck"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "What happened just now?", "cards": ["spill", "juice", "shirt"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "Did something happen?", "cards": ["friend", "hug", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "Why are you upset? What happened?", "cards": ["shoe", "gone"], "source_pass": "per-question pass", "_batch": "q:unknown:0:3"}
+{"setting": "unknown", "question": "Do you have a favorite?", "cards": ["train", "ride"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "What did you like most?", "cards": ["splash", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "Anything you really like here?", "cards": ["big", "slide", "fast"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "What's your favorite part?", "cards": ["music", "dance"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "Got a favorite spot?", "cards": ["quiet", "corner", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:1"}
+{"setting": "unknown", "question": "What's your favorite thing here?", "cards": ["big", "slide"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "What did you like best?", "cards": ["animals", "zoo"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "What do you like most about this place?", "cards": ["sand", "dig"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "What's the best part?", "cards": ["music", "dance"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Anything you really love here?", "cards": ["pizza", "eat"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "Which part do you like best?", "cards": ["fish", "watch", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:0"}
+{"setting": "unknown", "question": "What do you need right now?", "cards": ["break", "quiet"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "Do you need something?", "cards": ["help", "shoe"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["teddy", "blanket"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "What do you need, buddy?", "cards": ["medicine", "tummy", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "Do you need something?", "cards": ["car", "wait"], "source_pass": "per-question pass", "_batch": "q:unknown:4:3"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["bored", "wait"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you doing today?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How do you feel today, buddy?", "cards": ["sad", "friend", "not", "here"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How are you feeling at this place?", "cards": ["calm", "quiet", "room"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "How's today feeling for you?", "cards": ["hot", "sun", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:1:1"}
+{"setting": "unknown", "question": "What happened over there?", "cards": ["balloon", "fly", "away"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "What went on?", "cards": ["loud", "noise", "ears"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["bee", "sting"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "What happened there?", "cards": ["shoe", "lost"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "What's wrong, what happened?", "cards": ["too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "What happened while you were out?", "cards": ["new", "friend", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "Can you tell me what happened?", "cards": ["toy", "break", "sad"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "What happened when you were gone?", "cards": ["saw", "fire truck"], "source_pass": "per-question pass", "_batch": "q:unknown:0:0"}
+{"setting": "unknown", "question": "What do you mean?", "cards": ["park", "swing"], "source_pass": "per-question pass", "_batch": "q:unknown:2:1"}
+{"setting": "unknown", "question": "What are you trying to tell me?", "cards": ["zoo", "animals"], "source_pass": "per-question pass", "_batch": "q:unknown:2:1"}
+{"setting": "unknown", "question": "Can you show me what you mean?", "cards": ["scared", "dog"], "source_pass": "per-question pass", "_batch": "q:unknown:2:1"}
+{"setting": "unknown", "question": "What do you mean, sweetie?", "cards": ["outside", "snow"], "source_pass": "per-question pass", "_batch": "q:unknown:2:1"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["tummy", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:1:6"}
+{"setting": "unknown", "question": "Are you feeling okay today?", "cards": ["worried", "doctor"], "source_pass": "per-question pass", "_batch": "q:unknown:1:6"}
+{"setting": "unknown", "question": "Are you feeling okay today?", "cards": ["angry", "too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:1:6"}
+{"setting": "unknown", "question": "How's your body feeling today?", "cards": ["sleepy", "car"], "source_pass": "per-question pass", "_batch": "q:unknown:1:6"}
+{"setting": "unknown", "question": "What kind of feeling do you have today?", "cards": ["silly", "friend", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:1:6"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["nervous", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:1:5"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["bored", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:1:5"}
+{"setting": "unknown", "question": "Are you feeling okay here?", "cards": ["cold", "need", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:1:5"}
+{"setting": "unknown", "question": "Are you feeling okay here?", "cards": ["tummy", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:1:5"}
+{"setting": "unknown", "question": "How's your body feeling?", "cards": ["hot", "thirsty", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:1:5"}
+{"setting": "unknown", "question": "How are you doing in this new place?", "cards": ["calm", "hold", "hand"], "source_pass": "per-question pass", "_batch": "q:unknown:1:5"}
+{"setting": "unknown", "question": "How are you doing in this new place?", "cards": ["mad", "too", "bright"], "source_pass": "per-question pass", "_batch": "q:unknown:1:5"}
+{"setting": "unknown", "question": "What do you need, buddy?", "cards": ["sit", "tired"], "source_pass": "per-question pass", "_batch": "q:unknown:4:11"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["teddy"], "source_pass": "per-question pass", "_batch": "q:unknown:4:11"}
+{"setting": "unknown", "question": "What do you need right now?", "cards": ["wash", "hands", "sticky"], "source_pass": "per-question pass", "_batch": "q:unknown:4:11"}
+{"setting": "unknown", "question": "Do you need something?", "cards": ["medicine", "hurt", "tummy"], "source_pass": "per-question pass", "_batch": "q:unknown:4:11"}
+{"setting": "unknown", "question": "Show me what you mean.", "cards": ["my", "room", "quiet"], "source_pass": "per-question pass", "_batch": "q:unknown:2:9"}
+{"setting": "unknown", "question": "What are you trying to tell me?", "cards": ["library", "books"], "source_pass": "per-question pass", "_batch": "q:unknown:2:9"}
+{"setting": "unknown", "question": "Where do you mean?", "cards": ["pool", "swim"], "source_pass": "per-question pass", "_batch": "q:unknown:2:9"}
+{"setting": "unknown", "question": "Which place do you mean?", "cards": ["zoo", "animals"], "source_pass": "per-question pass", "_batch": "q:unknown:2:9"}
+{"setting": "unknown", "question": "Show me what you mean.", "cards": ["friend", "house", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:11"}
+{"setting": "unknown", "question": "What are you trying to tell me?", "cards": ["tired", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:2:11"}
+{"setting": "unknown", "question": "Can you show me what you mean?", "cards": ["scared", "dark"], "source_pass": "per-question pass", "_batch": "q:unknown:2:11"}
+{"setting": "unknown", "question": "Tell me more about that.", "cards": ["bathroom", "now"], "source_pass": "per-question pass", "_batch": "q:unknown:2:11"}
+{"setting": "unknown", "question": "Can you tell me more?", "cards": ["library", "books"], "source_pass": "per-question pass", "_batch": "q:unknown:2:10"}
+{"setting": "unknown", "question": "Where do you mean?", "cards": ["zoo", "see", "lion"], "source_pass": "per-question pass", "_batch": "q:unknown:2:10"}
+{"setting": "unknown", "question": "Show me what you mean.", "cards": ["outside", "play", "friend"], "source_pass": "per-question pass", "_batch": "q:unknown:2:10"}
+{"setting": "unknown", "question": "What are you trying to tell me?", "cards": ["tired", "go", "bed"], "source_pass": "per-question pass", "_batch": "q:unknown:2:10"}
+{"setting": "unknown", "question": "Which place do you mean?", "cards": ["restaurant", "pizza"], "source_pass": "per-question pass", "_batch": "q:unknown:2:10"}
+{"setting": "unknown", "question": "Can you show me more?", "cards": ["daddy", "work"], "source_pass": "per-question pass", "_batch": "q:unknown:2:10"}
+{"setting": "unknown", "question": "Where do you want to go?", "cards": ["playground", "slide", "fun"], "source_pass": "per-question pass", "_batch": "q:unknown:2:10"}
+{"setting": "unknown", "question": "What do you like best here?", "cards": ["balloon", "red"], "source_pass": "per-question pass", "_batch": "q:unknown:3:4"}
+{"setting": "unknown", "question": "What's your favorite thing here?", "cards": ["fountain", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:3:4"}
+{"setting": "unknown", "question": "Which one do you like most?", "cards": ["shop", "toy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:4"}
+{"setting": "unknown", "question": "Is there anything you really like here?", "cards": ["cousin", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:3:4"}
+{"setting": "unknown", "question": "What do you like the most?", "cards": ["pizza", "eat"], "source_pass": "per-question pass", "_batch": "q:unknown:3:4"}
+{"setting": "unknown", "question": "Got a favorite here?", "cards": ["quiet", "corner", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:4"}
+{"setting": "unknown", "question": "What's the best thing here?", "cards": ["duck", "feed", "bread"], "source_pass": "per-question pass", "_batch": "q:unknown:3:4"}
+{"setting": "unknown", "question": "What do you mean, somewhere else?", "cards": ["zoo", "see", "lion"], "source_pass": "per-question pass", "_batch": "q:unknown:2:8"}
+{"setting": "unknown", "question": "Can you tell me more about that?", "cards": ["friend", "house", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:8"}
+{"setting": "unknown", "question": "What are you trying to say?", "cards": ["too", "loud", "here"], "source_pass": "per-question pass", "_batch": "q:unknown:2:8"}
+{"setting": "unknown", "question": "Which place do you mean?", "cards": ["pool", "swim"], "source_pass": "per-question pass", "_batch": "q:unknown:2:8"}
+{"setting": "unknown", "question": "Can you show me what you mean?", "cards": ["outside", "quiet"], "source_pass": "per-question pass", "_batch": "q:unknown:2:8"}
+{"setting": "unknown", "question": "What do you mean, go somewhere else?", "cards": ["restaurant", "hungry", "pizza"], "source_pass": "per-question pass", "_batch": "q:unknown:2:8"}
+{"setting": "unknown", "question": "Tell me what you mean.", "cards": ["bus", "trip", "far"], "source_pass": "per-question pass", "_batch": "q:unknown:2:8"}
+{"setting": "unknown", "question": "What's wrong?", "cards": ["boy", "push", "sad"], "source_pass": "per-question pass", "_batch": "q:unknown:0:11"}
+{"setting": "unknown", "question": "What went on out there?", "cards": ["bus", "late"], "source_pass": "per-question pass", "_batch": "q:unknown:0:11"}
+{"setting": "unknown", "question": "What was that?", "cards": ["fire truck", "siren"], "source_pass": "per-question pass", "_batch": "q:unknown:0:11"}
+{"setting": "unknown", "question": "Why are you crying?", "cards": ["toy", "take", "girl"], "source_pass": "per-question pass", "_batch": "q:unknown:0:11"}
+{"setting": "unknown", "question": "Did something happen?", "cards": ["bird", "poop", "shirt"], "source_pass": "per-question pass", "_batch": "q:unknown:0:11"}
+{"setting": "unknown", "question": "What do you like best here?", "cards": ["ducks", "pond"], "source_pass": "per-question pass", "_batch": "q:unknown:3:6"}
+{"setting": "unknown", "question": "What's your favorite thing here?", "cards": ["train", "ride"], "source_pass": "per-question pass", "_batch": "q:unknown:3:6"}
+{"setting": "unknown", "question": "Do you have a favorite?", "cards": ["sand", "dig"], "source_pass": "per-question pass", "_batch": "q:unknown:3:6"}
+{"setting": "unknown", "question": "What do you like most?", "cards": ["cousin", "play", "fun"], "source_pass": "per-question pass", "_batch": "q:unknown:3:6"}
+{"setting": "unknown", "question": "Which do you like best?", "cards": ["elevator", "button"], "source_pass": "per-question pass", "_batch": "q:unknown:3:6"}
+{"setting": "unknown", "question": "Got a favorite?", "cards": ["fish", "tank", "watch"], "source_pass": "per-question pass", "_batch": "q:unknown:3:6"}
+{"setting": "unknown", "question": "What's the best part?", "cards": ["bubbles", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:6"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["water"], "source_pass": "per-question pass", "_batch": "q:unknown:4:7"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["help", "shoes"], "source_pass": "per-question pass", "_batch": "q:unknown:4:7"}
+{"setting": "unknown", "question": "What can I get for you?", "cards": ["tablet"], "source_pass": "per-question pass", "_batch": "q:unknown:4:7"}
+{"setting": "unknown", "question": "Do you need something?", "cards": ["sit", "tired"], "source_pass": "per-question pass", "_batch": "q:unknown:4:7"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:4:7"}
+{"setting": "unknown", "question": "What should I get you?", "cards": ["blanket", "teddy"], "source_pass": "per-question pass", "_batch": "q:unknown:4:7"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["band-aid", "hurt", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:4:7"}
+{"setting": "unknown", "question": "What do you need from me?", "cards": ["hold", "hand"], "source_pass": "per-question pass", "_batch": "q:unknown:4:7"}
+{"setting": "unknown", "question": "What do you need?", "cards": ["hug", "mom"], "source_pass": "per-question pass", "_batch": "q:unknown:4:8"}
+{"setting": "unknown", "question": "Do you need something?", "cards": ["rest", "tired"], "source_pass": "per-question pass", "_batch": "q:unknown:4:8"}
+{"setting": "unknown", "question": "What would help you right now?", "cards": ["headphones"], "source_pass": "per-question pass", "_batch": "q:unknown:4:8"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["sit", "down"], "source_pass": "per-question pass", "_batch": "q:unknown:4:8"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["blanket", "sleepy"], "source_pass": "per-question pass", "_batch": "q:unknown:4:8"}
+{"setting": "unknown", "question": "What do you need, buddy?", "cards": ["dad", "hand"], "source_pass": "per-question pass", "_batch": "q:unknown:4:8"}
+{"setting": "unknown", "question": "Can I get you anything?", "cards": ["medicine", "tummy", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:4:8"}
+{"setting": "unknown", "question": "What's wrong? What happened?", "cards": ["too", "loud", "noise"], "source_pass": "per-question pass", "_batch": "q:unknown:0:10"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["saw", "fire truck"], "source_pass": "per-question pass", "_batch": "q:unknown:0:10"}
+{"setting": "unknown", "question": "What happened there?", "cards": ["grandma", "hug"], "source_pass": "per-question pass", "_batch": "q:unknown:0:10"}
+{"setting": "unknown", "question": "What happened out there?", "cards": ["bee", "sting"], "source_pass": "per-question pass", "_batch": "q:unknown:0:10"}
+{"setting": "unknown", "question": "Did something happen?", "cards": ["balloon", "pop", "sad"], "source_pass": "per-question pass", "_batch": "q:unknown:0:10"}
+{"setting": "unknown", "question": "What happened when you were out?", "cards": ["friend", "share", "snack"], "source_pass": "per-question pass", "_batch": "q:unknown:0:10"}
+{"setting": "unknown", "question": "What was that? What happened?", "cards": ["bus", "late", "wait"], "source_pass": "per-question pass", "_batch": "q:unknown:0:10"}
+{"setting": "unknown", "question": "What do you need right now?", "cards": ["headphones", "loud"], "source_pass": "per-question pass", "_batch": "q:unknown:4:6"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["tablet"], "source_pass": "per-question pass", "_batch": "q:unknown:4:6"}
+{"setting": "unknown", "question": "What can I get for you?", "cards": ["blanket", "tired"], "source_pass": "per-question pass", "_batch": "q:unknown:4:6"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["hug"], "source_pass": "per-question pass", "_batch": "q:unknown:4:6"}
+{"setting": "unknown", "question": "What do you need, buddy?", "cards": ["band-aid", "hurt", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:4:6"}
+{"setting": "unknown", "question": "Do you need something?", "cards": ["sit", "chair"], "source_pass": "per-question pass", "_batch": "q:unknown:4:6"}
+{"setting": "unknown", "question": "What do you need help with?", "cards": ["open", "bottle"], "source_pass": "per-question pass", "_batch": "q:unknown:4:6"}
+{"setting": "unknown", "question": "Where do you mean?", "cards": ["dad", "work"], "source_pass": "per-question pass", "_batch": "q:unknown:2:7"}
+{"setting": "unknown", "question": "Can you show me what you mean?", "cards": ["pool", "swim"], "source_pass": "per-question pass", "_batch": "q:unknown:2:7"}
+{"setting": "unknown", "question": "Where do you want to go?", "cards": ["store", "snack"], "source_pass": "per-question pass", "_batch": "q:unknown:2:7"}
+{"setting": "unknown", "question": "Why somewhere else?", "cards": ["scared", "dog"], "source_pass": "per-question pass", "_batch": "q:unknown:2:7"}
+{"setting": "unknown", "question": "Tell me more about that place.", "cards": ["friend", "house", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:7"}
+{"setting": "unknown", "question": "What place are you thinking of?", "cards": ["zoo", "animals"], "source_pass": "per-question pass", "_batch": "q:unknown:2:7"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["bandaid", "hurt", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:4:4"}
+{"setting": "unknown", "question": "Do you need anything?", "cards": ["blanket", "sleep"], "source_pass": "per-question pass", "_batch": "q:unknown:4:4"}
+{"setting": "unknown", "question": "What would help you?", "cards": ["toy", "bored"], "source_pass": "per-question pass", "_batch": "q:unknown:4:4"}
+{"setting": "unknown", "question": "How are you doing right now?", "cards": ["loud", "too", "noisy"], "source_pass": "per-question pass", "_batch": "q:unknown:1:9"}
+{"setting": "unknown", "question": "How are you doing today, sweetie?", "cards": ["sad", "dog", "not", "here"], "source_pass": "per-question pass", "_batch": "q:unknown:1:9"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["sleepy", "want", "bed"], "source_pass": "per-question pass", "_batch": "q:unknown:1:9"}
+{"setting": "unknown", "question": "How are you feeling at this place?", "cards": ["shy", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:1:9"}
+{"setting": "unknown", "question": "How's your body feeling today?", "cards": ["hot", "thirsty", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:1:9"}
+{"setting": "unknown", "question": "How are you feeling right now?", "cards": ["worried", "where", "mom"], "source_pass": "per-question pass", "_batch": "q:unknown:1:9"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["bandage", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:4:5"}
+{"setting": "unknown", "question": "What should I get for you?", "cards": ["blanket", "tired"], "source_pass": "per-question pass", "_batch": "q:unknown:4:5"}
+{"setting": "unknown", "question": "What are you needing?", "cards": ["teddy", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:4:5"}
+{"setting": "unknown", "question": "Where do you mean?", "cards": ["outside", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:5"}
+{"setting": "unknown", "question": "Can you tell me more?", "cards": ["store", "snack"], "source_pass": "per-question pass", "_batch": "q:unknown:2:5"}
+{"setting": "unknown", "question": "Where else do you want to go?", "cards": ["pool", "swim"], "source_pass": "per-question pass", "_batch": "q:unknown:2:5"}
+{"setting": "unknown", "question": "What are you trying to say?", "cards": ["dad", "work"], "source_pass": "per-question pass", "_batch": "q:unknown:2:5"}
+{"setting": "unknown", "question": "Which place do you mean?", "cards": ["library", "books"], "source_pass": "per-question pass", "_batch": "q:unknown:2:5"}
+{"setting": "unknown", "question": "Can you show me what you mean?", "cards": ["scared", "go", "away"], "source_pass": "per-question pass", "_batch": "q:unknown:2:5"}
+{"setting": "unknown", "question": "Tell me what you mean.", "cards": ["friend", "house", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:5"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["hot", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:5:7"}
+{"setting": "unknown", "question": "You doing alright?", "cards": ["go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:7"}
+{"setting": "unknown", "question": "How are things?", "cards": ["bored", "tablet"], "source_pass": "per-question pass", "_batch": "q:unknown:5:7"}
+{"setting": "unknown", "question": "How are you feeling?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:5:7"}
+{"setting": "unknown", "question": "Everything okay over there?", "cards": ["lost", "toy"], "source_pass": "per-question pass", "_batch": "q:unknown:5:7"}
+{"setting": "unknown", "question": "How you doing, buddy?", "cards": ["happy", "dog"], "source_pass": "per-question pass", "_batch": "q:unknown:5:7"}
+{"setting": "unknown", "question": "How are you holding up?", "cards": ["sleepy", "car", "nap"], "source_pass": "per-question pass", "_batch": "q:unknown:5:7"}
+{"setting": "unknown", "question": "What do you like best here?", "cards": ["fish", "tank"], "source_pass": "per-question pass", "_batch": "q:unknown:3:7"}
+{"setting": "unknown", "question": "What's your favorite thing here?", "cards": ["bubbles"], "source_pass": "per-question pass", "_batch": "q:unknown:3:7"}
+{"setting": "unknown", "question": "Which one do you like most?", "cards": ["big", "truck"], "source_pass": "per-question pass", "_batch": "q:unknown:3:7"}
+{"setting": "unknown", "question": "Is there something you really love here?", "cards": ["cousin", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:3:7"}
+{"setting": "unknown", "question": "What's the best part?", "cards": ["pizza", "eat"], "source_pass": "per-question pass", "_batch": "q:unknown:3:7"}
+{"setting": "unknown", "question": "Which do you like best?", "cards": ["music", "dance"], "source_pass": "per-question pass", "_batch": "q:unknown:3:7"}
+{"setting": "unknown", "question": "Got a favorite spot?", "cards": ["tree", "climb", "high"], "source_pass": "per-question pass", "_batch": "q:unknown:3:7"}
+{"setting": "unknown", "question": "What happened over there?", "cards": ["balloon", "pop"], "source_pass": "per-question pass", "_batch": "q:unknown:0:6"}
+{"setting": "unknown", "question": "What happened while you were out?", "cards": ["saw", "fire truck"], "source_pass": "per-question pass", "_batch": "q:unknown:0:6"}
+{"setting": "unknown", "question": "What's wrong, what happened?", "cards": ["bee", "sting", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:0:6"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["too", "loud", "noise"], "source_pass": "per-question pass", "_batch": "q:unknown:0:6"}
+{"setting": "unknown", "question": "What happened out there?", "cards": ["grandma", "hug"], "source_pass": "per-question pass", "_batch": "q:unknown:0:6"}
+{"setting": "unknown", "question": "Why are you crying, what happened?", "cards": ["toy", "broken", "sad"], "source_pass": "per-question pass", "_batch": "q:unknown:0:6"}
+{"setting": "unknown", "question": "What happened when you went out?", "cards": ["new", "friend", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:0:6"}
+{"setting": "unknown", "question": "What happened on the trip?", "cards": ["bus", "late", "wait"], "source_pass": "per-question pass", "_batch": "q:unknown:0:6"}
+{"setting": "unknown", "question": "How are things?", "cards": ["miss", "mom"], "source_pass": "per-question pass", "_batch": "q:unknown:5:5"}
+{"setting": "unknown", "question": "How are you doing over there?", "cards": ["scared", "new", "place"], "source_pass": "per-question pass", "_batch": "q:unknown:5:5"}
+{"setting": "unknown", "question": "Everything alright?", "cards": ["legs", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:5:5"}
+{"setting": "unknown", "question": "How are you getting on?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:5:5"}
+{"setting": "unknown", "question": "How are you feeling here?", "cards": ["too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:5:5"}
+{"setting": "unknown", "question": "How are things going?", "cards": ["friend", "here", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:5:5"}
+{"setting": "unknown", "question": "How are you doing right now?", "cards": ["bored", "wait"], "source_pass": "per-question pass", "_batch": "q:unknown:1:8"}
+{"setting": "unknown", "question": "How do you feel being here?", "cards": ["shy", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:1:8"}
+{"setting": "unknown", "question": "Are you feeling okay today?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:1:8"}
+{"setting": "unknown", "question": "How's your body feeling today?", "cards": ["legs", "tired", "walk"], "source_pass": "per-question pass", "_batch": "q:unknown:1:8"}
+{"setting": "unknown", "question": "What kind of feeling do you have today?", "cards": ["angry", "want", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:1:8"}
+{"setting": "unknown", "question": "How are you feeling at this place?", "cards": ["worried", "doctor"], "source_pass": "per-question pass", "_batch": "q:unknown:1:8"}
+{"setting": "unknown", "question": "Tell me how you feel today.", "cards": ["proud", "brave"], "source_pass": "per-question pass", "_batch": "q:unknown:1:8"}
+{"setting": "unknown", "question": "What happened out there?", "cards": ["boy", "push", "me"], "source_pass": "per-question pass", "_batch": "q:unknown:0:4"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["ice cream", "drop"], "source_pass": "per-question pass", "_batch": "q:unknown:0:4"}
+{"setting": "unknown", "question": "What happened while we were out?", "cards": ["bee", "sting", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:0:4"}
+{"setting": "unknown", "question": "What was that about?", "cards": ["grandma", "hug"], "source_pass": "per-question pass", "_batch": "q:unknown:0:4"}
+{"setting": "unknown", "question": "Did something happen?", "cards": ["bus", "late", "wait"], "source_pass": "per-question pass", "_batch": "q:unknown:0:4"}
+{"setting": "unknown", "question": "What happened there?", "cards": ["new", "friend", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:0:4"}
+{"setting": "unknown", "question": "Can you tell me what happened?", "cards": ["toy", "broken", "sad"], "source_pass": "per-question pass", "_batch": "q:unknown:0:4"}
+{"setting": "unknown", "question": "How are things going?", "cards": ["too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:5:11"}
+{"setting": "unknown", "question": "Everything going okay?", "cards": ["lost", "shoe"], "source_pass": "per-question pass", "_batch": "q:unknown:5:11"}
+{"setting": "unknown", "question": "How's it going so far?", "cards": ["happy", "grandma"], "source_pass": "per-question pass", "_batch": "q:unknown:5:11"}
+{"setting": "unknown", "question": "How are you feeling here?", "cards": ["sleepy", "car"], "source_pass": "per-question pass", "_batch": "q:unknown:5:11"}
+{"setting": "unknown", "question": "How's everything going?", "cards": ["done", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:11"}
+{"setting": "unknown", "question": "How are you doing here?", "cards": ["noisy", "too", "loud"], "source_pass": "per-question pass", "_batch": "q:unknown:5:9"}
+{"setting": "unknown", "question": "How's it going so far?", "cards": ["new", "place", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:5:9"}
+{"setting": "unknown", "question": "How are things going?", "cards": ["bathroom", "now"], "source_pass": "per-question pass", "_batch": "q:unknown:5:9"}
+{"setting": "unknown", "question": "You doing alright here?", "cards": ["want", "mom"], "source_pass": "per-question pass", "_batch": "q:unknown:5:9"}
+{"setting": "unknown", "question": "How's everything going?", "cards": ["bored", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:5:9"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["hot", "sun", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:5:9"}
+{"setting": "unknown", "question": "How's it going over here?", "cards": ["friend", "play", "together"], "source_pass": "per-question pass", "_batch": "q:unknown:5:9"}
+{"setting": "unknown", "question": "Do you need something?", "cards": ["break", "quiet"], "source_pass": "per-question pass", "_batch": "q:unknown:4:9"}
+{"setting": "unknown", "question": "What do you need right now?", "cards": ["hug", "scared"], "source_pass": "per-question pass", "_batch": "q:unknown:4:9"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["blanket", "tired"], "source_pass": "per-question pass", "_batch": "q:unknown:4:9"}
+{"setting": "unknown", "question": "What would help you?", "cards": ["teddy"], "source_pass": "per-question pass", "_batch": "q:unknown:4:9"}
+{"setting": "unknown", "question": "Is there something you need?", "cards": ["bandage", "hurt", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:4:9"}
+{"setting": "unknown", "question": "What do you need, buddy?", "cards": ["sit", "chair"], "source_pass": "per-question pass", "_batch": "q:unknown:4:9"}
+{"setting": "unknown", "question": "What's wrong?", "cards": ["ice cream", "drop"], "source_pass": "per-question pass", "_batch": "q:unknown:0:7"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["see", "fire truck"], "source_pass": "per-question pass", "_batch": "q:unknown:0:7"}
+{"setting": "unknown", "question": "What happened there?", "cards": ["shoe", "gone"], "source_pass": "per-question pass", "_batch": "q:unknown:0:7"}
+{"setting": "unknown", "question": "Why are you crying?", "cards": ["brother", "take", "my", "ball"], "source_pass": "per-question pass", "_batch": "q:unknown:0:7"}
+{"setting": "unknown", "question": "What was that?", "cards": ["door", "close", "finger"], "source_pass": "per-question pass", "_batch": "q:unknown:0:7"}
+{"setting": "unknown", "question": "How are you doing right now?", "cards": ["tummy", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:1:10"}
+{"setting": "unknown", "question": "How's your body feeling today?", "cards": ["sleepy", "need", "nap"], "source_pass": "per-question pass", "_batch": "q:unknown:1:10"}
+{"setting": "unknown", "question": "How are you feeling at this place?", "cards": ["worried", "where", "mom"], "source_pass": "per-question pass", "_batch": "q:unknown:1:10"}
+{"setting": "unknown", "question": "How do you feel today, buddy?", "cards": ["silly", "dog", "lick"], "source_pass": "per-question pass", "_batch": "q:unknown:1:10"}
+{"setting": "unknown", "question": "How are you doing today?", "cards": ["too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:1:10"}
+{"setting": "unknown", "question": "How are you feeling now that we're here?", "cards": ["proud", "climb", "big", "slide"], "source_pass": "per-question pass", "_batch": "q:unknown:1:10"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["happy", "grandma", "here"], "source_pass": "per-question pass", "_batch": "q:unknown:5:4"}
+{"setting": "unknown", "question": "How are things going here?", "cards": ["bathroom", "now"], "source_pass": "per-question pass", "_batch": "q:unknown:5:4"}
+{"setting": "unknown", "question": "You doing alright?", "cards": ["hot", "sun"], "source_pass": "per-question pass", "_batch": "q:unknown:5:4"}
+{"setting": "unknown", "question": "How are you doing so far?", "cards": ["play", "new", "friend"], "source_pass": "per-question pass", "_batch": "q:unknown:5:4"}
+{"setting": "unknown", "question": "Everything going okay?", "cards": ["lost", "toy"], "source_pass": "per-question pass", "_batch": "q:unknown:5:4"}
+{"setting": "unknown", "question": "How are you feeling here?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:5:4"}
+{"setting": "unknown", "question": "How's it going so far?", "cards": ["fell", "hurt", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:5:4"}
+{"setting": "unknown", "question": "Are you having a good time?", "cards": ["like", "see", "animals"], "source_pass": "per-question pass", "_batch": "q:unknown:5:4"}
+{"setting": "unknown", "question": "What was your favorite part?", "cards": ["pool", "splash"], "source_pass": "per-question pass", "_batch": "q:unknown:3:9"}
+{"setting": "unknown", "question": "Which one did you like most?", "cards": ["red", "balloon"], "source_pass": "per-question pass", "_batch": "q:unknown:3:9"}
+{"setting": "unknown", "question": "Is there something you really liked?", "cards": ["friend", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:3:9"}
+{"setting": "unknown", "question": "What's your favorite thing here?", "cards": ["music", "dance"], "source_pass": "per-question pass", "_batch": "q:unknown:3:9"}
+{"setting": "unknown", "question": "Did anything make you happy?", "cards": ["bubbles", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:9"}
+{"setting": "unknown", "question": "What did you love the most?", "cards": ["pizza"], "source_pass": "per-question pass", "_batch": "q:unknown:3:9"}
+{"setting": "unknown", "question": "Which was the best one?", "cards": ["puppet", "show", "funny"], "source_pass": "per-question pass", "_batch": "q:unknown:3:9"}
+{"setting": "unknown", "question": "What's your favorite thing here?", "cards": ["ducks", "feed"], "source_pass": "per-question pass", "_batch": "q:unknown:3:8"}
+{"setting": "unknown", "question": "Which one do you like best?", "cards": ["red", "balloon"], "source_pass": "per-question pass", "_batch": "q:unknown:3:8"}
+{"setting": "unknown", "question": "Do you have a favorite here?", "cards": ["slide", "big"], "source_pass": "per-question pass", "_batch": "q:unknown:3:8"}
+{"setting": "unknown", "question": "What do you like most about this place?", "cards": ["music", "dance"], "source_pass": "per-question pass", "_batch": "q:unknown:3:8"}
+{"setting": "unknown", "question": "Got a favorite?", "cards": ["sand", "dig"], "source_pass": "per-question pass", "_batch": "q:unknown:3:8"}
+{"setting": "unknown", "question": "Which part is your favorite?", "cards": ["bubbles"], "source_pass": "per-question pass", "_batch": "q:unknown:3:8"}
+{"setting": "unknown", "question": "What's the best thing here for you?", "cards": ["cousin", "play", "ball"], "source_pass": "per-question pass", "_batch": "q:unknown:3:8"}
+{"setting": "unknown", "question": "Is there anything you like best?", "cards": ["lights", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:8"}
+{"setting": "unknown", "question": "How are you doing over here?", "cards": ["scared"], "source_pass": "per-question pass", "_batch": "q:unknown:5:8"}
+{"setting": "unknown", "question": "How are things going?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:5:8"}
+{"setting": "unknown", "question": "You doing alright?", "cards": ["hurt", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:5:8"}
+{"setting": "unknown", "question": "How's everything going?", "cards": ["thirsty", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:5:8"}
+{"setting": "unknown", "question": "Are you feeling okay here?", "cards": ["cold", "jacket"], "source_pass": "per-question pass", "_batch": "q:unknown:1:11"}
+{"setting": "unknown", "question": "How do you feel being here?", "cards": ["worried", "mom", "where"], "source_pass": "per-question pass", "_batch": "q:unknown:1:11"}
+{"setting": "unknown", "question": "How are you doing today, buddy?", "cards": ["sleepy", "nap"], "source_pass": "per-question pass", "_batch": "q:unknown:1:11"}
+{"setting": "unknown", "question": "How do you feel right now?", "cards": ["hot", "sun", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:1:11"}
+{"setting": "unknown", "question": "Tell me how you're feeling today.", "cards": ["proud", "friend", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:1:11"}
+{"setting": "unknown", "question": "Can you tell me more?", "cards": ["friend", "house", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:2:6"}
+{"setting": "unknown", "question": "Show me what you mean.", "cards": ["outside", "garden"], "source_pass": "per-question pass", "_batch": "q:unknown:2:6"}
+{"setting": "unknown", "question": "Can you show me where?", "cards": ["zoo", "animals"], "source_pass": "per-question pass", "_batch": "q:unknown:2:6"}
+{"setting": "unknown", "question": "What do you mean, somewhere else?", "cards": ["quiet", "room", "alone"], "source_pass": "per-question pass", "_batch": "q:unknown:2:6"}
+{"setting": "unknown", "question": "Tell me more about that.", "cards": ["tired", "go", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:2:6"}
+{"setting": "unknown", "question": "Do you have a favorite here?", "cards": ["dog"], "source_pass": "per-question pass", "_batch": "q:unknown:3:10"}
+{"setting": "unknown", "question": "What do you like most about this place?", "cards": ["water", "splash"], "source_pass": "per-question pass", "_batch": "q:unknown:3:10"}
+{"setting": "unknown", "question": "What's the best part here?", "cards": ["animals", "feed", "goat"], "source_pass": "per-question pass", "_batch": "q:unknown:3:10"}
+{"setting": "unknown", "question": "Which is your favorite?", "cards": ["quiet", "corner", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:10"}
+{"setting": "unknown", "question": "Are you feeling okay here?", "cards": ["confused", "where", "we"], "source_pass": "per-question pass", "_batch": "q:unknown:1:7"}
+{"setting": "unknown", "question": "Are you feeling okay here?", "cards": ["want", "mom", "hug"], "source_pass": "per-question pass", "_batch": "q:unknown:1:7"}
+{"setting": "unknown", "question": "How's your body feeling today?", "cards": ["sleepy", "car", "nap"], "source_pass": "per-question pass", "_batch": "q:unknown:1:7"}
+{"setting": "unknown", "question": "What kind of mood are you in today?", "cards": ["silly", "play", "park"], "source_pass": "per-question pass", "_batch": "q:unknown:1:7"}
+{"setting": "unknown", "question": "How are you doing?", "cards": ["toilet", "now"], "source_pass": "per-question pass", "_batch": "q:unknown:5:10"}
+{"setting": "unknown", "question": "How are you doing here?", "cards": ["like", "playground"], "source_pass": "per-question pass", "_batch": "q:unknown:5:10"}
+{"setting": "unknown", "question": "Everything alright?", "cards": ["lost", "shoe"], "source_pass": "per-question pass", "_batch": "q:unknown:5:10"}
+{"setting": "unknown", "question": "You doing okay?", "cards": ["thirsty", "water"], "source_pass": "per-question pass", "_batch": "q:unknown:5:10"}
+{"setting": "unknown", "question": "How's it going so far?", "cards": ["happy", "see", "grandma"], "source_pass": "per-question pass", "_batch": "q:unknown:5:10"}
+{"setting": "unknown", "question": "Are you having a good time?", "cards": ["dog", "friend"], "source_pass": "per-question pass", "_batch": "q:unknown:5:10"}
+{"setting": "unknown", "question": "How are things?", "cards": ["hurt", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:5:10"}
+{"setting": "unknown", "question": "Are you feeling okay out here?", "cards": ["tummy", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:1:4"}
+{"setting": "unknown", "question": "Are you feeling okay out here?", "cards": ["too", "many", "people"], "source_pass": "per-question pass", "_batch": "q:unknown:1:4"}
+{"setting": "unknown", "question": "How's your body feeling?", "cards": ["sleepy", "bed"], "source_pass": "per-question pass", "_batch": "q:unknown:1:4"}
+{"setting": "unknown", "question": "What kind of feeling do you have today?", "cards": ["calm", "quiet", "room"], "source_pass": "per-question pass", "_batch": "q:unknown:1:4"}
+{"setting": "unknown", "question": "Tell me how you feel today.", "cards": ["angry", "go", "home", "now"], "source_pass": "per-question pass", "_batch": "q:unknown:1:4"}
+{"setting": "unknown", "question": "What's wrong?", "cards": ["bee", "sting", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:0:9"}
+{"setting": "unknown", "question": "Tell me what happened.", "cards": ["boy", "push", "me"], "source_pass": "per-question pass", "_batch": "q:unknown:0:9"}
+{"setting": "unknown", "question": "What went on?", "cards": ["store", "too loud"], "source_pass": "per-question pass", "_batch": "q:unknown:0:9"}
+{"setting": "unknown", "question": "Did something happen?", "cards": ["balloon", "pop"], "source_pass": "per-question pass", "_batch": "q:unknown:0:9"}
+{"setting": "unknown", "question": "What happened out there?", "cards": ["new", "friend", "park"], "source_pass": "per-question pass", "_batch": "q:unknown:0:9"}
+{"setting": "unknown", "question": "Why are you upset?", "cards": ["bus", "late", "waiting"], "source_pass": "per-question pass", "_batch": "q:unknown:0:9"}
+{"setting": "unknown", "question": "What happened to you?", "cards": ["knee", "bleeding", "bandage"], "source_pass": "per-question pass", "_batch": "q:unknown:0:9"}
+{"setting": "unknown", "question": "How are you doing here?", "cards": ["fun", "playing"], "source_pass": "per-question pass", "_batch": "q:unknown:5:6"}
+{"setting": "unknown", "question": "You doing alright?", "cards": ["legs", "hurt"], "source_pass": "per-question pass", "_batch": "q:unknown:5:6"}
+{"setting": "unknown", "question": "How are you feeling?", "cards": ["sleepy", "car"], "source_pass": "per-question pass", "_batch": "q:unknown:5:6"}
+{"setting": "unknown", "question": "Everything okay?", "cards": ["lost", "toy", "sad"], "source_pass": "per-question pass", "_batch": "q:unknown:5:6"}
+{"setting": "unknown", "question": "What's wrong?", "cards": ["bee", "sting", "arm"], "source_pass": "per-question pass", "_batch": "q:unknown:0:5"}
+{"setting": "unknown", "question": "What happened there?", "cards": ["saw", "fire truck", "loud"], "source_pass": "per-question pass", "_batch": "q:unknown:0:5"}
+{"setting": "unknown", "question": "Why are you upset?", "cards": ["toy", "forgot", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:0:5"}
+{"setting": "unknown", "question": "What's going on?", "cards": ["too", "noisy", "ears"], "source_pass": "per-question pass", "_batch": "q:unknown:0:5"}
+{"setting": "unknown", "question": "How did that happen?", "cards": ["shoe", "mud", "dirty"], "source_pass": "per-question pass", "_batch": "q:unknown:0:5"}
+{"setting": "unknown", "question": "Can you tell me more?", "cards": ["quiet", "room"], "source_pass": "per-question pass", "_batch": "q:unknown:2:4"}
+{"setting": "unknown", "question": "Where do you mean?", "cards": ["my", "bedroom"], "source_pass": "per-question pass", "_batch": "q:unknown:2:4"}
+{"setting": "unknown", "question": "What are you trying to say?", "cards": ["zoo", "animals"], "source_pass": "per-question pass", "_batch": "q:unknown:2:4"}
+{"setting": "unknown", "question": "Can you show me what you mean?", "cards": ["car", "drive"], "source_pass": "per-question pass", "_batch": "q:unknown:2:4"}
+{"setting": "unknown", "question": "Where do you want to go?", "cards": ["friend", "house"], "source_pass": "per-question pass", "_batch": "q:unknown:2:4"}
+{"setting": "unknown", "question": "Tell me more about that.", "cards": ["scared", "go", "away"], "source_pass": "per-question pass", "_batch": "q:unknown:2:4"}
+{"setting": "unknown", "question": "What do you mean, somewhere else?", "cards": ["playground", "slide"], "source_pass": "per-question pass", "_batch": "q:unknown:2:4"}
+{"setting": "unknown", "question": "What do you like best here?", "cards": ["slide", "fast"], "source_pass": "per-question pass", "_batch": "q:unknown:3:5"}
+{"setting": "unknown", "question": "Which one is your favorite?", "cards": ["dog", "pet"], "source_pass": "per-question pass", "_batch": "q:unknown:3:5"}
+{"setting": "unknown", "question": "What's your favorite thing out here?", "cards": ["bubbles"], "source_pass": "per-question pass", "_batch": "q:unknown:3:5"}
+{"setting": "unknown", "question": "Is there something you really like?", "cards": ["cousin", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:3:5"}
+{"setting": "unknown", "question": "What do you love most about this place?", "cards": ["trampoline", "jump"], "source_pass": "per-question pass", "_batch": "q:unknown:3:5"}
+{"setting": "unknown", "question": "Got a favorite spot?", "cards": ["tree", "climb"], "source_pass": "per-question pass", "_batch": "q:unknown:3:5"}
+{"setting": "unknown", "question": "What's the best part here?", "cards": ["pizza", "restaurant"], "source_pass": "per-question pass", "_batch": "q:unknown:3:5"}
+{"setting": "unknown", "question": "What happened to you?", "cards": ["bee", "sting"], "source_pass": "per-question pass", "_batch": "q:unknown:0:8"}
+{"setting": "unknown", "question": "What happened out there?", "cards": ["ice cream", "drop", "sad"], "source_pass": "per-question pass", "_batch": "q:unknown:0:8"}
+{"setting": "unknown", "question": "What happened when we were out?", "cards": ["saw", "fire truck"], "source_pass": "per-question pass", "_batch": "q:unknown:0:8"}
+{"setting": "unknown", "question": "Why are you upset? What happened?", "cards": ["toy", "forgot", "home"], "source_pass": "per-question pass", "_batch": "q:unknown:0:8"}
+{"setting": "unknown", "question": "What was that?", "cards": ["bus", "late"], "source_pass": "per-question pass", "_batch": "q:unknown:0:8"}
+{"setting": "unknown", "question": "What happened over there?", "cards": ["friend", "share", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:0:8"}
+{"setting": "unknown", "question": "What did you like best there?", "cards": ["water", "splash"], "source_pass": "per-question pass", "_batch": "q:unknown:3:11"}
+{"setting": "unknown", "question": "What was your favorite part?", "cards": ["cousin", "play"], "source_pass": "per-question pass", "_batch": "q:unknown:3:11"}
+{"setting": "unknown", "question": "Did you have a favorite thing to do?", "cards": ["sand", "dig"], "source_pass": "per-question pass", "_batch": "q:unknown:3:11"}
+{"setting": "unknown", "question": "What was the best thing there?", "cards": ["music", "dance"], "source_pass": "per-question pass", "_batch": "q:unknown:3:11"}
+{"setting": "unknown", "question": "Was there something you really liked?", "cards": ["toy", "car", "new"], "source_pass": "per-question pass", "_batch": "q:unknown:3:11"}
+{"setting": "unknown", "question": "Anything you loved there?", "cards": ["bubbles", "happy"], "source_pass": "per-question pass", "_batch": "q:unknown:3:11"}
+{"setting": "unknown", "question": "What do you need right now?", "cards": ["rest", "tired"], "source_pass": "per-question pass", "_batch": "q:unknown:4:10"}
+{"setting": "unknown", "question": "Tell me what you need.", "cards": ["quiet", "place"], "source_pass": "per-question pass", "_batch": "q:unknown:4:10"}
+{"setting": "unknown", "question": "What do you need, buddy?", "cards": ["blanket", "teddy"], "source_pass": "per-question pass", "_batch": "q:unknown:4:10"}
+{"setting": "unknown", "question": "What can I help you with?", "cards": ["band-aid", "hurt", "knee"], "source_pass": "per-question pass", "_batch": "q:unknown:4:10"}

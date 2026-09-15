@@ -258,8 +258,11 @@ def setting_turn_states(dataset_dir, surf, lem, rng, max_rows=0):
             if cid and cid not in seq: seq.append(cid)
         if not seq or len(seq) * 2 < len(words): dropped += 1; continue
         kept += 1
+        # 0.7, not 1.5. At 1.5 these 39k rows took 45% of the loss mass -- as much as the whole 72k-row corpus --
+        # and the held-out corpus check fell from 332/371 to 309/371. They are here to supply the setting signal
+        # the corpus lacks, not to outvote it.
         base = {"split": "train", "source": "setting_turns", "setting": t.get("setting", "unknown"),
-                "tier": "gen", "weight": 1.5, "partner": t.get("question"), "history": [], "origin": "generated"}
+                "tier": "gen", "weight": 0.7, "partner": t.get("question"), "history": [], "origin": "generated"}
         for k, (prefix, targets) in enumerate(states_for([seq])):
             out.append(dict(base, id=f"genset_{i}_s{k}", prefix=prefix, targets=targets))
     print(f"setting turns: {kept} usable of {kept + dropped} -> {len(out)} states", flush=True)

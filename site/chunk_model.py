@@ -20,11 +20,17 @@ json.dump({"chunks": parts, "total_bytes": size, "sha256": h.hexdigest(), "versi
           open(os.path.join(a.out, "manifest.json"), "w"), indent=1)
 # cards.json: output order of the card logits (vocab order + <name> + <aac_end>), plus V and start index
 import csv
-rows = list(csv.DictReader(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "vocab", "vocab.csv"))))
+HERE = os.path.dirname(os.path.abspath(__file__))
+# the repo reorg moved the vocabulary under model/; keep both paths working
+_vocab = next(p for p in (os.path.join(HERE, "..", "model", "vocab", "vocab.csv"),
+                          os.path.join(HERE, "..", "vocab", "vocab.csv")) if os.path.exists(p))
+rows = list(csv.DictReader(open(_vocab)))
 meta = [{"id": r["id"], "speak": r["speak"], "category": r["category"], "intent": r["intent"]} for r in rows]
 ext = json.load(open(a.cards)) if a.cards.endswith(".json") and "extended" in a.cards else {}
 # v3: folder rows sit between the cards and the specials, in the order the trainer used (ext["cards"])
-folders = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "states", "folders.json")))["folders"] if ext.get("folders") else []
+_folders_path = next((p for p in (os.path.join(HERE, "..", "model", "data", "states", "folders.json"),
+                                  os.path.join(HERE, "..", "data", "states", "folders.json")) if os.path.exists(p)), None)
+folders = json.load(open(_folders_path))["folders"] if (ext.get("folders") and _folders_path) else []
 fmeta = {f["id"]: f for f in folders}
 # the app addresses folders by their browse path (web-client/public/folders.json); map the trainer's folder id onto it
 try:

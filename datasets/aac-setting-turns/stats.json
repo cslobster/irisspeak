@@ -1,0 +1,236 @@
+{
+  "rows": 6698,
+  "malformed_lines": 0,
+  "schema_violations": 0,
+  "schema_examples": [],
+  "valid_rows": 6698,
+  "by_setting": {
+    "doctor": 937,
+    "home": 908,
+    "play": 895,
+    "restaurant": 864,
+    "school": 838,
+    "selfcare": 926,
+    "transport": 983,
+    "unknown": 347
+  },
+  "by_pass": {
+    "doctor": 285,
+    "vocab": 970,
+    "q": 2333,
+    "qtype": 1637,
+    "home": 243,
+    "play": 276,
+    "restaurant": 203,
+    "school": 215,
+    "selfcare": 236,
+    "transport": 300
+  },
+  "exact_duplicate_rows": 0,
+  "distinct_questions": 4513,
+  "questions_per_row": 0.674,
+  "most_repeated_question": [
+    "how are you feeling today? x12",
+    "what do you need? x12",
+    "want me to come with you? x12"
+  ],
+  "answer_length": {
+    "mean": 1.98,
+    "dist": {
+      "1": 1654,
+      "2": 3558,
+      "3": 1445,
+      "4": 41
+    }
+  },
+  "answer_words": 13269,
+  "maps_to_a_card": 0.9211,
+  "filler_only_answers": 0.0015,
+  "dead_cards_revived": 607,
+  "dead_cards_revived_examples": [
+    "Absolute value",
+    "Adopt",
+    "Advent calendar",
+    "Affection",
+    "Ago",
+    "Aide",
+    "Aircraft carrier",
+    "Airplane",
+    "Airport",
+    "Alabama",
+    "Angel",
+    "Ankle",
+    "Ant",
+    "Antelope",
+    "Apple juice",
+    "Apricot",
+    "Apron",
+    "Aquarium",
+    "Archery",
+    "Arctic"
+  ],
+  "distinct_answer_words": 2010,
+  "top_unmapped": [
+    "tummy x95",
+    "teddy x56",
+    "ouch x37",
+    "yucky x31",
+    "tower x31",
+    "seatbelt x29",
+    "daddy x26",
+    "fell x23",
+    "seek x21",
+    "cartoon x20",
+    "took x20",
+    "mommy x20",
+    "plane x19",
+    "lap x17",
+    "stuck x17",
+    "stethoscope x16",
+    "shot x16",
+    "puddle x15",
+    "spelling x15",
+    "lost x14"
+  ],
+  "category_coverage": {
+    "actions": {
+      "cards": 434,
+      "hits": 1866
+    },
+    "activities": {
+      "cards": 167,
+      "hits": 150
+    },
+    "animals": {
+      "cards": 162,
+      "hits": 363
+    },
+    "body": {
+      "cards": 74,
+      "hits": 469
+    },
+    "clothes": {
+      "cards": 44,
+      "hits": 138
+    },
+    "colours": {
+      "cards": 16,
+      "hits": 143
+    },
+    "core": {
+      "cards": 154,
+      "hits": 718
+    },
+    "describing": {
+      "cards": 362,
+      "hits": 1001
+    },
+    "drink": {
+      "cards": 36,
+      "hits": 336
+    },
+    "feelings": {
+      "cards": 92,
+      "hits": 972
+    },
+    "food": {
+      "cards": 186,
+      "hits": 586
+    },
+    "health": {
+      "cards": 48,
+      "hits": 246
+    },
+    "home": {
+      "cards": 39,
+      "hits": 142
+    },
+    "ideas": {
+      "cards": 91,
+      "hits": 375
+    },
+    "music": {
+      "cards": 20,
+      "hits": 32
+    },
+    "nature": {
+      "cards": 112,
+      "hits": 317
+    },
+    "numbers": {
+      "cards": 38,
+      "hits": 210
+    },
+    "people": {
+      "cards": 166,
+      "hits": 644
+    },
+    "phrases": {
+      "cards": 189,
+      "hits": 92
+    },
+    "places": {
+      "cards": 68,
+      "hits": 203
+    },
+    "play": {
+      "cards": 22,
+      "hits": 8
+    },
+    "quantity": {
+      "cards": 22,
+      "hits": 43
+    },
+    "questions": {
+      "cards": 8,
+      "hits": 4
+    },
+    "school": {
+      "cards": 54,
+      "hits": 639
+    },
+    "technology": {
+      "cards": 48,
+      "hits": 289
+    },
+    "things": {
+      "cards": 401,
+      "hits": 1559
+    },
+    "time": {
+      "cards": 105,
+      "hits": 178
+    },
+    "transport": {
+      "cards": 55,
+      "hits": 304
+    },
+    "weather": {
+      "cards": 27,
+      "hits": 76
+    }
+  },
+  "categories_never_used": [],
+  "judged_quality": {
+    "judged": 200,
+    "answers_the_question": 0.94,
+    "fits_the_setting": 0.965,
+    "childlike": 0.935,
+    "concrete": 0.97,
+    "rejected_examples": [
+      "[school] \"Who helped you today?\" -> teacher + helper + computer",
+      "[school] \"When will you finish your worksheet?\" -> not + yet",
+      "[restaurant] \"Do you have a favorite?\" -> candy + lollipop",
+      "[restaurant] \"What can you do while we wait for the food?\" -> do my homework",
+      "[restaurant] \"Anything more for you today?\" -> pay + money + me",
+      "[restaurant] \"What do you like most at this shop?\" -> candy + red",
+      "[doctor] \"Do you want me with you?\" -> tummy + hurt + help",
+      "[doctor] \"You were so brave today. What should we do after we leave the office?\" -> meet + celebration + excitement",
+      "[doctor] \"Are you all set to see me?\" -> ear + sore",
+      "[doctor] \"Want me to come in with you?\" -> sticker + after + both",
+      "[play] \"Do you want some help?\" -> hat + sun + hot",
+      "[transport] \"You're sure about that?\" -> airplane + scared"
+    ]
+  },
+  "generated_at": "2026-09-15"
+}
