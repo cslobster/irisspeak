@@ -22,25 +22,30 @@ final class LocalApi {
     private func folder(at path: String) -> FolderDef? { LocalApi.folderData.folders.first { $0.path == path } }
 
     // MARK: question-type routing (same table as the web app)
-    private struct Route { let rx: NSRegularExpression; let folder: String?; let allow: [String] }
-    private static let routeTable: [(String, String?, [String])] = [
-        (#"\b(who|whose|who's|with whom)\b"#, "people", ["me", "you", "mine", "my turn", "your turn", "friend", "mum", "mom", "dad", "teacher", "nobody"]),
-        (#"\b(where)\b"#, "places", ["here", "there", "home", "school", "outside", "inside"]),
-        (#"\b(when|what time|how long|how soon)\b"#, "time", ["now", "later", "soon", "today", "tomorrow", "not yet"]),
-        (#"\b(how many|how much|how old|what number|count)\b"#, "numbers", []),
-        (#"\b(colou?rs?)\b"#, "describe > colours", []),
-        (#"\b(eat|food|breakfast|lunch|dinner|snack|hungry|ate)\b"#, "food", []),
-        (#"\b(drink|thirsty)\b"#, "drinks", []),
-        (#"\b(play|game|toy|toys)\b"#, "toys", ["ball", "blocks", "lego", "puzzle", "cars", "tag", "outside", "swing", "slide"]),
-        (#"\b(wear|clothes|pyjamas|pajamas|jacket|shoes|dress)\b"#, "clothing", []),
-        (#"\b(animal|animals|pet)\b"#, "animals", []),
-        (#"\b(hurt|hurts|pain|sore|ache)\b"#, "body", []),
-        (#"\b(weather|rain|sunny|snow)\b"#, "weather", []),
-        (#"\b(feel|feeling|mood|okay|ok)\b"#, nil, ["tired", "sick", "sad", "happy", "scared", "hurt", "fine", "good", "bad"]),
-        (#"\b(how was|how is|how's|how did it go|how did .* go|how are you|how're you)\b"#, "Good & nice", ["good", "bad", "okay", "fine", "great", "fun", "boring", "tired", "busy", "long"]),
+    private struct Route { let rx: NSRegularExpression; let folder: String?; let allow: [String]; let first: [String] }
+    private static let routeTable: [(String, String?, [String], [String])] = [
+        (#"\b(who|whose|who's|with whom)\b"#, "people", ["me", "you", "mine", "my turn", "your turn", "friend", "mum", "mom", "dad", "teacher", "nobody"], []),
+        (#"\b(where)\b"#, "places", ["here", "there", "home", "school", "outside", "inside"], []),
+        (#"\b(when|what time|how long|how soon)\b"#, "time", ["now", "later", "soon", "today", "tomorrow", "not yet"], []),
+        (#"\b(how many|how much|how old|what number|count)\b"#, "numbers", [], []),
+        (#"\b(colou?rs?)\b"#, "describe > colours", [], []),
+        (#"\b(eat|food|breakfast|lunch|dinner|snack|hungry|ate)\b"#, "food", [], []),
+        (#"\b(drink|thirsty)\b"#, "drinks", [], []),
+        (#"\b(play|game|toy|toys)\b"#, "toys", ["ball", "blocks", "lego", "puzzle", "cars", "tag", "outside", "swing", "slide"], []),
+        (#"\b(wear|clothes|pyjamas|pajamas|jacket|shoes|dress)\b"#, "clothing", [], []),
+        (#"\b(animal|animals|pet)\b"#, "animals", [], []),
+        (#"\b(hurt|hurts|pain|sore|ache)\b"#, "body", [], []),
+        (#"\b(weather|rain|sunny|snow)\b"#, "weather", [], []),
+        (#"\b(feel|feeling|mood|okay|ok)\b"#, nil, ["tired", "sick", "sad", "happy", "scared", "hurt", "fine", "good", "bad"], []),
+        (#"\b(how was|how is|how's|how did it go|how did .* go|how are you|how're you)\b"#, "Good & nice", ["good", "bad", "okay", "fine", "great", "fun", "boring", "tired", "busy", "long"], []),
+        // "What did you learn?" is a concrete question with concrete answers, but school subjects are rare in the
+        // training corpus (half the School Subjects folder is never a training target at all), so the model ranks
+        // them below everyday words. Pinning the subjects by name sidesteps the model, which is the only way the
+        // masked rows such as "english" and "geography" can ever reach a board.
+        (#"\b(learn|learned|learnt|study|studied|studying|subject|subjects|lesson|lessons|class|classes|homework|teach|taught)\b"#, "school > School Subjects", [], ["math", "book", "science", "art", "english", "history", "music", "sport"]),
     ]
-    private static let routes: [Route] = routeTable.map { (pat: String, folder: String?, allow: [String]) -> Route in
-        Route(rx: try! NSRegularExpression(pattern: pat, options: [.caseInsensitive]), folder: folder, allow: allow)
+    private static let routes: [Route] = routeTable.map { (pat: String, folder: String?, allow: [String], first: [String]) -> Route in
+        Route(rx: try! NSRegularExpression(pattern: pat, options: [.caseInsensitive]), folder: folder, allow: allow, first: first)
     }
     /// Where the conversation happens changes what a question means: at the doctor's, "How are you feeling?" is about
     /// being sick or in pain, not about mood. These answer words go first, in this order, and their folder leads.
@@ -56,7 +61,7 @@ final class LocalApi {
         }
         for r in LocalApi.routes where r.rx.firstMatch(in: s, range: NSRange(location: 0, length: ns.length)) != nil {
             if let f = r.folder, !folders.contains(f) { folders.append(f) }
-            allow.append(contentsOf: r.allow)
+            allow.append(contentsOf: r.allow); first.append(contentsOf: r.first)
         }
         return (folders, allow, first)
     }
@@ -351,7 +356,8 @@ final class LocalApi {
         if !again { current?.candidates = [] }
         let seen = current?.candidates ?? []
         var sentence: String? = nil
-        if let r = engine.realiser { sentence = try? r.realise(cards: labels, partner: cur.question, sample: again, avoid: seen) }
+        let setting = Store.getProfile().setting.isEmpty ? "unknown" : Store.getProfile().setting
+        if let r = engine.realiser { sentence = try? r.realise(cards: labels, partner: cur.question, sample: again, avoid: seen, setting: setting) }
         // "Another": a fresh wording; when the model has none left, the plain card order, then cycle through earlier ones.
         if sentence == nil {
             if again, !seen.contains(rule) { sentence = rule }

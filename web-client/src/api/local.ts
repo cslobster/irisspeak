@@ -26,7 +26,7 @@ export const PANEL_BIG = { topic: 12, action: 8, emotion: 4 };      // iPad land
 // Question-type routing: the shape of the partner's question guarantees a folder and a few cards on the
 // first board, the way TD Snap's topic pages and Proloquo2Go's fringe folders do by hand. The model still
 // fills the rest. `allow` lists words that are normally hidden (core category) but answer this question type.
-const ROUTES: { rx: RegExp; folder: string | null; allow: string[] }[] = [
+const ROUTES: { rx: RegExp; folder: string | null; allow: string[]; first?: string[] }[] = [
   { rx: /\b(who|whose|who's|with whom)\b/, folder: 'people', allow: ['me', 'you', 'mine', 'my turn', 'your turn', 'friend', 'mum', 'mom', 'dad', 'teacher', 'nobody'] },
   { rx: /\b(where)\b/, folder: 'places', allow: ['here', 'there', 'home', 'school', 'outside', 'inside'] },
   { rx: /\b(when|what time|how long|how soon)\b/, folder: 'time', allow: ['now', 'later', 'soon', 'today', 'tomorrow', 'not yet'] },
@@ -41,6 +41,12 @@ const ROUTES: { rx: RegExp; folder: string | null; allow: string[] }[] = [
   { rx: /\b(weather|rain|sunny|snow)\b/, folder: 'weather', allow: [] },
   { rx: /\b(feel|feeling|mood|okay|ok)\b/, folder: null, allow: ['tired', 'sick', 'sad', 'happy', 'scared', 'hurt', 'fine', 'good', 'bad'] },
   { rx: /\b(how was|how is|how's|how did it go|how did .* go|how are you|how're you)\b/, folder: 'Good & nice', allow: ['good', 'bad', 'okay', 'fine', 'great', 'fun', 'boring', 'tired', 'busy', 'long'] },
+  // "What did you learn?" is a concrete question with concrete answers, but school subjects are rare in the training
+  // corpus (half the School Subjects folder is never a training target at all), so the model ranks them below
+  // everyday words. Pinning the subjects by name sidesteps the model entirely, which is the only way the masked
+  // rows such as "english" and "geography" can ever reach a board.
+  { rx: /\b(learn|learned|learnt|study|studied|studying|subject|subjects|lesson|lessons|class|classes|homework|teach|taught)\b/, folder: 'school > School Subjects', allow: [],
+    first: ['math', 'book', 'science', 'art', 'english', 'history', 'music', 'sport'] },
 ];
 // Where the conversation happens changes what a question means: at the doctor's, "How are you feeling?" is about
 // being sick or in pain, not about mood. These answer words go first, in this order (not by model probability),
@@ -53,7 +59,7 @@ const SETTING_ROUTES: Record<string, { rx: RegExp; folder: string | null; first:
 function routeQuestion(q: string, setting = ''): { folders: string[]; allow: string[]; first: string[] } {
   const s = q.toLowerCase(); const folders: string[] = []; const allow: string[] = []; const first: string[] = [];
   for (const r of SETTING_ROUTES[setting] ?? []) if (r.rx.test(s)) { if (r.folder && !folders.includes(r.folder)) folders.push(r.folder); first.push(...r.first); }
-  for (const r of ROUTES) if (r.rx.test(s)) { if (r.folder && !folders.includes(r.folder)) folders.push(r.folder); allow.push(...r.allow); }
+  for (const r of ROUTES) if (r.rx.test(s)) { if (r.folder && !folders.includes(r.folder)) folders.push(r.folder); allow.push(...r.allow); if (r.first) first.push(...r.first); }
   return { folders, allow, first };
 }
 // For evaluation questions ("How was your day?", "How are you feeling?") a card that repeats a word of the question
@@ -286,7 +292,8 @@ class LocalApi {
     const rule = engine.realise(labels);
     if (!again || !cur.candidates) cur.candidates = [];
     let sentence: string | null = null;
-    try { sentence = await realiser.realise(labels, cur.question, again ? { avoid: cur.candidates, sample: true } : {}); } catch (e) { console.info('realiser failed, using the rule', e); }
+    const setting = getProfile().setting || 'unknown';
+    try { sentence = await realiser.realise(labels, cur.question, again ? { avoid: cur.candidates, sample: true, setting } : { setting }); } catch (e) { console.info('realiser failed, using the rule', e); }
     // "Another": a fresh wording; when the model has none left, the plain card order, then cycle through earlier ones.
     if (!sentence) {
       if (again && !cur.candidates.includes(rule)) sentence = rule;

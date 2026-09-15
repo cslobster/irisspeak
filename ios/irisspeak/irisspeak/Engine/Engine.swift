@@ -239,7 +239,7 @@ final class Engine: @unchecked Sendable {
         var total = 0; var kept: [String] = []
         for h0 in hist.reversed() {
             let h = String(h0.prefix(120))
-            if total + h.count > 600 { break }
+            if kept.count >= 2 || total + h.count > 240 { break }   // two turns, not six: a long "Earlier:" block let past answers outweigh the question being asked
             kept.insert(h, at: 0); total += h.count
         }
         let setting = Store.getProfile().setting.isEmpty ? "home" : Store.getProfile().setting
@@ -320,7 +320,12 @@ final class Engine: @unchecked Sendable {
                 h = y
             }
             let pc = counts[c.id] ?? 0, pb = bigr[c.id] ?? 0
-            scores.append((j, h[0] + 0.6 * log(1 + Float(pc)) + 0.5 * log(1 + Float(pb)) + (profile.contains(c.id) ? 0.8 : 0) + (tp[c.category] ?? 0)))
+            // The personal layer reorders cards the model already finds plausible; it must not resurrect ones it
+            // doesn't. A child who said "water" a few times was getting Water on the board for "What did you
+            // learn?". So the bonus fades with the model's own ranking and never applies to function words.
+            let pw = max(0, 1 - Float(r) / 60)
+            let personal = (c.core ?? 0) != 0 ? 0 : pw * (0.3 * log(1 + Float(pc)) + 0.25 * log(1 + Float(pb)))
+            scores.append((j, h[0] + personal + (profile.contains(c.id) ? 0.8 : 0) + (tp[c.category] ?? 0)))
         }
         scores.sort { $0.1 > $1.1 }
         return scores.map { $0.0 } + Array(order.dropFirst(rr.K))   // reranked top K, then the model's order

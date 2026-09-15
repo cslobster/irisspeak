@@ -37,3 +37,8 @@ site/.wrangler/
 # the published state dumps are built from Turk dialogues (CC BY-ND): regenerate with data/build_states.py,
 # never commit or redistribute them
 site/public/paper/data/states_*.jsonl.gz
+model/data/mapped/
+model/data/states/
+model/data/processed/
+model/data/realiser/
+__pycache__/

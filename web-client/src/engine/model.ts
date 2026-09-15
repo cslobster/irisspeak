@@ -152,7 +152,9 @@ class Engine {
 
   private promptText(question: string) {
     const hist = getHistory().map(t => (t.partner ? t.partner + ' | ' : '') + t.answer); let total = 0; const kept: string[] = [];
-    for (let i = hist.length - 1; i >= 0; i--) { const h = hist[i].slice(0, 120); if (total + h.length > 600) break; kept.unshift(h); total += h.length; }
+    // Two turns, not six. A long "Earlier:" block let past answers (water, thanks, good) outweigh the question
+    // actually being asked, which is what buried the school subjects under everyday words.
+    for (let i = hist.length - 1; i >= Math.max(0, hist.length - 2); i--) { const h = hist[i].slice(0, 120); if (total + h.length > 240) break; kept.unshift(h); total += h.length; }
     return `Setting: ${getProfile().setting || 'home'}.\n` + (kept.length ? `Earlier: ${kept.join(' | ')}\n` : '') + (question ? `Partner: ${question.slice(0, 200)}` : 'Partner: (nobody has spoken)') + `\nReply cards:`;
   }
   private freqLogp(prefixIdx: number[]) {
@@ -183,7 +185,13 @@ class Engine {
       let h: Float32Array = x;
       for (let li = 0; li < rr.layers.length; li++) { const L = rr.layers[li]; const y = new Float32Array(L.b.length); for (let i = 0; i < L.b.length; i++) { let acc = L.b[i]; const W = L.W[i]; for (let k = 0; k < W.length; k++) acc += W[k] * h[k]; y[i] = li < rr.layers.length - 1 ? Math.max(0, acc) : acc; } h = y; }
       const pc = counts[c.id] || 0, pb = bigr[c.id] || 0;
-      scores.push([j, h[0] + 0.6 * Math.log(1 + pc) + 0.5 * Math.log(1 + pb) + (profile.has(c.id) ? 0.8 : 0) + (tp[c.category] || 0)]);
+      // The personal layer is meant to reorder cards the model already finds plausible, not to resurrect ones it
+      // doesn't: a child who said "water" a few times was getting Water on the board for "What did you learn?".
+      // So the bonus fades with the model's own ranking and never applies to function words, which the fixed
+      // quick row already covers.
+      const w = Math.max(0, 1 - r / 60);
+      const personal = c.core ? 0 : w * (0.3 * Math.log(1 + pc) + 0.25 * Math.log(1 + pb));
+      scores.push([j, h[0] + personal + (profile.has(c.id) ? 0.8 : 0) + (tp[c.category] || 0)]);
     }
     scores.sort((a, b) => b[1] - a[1]); return scores.map(s => s[0]).concat(order.slice(rr.K));   // reranked top K, then the model's order
   }

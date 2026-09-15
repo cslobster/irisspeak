@@ -138,21 +138,26 @@ def install_all_folders():
         folders.append({'path': path, 'label': cat.capitalize(), 'icon': '', 'words': [c['speak'] for c in cards if c['category'] == cat and not c.get('is_folder')], 'triggers': []})
         cat2path[cat] = path
 QUICK_ROW = ['yes', 'no', "i don't know", 'help', 'more', 'stop', 'please']
-ROUTES = [  # (regex on the question, folder path, extra allowed labels that are normally hidden core words)
-    (r"\b(who|whose|who's|with whom)\b", 'people', ['me', 'you', 'mine', 'my turn', 'your turn', 'friend', 'mum', 'mom', 'dad', 'teacher', 'nobody']),
-    (r"\b(where)\b", 'places', ['here', 'there', 'home', 'school', 'outside', 'inside']),
-    (r"\b(when|what time|how long|how soon)\b", 'time', ['now', 'later', 'soon', 'today', 'tomorrow', 'not yet']),
-    (r"\b(how many|how much|how old|what number|count)\b", 'numbers', []),
-    (r"\b(colou?r)\b", 'describe > colours', []),
-    (r"\b(eat|food|breakfast|lunch|dinner|snack|hungry|ate)\b", 'food', []),
-    (r"\b(drink|thirsty)\b", 'drinks', []),
-    (r"\b(play|game|toy|toys)\b", 'toys', ['ball', 'blocks', 'lego', 'puzzle', 'cars', 'tag', 'hide and seek', 'outside', 'swing', 'slide']),
-    (r"\b(wear|clothes|pyjamas|pajamas|jacket|shoes|dress)\b", 'clothing', []),
-    (r"\b(animal|pet)\b", 'animals', []),
-    (r"\b(hurt|hurts|pain|sore|ache)\b", 'body', []),
-    (r"\b(weather|rain|sunny|cold outside)\b", 'weather', []),
-    (r"\b(feel|feeling|mood|okay|ok)\b", None, ['tired', 'sick', 'sad', 'happy', 'scared', 'hurt', 'fine', 'good', 'bad']),
-    (r"\b(how was|how is|how's|how did it go|how did .* go|how are you|how're you)\b", 'Good & nice', ['good', 'bad', 'okay', 'fine', 'great', 'fun', 'boring', 'tired', 'busy', 'long']),
+ROUTES = [  # (regex, folder path, extra allowed labels normally hidden as core words, ordered answer words pinned first)
+    (r"\b(who|whose|who's|with whom)\b", 'people', ['me', 'you', 'mine', 'my turn', 'your turn', 'friend', 'mum', 'mom', 'dad', 'teacher', 'nobody'], []),
+    (r"\b(where)\b", 'places', ['here', 'there', 'home', 'school', 'outside', 'inside'], []),
+    (r"\b(when|what time|how long|how soon)\b", 'time', ['now', 'later', 'soon', 'today', 'tomorrow', 'not yet'], []),
+    (r"\b(how many|how much|how old|what number|count)\b", 'numbers', [], []),
+    (r"\b(colou?r)\b", 'describe > colours', [], []),
+    (r"\b(eat|food|breakfast|lunch|dinner|snack|hungry|ate)\b", 'food', [], []),
+    (r"\b(drink|thirsty)\b", 'drinks', [], []),
+    (r"\b(play|game|toy|toys)\b", 'toys', ['ball', 'blocks', 'lego', 'puzzle', 'cars', 'tag', 'hide and seek', 'outside', 'swing', 'slide'], []),
+    (r"\b(wear|clothes|pyjamas|pajamas|jacket|shoes|dress)\b", 'clothing', [], []),
+    (r"\b(animal|pet)\b", 'animals', [], []),
+    (r"\b(hurt|hurts|pain|sore|ache)\b", 'body', [], []),
+    (r"\b(weather|rain|sunny|cold outside)\b", 'weather', [], []),
+    (r"\b(feel|feeling|mood|okay|ok)\b", None, ['tired', 'sick', 'sad', 'happy', 'scared', 'hurt', 'fine', 'good', 'bad'], []),
+    (r"\b(how was|how is|how's|how did it go|how did .* go|how are you|how're you)\b", 'Good & nice', ['good', 'bad', 'okay', 'fine', 'great', 'fun', 'boring', 'tired', 'busy', 'long'], []),
+    # "What did you learn?" is concrete, but school subjects are rare in the training corpus (17 of the 40 School
+    # Subjects words are never a training target, so they are masked out of the softmax entirely). Pinning the
+    # subjects by name is the only way those rows reach a board.
+    (r"\b(learn|learned|learnt|study|studied|studying|subject|subjects|lesson|lessons|class|classes|homework|teach|taught)\b",
+     'school > School Subjects', [], ['math', 'book', 'science', 'art', 'english', 'history', 'music', 'sport']),
 ]
 SETTING_ROUTES = {  # setting -> (regex, folder, answer words first, in this order): the place changes what a question means
     'doctor': [(r"\b(feel|feeling|mood|okay|ok|how are you|how're you|how's it going|what's wrong|what is wrong|hurt|hurts|pain|sore|sick|better|worse)\b", 'Health & sick', ['sick', 'hurt', 'pain', 'bad', 'tired', 'fine', 'good', 'better'])],
@@ -163,10 +168,10 @@ def route(question, setting=''):
         if re.search(rx, q):
             if path: paths.append(path)
             first += words
-    for rx, path, extra in ROUTES:
+    for rx, path, extra, pin in ROUTES:
         if re.search(rx, q):
             if path and path not in paths: paths.append(path)
-            allow += extra
+            allow += extra; first += pin
     return paths, allow, first
 
 EVAL_QUESTION = r"\b(how was|how is|how's|how did|how are you|how're you|how's it going|feel|feeling|mood)\b"
