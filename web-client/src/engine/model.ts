@@ -97,8 +97,10 @@ class Engine {
     // All chunks in parallel: much faster than one after another on a high-latency link.
     const parts: Uint8Array[] = await Promise.all((man.chunks as string[]).map(f => this.fetchBytes(f, report)));
     const buf = new Uint8Array(got); let o = 0; for (const p of parts) { buf.set(p, o); o += p.length; }
-    // The wasm binaries stay on R2; ort.min.js is served from this origin so ORT may spawn its proxy worker.
-    ort.env.wasm.wasmPaths = CDN_BASE + 'ort/'; ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 2);
+    // onnxruntime is served from this origin: with cross-origin isolation on (see vercel.json) it spawns worker
+    // threads, and a worker cannot load its wasm or its glue script from another origin. Only the model weights
+    // come from R2. irisspeak.org has always run this way, which is why a prediction there takes ~250 ms.
+    ort.env.wasm.wasmPaths = '/ort/'; ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 2);
     this.setLoad('Starting the model…', 0.96);
     // proxy: true runs the model in a worker, so a prediction (about a second on a laptop) never freezes the page.
     // Older browsers and blocked workers fall back to the main thread, which is how this ran before.
