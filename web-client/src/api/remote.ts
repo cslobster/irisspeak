@@ -42,24 +42,6 @@ export async function signIn(username: string, code: string): Promise<Account> {
   notify();
   return acc;
 }
-/** Ask the API to email a six-digit sign-in code to the parent's address. Answers the same way whether or not
- *  the address is on an account; `sent: false` with reason 'not_configured' means email is not set up yet. */
-export async function requestEmailCode(email: string): Promise<{ sent: boolean; reason?: string }> {
-  return call<{ sent: boolean; reason?: string }>('POST', '/dyad/account/email/request', { email: email.trim() }, false);
-}
-/** Finish an email-code sign-in and pull the account down, exactly as a password sign-in does. */
-export async function signInWithEmailCode(email: string, code: string): Promise<Account> {
-  const res = await call<{ jwt: string; child_name?: string; alias?: string }>('POST', '/dyad/account/email/verify', { email: email.trim(), code: code.trim() }, false);
-  store.set(TOKEN_KEY, res.jwt);
-  const acc: Account = { alias: res.alias || '', child_name: res.child_name || '' };
-  store.set(ACCOUNT_KEY, acc);
-  await pullProfile().catch(() => {});
-  await pullHistory().catch(() => {});
-  await syncCustomWords().catch(() => {});
-  notify();
-  return acc;
-}
-
 /** Where "Sign in with Google" starts: the API sends the browser to Google and back to #/google with a JWT. */
 export function googleSignInUrl(): string {
   const back = `${location.origin}${location.pathname}#/google`;

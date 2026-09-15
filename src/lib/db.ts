@@ -92,20 +92,6 @@ export async function ensureSchema(): Promise<void> {
       sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS google_sub TEXT`,
       sql`ALTER TABLE dyad ADD COLUMN IF NOT EXISTS google_email TEXT`,
       sql`CREATE UNIQUE INDEX IF NOT EXISTS dyad_google_sub_idx ON dyad(google_sub)`,
-      // Sign-in codes emailed to the parent (src/lib/mail.ts): six digits, single use, ten minutes, five guesses.
-      sql`
-        CREATE TABLE IF NOT EXISTS email_login_code (
-          id         TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-          email      TEXT NOT NULL,
-          dyad_id    TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
-          code       TEXT NOT NULL,
-          attempts   INTEGER NOT NULL DEFAULT 0,
-          used       BOOLEAN NOT NULL DEFAULT FALSE,
-          expires_at TIMESTAMPTZ NOT NULL,
-          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        )
-      `,
-      sql`CREATE INDEX IF NOT EXISTS email_login_code_email_idx ON email_login_code(email, created_at DESC)`,
       sql`ALTER TABLE dyad DROP COLUMN IF EXISTS parent_type`,
       sql`
         CREATE TABLE IF NOT EXISTS dyad_login_code (
