@@ -102,16 +102,10 @@ class Engine {
     // come from R2. irisspeak.org has always run this way, which is why a prediction there takes ~250 ms.
     ort.env.wasm.wasmPaths = '/ort/'; ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 2);
     this.setLoad('Starting the model…', 0.96);
-    // proxy: true runs the model in a worker, so a prediction (about a second on a laptop) never freezes the page.
-    // Older browsers and blocked workers fall back to the main thread, which is how this ran before.
-    try {
-      ort.env.wasm.proxy = true;
-      this.session = await ort.InferenceSession.create(buf, { executionProviders: ['wasm'] });
-    } catch (e) {
-      console.warn('ORT worker unavailable, running on the main thread', e);
-      ort.env.wasm.proxy = false;
-      this.session = await ort.InferenceSession.create(buf, { executionProviders: ['wasm'] });
-    }
+    // No proxy worker: with cross-origin isolation the four wasm threads already keep a prediction near 250 ms,
+    // and asking for the proxy as well made onnxruntime fail its backend init ('no available backend found'),
+    // which a retry cannot recover from because the backend is only initialised once per page.
+    this.session = await ort.InferenceSession.create(buf, { executionProviders: ['wasm'] });
     this.setLoad('Ready', 1); this.ready = true;
     this.loadReranker(); // in the background; the model works without it
     // The realiser is only needed once the child asks for a sentence, so it loads when the browser is idle
