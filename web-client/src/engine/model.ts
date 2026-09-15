@@ -97,12 +97,25 @@ class Engine {
     // All chunks in parallel: much faster than one after another on a high-latency link.
     const parts: Uint8Array[] = await Promise.all((man.chunks as string[]).map(f => this.fetchBytes(f, report)));
     const buf = new Uint8Array(got); let o = 0; for (const p of parts) { buf.set(p, o); o += p.length; }
+    // The wasm binaries stay on R2; ort.min.js is served from this origin so ORT may spawn its proxy worker.
     ort.env.wasm.wasmPaths = CDN_BASE + 'ort/'; ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 2);
     this.setLoad('Starting the model…', 0.96);
-    this.session = await ort.InferenceSession.create(buf, { executionProviders: ['wasm'] });
+    // proxy: true runs the model in a worker, so a prediction (about a second on a laptop) never freezes the page.
+    // Older browsers and blocked workers fall back to the main thread, which is how this ran before.
+    try {
+      ort.env.wasm.proxy = true;
+      this.session = await ort.InferenceSession.create(buf, { executionProviders: ['wasm'] });
+    } catch (e) {
+      console.warn('ORT worker unavailable, running on the main thread', e);
+      ort.env.wasm.proxy = false;
+      this.session = await ort.InferenceSession.create(buf, { executionProviders: ['wasm'] });
+    }
     this.setLoad('Ready', 1); this.ready = true;
     this.loadReranker(); // in the background; the model works without it
-    realiser.load(this.tok, n => this.fetchJson(n), n => this.fetchBytes(n)); // the sentence realiser, also in the background
+    // The realiser is only needed once the child asks for a sentence, so it loads when the browser is idle
+    // rather than competing with the card model for CPU and bandwidth during the first turns.
+    const idle = (window as any).requestIdleCallback || ((f: any) => setTimeout(f, 4000));
+    idle(() => realiser.load(this.tok, n => this.fetchJson(n), n => this.fetchBytes(n)));
   }
   private async loadReranker() {
     try {

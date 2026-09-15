@@ -13,6 +13,8 @@ export function WelcomeScreen() {
 
   useEffect(() => {
     engine.onProgress = setProgress;
+    // Start the download here: by now the parent is signed in and this screen shows the progress.
+    engine.load().catch(err => console.error('model load failed', err));
     return () => { engine.onProgress = () => {}; };
   }, []);
 
