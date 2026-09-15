@@ -1,45 +1,43 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { SignInScreen } from './screens/SignInScreen';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 import { SessionScreen } from './screens/SessionScreen';
 import { SessionEndScreen } from './screens/SessionEndScreen';
 import { StarsScreen } from './screens/StarsScreen';
-import { VocabularySettingsScreen } from './screens/VocabularySettingsScreen';
 import { ProfileSettingsScreen } from './screens/ProfileSettingsScreen';
+import { VocabularySettingsScreen } from './screens/VocabularySettingsScreen';
+import { SignInScreen } from './screens/SignInScreen';
 import { SignupWizardScreen } from './screens/SignupWizardScreen';
 import { GoogleCallbackScreen } from './screens/GoogleCallbackScreen';
-import { PrivacyScreen, TermsScreen } from './screens/LegalScreens';
-import { MuteButton } from './components/MuteButton';
+import { SetupScreen } from './screens/SetupScreen';
+import { CreditsScreen } from './screens/CreditsScreen';
 import { SettingsButton } from './components/SettingsButton';
-import { useSelector } from './store';
+import { isSignedIn, needsSetup } from './api/remote';
 
+// Same flow as irisspeak.com: sign in (or continue as guest) first, then the welcome page; the account,
+// profile, custom words and conversations are shared with irisspeak.com's backend. Cards are chosen on the device.
 function RequireAuth({ children }: { children: JSX.Element }) {
-  const jwt = useSelector(s => s.auth.jwt);
   const loc = useLocation();
-  if (!jwt) return <Navigate to="/" replace state={{ from: loc }} />;
+  if (!isSignedIn()) return <Navigate to="/" replace state={{ from: loc }} />;
+  if (needsSetup() && loc.pathname !== '/setup') return <Navigate to="/setup" replace />;   // first run: boy/girl, age, notes
   return children;
 }
-
-// Redirect already-authenticated users away from the login screen.
 function RedirectIfAuthed({ children }: { children: JSX.Element }) {
-  const jwt = useSelector(s => s.auth.jwt);
-  if (jwt) return <Navigate to="/home" replace />;
+  if (isSignedIn()) return <Navigate to="/home" replace />;
   return children;
 }
 
 export default function App() {
   return (
     <>
-      <div className="fixed top-5 right-5 z-50 flex items-center gap-3">
-        <MuteButton />
+      <div className="fit-topright fixed z-50 flex items-center gap-3">
         <SettingsButton />
       </div>
       <Routes>
         <Route path="/" element={<RedirectIfAuthed><SignInScreen /></RedirectIfAuthed>} />
         <Route path="/signup" element={<RedirectIfAuthed><SignupWizardScreen /></RedirectIfAuthed>} />
         <Route path="/google" element={<GoogleCallbackScreen />} />
-        <Route path="/privacy" element={<PrivacyScreen />} />
-        <Route path="/terms" element={<TermsScreen />} />
+        <Route path="/setup" element={<RequireAuth><SetupScreen /></RequireAuth>} />
+        <Route path="/credits" element={<CreditsScreen />} />
         <Route path="/home" element={<RequireAuth><WelcomeScreen /></RequireAuth>} />
         <Route path="/session/:sessionId" element={<RequireAuth><SessionScreen /></RequireAuth>} />
         <Route path="/session-end/:sessionId" element={<RequireAuth><SessionEndScreen /></RequireAuth>} />

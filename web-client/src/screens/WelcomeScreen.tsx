@@ -1,13 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from '../store';
-import { api } from '../api/client';
+import { api } from '../api/local';
+import { engine } from '../engine/model';
+import { getProfile } from '../engine/store';
 
 export function WelcomeScreen() {
   const nav = useNavigate();
-  const childName = useSelector(s => s.auth.childName) || 'there';
+  const childName = getProfile().name || 'there';
   const [starting, setStarting] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
+  const [progress, setProgress] = useState(engine.progress);
+
+  useEffect(() => {
+    engine.onProgress = setProgress;
+    return () => { engine.onProgress = () => {}; };
+  }, []);
 
   async function startConversation() {
     if (starting) return;
@@ -18,7 +25,7 @@ export function WelcomeScreen() {
       const sid = await api.newSession({ category: 'plan' }, tz);
       nav(`/session/${encodeURIComponent(sid)}`, { state: { topic: { category: 'plan' } } });
     } catch (e: any) {
-      setStartError(e?.response?.data?.detail || e?.message || 'Could not start session.');
+      setStartError(e?.message || 'Could not start session.');
       setStarting(false);
     }
   }
@@ -99,6 +106,9 @@ export function WelcomeScreen() {
             </button>
             </div>
           </div>
+          {!engine.ready && (
+            <p className="text-sm font-bold text-slate-500 select-none">{progress.msg}</p>
+          )}
           {startError && (
             <p className="text-[#f09281] font-bold text-base">{startError}</p>
           )}

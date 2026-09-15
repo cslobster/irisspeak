@@ -85,6 +85,9 @@ export interface SessionRow {
   started_timestamp: number | null;
   ended_timestamp: number | null;
   created_at: string;
+  /** Which app wrote the session: 'web-ondevice' / 'irisspeak.org' = on-device web, 'irisspeak.app' = iPad app,
+   *  null / 'irisspeak.com' = the retired cloud-LLM web client. */
+  client?: string | null;
 }
 
 export interface MessageRow {

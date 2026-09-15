@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../api/client';
+import { api } from '../api/local';
 import { CloseIcon, StarIcon } from '../components/Icons';
 import { TranscriptMessages } from '../components/Transcript';
 import type { DialogueMessage, ExtendedSessionInfo, TopicCategory } from '../api/types';
 
 const topicLabels: Record<TopicCategory, string> = {
-  plan: '',
+  plan: 'Conversation',
   recall: "Today's day",
   free: 'Favorites',
 };

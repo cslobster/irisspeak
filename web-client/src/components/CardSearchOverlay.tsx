@@ -1,17 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { getCustomWords } from '../engine/store';
 import { CloseIcon } from './Icons';
 import { labelSizeClass } from '../labelSize';
 
 interface CboardCard {
   word: string;
-  image_url: string;
+  image_url: string | null;
+  emoji?: string;          // vocabulary words without a symbol picture
   category: string;
 }
 
 interface FolderCard {
   folder: string;
   word: string;
-  image_url: string;
+  image_url: string | null;
+  emoji?: string;
 }
 
 let _cache: CboardCard[] | null = null;
@@ -19,14 +22,14 @@ let _folderCache: FolderCard[] | null = null;
 
 async function loadCards(): Promise<CboardCard[]> {
   if (_cache) return _cache;
-  const r = await fetch('/cboard_cards.json');
+  const r = await fetch('/cboard_cards.json', { cache: 'no-cache' });
   _cache = await r.json();
   return _cache!;
 }
 
 async function loadFolders(): Promise<FolderCard[]> {
   if (_folderCache) return _folderCache;
-  const r = await fetch('/cboard_folders.json');
+  const r = await fetch('/cboard_folders.json', { cache: 'no-cache' });
   _folderCache = await r.json();
   return _folderCache!;
 }
@@ -37,6 +40,8 @@ interface Props {
   // Opens the folder-browse view scoped directly into this path (e.g. ['numbers']) instead
   // of the root — used when a folder card (e.g. "Numbers") is tapped from the session screen.
   initialPath?: string[];
+  /** Extra folder rows supplied by the session (the "More ideas" page of next suggestions). */
+  extraRows?: FolderCard[];
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -50,36 +55,36 @@ const CATEGORY_COLORS: Record<string, string> = {
 // folders. Deeper sub-folders (e.g. animals > birds) don't have a dedicated Cboard icon, so
 // those fall back to their first word's image as a cover, like an album using its first photo.
 const FOLDER_ICONS: Record<string, string> = {
-  actions: '/symbols/cboard/actions.svg',
-  activities: '/symbols/cboard/activities.svg',
-  animals: '/symbols/cboard/animals.svg',
+  actions: '/symbols/openmoji/actions.svg',
+  activities: '/symbols/openmoji/activities.svg',
+  animals: '/symbols/openmoji/animals.svg',
   body: '/symbols/mulberry/body_outline.svg',
   clothing: '/symbols/mulberry/generic_clothes.svg',
   describe: '/symbols/mulberry/shapesorter.svg',
   drinks: '/symbols/mulberry/drinks.svg',
-  emotions: '/symbols/cboard/emotions.svg',
+  emotions: '/symbols/openmoji/emotions.svg',
   food: '/symbols/mulberry/food.svg',
   furniture: '/symbols/mulberry/furniture.svg',
-  hygiene: '/symbols/cboard/personal_hygiene.svg',
-  kitchen: '/symbols/cboard/kitchen_items.svg',
+  hygiene: '/symbols/openmoji/hygiene.svg',
+  kitchen: '/symbols/openmoji/kitchen.svg',
   numbers: '/symbols/mulberry/count_,_to.svg',
-  people: '/symbols/cboard/people.svg',
+  people: '/symbols/openmoji/people.svg',
   places: '/symbols/mulberry/globe.svg',
-  plants: '/symbols/cboard/plants.svg',
-  position: '/symbols/cboard/position.svg',
+  plants: '/symbols/mulberry/plant.svg',
+  position: '/symbols/mulberry/where.svg',
   questions: '/symbols/mulberry/ask_,_to.svg',
-  'quick chat': '/symbols/cboard/speech_bubble.svg',
+  'quick chat': '/symbols/openmoji/speech_bubble.svg',
   school: '/symbols/mulberry/school.svg',
   snacks: '/symbols/mulberry/jelly_beans.svg',
-  sports: '/symbols/cboard/sports.svg',
+  sports: '/symbols/mulberry/football.svg',
   technology: '/symbols/mulberry/technology.svg',
   time: '/symbols/mulberry/clock.svg',
   toys: '/symbols/mulberry/toys.svg',
   transport: '/symbols/mulberry/travel.svg',
-  weather: '/symbols/cboard/weather.svg',
+  weather: '/symbols/openmoji/weather.svg',
 };
 
-export function CardSearchOverlay({ onSelect, onClose, initialPath }: Props) {
+export function CardSearchOverlay({ onSelect, onClose, initialPath, extraRows }: Props) {
   const [query, setQuery] = useState('');
   const [allCards, setAllCards] = useState<CboardCard[]>([]);
   const [folderCards, setFolderCards] = useState<FolderCard[]>([]);
@@ -88,8 +93,14 @@ export function CardSearchOverlay({ onSelect, onClose, initialPath }: Props) {
 
   useEffect(() => {
     loadCards().then(setAllCards);
-    loadFolders().then(setFolderCards);
-    setTimeout(() => inputRef.current?.focus(), 50);
+    loadFolders().then(rows => {
+      setFolderCards(rows);
+      // "View all" lands on the first folder (the first icon of the root grid), not on an empty search.
+      if (!initialPath) {
+        const first = [...new Set(rows.filter(r => r.folder !== 'Root').map(r => r.folder.split(' > ')[0]))].sort((a, b) => a.localeCompare(b))[0];
+        if (first) setPath([first]);
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -110,7 +121,8 @@ export function CardSearchOverlay({ onSelect, onClose, initialPath }: Props) {
 
   const q = query.toLowerCase().trim();
   const isSearching = q.length > 0;
-  const searchResults = isSearching ? allCards.filter(c => c.word.toLowerCase().includes(q)) : [];
+  const custom: CboardCard[] = getCustomWords().map(w => ({ word: w.word, image_url: w.image_url, emoji: w.emoji ?? (w.favourite ? '⭐' : '💬'), category: w.category }));
+  const searchResults = isSearching ? [...custom.filter(c => c.word.toLowerCase().includes(q) && !allCards.some(a => a.word.toLowerCase() === c.word.toLowerCase())), ...allCards.filter(c => c.word.toLowerCase().includes(q))] : [];
 
   // Folder rows are tagged with their full path, e.g. "animals > birds". At the current
   // `path`, a row is either a direct word here (its path matches exactly) or belongs to a
@@ -123,7 +135,7 @@ export function CardSearchOverlay({ onSelect, onClose, initialPath }: Props) {
     const order: string[] = [];
     const covers = new Map<string, string>();
     const here: FolderCard[] = [];
-    for (const row of folderCards) {
+    for (const row of [...(extraRows ?? []), ...folderCards]) {
       if (row.folder === 'Root') continue; // just yes/no, redundant with the always-on core cards
       const segs = row.folder.split(' > ');
       const matchesPrefix = path.every((p, i) => segs[i] === p);
@@ -137,7 +149,7 @@ export function CardSearchOverlay({ onSelect, onClose, initialPath }: Props) {
     }
     order.sort((a, b) => a.localeCompare(b));
     return { subfolders: order.map(name => ({ name, cover: covers.get(name)! })), wordsHere: here };
-  }, [folderCards, path]);
+  }, [folderCards, path, extraRows]);
 
   return (
     <div
@@ -186,7 +198,8 @@ export function CardSearchOverlay({ onSelect, onClose, initialPath }: Props) {
                     onClick={() => { onSelect(c.word, c.category, c.image_url); onClose(); }}
                     className={`aspect-square overflow-hidden flex flex-col items-center justify-center rounded-2xl border-2 border-slate-200 ${CATEGORY_COLORS[c.category] ?? 'bg-slate-100'} shadow-sm hover:shadow-md active:scale-95 transition-all p-2`}
                   >
-                    <img src={c.image_url} alt="" className="w-1/2 h-1/2 object-contain mb-1" loading="lazy" draggable={false} />
+                    {c.image_url ? <img src={c.image_url} alt="" className="w-1/2 h-1/2 object-contain mb-1" loading="lazy" draggable={false} />
+                      : <span className="w-1/2 h-1/2 flex items-center justify-center text-3xl mb-1" aria-hidden="true">{c.emoji ?? '💬'}</span>}
                     <span className={`${labelSizeClass(c.word)} font-bold text-slate-800 text-center line-clamp-2 leading-tight`}>
                       {c.word}
                     </span>
@@ -246,7 +259,8 @@ export function CardSearchOverlay({ onSelect, onClose, initialPath }: Props) {
                         onClick={() => { onSelect(c.word, category, c.image_url); onClose(); }}
                         className={`aspect-square overflow-hidden flex flex-col items-center justify-center rounded-2xl border-2 border-slate-200 ${CATEGORY_COLORS[category] ?? 'bg-slate-100'} shadow-sm hover:shadow-md active:scale-95 transition-all p-2`}
                       >
-                        <img src={c.image_url} alt="" className="w-1/2 h-1/2 object-contain mb-1" loading="lazy" draggable={false} />
+                        {c.image_url ? <img src={c.image_url} alt="" className="w-1/2 h-1/2 object-contain mb-1" loading="lazy" draggable={false} />
+                          : <span className="w-1/2 h-1/2 flex items-center justify-center text-3xl mb-1" aria-hidden="true">{c.emoji ?? '💬'}</span>}
                         <span className={`${labelSizeClass(c.word)} font-bold text-slate-800 text-center line-clamp-2 leading-tight`}>
                           {c.word}
                         </span>

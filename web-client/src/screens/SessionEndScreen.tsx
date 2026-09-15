@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { api } from '../api/client';
-import { analytics } from '../api/analytics';
+import { api } from '../api/local';
 import { StarIcon } from '../components/Icons';
 import { TranscriptMessages } from '../components/Transcript';
-import type { DialogueMessage } from '../api/types';
-import { emojiForCard } from '../cardEmoji';
+import type { DialogueMessage, ExtendedSessionInfo } from '../api/types';
 
 export function SessionEndScreen() {
   const nav = useNavigate();
@@ -19,7 +17,7 @@ export function SessionEndScreen() {
     if (!sessionId) return;
     Promise.all([
       api.getDialogue(sessionId).catch(() => ({ dialogue: [] as DialogueMessage[] })),
-      api.listSessions().catch(() => ({ sessions: [] })),
+      api.listSessions().catch(() => ({ sessions: [] as ExtendedSessionInfo[] })),
     ]).then(([d, l]) => {
       setDialogue(d.dialogue || []);
       const s = (l.sessions || []).find(x => x.id === sessionId);
@@ -86,8 +84,8 @@ export function SessionEndScreen() {
         </div>
 
         <div className="flex gap-3">
-          <button onClick={() => { analytics.sessionEndGoHome(); nav('/home', { replace: true }); }} className="pill-btn bg-[#94c1c2]">Back to home</button>
-          <button onClick={() => { analytics.sessionEndViewStars(); nav('/stars'); }} className="pill-btn bg-[#f09281]">See all stars</button>
+          <button onClick={() => nav('/home', { replace: true })} className="pill-btn bg-[#94c1c2]">Back to home</button>
+          <button onClick={() => nav('/stars')} className="pill-btn bg-[#f09281]">See all stars</button>
         </div>
       </div>
     </div>

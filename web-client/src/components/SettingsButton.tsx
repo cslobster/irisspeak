@@ -1,24 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../api/client';
-import { useDispatch, useSelector, logout } from '../store';
-import { GearIcon } from './Icons';
+import { GearIcon, SoundOffIcon, SoundOnIcon } from './Icons';
+import { getMuted, toggleMuted } from '../audio/mute';
+import { VoicePicker } from './VoicePicker';
 import { UI_SCALE_LEVELS, UI_SCALE_LABELS, getUiScaleLevel, setUiScaleLevel, type UiScaleLevel } from '../uiScale';
+import { isSignedIn, onAuthChange, signOut as remoteSignOut } from '../api/remote';
 
-// Mounted once at the App level (see App.tsx), inside the fixed top-right
-// button row, so it appears in the same spot on every authenticated screen.
+// Same Settings menu as irisspeak.com, mounted once at the App level inside the fixed top-right button row,
+// so it appears in the same spot on every authenticated screen.
 export function SettingsButton() {
-  const jwt = useSelector(s => s.auth.jwt);
   const nav = useNavigate();
-  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [uiScale, setUiScale] = useState<UiScaleLevel>(getUiScaleLevel);
+  const [muted, setMuted] = useState(getMuted);
+  const [, tick] = useState(0);
+  useEffect(() => { const f = () => tick(x => x + 1); onAuthChange.add(f); return () => { onAuthChange.delete(f); }; }, []);
 
-  if (!jwt) return null;
+  if (!isSignedIn()) return null;
 
   function signOut() {
-    api.setJwt(null);
-    dispatch(logout());
+    remoteSignOut();
     setOpen(false);
     nav('/', { replace: true });
   }
@@ -39,6 +40,18 @@ export function SettingsButton() {
 
         {open && (
           <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            <button
+              onClick={() => setMuted(toggleMuted())}
+              className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100 flex items-center gap-3"
+              aria-pressed={muted}
+            >
+              {muted ? <SoundOffIcon size={20} color="#f09281" /> : <SoundOnIcon size={20} color="#6b7280" />}
+              <span className={muted ? 'text-[#f09281]' : ''}>{muted ? 'Sound off' : 'Sound on'}</span>
+            </button>
+            <div className="px-5 pt-4 pb-3 border-b border-slate-100">
+              <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2">Voice</p>
+              <VoicePicker />
+            </div>
             <div className="px-5 pt-4 pb-3 border-b border-slate-100">
               <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2">
                 Text &amp; card size
@@ -77,6 +90,12 @@ export function SettingsButton() {
               className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
             >
               Profile
+            </button>
+            <button
+              onClick={() => { setOpen(false); nav('/credits'); }}
+              className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
+            >
+              Credits &amp; privacy
             </button>
             <button
               onClick={signOut}

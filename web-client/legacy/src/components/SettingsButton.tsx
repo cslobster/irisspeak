@@ -1,0 +1,92 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { api } from '../api/client';
+import { useDispatch, useSelector, logout } from '../store';
+import { GearIcon } from './Icons';
+import { UI_SCALE_LEVELS, UI_SCALE_LABELS, getUiScaleLevel, setUiScaleLevel, type UiScaleLevel } from '../uiScale';
+
+// Mounted once at the App level (see App.tsx), inside the fixed top-right
+// button row, so it appears in the same spot on every authenticated screen.
+export function SettingsButton() {
+  const jwt = useSelector(s => s.auth.jwt);
+  const nav = useNavigate();
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const [uiScale, setUiScale] = useState<UiScaleLevel>(getUiScaleLevel);
+
+  if (!jwt) return null;
+
+  function signOut() {
+    api.setJwt(null);
+    dispatch(logout());
+    setOpen(false);
+    nav('/', { replace: true });
+  }
+
+  return (
+    <>
+      {open && <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />}
+      <div className="relative z-50">
+        <button
+          onClick={() => setOpen(o => !o)}
+          className="h-12 pl-3 pr-4 rounded-2xl bg-white/80 backdrop-blur flex items-center gap-2 hover:bg-white transition active:scale-95"
+          style={{ boxSizing: 'border-box', border: '2px solid #000', borderBottomWidth: 4 }}
+          aria-label="Settings"
+        >
+          <GearIcon size={20} color="#6b7280" />
+          <span className="text-sm font-bold text-slate-600 whitespace-nowrap">Settings</span>
+        </button>
+
+        {open && (
+          <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            <div className="px-5 pt-4 pb-3 border-b border-slate-100">
+              <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2">
+                Text &amp; card size
+              </p>
+              <div className="flex gap-1.5">
+                {UI_SCALE_LEVELS.map(level => (
+                  <button
+                    key={level}
+                    onClick={() => { setUiScaleLevel(level); setUiScale(level); }}
+                    className={`flex-1 rounded-xl py-2 text-xs font-bold transition active:scale-95 ${
+                      uiScale === level
+                        ? 'bg-[#94c1c2] text-white shadow'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                    aria-pressed={uiScale === level}
+                  >
+                    {UI_SCALE_LABELS[level]}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button
+              onClick={() => { setOpen(false); nav('/stars'); }}
+              className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
+            >
+              Previous conversations
+            </button>
+            <button
+              onClick={() => { setOpen(false); nav('/vocabulary'); }}
+              className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
+            >
+              Vocabulary
+            </button>
+            <button
+              onClick={() => { setOpen(false); nav('/profile'); }}
+              className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
+            >
+              Profile
+            </button>
+            <button
+              onClick={signOut}
+              className="w-full text-left px-5 py-4 text-sm font-bold text-[#f09281] hover:bg-[#f09281]/10 transition"
+            >
+              Sign out
+            </button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}

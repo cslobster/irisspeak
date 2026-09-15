@@ -5,12 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="theme-color" content="#fffaf0" />
+    <meta name="theme-color" content="#f0ebe1" />
+    <meta name="description" content="Iris Speak: context-aware AAC. The card suggestions and sentences run on your device." />
     <meta name="format-detection" content="telephone=no" />
     <title>Iris Speak</title>
   </head>
   <body>
     <div id="root"></div>
+    <script src="https://model.irisspeak.org/ort/ort.min.js" crossorigin="anonymous"></script>
+        <script>
+      // keeps the first few runtime errors in memory so a blank screen can be diagnosed from the console: window.__errs
+      window.__errs = []; window.addEventListener('error', function (e) { window.__errs.push('ERR ' + ((e.error && e.error.stack) || e.message)); });
+      window.addEventListener('unhandledrejection', function (e) { window.__errs.push('REJ ' + ((e.reason && (e.reason.stack || e.reason.message)) || e.reason)); });
+      (function () { var oe = console.error; console.error = function () { try { window.__errs.push('CON ' + Array.prototype.map.call(arguments, function (x) { return (x && x.stack) || String(x); }).join(' ').slice(0, 800)); } catch (_) {} oe.apply(console, arguments); }; })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 html, body, #root { height: 100%; margin: 0; }
+/* Cream everywhere so no white strip shows if the viewport and the board disagree by a few pixels. */
+html, body { background: #f0ebe1; }
 html, body { overscroll-behavior-y: none; }
 body {
   font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -218,4 +220,21 @@ html.ui-scale-xl    { --ui-scale: 1.22; }
     transform: none !important;
     opacity: 0.85;
   }
+}
+
+/* Top-right Sound/Settings row follows the session screen's zoom-to-fit scale (see useFitScale). */
+.fit-topright {
+  top: calc(1.25rem * var(--fit-scale, 1));
+  right: calc(1.25rem * var(--fit-scale, 1));
+  transform: scale(var(--fit-scale, 1));
+  transform-origin: top right;
+}
+
+/* During a session the corner Sound/Settings row is replaced by the ☰ session menu. */
+html.session-active .fit-topright { display: none; }
+
+/* Home-screen / full-screen mode on iPad: keep the top row clear of the status bar even when the
+   safe-area inset is reported as zero. */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  .safe-top { padding-top: max(28px, env(safe-area-inset-top)); }
 }

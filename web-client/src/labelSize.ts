@@ -11,7 +11,7 @@ const TIERS: Record<'sm' | 'md' | 'lg', [normal: string, long: string, longer: s
 
 export function labelSizeClass(text: string, base: 'sm' | 'md' | 'lg' = 'sm'): string {
   const [normal, long, longer] = TIERS[base];
-  if (text.length > 16) return longer;
-  if (text.length > 10) return long;
+  if (text.length > 14) return longer;
+  if (text.length > 8) return long;
   return normal;
 }

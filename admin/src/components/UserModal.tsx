@@ -21,6 +21,8 @@ export function UserModal({ dyad, onSave, onClose }: Props) {
   const [notes, setNotes] = useState(dyad?.notes ?? '');
   const [parentEmail, setParentEmail] = useState(dyad?.parent_email ?? '');
   const [loginCode, setLoginCode] = useState('');
+  const googleEmail = dyad?.google_email ?? null;      // set when the family signed in with Google
+  const savedSetting = dyad?.setting ?? null;          // the place the on-device app last used
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -52,6 +54,19 @@ export function UserModal({ dyad, onSave, onClose }: Props) {
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-6" onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8">
         <h2 className="text-2xl font-extrabold text-slate-800 mb-6">{isEdit ? 'Edit User' : 'Add User'}</h2>
+
+        {(googleEmail || savedSetting) && (
+
+          <div className="mb-4 rounded-xl bg-slate-50 border-2 border-slate-100 px-3 py-2 text-xs font-semibold text-slate-600 space-y-1">
+
+            {googleEmail && <div>Signs in with Google: <span className="font-mono text-slate-800">{googleEmail}</span></div>}
+
+            {savedSetting && <div>Last place used in the app: <span className="text-slate-800">{savedSetting}</span></div>}
+
+          </div>
+
+        )}
+
 
         {error && <p className="mb-4 text-sm text-red-600 bg-red-50 rounded-xl px-4 py-2 font-semibold">{error}</p>}
 

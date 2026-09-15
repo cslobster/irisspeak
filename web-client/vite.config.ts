@@ -30,7 +30,8 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['@huggingface/transformers'],
+    // transformers.js and onnxruntime-web ship their own workers/wasm; pre-bundling breaks them
+    exclude: ['@huggingface/transformers', 'onnxruntime-web'],
   },
   build: {
     outDir: 'dist',

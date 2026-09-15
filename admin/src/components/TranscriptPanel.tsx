@@ -72,6 +72,7 @@ export function TranscriptPanel({ dyad }: Props) {
                   </div>
                   <div className="flex items-center gap-3">
                     {s.rating != null && <StarRating rating={s.rating} />}
+                    <ClientBadge client={s.client} />
                     <StatusBadge status={s.status} />
                     <span className="text-slate-400 text-lg">{isOpen ? '▲' : '▼'}</span>
                   </div>
@@ -114,6 +115,19 @@ function MessageBubble({ msg }: { msg: MessageRow }) {
       </div>
     </div>
   );
+}
+
+/** Which app produced the conversation. The on-device apps run the card model and the sentence model locally;
+ *  'cloud web' is the retired server-LLM client. */
+function ClientBadge({ client }: { client?: string | null }) {
+  const map: Record<string, { label: string; cls: string }> = {
+    'web-ondevice': { label: 'Web (on-device)', cls: 'bg-teal-100 text-teal-700' },
+    'irisspeak.org': { label: 'Web (on-device)', cls: 'bg-teal-100 text-teal-700' },
+    'irisspeak.app': { label: 'iPad app', cls: 'bg-indigo-100 text-indigo-700' },
+    'irisspeak.com': { label: 'Cloud web (retired)', cls: 'bg-slate-100 text-slate-500' },
+  };
+  const m = map[client ?? ''] ?? { label: 'Cloud web (retired)', cls: 'bg-slate-100 text-slate-500' };
+  return <span className={`text-[11px] font-bold px-2 py-1 rounded-lg whitespace-nowrap ${m.cls}`}>{m.label}</span>;
 }
 
 function StarRating({ rating }: { rating: number }) {

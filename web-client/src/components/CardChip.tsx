@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import type { CardCategory, CardInfo } from '../api/types';
 import { labelSizeClass } from '../labelSize';
 
@@ -14,7 +15,9 @@ const tile: Record<CardCategory, { bg: string }> = {
 interface Props {
   card: CardInfo;
   onClick?: () => void;
-  size?: 'sm' | 'md' | 'lg';
+  /** Tap-and-hold (about half a second): opens the word forms for this card. */
+  onLongPress?: () => void;
+  size?: 'sm' | 'md' | 'lg' | 'fill';
   selected?: boolean;
   disabled?: boolean;
 }
@@ -23,16 +26,23 @@ const sizeMap = {
   sm: { card: 'w-16 h-20 sm:w-20 sm:h-24' },
   md: { card: 'w-[72px] h-24 sm:w-24 sm:h-28' },
   lg: { card: 'w-24 h-28 sm:w-28 sm:h-32 md:w-32 md:h-36' },
+  // Fills its grid cell (phone layout, see CompactSession); the image and label scale with the cell.
+  fill: { card: 'w-full h-full min-h-0' },
 };
 
-export function CardChip({ card, onClick, size = 'lg', selected = false, disabled = false }: Props) {
+export function CardChip({ card, onClick, onLongPress, size = 'lg', selected = false, disabled = false }: Props) {
   const t = tile[card.category];
+  // long press: a pointer held still for 450 ms fires onLongPress and swallows the click that follows
+  const holdTimer = useRef<number | null>(null); const held = useRef(false);
+  const startHold = () => { if (!onLongPress) return; held.current = false; holdTimer.current = window.setTimeout(() => { held.current = true; onLongPress(); }, 450); };
+  const endHold = () => { if (holdTimer.current) { clearTimeout(holdTimer.current); holdTimer.current = null; } };
+  const handleClick = () => { if (held.current) { held.current = false; return; } onClick?.(); };
   const sz = sizeMap[size];
   // Emotion cards show their "I'm X" phrase (label); other categories prefer the corpus's
   // matched word (corpus_name) since that's the word actually confirmed against the vocab.
   const displayLabel = card.category === 'emotion' ? card.label : (card.corpus_name ?? card.label);
   // Longer words/phrases (e.g. "spaghetti bolognaise") shrink to fit instead of clipping.
-  const labelClass = labelSizeClass(displayLabel, size);
+  const labelClass = size === 'fill' ? (displayLabel.length > 12 ? 'text-[9px]' : displayLabel.length > 8 ? 'text-[11px]' : 'text-xs') : labelSizeClass(displayLabel, size);
 
   // Folder cards keep their category's Fitzgerald-Key fill color (that color-to-word-type
   // mapping is itself an accessibility convention — changing it would cost more than it gains)
@@ -62,7 +72,9 @@ export function CardChip({ card, onClick, size = 'lg', selected = false, disable
         </>
       )}
       <button
-        onClick={onClick}
+        onClick={handleClick}
+        onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} onPointerMove={endHold}
+        onContextMenu={e => { if (onLongPress) e.preventDefault(); }}
         disabled={!onClick || disabled}
         style={{
           touchAction: 'manipulation', WebkitTouchCallout: 'none' as any, WebkitUserSelect: 'none',
@@ -71,12 +83,11 @@ export function CardChip({ card, onClick, size = 'lg', selected = false, disable
         className={`
           ${sz.card}
           relative flex flex-col items-center justify-center
-          rounded-2xl border-2 border-b-4 ${card.is_folder ? '' : 'border-black'} ${t.bg}
+          ${size === 'fill' ? 'rounded-xl border-2 border-b-[3px] p-0.5' : 'rounded-2xl border-2 border-b-4 p-2'} ${card.is_folder ? '' : 'border-black'} ${t.bg}
           shadow-md hover:shadow-lg active:shadow-sm active:translate-y-1 active:scale-95
           transition-all duration-150 ease-out
           select-none cursor-pointer
           disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 disabled:active:translate-y-0
-          p-2
           ${selected ? 'ring-4 ring-amber-400' : ''}
         `}
       >
@@ -94,17 +105,17 @@ export function CardChip({ card, onClick, size = 'lg', selected = false, disable
           src={card.corpus_image_url}
           alt=""
           draggable={false}
-          className="w-3/4 h-3/4 object-contain mb-1 pointer-events-none select-none"
+          className={size === 'fill' ? 'h-[52%] w-auto max-w-[80%] object-contain pointer-events-none select-none' : 'w-3/4 h-3/4 object-contain mb-1 pointer-events-none select-none'}
         />
       ) : card.emoji ? (
         // Custom Vocabulary Word using the emoji fallback (no corpus image, no parent
         // upload) — an emoji character isn't a valid <img src>, so it renders as text.
-        <span className="text-4xl mb-1 pointer-events-none select-none" aria-hidden="true">
+        <span className={size === 'fill' ? 'text-2xl leading-none pointer-events-none select-none' : 'text-4xl mb-1 pointer-events-none select-none'} aria-hidden="true">
           {card.emoji}
         </span>
       ) : null}
       <div className="w-full px-0.5 text-center leading-tight">
-        <div className={`${labelClass} font-bold text-slate-800 line-clamp-2`}>
+        <div className={`${labelClass} font-bold text-slate-800 ${size === 'fill' ? 'line-clamp-1 leading-tight' : 'line-clamp-2'}`}>
           {displayLabel}
         </div>
       </div>
