@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GB4F42F02M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GB4F42F02M');
+</script>
+<title>IrisSpeak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/paper/style.css"><meta name="robots" content="noindex,nofollow"></head>
+<body>
+<header class="top"><div class="in"><a class="brand" href="/paper/">IrisSpeak</a><a class="brand" href="/paper/" style="margin-left:-12px"><span>Live demo</span></a>
+<nav><a href="/paper/overview.html">Overview</a><a href="/paper/architecture.html">Architecture</a><a href="/paper/data.html">Data</a><a href="/paper/training.html">Training</a><a href="/paper/benchmark.html">Benchmarks</a><a href="/paper/model.html">Model</a><a href="/paper/howitworks.html">How it works</a><a href="/paper/competition.html">Competition</a></nav></div></header>
+<main>
+<span class="eyebrow">Live demo · model runs in this page</span>
+<h1>Type the question, then tap cards</h1>
+<p class="lede">The IrisSpeak-135M model is downloaded once and runs in your browser. Every tap recomputes the ranking over all 3,094 cards.</p>
+<p class="status" id="loading" style="font-size:1rem;margin:24px 0">Loading model…</p>
+<div class="two" id="demo" hidden>
+<div>
+  <div class="row" style="margin:14px 0 8px"><label class="status" for="setting" style="display:inline-block;width:72px">Setting:</label><select id="setting"><option value="unknown">unknown</option><option value="home">home</option><option value="school" selected>school</option><option value="restaurant">restaurant / shop</option><option value="doctor">doctor / clinic</option><option value="play">play / outdoors</option><option value="transport">transport</option><option value="selfcare">bedtime / self-care</option></select></div>
+  <div class="row" style="margin:0 0 10px"><label class="status" for="partner" style="display:inline-block;width:72px">Question:</label><input type="text" id="partner" value="What do you want?" placeholder="The question the communication partner just asked (leave empty if the user starts)"><button id="go">Start</button></div>
+  <div class="row" style="margin:6px 0 4px"><span class="status" style="display:inline-block;width:72px">Tapped so far:</span><div class="chips" id="chips"></div></div>
+  <div class="row" style="margin:0 0 12px"><button class="secondary" id="undo">Undo</button><button class="secondary" id="reset">Clear</button><button id="more">More</button><button class="speak" id="speak" title="Speak the tapped cards and start a new turn">speak</button><span class="status" id="spoken"></span></div>
+  <div class="row" style="margin:0 0 10px"><label class="status"><input type="checkbox" id="userer" checked> use reranker for context awareness</label></div>
+  <div class="row" style="margin:0 0 6px"><span class="status">About the user (personal layer):</span></div>
+  <div class="row" style="margin:0 0 10px;align-items:flex-start"><textarea id="profile" rows="4" placeholder="e.g. an 8-year-old boy who likes football, dinosaurs and drawing; friends Sam and Mia; goes to school by bus"></textarea><button class="secondary" id="saveprofile">Save</button></div>
+  <p class="status" id="profilenote"></p>
+  <div class="grid16" id="grid"></div>
+  <p class="status" id="status" style="margin:10px 0 2px"></p>
+  <p class="status" id="rrstatus" style="margin:0 0 10px">reranker: loading…</p>
+  <h3>Conversation history <button class="secondary" id="clearhist" style="font-size:.8rem;padding:4px 8px">clear</button></h3>
+  <div class="tablewrap"><table id="hist"><tr><th>partner said</th><th>answer</th></tr></table></div>
+</div>
+<div>
+  <h3 id="toptitle">Grid cards: model probability and reranked probability</h3>
+  <div class="tablewrap"><table id="top"><tr><th>card</th><th class="num">model p</th><th class="num">reranked p</th><th>category</th></tr></table></div>
+  <h3>Timing</h3>
+  <p class="status" id="timing">–</p>
+</div>
+</div>
+</main>
+<footer>IrisSpeak · demo runs entirely client-side after the model download; nothing you type leaves your browser.</footer>
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/ort.min.js"></script>
+<script type="module">
+import { AutoTokenizer, pipeline } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.2';
+const FIXED = ["yes","no","help","i don't know"], REFUSE = ["no","not now","i don't want to"], UNCERT = ["maybe","i don't know"];
+const $ = id => document.getElementById(id);
+function setStatus(msg) { $('loading').textContent = msg; $('status').textContent = msg; }
+let tok, session, cards, byLabel = {}, startIdx, nOut, V = 49152, prefix = [], prevGrid = null, ready = false;
+let lastOrder = null, lastP = null, lastRR = null, page = 0;
+let rr = null, freq = null, cardVecs = null, embed = null, partnerVec = null, partnerVecFor = null;
+ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/';
+ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 2);
+
+// ---------- history and personal counts in browser storage
+function loadHist() { try { return JSON.parse(localStorage.getItem('irisspeak_history') || '[]'); } catch (e) { return []; } }
+function saveHist(h) { try { localStorage.setItem('irisspeak_history', JSON.stringify(h.slice(-50))); } catch (e) {} }
+function personalCounts() { const c = {}; for (const t of loadHist()) for (const id of (t.cards || [])) c[id] = (c[id] || 0) + 1; return c; }
+const DEFAULT_PROFILE = 'an 8-year-old boy who likes football, dinosaurs and drawing; friends Sam and Mia; goes to school by bus';
+function loadProfile() { try { return localStorage.getItem('irisspeak_profile') ?? DEFAULT_PROFILE; } catch (e) { return DEFAULT_PROFILE; } }
+let profileCards = new Set();
+function applyProfile(text) {
+  // match single words and two-word phrases of the description to card labels (interest cards get a reranker bonus)
+  profileCards = new Set(); const words = text.toLowerCase().replace(/[^a-z0-9' ]+/g, ' ').split(/\s+/).filter(Boolean);
+  const stop = new Set(['an','a','the','who','and','his','her','he','she','to','by','of','is','old','year','likes','like','goes','friends','friend','with','in','on','at']);
+  for (let i = 0; i < words.length; i++) {
+    for (const cand of [words[i] + ' ' + (words[i+1] || ''), words[i]]) {
+      const w = cand.trim(); if (!w || stop.has(w)) continue;
+      const c = byLabel[w] || byLabel[w.replace(/s$/, '')]; if (c && !c.core) profileCards.add(c.id);
+    }
+  }
+  $('profilenote').textContent = profileCards.size ? 'Personal cards from the description: ' + [...profileCards].map(id => byLabel[id].speak).join(', ') : 'No vocabulary cards matched the description yet.';
+}
+function renderHist() {
+  const h = loadHist(); const t = $('hist'); t.innerHTML = '<tr><th>partner said</th><th>answer</th></tr>';
+  for (const x of h.slice(-8).reverse()) { const r = t.insertRow(); r.insertCell().textContent = x.partner || '(user started)'; r.insertCell().textContent = x.answer; }
+  if (!h.length) { const r = t.insertRow(); const c = r.insertCell(); c.colSpan = 2; c.className = 'status'; c.textContent = 'No turns yet. Speak an answer to record one.'; }
+}
+
+async function loadModel() {
+  const man = await (await fetch('/model/manifest.json')).json();
+  const parts = []; let got = 0;
+  for (const f of man.chunks) {
+    const r = await fetch('/model/' + f); const b = new Uint8Array(await r.arrayBuffer()); parts.push(b); got += b.length;
+    setStatus(`Downloading model… ${(got/1e6).toFixed(0)} / ${(man.total_bytes/1e6).toFixed(0)} MB`);
+  }
+  const buf = new Uint8Array(got); let o = 0; for (const p of parts) { buf.set(p, o); o += p.length; }
+  return await ort.InferenceSession.create(buf, { executionProviders: ['wasm'] });
+}
+async function loadReranker() {
+  try {
+    const [r, f, cv] = await Promise.all([fetch('/model/reranker.json').then(x => x.json()), fetch('/model/freq.json').then(x => x.json()), fetch('/model/card_vecs.bin').then(x => x.arrayBuffer())]);
+    rr = r; freq = f; const h = new Uint16Array(cv); cardVecs = new Float32Array(h.length);
+    for (let i = 0; i < h.length; i++) cardVecs[i] = f16(h[i]);
+    embed = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', { dtype: 'fp32' });
+    $('rrstatus').textContent = `reranker: ready (${rr.dim} features)`;
+  } catch (e) { $('rrstatus').textContent = 'reranker unavailable: ' + e.message; console.error(e); }
+}
+function f16(h) { const s = (h & 0x8000) ? -1 : 1, e = (h >> 10) & 0x1f, m = h & 0x3ff; if (e === 0) return s * m * Math.pow(2, -24); if (e === 31) return m ? NaN : s * Infinity; return s * (1 + m / 1024) * Math.pow(2, e - 15); }
+
+function promptText() {
+  const p = $('partner').value.trim();
+  // all stored turns, newest last, capped at about 600 characters so the prompt stays short
+  let hist = loadHist().map(t => (t.partner ? t.partner + ' | ' : '') + t.answer); let total = 0; const kept = [];
+  for (let i = hist.length - 1; i >= 0; i--) { const h = hist[i].slice(0, 120); if (total + h.length > 600) break; kept.unshift(h); total += h.length; }
+  return `Setting: ${$('setting').value}.\n` + (kept.length ? `Earlier: ${kept.join(' | ')}\n` : '') + (p ? `Partner: ${p.slice(0,200)}` : 'Partner: (nobody has spoken)') + `\nReply cards:`;
+}
+function freqLogp(prefixIdx) {
+  const uniSum = freq.uni.reduce((a, b) => a + b, 0); const last = prefixIdx.length ? prefixIdx[prefixIdx.length - 1] : -1;
+  const bi = freq.bi[String(last)] || []; const biMap = new Map(bi); const biSum = bi.reduce((a, b) => a + b[1], 0) + freq.smoothing * freq.uni.length;
+  return j => Math.log(freq.lambda_bi * ((biMap.get(j) || freq.smoothing) / biSum) + (1 - freq.lambda_bi) * (freq.uni[j] / uniSum));
+}
+async function rerank(order, p) {
+  if (!rr || !embed || !$('userer').checked) return null;
+  const partner = $('partner').value.trim(); let sim = () => 0;
+  if (partner) {
+    if (partnerVecFor !== partner) { const out = await embed(partner, { pooling: 'mean', normalize: true }); partnerVec = Float32Array.from(out.data); partnerVecFor = partner; }
+    sim = j => { let d = 0; for (let k = 0; k < 384; k++) d += cardVecs[j * 384 + k] * partnerVec[k]; return d; };
+  }
+  const fl = freqLogp(prefix.map(c => byLabel[c].index)); const counts = personalCounts(); const top = order.slice(0, rr.K); const scores = [];
+  for (let r = 0; r < top.length; r++) {
+    const j = top[r], c = cards[j]; const x = new Float32Array(rr.dim); let o = 0;
+    const raw = [Math.log(p[j] + 1e-12), Math.log(r + 1), fl(j), sim(j)];
+    for (let k = 0; k < 4; k++) x[o++] = (raw[k] - rr.mu[k]) / rr.sd[k];
+    for (const cat of rr.cats) x[o++] = c.category === cat ? 1 : 0;
+    for (const it of rr.ints) x[o++] = c.intent === it ? 1 : 0;
+    x[o++] = c.core || 0; x[o++] = c.safety || 0; x[o++] = c.composable || 0; x[o++] = c.multiword || 0;
+    x[o++] = c.id === '<aac_end>' ? 1 : 0; x[o++] = c.id === '<name>' ? 1 : 0; x[o++] = Math.min(prefix.length, 6) / 6; x[o++] = partner ? 1 : 0;
+    let h = x;
+    for (let li = 0; li < rr.layers.length; li++) { const L = rr.layers[li]; const y = new Float32Array(L.b.length); for (let i = 0; i < L.b.length; i++) { let acc = L.b[i]; const W = L.W[i]; for (let k = 0; k < W.length; k++) acc += W[k] * h[k]; y[i] = li < rr.layers.length - 1 ? Math.max(0, acc) : acc; } h = y; }
+    // personal layer: bonus for cards used in this browser's earlier answers (decayed count)
+    const pc = counts[c.id] || 0; const prof = profileCards.has(c.id) ? 0.8 : 0;
+    scores.push([j, h[0] + 0.6 * Math.log(1 + pc) + prof]);
+  }
+  // reranked probability: softmax over the reranker scores of the top 100
+  const m = Math.max(...scores.map(s => s[1])); let z = 0; for (const s of scores) z += Math.exp(s[1] - m);
+  for (const s of scores) s.push(Math.exp(s[1] - m) / z);
+  scores.sort((a, b) => b[1] - a[1]); return scores;   // [index, score, prob]
+}
+async function predict() {
+  if (!ready) return;
+  const t0 = performance.now();
+  const enc = await tok(promptText(), { add_special_tokens: true });
+  const textIds = Array.from(enc.input_ids.data).map(Number);
+  const ids = [...textIds, V + startIdx, ...prefix.map(c => V + byLabel[c].index).slice(-10)];
+  const L = ids.length;
+  const feed = { input_ids: new ort.Tensor('int64', BigInt64Array.from(ids.map(BigInt)), [1, L]), attention_mask: new ort.Tensor('int64', BigInt64Array.from(ids.map(() => 1n)), [1, L]) };
+  if (session.inputNames.includes('position_ids')) feed.position_ids = new ort.Tensor('int64', BigInt64Array.from(ids.map((_, i) => BigInt(i))), [1, L]);
+  const out = await session.run(feed);
+  const full = out.logits.data; const vocabExt = out.logits.dims[2];
+  const logits = full.subarray((L - 1) * vocabExt + V, (L - 1) * vocabExt + V + nOut);
+  const cidx = ids.slice(textIds.length);
+  const m = Math.max(...logits); let z = 0; const p = new Float32Array(logits.length);
+  for (let i = 0; i < logits.length; i++) { p[i] = Math.exp(logits[i] - m); z += p[i]; }
+  for (let i = 0; i < p.length; i++) p[i] /= z;
+  const order = Array.from(p.keys()).sort((a, b) => p[b] - p[a]);
+  const rs = await rerank(order, p);
+  const t1 = performance.now();
+  lastOrder = order; lastP = p; lastRR = rs; page = 0;
+  render(order, p, rs); $('timing').textContent = `${(t1 - t0).toFixed(0)} ms per prediction incl. reranker (wasm, ${ort.env.wasm.numThreads} threads), ${textIds.length} text tokens + ${cidx.length} card tokens`;
+}
+function slate(orderIds) {
+  const fixed = FIXED.map(l => byLabel[l].id);
+  let cands = orderIds.filter(c => !fixed.includes(c) && !prefix.includes(c) && c !== '<aac_end>' && c !== '<name>');
+  cands = cands.slice(page * 12);
+  const extra = [];
+  for (const group of [REFUSE, UNCERT]) if (!group.some(l => byLabel[l] && (cands.slice(0,10).includes(byLabel[l].id) || fixed.includes(byLabel[l].id)))) extra.push(byLabel[group[0]].id);
+  const wanted = [...extra, ...cands.slice(0, 12 - extra.length)];
+  if (!prevGrid) return { grid: [...fixed, ...wanted], extra };
+  const g = [...prevGrid]; const keep = new Set(wanted);
+  for (let i = 4; i < 16; i++) if (!keep.has(g[i]) || prefix.includes(g[i])) g[i] = null;
+  const fill = wanted.filter(c => !g.includes(c));
+  for (let i = 4; i < 16; i++) if (g[i] === null && fill.length) g[i] = fill.shift();
+  return { grid: g, extra };
+}
+function render(order, p, rs) {
+  const rankedIdx = rs ? rs.map(x => x[0]) : order;
+  const orderIds = rankedIdx.map(i => cards[i].id);
+  const { grid, extra } = slate(orderIds); prevGrid = grid;
+  const el = $('grid'); el.innerHTML = '';
+  grid.forEach((c, i) => {
+    const d = document.createElement('div'); d.className = 'cell' + (i < 4 ? ' fixed' : '') + (extra.includes(c) ? ' contrast' : '') + (c ? '' : ' empty');
+    d.textContent = c ? byLabel[c].speak : '–'; if (c) d.onclick = () => { prefix.push(c); refreshChips(); predict(); }; el.appendChild(d);
+  });
+  const endP = p[byLabel['<aac_end>'].index]; $('speak').className = 'speak' + (endP > 0.3 ? ' on' : ''); $('speak').textContent = `speak (end ${(100*endP).toFixed(0)}%)`;
+  const rpMap = new Map(rs ? rs.map(x => [x[0], x[2]]) : []);
+  const tbl = $('top'); tbl.innerHTML = '<tr><th>card</th><th class="num">model p</th><th class="num">reranked p</th><th>category</th></tr>';
+  const fixedIds = FIXED.map(l => byLabel[l].id);
+  const shown = rankedIdx.filter(i => { const id = cards[i].id; return !prefix.includes(id) && id !== '<aac_end>' && id !== '<name>' && !fixedIds.includes(id); }).slice(page * 12, page * 12 + 12);
+  shown.forEach(i => { const r = tbl.insertRow(); r.insertCell().textContent = cards[i].speak; let c = r.insertCell(); c.className = 'num'; c.textContent = (100*p[i]).toFixed(1) + '%'; c = r.insertCell(); c.className = 'num'; c.textContent = rpMap.has(i) ? (100*rpMap.get(i)).toFixed(1) + '%' : '–'; r.insertCell().textContent = cards[i].category; });
+  $('toptitle').textContent = (page === 0 ? 'Grid cards' : `Grid cards, ranks ${page*12+1} to ${page*12+12}`) + (rs ? ': model probability and reranked probability' : ': model probability (reranker off)');
+}
+function refreshChips() { $('chips').innerHTML = prefix.map(c => `<span class="chip">${byLabel[c].speak}</span>`).join(''); }
+$('go').onclick = () => { prefix = []; prevGrid = null; page = 0; refreshChips(); predict(); };
+$('more').onclick = () => { if (!lastOrder) return; page += 1; prevGrid = null; render(lastOrder, lastP, lastRR); $('status').textContent = `Showing ranks ${page*12+1} to ${page*12+12}. Tap a card to continue, or More again.`; };
+$('partner').addEventListener('keydown', e => { if (e.key === 'Enter') $('go').onclick(); });
+$('setting').addEventListener('change', () => { page = 0; predict(); });
+$('userer').onchange = () => predict();
+$('clearhist').onclick = () => { saveHist([]); renderHist(); predict(); };
+$('saveprofile').onclick = () => { try { localStorage.setItem('irisspeak_profile', $('profile').value.trim()); } catch (e) {} applyProfile($('profile').value.trim()); predict(); };
+$('speak').onclick = () => {
+  const words = prefix.map(c => byLabel[c].speak);
+  if (!words.length) { $('spoken').textContent = 'Tap some cards first.'; return; }
+  const text = words.join(' ').replace(/\s+([,.!?])/g, '$1');
+  $('spoken').textContent = 'Spoken: "' + text + '"';
+  try { const u = new SpeechSynthesisUtterance(text); u.rate = 0.95; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); } catch (e) {}
+  const h = loadHist(); h.push({ partner: $('partner').value.trim(), answer: text, cards: [...prefix], t: Date.now() }); saveHist(h); renderHist();
+  prefix = []; prevGrid = null; page = 0; refreshChips(); predict();
+};
+$('undo').onclick = () => { prefix.pop(); page = 0; refreshChips(); predict(); };
+$('reset').onclick = () => { prefix = []; prevGrid = null; page = 0; refreshChips(); predict(); };
+(async () => {
+  try {
+    renderHist();
+    setStatus('Loading tokenizer…');
+    tok = await AutoTokenizer.from_pretrained('HuggingFaceTB/SmolLM2-135M-Instruct');
+    const meta = await (await fetch('/model/cards.json')).json();
+    cards = meta.cards; startIdx = meta.start_index; nOut = meta.n_outputs; if (meta.V) V = meta.V;
+    cards.forEach((c, i) => { c.index = i; byLabel[c.id] = c; byLabel[c.speak.toLowerCase()] = c; });
+    $('profile').value = loadProfile(); applyProfile($('profile').value);
+    setStatus('Building the model session…');
+    session = await loadModel(); ready = true; setStatus('Model ready. Predictions run locally.');
+    $('loading').hidden = true; $('demo').hidden = false;
+    loadReranker().then(() => predict());
+    predict();
+  } catch (e) { setStatus('Failed to load: ' + e.message); console.error(e); }
+})();
+</script>
+</body></html>

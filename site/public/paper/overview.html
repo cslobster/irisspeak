@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GB4F42F02M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GB4F42F02M');
+</script>
+<title>Overview · IrisSpeak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/paper/style.css"><meta name="robots" content="noindex,nofollow"></head>
+<body>
+<header class="top"><div class="in"><a class="brand" href="/paper/">IrisSpeak</a><a class="brand" href="/paper/" style="margin-left:-12px"><span>Live demo</span></a>
+<nav><a class="on" href="/paper/overview.html">Overview</a><a href="/paper/architecture.html">Architecture</a><a href="/paper/data.html">Data</a><a href="/paper/training.html">Training</a><a href="/paper/benchmark.html">Benchmarks</a><a href="/paper/model.html">Model</a><a href="/paper/howitworks.html">How it works</a><a href="/paper/competition.html">Competition</a></nav></div></header>
+<main class="narrow">
+<span class="eyebrow">Research study</span>
+<h1>IrisSpeak: Context-Aware AAC</h1>
+<p class="lede">IrisSpeak is a context-aware augmentative and alternative communication (AAC) system. Its core is IrisSpeak-135M, a small language model trained to read the communication partner's words and the cards tapped so far and predict the next card from a 3,094-card vocabulary. It runs entirely on the device, answering every tap in well under a second without a network; a reranker and slate policy turn its ranking into a stable, safe grid, and a personal layer learns the user on the device.</p>
+<div class="kpis">
+<div class="kpi"><div class="v">3,094</div><div class="l">cards with stable ids</div></div>
+<div class="kpi"><div class="v">69,676</div><div class="l">training states, real data</div></div>
+<div class="kpi"><div class="v">135M</div><div class="l">parameters, runs on device</div></div>
+<div class="kpi"><div class="v" id="kpi-r16">–</div><div class="l">Recall@16 on question-answer test, model + reranker</div></div>
+</div>
+<h2>Why this research</h2>
+<ul>
+<li><strong>Existing AAC is not context aware.</strong> Symbol boards show the same cells whatever the communication partner just said, so every card is found by category and page.</li>
+<li><strong>The learning curve is steep and use is slow.</strong> Users must memorise board layouts and navigate several levels per word; many abandon the device outside therapy.</li>
+<li><strong>Word prediction so far ignores the conversation.</strong> It ranks by frequency, not by the question being answered.</li>
+<li><strong>Cloud LLM APIs on every tap are costly and slow.</strong> The Gemini 2.5 Flash prototype generated each grid with a cloud call: one to two seconds and thousands of tokens per grid, at a price that scales with every tap of every conversation.</li>
+<li><strong>Cloud prompts are not adaptive.</strong> A prompt has no memory of the person, does not learn from their choices, and reshuffles the board after each tap.</li>
+<li><strong>Nothing works offline.</strong> A communication aid that stops when the network drops is not a communication aid.</li>
+<li><strong>The goal:</strong> an agentic, AI-native AAC system that runs zero-shot on a phone or tablet in the browser, with light on-device models that read the partner's words and the cards tapped so far, answer every tap in tens of milliseconds, keep the grid stable, learn the user on the device, and treat any cloud model as an optional planning agent rather than the engine.</li>
+</ul>
+<h2>Contributions</h2>
+<ol>
+<li><strong>A curated 3,094-card AAC vocabulary with stable ids</strong>, built from CBoard Classic, Project Core, a safety and repair set, and consensus across 25 AAC vocabularies, with intent classes and composable phrase cards.</li>
+<li><strong>IrisSpeak-135M, an on-device next-card model</strong>: SmolLM2-135M with the card vocabulary folded into its token space, fine-tuned with a soft-target loss on states derived from public AAC corpora, and exported to run in the browser with verified parity.</li>
+<li><strong>A context-aware system design</strong> that uses a reranker over the model's candidates, a slate policy with fixed safety cells and stable positions, an on-device personal layer, and an optional planner agent, so the grid answers every tap locally, keeps refusal one tap away, and improves with use.</li>
+</ol>
+<h2>What is here</h2>
+<ul>
+<li><a href="/paper/architecture.html">Architecture</a>: the ground-up design of IrisSpeak with the system diagram.</li>
+<li><a href="/paper/data.html">Data</a>: vocabulary files, mapped corpora, training states, licences, the scripts that built them, and the data, training, and experiment plans.</li>
+<li><a href="/paper/training.html">Training</a>: loss and dev-recall curves during fine-tuning, end-of-message precision, and what each evaluation measures.</li>
+<li><a href="/paper/benchmark.html">Benchmarks</a>: frequency and encoder baselines, the fine-tuned model with and without the reranker, and the comparison with a pure-LLM card generator.</li>
+<li><a href="/paper/model.html">Model</a>: how the model is built, its exports, and how to load it.</li>
+<li><a href="/paper/">Live demo</a>: type what a partner said, tap cards, and watch the 16-cell grid update from the model running locally in the page.</li>
+</ul>
+<h2>The idea in one paragraph</h2>
+<p>A parent asks "What did you do today at school?". The model reads that sentence and the cards tapped so far and gives every card in the vocabulary a probability of being tapped next. A reranker reorders the top hundred using frequency, similarity to the question, card metadata, and, later, the child's own history. A slate policy fills a grid with four fixed safety cells, a refusal and an uncertain option, and stable contextual cells. Every tap recomputes in tens of milliseconds on the device; no network is needed. A cloud model may be consulted once per question to suggest intent paths, but it never decides the grid.</p>
+<div class="callout">This site is access-controlled and not indexed. Materials are for research review. Corpus-derived files carry the licences of their sources; see the data page.</div>
+</main>
+<footer>IrisSpeak: Context-Aware AAC · research site, September 2026</footer>
+<script>fetch('/paper/results.json').then(r=>r.json()).then(j=>{const v=j.headline&&j.headline.qa_r16_rerank;if(v)document.getElementById('kpi-r16').textContent=v.toFixed(2)}).catch(()=>{})</script>
+</body></html>

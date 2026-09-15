@@ -9,3 +9,31 @@ node_modules
 data/.cache
 .vercel
 tsconfig.tsbuildinfo
+
+# ---- model training and export (see PLAN-RETRAIN.md; regenerate, never commit) ----
+train/out/
+export/out*/
+export/stage*/
+site/public/model/
+site/public/ort/
+site/public/assets/
+site/public/symbols/
+site/public/app/
+site/model_final/
+site/*.key
+site/r2_cors.json
+# corpora: derived from licence-restricted sources (Turk CC BY-ND); rebuild with data/*.py
+data/raw/
+data/mapped*/
+data/processed/
+data/states*/
+data/.cache/
+# ---- iOS ----
+ios/irisspeak/build/
+ios/irisspeak/irisspeak/Resources/Model/
+**/xcuserdata/
+*.xcuserstate
+site/.wrangler/
+# the published state dumps are built from Turk dialogues (CC BY-ND): regenerate with data/build_states.py,
+# never commit or redistribute them
+site/public/paper/data/states_*.jsonl.gz

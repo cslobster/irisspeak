@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Iris Speak listens to the parent's spoken sentence so the child can answer with cards.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Iris Speak turns the parent's speech into text to suggest cards for the child.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Iris Speak uses the front camera to let the child choose cards by looking at them (eye gaze mode).</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>OpenDyslexic-Regular.otf</string>
+		<string>OpenDyslexic-Bold.otf</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>lomaridge.irisspeak</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>irisspeak</string>
+			</array>
+		</dict>
+	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>UIStatusBarHidden</key>
+	<false/>
+</dict>
+</plist>

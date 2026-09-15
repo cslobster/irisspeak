@@ -1,0 +1,99 @@
+{
+  "_note": "Partner questions per setting with the answer cards a child would plausibly want first. A question passes when at least one expected card is on the first board (no Refresh), directly or inside a folder card shown on the board. Labels must exist in vocab/vocab.csv.",
+  "home": [
+    {"q": "What do you want for breakfast?", "expect": ["cereal", "toast", "eggs", "pancakes", "milk", "juice", "banana", "yogurt"]},
+    {"q": "Do you want to watch TV or play outside?", "expect": ["tv", "outside", "play", "watch"]},
+    {"q": "How did you sleep?", "expect": ["good", "bad", "okay", "tired", "well"]},
+    {"q": "Can you help me set the table?", "expect": ["yes", "no", "okay", "help", "later"]},
+    {"q": "Where is your jacket?", "expect": ["room", "school", "car", "bag", "i don't know", "upstairs"]},
+    {"q": "What do you want to do this weekend?", "expect": ["park", "swim", "play", "grandma", "movie", "beach", "zoo"]},
+    {"q": "Are you hungry?", "expect": ["yes", "no", "hungry", "snack"]},
+    {"q": "Which cup do you want, the blue one or the red one?", "expect": ["blue", "red"]},
+    {"q": "Time to clean your room. Ready?", "expect": ["yes", "no", "later", "okay", "not now"]},
+    {"q": "Who is coming for dinner?", "expect": ["grandma", "grandpa", "friend", "uncle", "aunt", "i don't know"]}
+  ],
+  "school": [
+    {"q": "What did you learn today?", "expect": ["math", "reading", "science", "art", "music", "nothing", "numbers", "letters"]},
+    {"q": "Who did you play with at recess?", "expect": ["friend", "nobody", "friends", "teacher", "<name>"]},
+    {"q": "Do you want to read or draw?", "expect": ["read", "draw"]},
+    {"q": "What colour is the apple?", "expect": ["red", "green", "yellow"]},
+    {"q": "How many blocks do you have?", "expect": ["one", "two", "three", "four", "five", "six", "ten"]},
+    {"q": "Do you need help with your work?", "expect": ["yes", "no", "help", "please"]},
+    {"q": "What do you want to do first, maths or writing?", "expect": ["math", "writing", "write"]},
+    {"q": "Are you ready for the test?", "expect": ["yes", "no", "scared", "nervous", "ready"]},
+    {"q": "What is your favourite subject?", "expect": ["math", "art", "music", "science", "reading", "pe", "history"]},
+    {"q": "Did you finish your homework?", "expect": ["yes", "no", "almost", "not yet", "finished", "done"]}
+  ],
+  "restaurant": [
+    {"q": "What would you like to eat?", "expect": ["pizza", "burger", "chicken", "pasta", "fries", "sandwich", "soup", "salad", "rice"]},
+    {"q": "Anything to drink?", "expect": ["water", "juice", "milk", "soda", "lemonade"]},
+    {"q": "Do you want fries or salad with that?", "expect": ["fries", "salad"]},
+    {"q": "Would you like dessert?", "expect": ["yes", "no", "ice cream", "cake", "cookie"]},
+    {"q": "Is your food okay?", "expect": ["yes", "no", "good", "yummy", "hot", "cold", "too hot"]},
+    {"q": "Do you want ketchup?", "expect": ["yes", "no", "please", "ketchup"]},
+    {"q": "Would you like to sit inside or outside?", "expect": ["inside", "outside"]},
+    {"q": "Are you finished?", "expect": ["yes", "no", "finished", "done", "more", "all done"]},
+    {"q": "What flavour ice cream?", "expect": ["chocolate", "vanilla", "strawberry"]},
+    {"q": "Do you want a big one or a small one?", "expect": ["big", "small"]}
+  ],
+  "doctor": [
+    {"q": "Where does it hurt?", "expect": ["tummy", "head", "ear", "throat", "leg", "arm", "stomach", "tooth", "foot", "knee"]},
+    {"q": "How are you feeling today?", "expect": ["sick", "tired", "okay", "bad", "good", "sad", "hurt", "fine"]},
+    {"q": "Does your ear hurt?", "expect": ["yes", "no", "a little", "ear", "hurt"]},
+    {"q": "Can I look in your mouth?", "expect": ["yes", "no", "okay", "scared", "wait"]},
+    {"q": "Are you scared of the needle?", "expect": ["yes", "no", "scared", "a little"]},
+    {"q": "Did you throw up?", "expect": ["yes", "no", "sick", "throw up"]},
+    {"q": "Do you feel hot or cold?", "expect": ["hot", "cold"]},
+    {"q": "What did you eat this morning?", "expect": ["cereal", "toast", "nothing", "eggs", "milk", "banana"]},
+    {"q": "Do you want mum to hold your hand?", "expect": ["yes", "no", "mum", "please", "hand"]},
+    {"q": "How many days have you been sick?", "expect": ["one", "two", "three", "four", "i don't know", "today", "yesterday"]}
+  ],
+  "play": [
+    {"q": "What do you want to play?", "expect": ["ball", "tag", "hide and seek", "lego", "blocks", "game", "swing", "cars", "puzzle", "outside"]},
+    {"q": "Do you want the swing or the slide?", "expect": ["swing", "slide"]},
+    {"q": "Whose turn is it?", "expect": ["mine", "me", "you", "my turn", "your turn", "<name>"]},
+    {"q": "Are you having fun?", "expect": ["yes", "no", "fun", "happy", "bored"]},
+    {"q": "Do you want to go higher?", "expect": ["yes", "no", "higher", "stop", "more", "scared"]},
+    {"q": "Shall we play with the ball or the bubbles?", "expect": ["ball", "bubbles"]},
+    {"q": "Can I play too?", "expect": ["yes", "no", "okay", "sure"]},
+    {"q": "Do you want to be the pirate or the dragon?", "expect": ["pirate", "dragon"]},
+    {"q": "Are you tired yet?", "expect": ["yes", "no", "tired", "more", "not yet"]},
+    {"q": "Which colour crayon do you want?", "expect": ["blue", "red", "green", "yellow", "pink", "purple", "orange", "black"]}
+  ],
+  "transport": [
+    {"q": "Where are we going?", "expect": ["school", "home", "park", "shop", "grandma", "i don't know", "doctor", "beach"]},
+    {"q": "Do you want to sit by the window?", "expect": ["yes", "no", "window", "please"]},
+    {"q": "Are you feeling sick in the car?", "expect": ["yes", "no", "sick", "okay", "a little"]},
+    {"q": "Should we take the bus or the train?", "expect": ["bus", "train"]},
+    {"q": "Can you see the aeroplane?", "expect": ["yes", "no", "where", "plane", "airplane", "look"]},
+    {"q": "Do you need the toilet before we go?", "expect": ["yes", "no", "toilet", "bathroom"]},
+    {"q": "How long until we get there?", "expect": ["i don't know", "soon", "long", "minutes", "hour", "five minutes"]},
+    {"q": "Did you put your seat belt on?", "expect": ["yes", "no", "help", "done", "seat belt"]},
+    {"q": "Do you want music on?", "expect": ["yes", "no", "music", "quiet", "song"]},
+    {"q": "Are we there yet?", "expect": ["no", "yes", "soon", "not yet", "i don't know"]}
+  ],
+  "selfcare": [
+    {"q": "Ready for bed?", "expect": ["yes", "no", "not yet", "tired", "later", "five minutes"]},
+    {"q": "Do you want a story?", "expect": ["yes", "no", "story", "book", "please"]},
+    {"q": "Did you brush your teeth?", "expect": ["yes", "no", "not yet", "teeth", "brush"]},
+    {"q": "Bath or shower tonight?", "expect": ["bath", "shower"]},
+    {"q": "Which pyjamas do you want?", "expect": ["blue", "red", "dinosaur", "pyjamas", "these", "those", "green"]},
+    {"q": "Do you want the light on or off?", "expect": ["on", "off", "light"]},
+    {"q": "Are you cold?", "expect": ["yes", "no", "cold", "blanket", "warm"]},
+    {"q": "Do you need to go to the toilet?", "expect": ["yes", "no", "toilet", "bathroom"]},
+    {"q": "What do you want to dream about?", "expect": ["dog", "unicorn", "dinosaur", "space", "beach", "i don't know", "friends"]},
+    {"q": "Good night. Do you want a hug?", "expect": ["yes", "no", "hug", "kiss", "please", "love you"]}
+  ],
+  "unknown": [
+    {"q": "What happened?", "expect": ["fell", "hurt", "nothing", "i don't know", "broke", "lost"]},
+    {"q": "Are you okay?", "expect": ["yes", "no", "okay", "fine", "hurt", "sad", "scared"]},
+    {"q": "What do you need?", "expect": ["help", "water", "toilet", "mum", "dad", "break", "food", "nothing"]},
+    {"q": "Do you want to go home?", "expect": ["yes", "no", "home", "stay", "later"]},
+    {"q": "What's wrong?", "expect": ["hurt", "tired", "sad", "sick", "scared", "nothing", "loud", "hungry"]},
+    {"q": "Do you want to stop or keep going?", "expect": ["stop", "keep going", "go", "more"]},
+    {"q": "Who do you want to call?", "expect": ["mum", "dad", "grandma", "friend", "nobody", "<name>"]},
+    {"q": "Is it too loud?", "expect": ["yes", "no", "loud", "quiet", "a little"]},
+    {"q": "What is your favourite animal?", "expect": ["dog", "cat", "horse", "elephant", "lion", "rabbit", "fish", "bird"]},
+    {"q": "How old are you?", "expect": ["five", "six", "seven", "eight", "nine", "ten", "four", "three"]}
+  ]
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GB4F42F02M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GB4F42F02M');
+</script>
+<title>How the model works · IrisSpeak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/paper/style.css"><meta name="robots" content="noindex,nofollow"></head>
+<body>
+<header class="top"><div class="in"><a class="brand" href="/paper/">IrisSpeak</a><a class="brand" href="/paper/" style="margin-left:-12px"><span>Live demo</span></a>
+<nav><a href="/paper/overview.html">Overview</a><a href="/paper/architecture.html">Architecture</a><a href="/paper/data.html">Data</a><a href="/paper/training.html">Training</a><a href="/paper/benchmark.html">Benchmarks</a><a href="/paper/model.html">Model</a><a class="on" href="/paper/howitworks.html">How it works</a><a href="/paper/competition.html">Competition</a></nav></div></header>
+<main class="narrow">
+<span class="eyebrow">Plain-language guide</span>
+<h1>How the IrisSpeak model was built</h1>
+<p class="lede">Six steps, in everyday words.</p>
+
+<h2>1. Start from an open model</h2>
+<p>We took <strong>SmolLM2-135M-Instruct</strong> from Hugging Face. It is a small, free language model that already understands English. It is about a thousand times smaller than ChatGPT, which is why it can run on a phone with no internet.</p>
+
+<h2>2. Change the model to work with cards</h2>
+<p>A language model normally guesses the next <em>word</em>. AAC users tap <em>cards</em>. So we added an extra layer to the model: a card layer with one row for each of the 3,094 cards. It does two jobs. It reads the cards already tapped into the model, and at the end it scores every card, so the model's output is one score per card instead of one score per word. The best-scoring cards go on the screen. Everything else in SmolLM2 stays as it was, and the whole model is then trained together.</p>
+
+<h2>3. Train it with AAC data</h2>
+<p>We used AAC conversation data from Hugging Face, plus the AAC datasets we collected (AACText and the Turk AAC dialogues). Each reply was turned into cards, for example "I want some juice" becomes <em>I want → some → juice</em>. Every step is one lesson: given the question and the cards so far, this is the next card. About <strong>70,000 lessons</strong> in total.</p>
+<p>Training is simple: show a lesson, let the model guess, tell it how wrong it was, adjust it a little. Repeat about 4,000 times.</p>
+<table>
+<tr><th>Machine</th><td>one Apple MacBook Pro laptop (M2 Max chip), no GPU servers</td></tr>
+<tr><th>Training time</th><td>about 2 hours (125 minutes)</td></tr>
+<tr><th>Lessons</th><td>69,676 examples, shown twice</td></tr>
+<tr><th>Model size</th><td>135 million parameters</td></tr>
+</table>
+
+<h2>4. Test it</h2>
+<p>We kept thousands of lessons the model never saw and asked: when it shows 16 cards, is the right one there? For question-and-answer turns, yes <strong>7 times out of 10</strong>. The first suggestion is right about 4 times out of 10. A plain "most common cards" rule did clearly worse, and so did our earlier version that asked a big cloud model for the cards.</p>
+
+<h2>5. Add a small model that learns the person</h2>
+<p>A tiny second model reorders the cards using the child's profile and the cards they have used before. The more you use it, the better it fits you. Everything stays on the device.</p>
+
+<h2>6. Put it on the phone</h2>
+<p>The finished model is about 274 MB. The phone downloads it once and keeps it. After that every tap is answered on the phone in under a second.</p>
+</main>
+<footer>IrisSpeak: Context-Aware AAC · research site, September 2026</footer>
+</body></html>

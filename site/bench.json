@@ -1,0 +1,51 @@
+{
+ "recall16": [
+  [
+   "S1 frequency",
+   0.5986666666666667,
+   null
+  ],
+  [
+   "S2 MiniLM + S1",
+   0.6106666666666667,
+   null
+  ],
+  [
+   "v1 Gemini-2.5-Flash prototype\n(grid hit, 6-utterance sample)",
+   null,
+   0.33
+  ],
+  [
+   "IrisSpeak-135M model alone",
+   0.541,
+   0.622
+  ],
+  [
+   "IrisSpeak-135M model + reranker",
+   0.645,
+   0.701
+  ]
+ ],
+ "recall1": [
+  [
+   "S1 frequency",
+   0.268,
+   null
+  ],
+  [
+   "S2 MiniLM + S1",
+   0.2813333333333333,
+   null
+  ],
+  [
+   "IrisSpeak-135M model alone",
+   0.284,
+   0.306
+  ],
+  [
+   "IrisSpeak-135M model + reranker",
+   0.349,
+   0.377
+  ]
+ ]
+}

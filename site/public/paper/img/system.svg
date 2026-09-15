@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1180" width="900" height="1180" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="12.5">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3E4956"/></marker>
+    <marker id="arrw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#B7791F"/></marker>
+    <marker id="arrt" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0E6B72"/></marker>
+  </defs>
+  <rect width="900" height="1180" fill="#FFFFFF"/>
+  <text x="24" y="32" font-size="17" font-weight="700" fill="#1A212B">IrisSpeak: system at a glance</text>
+  <text x="24" y="51" font-size="12" fill="#5C6875">Every tap is answered on the device. The cloud is consulted at most once or twice per utterance, and it only advises.</text>
+
+  <!-- Partner lane -->
+  <rect x="24" y="70" width="852" height="66" rx="6" fill="#F6F7F5" stroke="#D9DED9"/>
+  <text x="38" y="92" font-weight="600" fill="#1A212B">Communication partner</text>
+  <rect x="220" y="80" width="120" height="32" rx="4" fill="#FFFFFF" stroke="#B9C0BB"/><text x="280" y="100" text-anchor="middle" fill="#1A212B">speaks or types</text>
+  <rect x="372" y="80" width="150" height="32" rx="4" fill="#FFFFFF" stroke="#B9C0BB"/><text x="447" y="95" text-anchor="middle" fill="#1A212B">on-device ASR</text><text x="447" y="107" text-anchor="middle" font-size="10" fill="#5C6875">Web Speech / Whisper-tiny</text>
+  <line x1="340" y1="96" x2="372" y2="96" stroke="#3E4956" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="540" y="99" font-size="10.5" fill="#5C6875">"What did you do today at school?"</text>
+  <text x="38" y="124" font-size="10.5" fill="#5C6875">may be absent when the user initiates · the partner turn goes to the context assembler now and, asynchronously, to the planner</text>
+  <line x1="447" y1="112" x2="447" y2="150" stroke="#3E4956" stroke-width="1.5"/>
+  <line x1="447" y1="150" x2="140" y2="150" stroke="#3E4956" stroke-width="1.5"/>
+  <line x1="140" y1="150" x2="140" y2="196" stroke="#3E4956" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Device box -->
+  <rect x="24" y="158" width="852" height="564" rx="8" fill="#FFFFFF" stroke="#0E6B72" stroke-width="2"/>
+  <text x="40" y="182" font-weight="700" fill="#0B565C">On the device (browser, works offline)</text>
+
+  <!-- Context assembler -->
+  <rect x="40" y="196" width="220" height="100" rx="5" fill="#F6F7F5" stroke="#B9C0BB"/>
+  <text x="50" y="215" font-weight="600" fill="#1A212B">Context assembler</text>
+  <text x="50" y="233" font-size="11" fill="#3E4956">profile header: age band, interests</text>
+  <text x="50" y="248" font-size="11" fill="#3E4956">setting · last 2 turns · partner turn</text>
+  <text x="50" y="263" font-size="11" fill="#3E4956">tapped cards so far (the prefix)</text>
+  <text x="50" y="283" font-size="10.5" fill="#5C6875">names become a &lt;name&gt; slot</text>
+
+  <!-- Local scorer -->
+  <rect x="284" y="196" width="284" height="100" rx="5" fill="#E1EFEF" stroke="#0E6B72"/>
+  <text x="294" y="215" font-weight="600" fill="#0B565C">Local scorer · SmolLM2-135M + card rows</text>
+  <text x="294" y="233" font-size="11" fill="#1A212B">partner text prefilled once per turn</text>
+  <text x="294" y="248" font-size="11" fill="#1A212B">one card token per tap, KV cache kept</text>
+  <text x="294" y="263" font-size="11" fill="#1A212B">→ probability for all 3,094 cards + end</text>
+  <text x="294" y="280" font-size="10.5" fill="#5C6875">≈ 40 ms per tap on WebGPU · fp16 ONNX 274 MB</text>
+  <text x="294" y="292" font-size="10.5" fill="#5C6875">MiniLM bi-encoder fallback on CPU-only devices</text>
+
+  <!-- Personal layer -->
+  <rect x="592" y="196" width="268" height="100" rx="5" fill="#F6F7F5" stroke="#B9C0BB"/>
+  <text x="602" y="215" font-weight="600" fill="#1A212B">Personal layer (IndexedDB)</text>
+  <text x="602" y="233" font-size="11" fill="#3E4956">decayed count per card · recency</text>
+  <text x="602" y="248" font-size="11" fill="#3E4956">deletion rate · per-setting counts</text>
+  <text x="602" y="263" font-size="11" fill="#3E4956">bandit on one exploration cell</text>
+  <text x="602" y="283" font-size="10.5" fill="#5C6875">updated on tap, delete, speak · never uploaded</text>
+
+  <!-- Reranker -->
+  <rect x="284" y="332" width="576" height="100" rx="5" fill="#E1EFEF" stroke="#0E6B72"/>
+  <text x="294" y="351" font-weight="600" fill="#0B565C">Reranker · 3-layer MLP over the top 100 · listwise-trained · weights fixed on the device</text>
+  <text x="294" y="369" font-size="11" fill="#1A212B">features per card: model log-prob and rank · hidden-state similarity · bigram frequency</text>
+  <text x="294" y="384" font-size="11" fill="#1A212B">category, intent, core, safety, composable · personal count, recency, deletions</text>
+  <text x="294" y="399" font-size="11" fill="#1A212B">planner bonus (decays every tap) · prefix length · partner present</text>
+  <text x="294" y="420" font-size="10.5" fill="#5C6875">under 1 ms · added 8 to 11 points of Recall@16 over the model alone in this study</text>
+
+  <!-- Slate policy -->
+  <rect x="284" y="458" width="576" height="100" rx="5" fill="#E1EFEF" stroke="#0E6B72"/>
+  <text x="294" y="477" font-weight="600" fill="#0B565C">Slate policy · 16 / 24 / 36 cells, chosen by the clinician</text>
+  <text x="294" y="495" font-size="11" fill="#1A212B">4 fixed safety cells: yes, no, help, I don't know · 2 contrast cells: a refusal and an uncertain option</text>
+  <text x="294" y="510" font-size="11" fill="#1A212B">1 personal favourite · 1 folder or exploration cell · 8 contextual cells from the reranked list</text>
+  <text x="294" y="525" font-size="11" fill="#1A212B">a card that stays ranked keeps its cell; newcomers fill vacated cells only</text>
+  <text x="294" y="546" font-size="10.5" fill="#5C6875">end-of-message probability lights the speak button instead of taking a cell</text>
+
+  <!-- Grid -->
+  <rect x="40" y="332" width="220" height="226" rx="5" fill="#FFFFFF" stroke="#B9C0BB"/>
+  <text x="50" y="351" font-weight="600" fill="#1A212B">Grid the user sees</text>
+  <g font-size="10" fill="#1A212B">
+    <rect x="50" y="362" width="46" height="26" rx="3" fill="#E1EFEF" stroke="#0E6B72"/><text x="73" y="379" text-anchor="middle">yes</text>
+    <rect x="102" y="362" width="46" height="26" rx="3" fill="#E1EFEF" stroke="#0E6B72"/><text x="125" y="379" text-anchor="middle">no</text>
+    <rect x="154" y="362" width="46" height="26" rx="3" fill="#E1EFEF" stroke="#0E6B72"/><text x="177" y="379" text-anchor="middle">help</text>
+    <rect x="206" y="362" width="46" height="26" rx="3" fill="#E1EFEF" stroke="#0E6B72"/><text x="229" y="379" text-anchor="middle">don't know</text>
+    <rect x="50" y="394" width="46" height="26" rx="3" fill="#FFFFFF" stroke="#B9C0BB"/><text x="73" y="411" text-anchor="middle">I</text>
+    <rect x="102" y="394" width="46" height="26" rx="3" fill="#F6EBD9" stroke="#B7791F"/><text x="125" y="411" text-anchor="middle">played</text>
+    <rect x="154" y="394" width="46" height="26" rx="3" fill="#FFFFFF" stroke="#B9C0BB"/><text x="177" y="411" text-anchor="middle">nothing</text>
+    <rect x="206" y="394" width="46" height="26" rx="3" fill="#FFFFFF" stroke="#B9C0BB"/><text x="229" y="411" text-anchor="middle">lunch</text>
+    <rect x="50" y="426" width="46" height="26" rx="3" fill="#F6EBD9" stroke="#B7791F"/><text x="73" y="443" text-anchor="middle">football</text>
+    <rect x="102" y="426" width="46" height="26" rx="3" fill="#FFFFFF" stroke="#B9C0BB"/><text x="125" y="443" text-anchor="middle">with</text>
+    <rect x="154" y="426" width="46" height="26" rx="3" fill="#F6EBD9" stroke="#B7791F"/><text x="177" y="443" text-anchor="middle">Sam</text>
+    <rect x="206" y="426" width="46" height="26" rx="3" fill="#FFFFFF" stroke="#B9C0BB" stroke-dasharray="3,2"/><text x="229" y="443" text-anchor="middle">not now</text>
+    <rect x="50" y="458" width="46" height="26" rx="3" fill="#FFFFFF" stroke="#B9C0BB"/><text x="73" y="475" text-anchor="middle">recess</text>
+    <rect x="102" y="458" width="46" height="26" rx="3" fill="#FFFFFF" stroke="#B9C0BB"/><text x="125" y="475" text-anchor="middle">fun</text>
+    <rect x="154" y="458" width="46" height="26" rx="3" fill="#FFFFFF" stroke="#B9C0BB"/><text x="177" y="475" text-anchor="middle">art class</text>
+    <rect x="206" y="458" width="46" height="26" rx="3" fill="#FFFFFF" stroke="#B9C0BB"/><text x="229" y="475" text-anchor="middle">folder</text>
+  </g>
+  <text x="50" y="506" font-size="10" fill="#5C6875">teal: fixed · amber: planner-boosted</text>
+  <text x="50" y="520" font-size="10" fill="#5C6875">dashed: forced contrast option</text>
+  <text x="50" y="542" font-size="10" fill="#5C6875">a tap adds one card to the prefix</text>
+
+  <!-- Sentence realiser + log -->
+  <rect x="40" y="586" width="400" height="66" rx="5" fill="#F6F7F5" stroke="#B9C0BB"/>
+  <text x="50" y="605" font-weight="600" fill="#1A212B">Sentence realiser → speech</text>
+  <text x="50" y="623" font-size="11" fill="#3E4956">local template first: order, tense from the question, phrase expansion, names</text>
+  <text x="50" y="638" font-size="11" fill="#3E4956">optional LLM sentence (prototype prompt) when online, offered as an alternative</text>
+  <rect x="460" y="586" width="400" height="66" rx="5" fill="#F6F7F5" stroke="#B9C0BB"/>
+  <text x="470" y="605" font-weight="600" fill="#1A212B">On-device log</text>
+  <text x="470" y="623" font-size="11" fill="#3E4956">slate shown, cell positions, tap, delete, speak, planner used or not</text>
+  <text x="470" y="638" font-size="11" fill="#3E4956">feeds the personal layer; exported only with consent, names stripped</text>
+  <text x="40" y="700" font-size="11" fill="#B7791F" font-weight="600">every tap: prefix +1 → rescore in under 150 ms, no network · every partner turn: prefill once</text>
+
+  <!-- arrows in device -->
+  <line x1="260" y1="246" x2="284" y2="246" stroke="#0E6B72" stroke-width="2" marker-end="url(#arrt)"/>
+  <line x1="426" y1="296" x2="426" y2="332" stroke="#0E6B72" stroke-width="2" marker-end="url(#arrt)"/>
+  <text x="432" y="318" font-size="10.5" fill="#0B565C">top 100 + hidden state</text>
+  <line x1="726" y1="296" x2="726" y2="332" stroke="#3E4956" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="732" y="318" font-size="10.5" fill="#5C6875">personal features</text>
+  <line x1="572" y1="432" x2="572" y2="458" stroke="#0E6B72" stroke-width="2" marker-end="url(#arrt)"/>
+  <text x="578" y="450" font-size="10.5" fill="#0B565C">ranked list</text>
+  <line x1="284" y1="508" x2="260" y2="508" stroke="#0E6B72" stroke-width="2" marker-end="url(#arrt)"/>
+  <!-- tap loop: grid back to context assembler -->
+  <line x1="140" y1="332" x2="140" y2="296" stroke="#B7791F" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrw)"/>
+  <text x="146" y="318" font-size="10.5" fill="#B7791F" font-weight="600">tap → prefix +1</text>
+  <line x1="150" y1="558" x2="150" y2="586" stroke="#3E4956" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="156" y="578" font-size="10.5" fill="#5C6875">speak</text>
+  <line x1="660" y1="558" x2="660" y2="586" stroke="#3E4956" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Planner row -->
+  <rect x="24" y="742" width="590" height="236" rx="8" fill="#FFFFFF" stroke="#B7791F" stroke-width="2" stroke-dasharray="8,5"/>
+  <text x="40" y="766" font-weight="700" fill="#8A5A12">Planner agent (optional) · cloud LLM (gpt-5.6-luna, Gemini) or local Qwen-0.5B</text>
+  <rect x="40" y="780" width="276" height="112" rx="5" fill="#F6EBD9" stroke="#B7791F"/>
+  <text x="50" y="799" font-weight="600" fill="#1A212B">Input, once per partner turn</text>
+  <text x="50" y="817" font-size="11" fill="#3E4956">profile summary with names masked · setting</text>
+  <text x="50" y="832" font-size="11" fill="#3E4956">last turns · tapped prefix</text>
+  <text x="50" y="847" font-size="11" fill="#3E4956">full card list as a cached prompt prefix</text>
+  <text x="50" y="868" font-size="10.5" fill="#5C6875">measured: about 3 s, 20.7k tokens,</text>
+  <text x="50" y="881" font-size="10.5" fill="#5C6875">99.7 percent served from cache</text>
+  <rect x="330" y="780" width="268" height="112" rx="5" fill="#F6EBD9" stroke="#B7791F"/>
+  <text x="340" y="799" font-weight="600" fill="#1A212B">Output, strict JSON</text>
+  <text x="340" y="817" font-size="11" fill="#3E4956">3 to 6 intent paths as card ids, for example</text>
+  <text x="340" y="833" font-size="10.5" fill="#1A212B" font-family="IBM Plex Mono, Menlo, monospace">[i, played, football, &lt;name:Sam&gt;]</text>
+  <text x="340" y="849" font-size="11" fill="#3E4956">category boosts · confidence</text>
+  <text x="340" y="868" font-size="10.5" fill="#5C6875">ids validated · prefix repeats stripped</text>
+  <text x="340" y="881" font-size="10.5" fill="#5C6875">becomes one reranker feature, decaying per tap</text>
+  <text x="40" y="916" font-size="11" fill="#3E4956">triggers: new partner turn · sentence start with no plan · setting change · "more ideas" · high local entropy</text>
+  <text x="40" y="932" font-size="11" fill="#3E4956">never on ordinary taps · if the planner is absent or late the bonus is zero and the grid still works</text>
+  <text x="40" y="960" font-size="10.5" fill="#5C6875">context arrives from the partner lane asynchronously; the output feeds the reranker (amber arrow)</text>
+  <line x1="316" y1="836" x2="330" y2="836" stroke="#B7791F" stroke-width="1.5" marker-end="url(#arrw)"/>
+  <!-- planner output to reranker -->
+  <path d="M598,808 L868,808 L868,382 L860,382" fill="none" stroke="#B7791F" stroke-width="2" marker-end="url(#arrw)"/>
+  <text x="872" y="600" font-size="10.5" fill="#8A5A12" transform="rotate(-90 872 600)" text-anchor="middle">planner bonus</text>
+  <!-- async context from partner lane to planner -->
+  <path d="M447,136 L447,144 L890,144 L890,730 L640,730 L640,742" fill="none" stroke="#B7791F" stroke-width="1.2" stroke-dasharray="4,4" marker-end="url(#arrw)"/>
+  <text x="530" y="140" font-size="10" fill="#8A5A12">context to planner (async)</text>
+
+  <!-- Parent guide -->
+  <rect x="632" y="742" width="244" height="90" rx="6" fill="#F6F7F5" stroke="#D9DED9"/>
+  <text x="644" y="764" font-weight="600" fill="#1A212B">Parent guide agent</text>
+  <text x="644" y="781" font-size="11" fill="#3E4956">optional, asynchronous, kept from the Gemini 2.5 Flash prototype</text>
+  <text x="644" y="797" font-size="11" fill="#3E4956">suggests how the partner can respond</text>
+  <text x="644" y="815" font-size="10.5" fill="#5C6875">reads the transcript, never the grid</text>
+
+  <!-- Offline pipeline -->
+  <rect x="24" y="1000" width="852" height="164" rx="8" fill="#F6F7F5" stroke="#D9DED9"/>
+  <text x="40" y="1024" font-weight="700" fill="#1A212B">Offline, before shipping (not on the device)</text>
+  <g font-size="11" fill="#1A212B">
+    <rect x="40" y="1040" width="126" height="78" rx="4" fill="#FFFFFF" stroke="#B9C0BB"/><text x="103" y="1058" text-anchor="middle" font-weight="600">Corpora</text><text x="103" y="1074" text-anchor="middle" font-size="10" fill="#3E4956">AAC Conversations,</text><text x="103" y="1087" text-anchor="middle" font-size="10" fill="#3E4956">AACText, Turk,</text><text x="103" y="1100" text-anchor="middle" font-size="10" fill="#3E4956">synthetic parent–child Q&amp;A</text>
+    <rect x="182" y="1040" width="126" height="78" rx="4" fill="#FFFFFF" stroke="#B9C0BB"/><text x="245" y="1058" text-anchor="middle" font-weight="600">Mapper</text><text x="245" y="1074" text-anchor="middle" font-size="10" fill="#3E4956">English → card</text><text x="245" y="1087" text-anchor="middle" font-size="10" fill="#3E4956">sequences, acceptable</text><text x="245" y="1100" text-anchor="middle" font-size="10" fill="#3E4956">variants, coverage gate</text>
+    <rect x="324" y="1040" width="126" height="78" rx="4" fill="#FFFFFF" stroke="#B9C0BB"/><text x="387" y="1058" text-anchor="middle" font-weight="600">Training states</text><text x="387" y="1074" text-anchor="middle" font-size="10" fill="#3E4956">one per prefix,</text><text x="387" y="1087" text-anchor="middle" font-size="10" fill="#3E4956">soft targets, question-</text><text x="387" y="1100" text-anchor="middle" font-size="10" fill="#3E4956">answer tiers weighted up</text>
+    <rect x="466" y="1040" width="126" height="78" rx="4" fill="#FFFFFF" stroke="#B9C0BB"/><text x="529" y="1058" text-anchor="middle" font-weight="600">Fine-tune + DPO</text><text x="529" y="1074" text-anchor="middle" font-size="10" fill="#3E4956">SmolLM2-135M with</text><text x="529" y="1087" text-anchor="middle" font-size="10" fill="#3E4956">card rows, soft-target</text><text x="529" y="1100" text-anchor="middle" font-size="10" fill="#3E4956">loss, ~1 h per epoch</text>
+    <rect x="608" y="1040" width="126" height="78" rx="4" fill="#FFFFFF" stroke="#B9C0BB"/><text x="671" y="1058" text-anchor="middle" font-weight="600">Export</text><text x="671" y="1074" text-anchor="middle" font-size="10" fill="#3E4956">extended vocabulary</text><text x="671" y="1087" text-anchor="middle" font-size="10" fill="#3E4956">→ ONNX fp16, parity</text><text x="671" y="1100" text-anchor="middle" font-size="10" fill="#3E4956">of at least 0.97 required</text>
+    <rect x="750" y="1040" width="110" height="78" rx="4" fill="#FFFFFF" stroke="#B9C0BB"/><text x="805" y="1058" text-anchor="middle" font-weight="600">Reranker + eval</text><text x="805" y="1074" text-anchor="middle" font-size="10" fill="#3E4956">top-100 dumps, graded</text><text x="805" y="1087" text-anchor="middle" font-size="10" fill="#3E4956">labels, logs; replay:</text><text x="805" y="1100" text-anchor="middle" font-size="10" fill="#3E4956">Recall@16, taps/utterance</text>
+  </g>
+  <g stroke="#3E4956" stroke-width="1.5" marker-end="url(#arr)"><line x1="166" y1="1079" x2="182" y2="1079"/><line x1="308" y1="1079" x2="324" y2="1079"/><line x1="450" y1="1079" x2="466" y2="1079"/><line x1="592" y1="1079" x2="608" y2="1079"/><line x1="734" y1="1079" x2="750" y2="1079"/></g>
+  <text x="40" y="1146" font-size="10.5" fill="#5C6875">ships to the device: fp16 ONNX model, reranker weights, vocabulary registry with its version hash · comes back: consented, name-stripped logs</text>
+</svg>

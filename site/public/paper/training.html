@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GB4F42F02M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GB4F42F02M');
+</script>
+<title>Training · IrisSpeak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/paper/style.css"><meta name="robots" content="noindex,nofollow"></head>
+<body>
+<header class="top"><div class="in"><a class="brand" href="/paper/">IrisSpeak</a><a class="brand" href="/paper/" style="margin-left:-12px"><span>Live demo</span></a>
+<nav><a href="/paper/overview.html">Overview</a><a href="/paper/architecture.html">Architecture</a><a href="/paper/data.html">Data</a><a class="on" href="/paper/training.html">Training</a><a href="/paper/benchmark.html">Benchmarks</a><a href="/paper/model.html">Model</a><a href="/paper/howitworks.html">How it works</a><a href="/paper/competition.html">Competition</a></nav></div></header>
+<main class="narrow">
+<span class="eyebrow">Training</span>
+<h1>Training IrisSpeak-135M</h1>
+<p class="lede">IrisSpeak-135M is SmolLM2-135M-Instruct fine-tuned to predict the next card. IrisSpeak-135M was trained on all 69,676 states with a 6-card cap, end-of-message down-weighting, a topic-bias filter, and question-answer states weighted up to 37 percent of each epoch. On an Apple M2 Max, two weighted epochs, 4,356 steps, batch 32, 125 minutes.</p>
+<h2>How each evaluation works</h2>
+<ul>
+<li><strong>Training loss</strong> is the cross-entropy between the model's distribution over 3,096 outputs and the soft target set for the state, which puts weight on every acceptable next card, not just one.</li>
+<li><strong>Dev Recall@k</strong> is measured every 500 steps on 1,000 held-out states: the share of states where at least one acceptable next card is in the model's top k. Recall@16 is the grid; Recall@100 is the pool the reranker sees.</li>
+<li><strong>End-of-message precision</strong> is how often "end" is right when it is the top prediction. It is the guard against a model that ends utterances too early.</li>
+<li><strong>Test sets</strong> at the end: the general held-out set and the question-answer subset where the partner asked a question and an AAC user replied in at most 5 cards. See the benchmarks page.</li>
+</ul>
+<h2>Curves</h2>
+<figure><img src="/paper/img/train_loss.png" alt="Training loss versus optimizer step"><figcaption>Training loss, soft-target cross-entropy, running mean over 50 steps.</figcaption></figure>
+<figure><img src="/paper/img/dev_recall.png" alt="Dev Recall@1, @16 and @100 versus step"><figcaption>Dev recall during training. Recall@100 above 0.75 means the reranker has something to work with in three states out of four.</figcaption></figure>
+<figure><img src="/paper/img/end_precision.png" alt="End-of-message precision versus step"><figcaption>End-of-message precision. Low values early mean the model calls "finished" too eagerly; the data preparation halves the weight of end-only states.</figcaption></figure>
+<h2>Recipe</h2>
+<div class="tablewrap"><table>
+<tr><th>setting</th><th>value</th></tr>
+<tr><td>base model</td><td>HuggingFaceTB/SmolLM2-135M-Instruct, Apache 2.0</td></tr>
+<tr><td>card representation</td><td>3,096 trainable rows (cards, name slot, end) initialised from the mean embedding of each spoken form; fed as input embeddings; the same rows form the output head</td></tr>
+<tr><td>prompt</td><td>setting, last two turns, partner utterance as text, then a start marker and the tapped cards</td></tr>
+<tr><td>loss</td><td>soft-target cross-entropy at the last position, over card rows only</td></tr>
+<tr><td>optimiser</td><td>AdamW, 3e-5 backbone, 1e-3 card rows, warm-up 200 steps, linear decay, grad clip 1.0</td></tr>
+<tr><td>batch, epochs</td><td>32 states; two weighted epochs of 69,676 states</td></tr>
+<tr><td>hardware</td><td>Apple M2 Max, MPS backend, fp32, about 0.6 s per step</td></tr>
+</table></div>
+<h2>Final evaluation of IrisSpeak-135M, model alone</h2>
+<div class="tablewrap"><table>
+<tr><th>set</th><th class="num">R@1</th><th class="num">R@8</th><th class="num">R@16</th><th class="num">R@100</th><th class="num">MRR</th><th class="num">end precision</th><th class="num">end recall</th></tr>
+<tr><td>dev (2,000 states)</td><td class="num">0.252</td><td class="num">0.449</td><td class="num">0.526</td><td class="num">0.758</td><td class="num">0.325</td><td class="num">0.355</td><td class="num">0.846</td></tr>
+<tr><td>test, general (2,000)</td><td class="num">0.292</td><td class="num">0.476</td><td class="num">0.550</td><td class="num">0.775</td><td class="num">0.364</td><td class="num">0.432</td><td class="num">0.827</td></tr>
+<tr><td>test, question-answer (2,000)</td><td class="num">0.303</td><td class="num">0.518</td><td class="num">0.599</td><td class="num">0.800</td><td class="num">0.388</td><td class="num">0.479</td><td class="num">0.793</td></tr>
+</table></div>
+<p>With the reranker on 1,500 states each: Recall@16 0.645 general and 0.701 question-answer, Recall@1 0.349 and 0.377. See the benchmarks page for the comparison with the baselines and the Gemini-2.5-Flash prototype.</p>
+<div class="callout" id="final">Final test metrics are shown below.</div>
+</main>
+<footer>IrisSpeak: Context-Aware AAC</footer>
+<script>fetch('/paper/results.json').then(r=>r.json()).then(j=>{if(j.v2_final){document.getElementById('final').textContent='Final run: '+j.v2_final}}).catch(()=>{})</script>
+</body></html>

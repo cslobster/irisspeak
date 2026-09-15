@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GB4F42F02M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GB4F42F02M');
+</script>
+<title>Model · IrisSpeak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/paper/style.css"><meta name="robots" content="noindex,nofollow"></head>
+<body>
+<header class="top"><div class="in"><a class="brand" href="/paper/">IrisSpeak</a><a class="brand" href="/paper/" style="margin-left:-12px"><span>Live demo</span></a>
+<nav><a href="/paper/overview.html">Overview</a><a href="/paper/architecture.html">Architecture</a><a href="/paper/data.html">Data</a><a href="/paper/training.html">Training</a><a href="/paper/benchmark.html">Benchmarks</a><a class="on" href="/paper/model.html">Model</a><a href="/paper/howitworks.html">How it works</a><a href="/paper/competition.html">Competition</a></nav></div></header>
+<main class="narrow">
+<span class="eyebrow">Model</span>
+<h1>IrisSpeak-135M</h1>
+<p class="lede">IrisSpeak-135M is based on SmolLM2-135M-Instruct. We add a card layer to the transformer: a 3,096-row matrix with one row per vocabulary card, a name slot, and an end-of-message marker. The rows serve two purposes: as input embeddings for the cards already tapped, and as the output head that turns the final hidden state into one logit per card. The whole model was then fine-tuned on next-card states derived from AAC conversation data, so it learns how people who use AAC reply to a communication partner rather than how to write text.</p>
+<h2>Architecture</h2>
+<pre><code>Setting: school.
+Partner: What did you do today at school?
+Reply cards:            ← text, through the normal token embedding (49,152 rows kept)
+&lt;start&gt; &lt;card_0102&gt;    ← cards, through the 3,096 trainable card rows
+      │
+   30 transformer layers, hidden 576 (SmolLM2-135M, Apache 2.0)
+      │
+   last hidden state · card rows ᵀ  → 3,096 logits → softmax → probability per card</code></pre>
+<ul>
+<li>Each card row is initialised from the mean of SmolLM2's own embeddings of the card's spoken form, so "koala" starts near "kangaroo" before any training example, and rows for rare cards inherit meaning from the base model.</li>
+<li>Only the 3,096 card rows are scored. The original 49,152-token language-model head is not used at inference, so the model never produces free text.</li>
+<li>Inference per tap is one forward pass over the prompt plus tapped cards. In the product the partner turn is prefilled once and each tap appends one token to a KV cache; the demo recomputes the full sequence for simplicity.</li>
+</ul>
+<h2>Files</h2>
+<div class="tablewrap"><table>
+<tr><th>file</th><th>what</th><th>where</th></tr>
+<tr><td>card_model.pt</td><td>PyTorch state dict: SmolLM2 weights plus card rows, fp32, about 540 MB</td><td>public Hugging Face repository <a href="https://huggingface.co/cryptobunny/IrisSpeak-135M">cryptobunny/IrisSpeak-135M</a> (weights, ONNX and checkpoint; the card vocabulary is not included)</td></tr>
+<tr><td>card_model_fp16.onnx</td><td>standard SmolLM2 graph with the 3,097 card rows folded into the vocabulary as extra token ids (card i = token 49152 + i); inputs input_ids, attention_mask, position_ids; card logits are the last 3,096 outputs. fp16 weights: top-100 overlap with PyTorch 0.998. Dynamic int8 (0.74) and 4-bit block-wise (0.82) failed the 0.97 parity bar.</td><td>served by this site in 24 MB chunks under <code>/model/</code>, used by the live demo</td></tr>
+<tr><td>cards.json</td><td>card order used by the model's output, with spoken forms and categories</td><td><a href="/model/cards.json">/model/cards.json</a></td></tr>
+<tr><td>manifest.json</td><td>chunk list, total size, sha256</td><td><a href="/model/manifest.json">/model/manifest.json</a></td></tr>
+</table></div>
+<div class="callout" id="parity">Export parity figures (top-100 overlap between PyTorch and int8 ONNX) are added when the export completes.</div>
+<h2>Loading it yourself</h2>
+<pre><code># Python, PyTorch
+from train_smollm import CardModel, encode_batch, load_vocab, MODEL   # scripts.zip on the data page
+base = AutoModelForCausalLM.from_pretrained(MODEL)
+model = CardModel(base, 3096, torch.zeros(3097, 576)); model.load_state_dict(torch.load("card_model.pt"))
+logits, hidden = model(*encode_batch(tok, [state], id2idx, start_idx=3096, device="cpu"))
+
+# Browser, onnxruntime-web (see demo.html)
+session = await ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] })
+out = await session.run({ text_ids, text_mask, card_idx, card_mask })   // out.logits: Float32Array(3096)</code></pre>
+<h2>Reranker</h2>
+<p>A three-layer feed-forward network over the model's top 100 candidates, about 6,000 weights, trained with a listwise loss on graded labels. Features: model log-probability and rank, bigram frequency, MiniLM similarity between the partner turn and the card, category and intent flags, core, safety, composable, multiword, prefix length, partner present. It adds 8 to 11 points of Recall@16 over the model alone. Its weights are global; personalisation enters as per-child count features, which are not part of this demo.</p>
+<h2>Versions</h2>
+<div class="tablewrap"><table>
+<tr><th>version</th><th>data</th><th>training</th><th>status</th></tr>
+<tr><td>v1: Gemini-2.5-Flash prototype</td><td>none</td><td>no training; a cloud LLM call generates every grid from a prompt containing the vocabulary</td><td>baseline design, compared on the benchmarks page</td></tr>
+<tr><td>v2: IrisSpeak-135M</td><td>69,676 states, 6-card cap, end-of-message down-weighted, topic filter, question-answer tiers weighted up</td><td>2 weighted epochs, 4,356 steps</td><td id="v2status">training</td></tr>
+</table></div>
+</main>
+<footer>IrisSpeak: Context-Aware AAC</footer>
+<script>fetch('/paper/results.json').then(r=>r.json()).then(j=>{if(j.parity)document.getElementById('parity').textContent=j.parity;if(j.v2_status)document.getElementById('v2status').textContent=j.v2_status}).catch(()=>{})</script>
+</body></html>

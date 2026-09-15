@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Competitive analysis · IrisSpeak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/paper/style.css"><meta name="robots" content="noindex,nofollow">
+<style>
+.doc table{display:block;overflow-x:auto;white-space:normal;font-size:.9rem}
+.doc table th,.doc table td{vertical-align:top;min-width:7em}
+.doc h2{margin-top:2.2em} .doc h3{margin-top:1.6em}
+</style></head>
+<body>
+<header class="top"><div class="in"><a class="brand" href="/paper/">IrisSpeak</a><a class="brand" href="/paper/" style="margin-left:-12px"><span>Live demo</span></a>
+<nav><a href="/paper/overview.html">Overview</a><a href="/paper/architecture.html">Architecture</a><a href="/paper/data.html">Data</a><a href="/paper/training.html">Training</a><a href="/paper/benchmark.html">Benchmarks</a><a href="/paper/model.html">Model</a><a href="/paper/howitworks.html">How it works</a><a class="on" href="/paper/competition.html">Competition</a></nav></div></header>
+<main class="narrow doc" style="max-width:1080px">
+<span class="eyebrow">Market study</span>
+<h1>IrisSpeak competitive analysis and feature roadmap</h1>
+<p>Date: 9 September 2026. Prices, ratings and release dates were checked on the US App Store (iTunes lookup) on this date; vendor feature claims are marked as such where they could not be tested. Evidence citations are at the end.</p>
+<h2>Bottom line</h2>
+<p>Your draft's conclusion is right and the research sharpens it in four ways.</p>
+<ol>
+<li>"AI-powered AAC" is no longer a position. Twenty-plus apps now say it. Three actually listen to the partner (MaTalk AI, Rejoin, Vocable), one runs a generic on-device LLM (Prism), and the incumbents (PRC-Saltillo's LAMP and TouchChat, Grid, Avaz) added Apple-Intelligence or cloud "AI edit / translate / image" features in 2026. Drop the "world's first language model for AAC" line from the app and the site.</li>
+<li>What IrisSpeak has that nobody ships is a <strong>purpose-trained on-device next-card model with published accuracy</strong>. Every competitor's prediction is either a generic LLM in the cloud, a generic small LLM on device, an n-gram autocomplete, or a heuristic glow. Nobody publishes recall numbers. That is the asset to build the positioning on.</li>
+<li>IrisSpeak's board currently does the one thing the evidence and the newest competitors argue against: it re-ranks all 18 suggestion cards after every tap. Stable positions are the clinical baseline (Thistle 2018: consistent locations cut symbol-finding time from 6.0 s to 3.3 s; variable locations showed no learning). Lighthouse, Sayella, SpeakPad and Context AAC now market "buttons never move" explicitly. This is the first thing to change.</li>
+<li>IrisSpeak is a strong prediction engine inside a thin AAC shell. It lacks most of what every established app treats as baseline: custom words and photos, multiple profiles, backup, switch scanning, grammar forms, label-versus-spoken text, caregiver editing. Those gaps, not the model, are what would stop a parent or SLP adopting it today.</li>
+</ol>
+<p>Recommended positioning: <em>IrisSpeak helps symbol-based communicators join real conversations by offering a few personal, context-aware possibilities for answering, asking and repairing, from a model that runs on the device and whose accuracy we publish, without moving the core vocabulary they rely on.</em></p>
+<h2>1. Market map</h2>
+<h3>Established apps (verified 9 Sep 2026)</h3>
+<table>
+<thead>
+<tr>
+<th>app</th>
+<th>price</th>
+<th>vocabulary and symbols</th>
+<th>prediction / AI</th>
+<th>caregiver tools</th>
+<th>access</th>
+<th>rating</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Proloquo2Go</td>
+<td>$249.99 one-time (vendor site $299.99)</td>
+<td>Crescendo 4,750 direct + 7,250 stored words; 25k+ SymbolStix; 23 grid sizes</td>
+<td>none; full morphology popups</td>
+<td>iCloud auto-backup, manual transfer, no live sync</td>
+<td>switch scanning, VoiceOver</td>
+<td>4.8, 12k ratings</td>
+</tr>
+<tr>
+<td>LAMP Words for Life</td>
+<td>$299.99</td>
+<td>fixed 84-cell Unity grid, 3,000+ words</td>
+<td>Apple-Intelligence "AI Message Edit / Translate / Image" (2026, off by default)</td>
+<td>Realize Language logging (subscription)</td>
+<td>scanning, head tracking</td>
+<td>3.8, 93</td>
+</tr>
+<tr>
+<td>TD Snap</td>
+<td>free + $9.99/mo for speech</td>
+<td>75k PCS; Core First, Motor Plan, Text, Aphasia, Scanning sets</td>
+<td>none found</td>
+<td>cloud sync, modeling counts, dashboards</td>
+<td>eye gaze, switch, touch</td>
+<td>4.1, 825</td>
+</tr>
+<tr>
+<td>TouchChat WordPower</td>
+<td>$299.99</td>
+<td>40k SymbolStix; WordPower 25 to 140</td>
+<td>same Apple-Intelligence trio as LAMP</td>
+<td>Realize Language, iShare, profiles</td>
+<td>scanning, head and eye tracking</td>
+<td>3.9, 131</td>
+</tr>
+<tr>
+<td>Avaz</td>
+<td>$9.99/mo, $99.99/yr, lifetime $199 to $299</td>
+<td>40k SymbolStix; 60 to 117 pictures per screen</td>
+<td>"Expressive Tones" (AI emotional TTS, online)</td>
+<td>Avaz Live remote editing and modeling, partner dashboard</td>
+<td>switch via OS, eye-tracker compatible</td>
+<td>4.1, 315</td>
+</tr>
+<tr>
+<td>Grid for iPad</td>
+<td>$10.99/mo or $299.99</td>
+<td>SymbolStix, PCS, Widgit; Super Core sets</td>
+<td>"Fix" grammar and "Smart Prompt" cell generation (cloud)</td>
+<td>remote editing, message banking, print</td>
+<td>switch via iOS; no eye gaze on iPad</td>
+<td>3.6, 18</td>
+</tr>
+<tr>
+<td>CoughDrop</td>
+<td>$9/mo or $295 lifetime</td>
+<td>57k open symbols, custom sizes</td>
+<td>none</td>
+<td>free supporter accounts, remote editing and modeling, reports, OBF export</td>
+<td>scanning, camera head and eye tracking</td>
+<td>3.7, 61</td>
+</tr>
+<tr>
+<td>Proloquo (subscription)</td>
+<td>$9.99/mo</td>
+<td>AssistiveWare vocabulary, 48+12 layout</td>
+<td>none; Focus Mode highlights targets in place</td>
+<td>free team sync</td>
+<td>direct selection only</td>
+<td>3.9, 144</td>
+</tr>
+<tr>
+<td>Speak for Yourself</td>
+<td>$299.99</td>
+<td>fixed 119-button core, any word in 2 taps, 14k words</td>
+<td>none</td>
+<td>profiles, backup, no data collection</td>
+<td>direct selection only</td>
+<td>4.6, 404</td>
+</tr>
+<tr>
+<td>GoTalk NOW</td>
+<td>$119.99 / $189.99</td>
+<td>user-built books, 1 to 49 cells, scenes</td>
+<td>none</td>
+<td>Dropbox backup, print to PDF</td>
+<td>scanning</td>
+<td>few ratings</td>
+</tr>
+</tbody>
+</table>
+<p>Baseline present in seven or more of the ten: fixed-position core words, a licensed symbol library, several grid sizes, switch scanning, cloud backup, multiple profiles, bilingual vocabularies, keyboard with prediction, neural and Personal Voice output, offline speech. One-time $250 to $300 is the dominant price; subscriptions cluster at $9 to $11 a month.</p>
+<h3>AI and context apps (verified 9 Sep 2026)</h3>
+<table>
+<thead>
+<tr>
+<th>app</th>
+<th>price</th>
+<th>target</th>
+<th>what the AI actually does</th>
+<th>where it runs</th>
+<th>ratings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MaTalk AI</td>
+<td>$4.99/mo, $49.99/yr</td>
+<td>nonspeaking children, pictures</td>
+<td>listens to speech around the child and shows generated picture replies; "smart starters"; AI images</td>
+<td>ASR cloud by default, on-device option added later; LLM provider undisclosed; collects audio data per privacy label</td>
+<td>4.4, 7</td>
+</tr>
+<tr>
+<td>Rejoin Voice</td>
+<td>free core; $12.99/mo</td>
+<td>literate adults with ALS, Parkinson's, stroke</td>
+<td>listens on device; three replies in the user's style with a tone choice; learns phrases with approval; caregiver handoff notes</td>
+<td>Apple on-device ASR, Anthropic cloud LLM, no training on data</td>
+<td>5.0, 1</td>
+</tr>
+<tr>
+<td>Prism AAC</td>
+<td>free, open source</td>
+<td>motor-impaired users, hospitals</td>
+<td>on-device Qwen 2B/4B chat and phrase suggestions, camera "vision context", n-gram prediction; Apple Watch, bedside mode</td>
+<td>on device with cloud fallback; safety filter still buggy per release notes</td>
+<td>5.0, 1</td>
+</tr>
+<tr>
+<td>Lighthouse AAC</td>
+<td>free, non-profit</td>
+<td>nonspeaking children</td>
+<td>no LLM: a "golden glow" highlights likely words by time of day and recent taps; buttons never move</td>
+<td>on device</td>
+<td>5.0, 1</td>
+</tr>
+<tr>
+<td>Context AAC (Weave Chat)</td>
+<td>$14.99 one-time</td>
+<td>phrase-based, literate-leaning</td>
+<td>board adapts to manually entered place, time and activity; frequent phrases move up within fixed categories</td>
+<td>small on-device models, no server</td>
+<td>5.0, 8</td>
+</tr>
+<tr>
+<td>Spoken</td>
+<td>$12.99/mo, $249 lifetime</td>
+<td>literate teens and adults</td>
+<td>next-word chips that learn the user's style (premium)</td>
+<td>unstated</td>
+<td>4.3, 160</td>
+</tr>
+<tr>
+<td>Fast AAC</td>
+<td>free, $12.99 one-time</td>
+<td>symbol users</td>
+<td>next-tile suggestion from the user's own entries</td>
+<td>on device</td>
+<td>4.3, 7</td>
+</tr>
+<tr>
+<td>Flexspeak</td>
+<td>$9.99/mo, $299.99 lifetime</td>
+<td>multilingual families</td>
+<td>"AI prediction" completes partial phrases; translation; remote editing and sync</td>
+<td>unspecified, needs Wi-Fi</td>
+<td>4.2, 5</td>
+</tr>
+<tr>
+<td>Tala</td>
+<td>free; Plus $9.99/mo</td>
+<td>gestalt language processors</td>
+<td>AI only at setup: boards generated from the child's profile via Claude</td>
+<td>cloud at setup</td>
+<td>4.9, 21</td>
+</tr>
+<tr>
+<td>Vocable</td>
+<td>free</td>
+<td>motor-impaired adults, head tracking</td>
+<td>asks a question aloud, shows generated response options (since 2023)</td>
+<td>Azure OpenAI</td>
+<td>4.5, 60</td>
+</tr>
+<tr>
+<td>CardSpeak AI</td>
+<td>$4.99/mo</td>
+<td>PECS-style children</td>
+<td>sentence polishing, AI card images</td>
+<td>cloud</td>
+<td>5.0, 1</td>
+</tr>
+<tr>
+<td>Sayella</td>
+<td>£7.99/mo, £189 lifetime</td>
+<td>first words to literate</td>
+<td>AI symbol generation only; markets stable positions, scanning from day one, modeling mode</td>
+<td>n/a</td>
+<td>0</td>
+</tr>
+<tr>
+<td>ChirpBot</td>
+<td>$4.99 to $9.99/mo</td>
+<td>children 1 to 12</td>
+<td>context-aware word engine; paid tier sends the current sentence to a cloud LLM</td>
+<td>on device free, cloud paid</td>
+<td>0</td>
+</tr>
+<tr>
+<td>GoTalk About It (ex QuickPic)</td>
+<td>$49.99</td>
+<td>children</td>
+<td>topic boards generated from a photo; the only app here with a peer-reviewed study</td>
+<td>cloud GPT</td>
+<td>4.0, 3</td>
+</tr>
+<tr>
+<td>Weave Chat</td>
+<td>free</td>
+<td>symbol users, all ages</td>
+<td>none</td>
+<td>n/a</td>
+<td>4.7, 512</td>
+</tr>
+</tbody>
+</table>
+<p>Every app launched since mid-2025 has between 0 and 21 ratings. The claims are developer claims; none has published accuracy, latency or outcome data. Two patterns matter for IrisSpeak: the AI tier is almost always the paid tier at $5 to $13 a month, and several new entrants market the opposite of dynamic boards.</p>
+<h2>2. Where IrisSpeak stands today</h2>
+<p>Verified against the code in <code>aac_next/</code> (web, irisspeak.org) and <code>irisspeakapp/</code> (iPad).</p>
+<table>
+<thead>
+<tr>
+<th>area</th>
+<th>status</th>
+<th>detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>core engine</td>
+<td>done</td>
+<td>IrisSpeak-135M next-card model + reranker + MiniLM similarity, all on device; every tap re-predicts in well under a second</td>
+</tr>
+<tr>
+<td>vocabulary</td>
+<td>done, fixed</td>
+<td>3,094 cards (+ name slot, end marker); 23 extra search-only words; no user-added words in the model</td>
+</tr>
+<tr>
+<td>board layout</td>
+<td>done</td>
+<td>Topic 9 / Action 6 / Feeling 3 panels re-ranked on every tap; fixed core row (yes, no, I don't know, How about you?, I want, I'm <name>); Refresh pages deeper</td>
+</tr>
+<tr>
+<td>stable positions</td>
+<td><strong>no</strong></td>
+<td>every suggestion panel is re-ranked after each tap; only the core row is stable</td>
+</tr>
+<tr>
+<td>message bar</td>
+<td>done</td>
+<td>selection strip with tap-to-remove; Undo/Clear on web</td>
+</tr>
+<tr>
+<td>speech</td>
+<td>done</td>
+<td>each tapped card spoken; whole sentence spoken on approval; mute toggle; no per-word repeat button, no backspace/delete-last on iPad</td>
+</tr>
+<tr>
+<td>sentence generation</td>
+<td>done</td>
+<td>cloud endpoint (OpenAI) turns cards into a sentence when online; on-device rule (cards in order) offline; child approves before it is spoken/banked</td>
+</tr>
+<tr>
+<td>partner input</td>
+<td>done</td>
+<td>parent types or dictates; question drives the prediction</td>
+</tr>
+<tr>
+<td>context</td>
+<td>done</td>
+<td>setting (home, school, …), last 50 confirmed exchanges in the prompt, profile text → personal cards, per-card usage bonus</td>
+</tr>
+<tr>
+<td>conversation history / transcript</td>
+<td>done</td>
+<td>per session, local only; previous conversations list with rating</td>
+</tr>
+<tr>
+<td>profile</td>
+<td>done</td>
+<td>one profile: name, setting, age, communication style, notes; reranker toggle; clear history</td>
+</tr>
+<tr>
+<td>multiple users</td>
+<td><strong>no</strong></td>
+<td>single profile per device</td>
+</tr>
+<tr>
+<td>custom words / photos / recorded audio</td>
+<td><strong>no</strong></td>
+<td>vocabulary is closed; View all only searches the bundled Cboard list + 23 extras</td>
+</tr>
+<tr>
+<td>label vs spoken text, pronunciation editor</td>
+<td><strong>no</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>grammar / word endings</td>
+<td>partial</td>
+<td>cloud sentence step supplies grammar; no morphology buttons</td>
+</tr>
+<tr>
+<td>grid size / spacing / hold time</td>
+<td>partial</td>
+<td>three text sizes; fixed 3/2/1 panel geometry; no dwell/hold time on touch</td>
+</tr>
+<tr>
+<td>access methods</td>
+<td>partial</td>
+<td>touch; iPad app has an eye-gaze mode (ARKit) with dwell; no switch scanning; no head tracking on web</td>
+</tr>
+<tr>
+<td>offline</td>
+<td>done (web after first load; iPad fully)</td>
+<td>model cached in the browser; cloud sentence degrades to the on-device rule</td>
+</tr>
+<tr>
+<td>privacy</td>
+<td>done, informal</td>
+<td>no account, no server storage of conversations; the only network call is the optional sentence endpoint (cards + question sent to OpenAI via our server); no written policy, no microphone indicator beyond the OS one</td>
+</tr>
+<tr>
+<td>caregiver tools</td>
+<td><strong>no</strong></td>
+<td>no remote editing, sync, roles, modeling mode, analytics dashboard</td>
+</tr>
+<tr>
+<td>backup / export / import</td>
+<td><strong>no</strong></td>
+<td>local storage only</td>
+</tr>
+<tr>
+<td>printable low-tech board</td>
+<td><strong>no</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>bilingual</td>
+<td><strong>no</strong></td>
+<td>English only</td>
+</tr>
+<tr>
+<td>symbols</td>
+<td>done</td>
+<td>1,211 cards with Mulberry/ARASAAC pictures, 1,884 with emoji</td>
+</tr>
+<tr>
+<td>instrumentation</td>
+<td>partial</td>
+<td>benchmark numbers on the research site; no in-app metrics (time to first tap, taps per message, suggestion acceptance)</td>
+</tr>
+<tr>
+<td>platforms</td>
+<td>done</td>
+<td>web (any browser, phone/tablet/desktop layouts), native iPad/iPhone app</td>
+</tr>
+<tr>
+<td>price</td>
+<td>free</td>
+<td>no monetisation</td>
+</tr>
+</tbody>
+</table>
+<h3>Gap matrix against the market baseline</h3>
+<table>
+<thead>
+<tr>
+<th>baseline feature (7+ of 10 established apps)</th>
+<th>IrisSpeak</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fixed-position core vocabulary</td>
+<td>partial: only the 5-card core row is fixed</td>
+</tr>
+<tr>
+<td>licensed symbol library</td>
+<td>partial: Mulberry and ARASAAC on 1,211 of 3,094 cards, emoji elsewhere</td>
+</tr>
+<tr>
+<td>several grid sizes</td>
+<td>no</td>
+</tr>
+<tr>
+<td>switch scanning</td>
+<td>no</td>
+</tr>
+<tr>
+<td>cloud or file backup</td>
+<td>no</td>
+</tr>
+<tr>
+<td>multiple user profiles</td>
+<td>no</td>
+</tr>
+<tr>
+<td>bilingual</td>
+<td>no</td>
+</tr>
+<tr>
+<td>keyboard with prediction</td>
+<td>no</td>
+</tr>
+<tr>
+<td>neural voices, Personal Voice</td>
+<td>partial: system voice; Personal Voice possible on iPad, not wired</td>
+</tr>
+<tr>
+<td>offline speech</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>AI feature seen in the field</th>
+<th>IrisSpeak</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>partner-aware suggestions (MaTalk, Rejoin, Vocable)</td>
+<td>yes, and the only one with a purpose-trained on-device model</td>
+</tr>
+<tr>
+<td>suggestions in a fixed area, grid untouched (Lighthouse, Context AAC, Rejoin)</td>
+<td>no: panels re-rank on every tap</td>
+</tr>
+<tr>
+<td>learns the user (Spoken, Rejoin, Context AAC)</td>
+<td>yes: usage counts and profile words in the reranker</td>
+</tr>
+<tr>
+<td>user can pin, block or correct suggestions (Rejoin approves each learned phrase)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>explains why a word was suggested</td>
+<td>no</td>
+</tr>
+<tr>
+<td>published accuracy and latency</td>
+<td>yes, research site</td>
+</tr>
+<tr>
+<td>listening mode with visible indicator, off by default</td>
+<td>partial: parent dictates deliberately; no always-on listening, which is a good default to keep</td>
+</tr>
+</tbody>
+</table>
+<h2>3. What the evidence says about the draft's design principles</h2>
+<ul>
+<li><strong>Stable core grid.</strong> Supported. Thistle et al. 2018: preschoolers with consistent symbol locations went from 6.0 s to 3.3 s to find a symbol over five sessions; the variable-location group did not improve at all. ASHA's practice portal treats consistent locations as a motor-planning requirement. No study tests LLM-driven rearrangement directly, so the inference is from this and from the word-prediction literature, where scanning a changing prediction list costs time (Koester and Levine; Trnka 2008 found gains only when prediction quality was high). IrisSpeak's re-ranking panels are the wrong default for the primary user.</li>
+<li><strong>A small, fixed suggestion tray.</strong> Supported by the same literature and by the only child deployments that exist: AACessTalk (11 dyads, two weeks) delivered LLM-recommended cards per turn and saw more turn-taking; Holyfield 2024 and 2025 (n = 3 each) saw more participation with partner-speech-driven options. All are small and short; none measured long-term learning.</li>
+<li><strong>Agency and authenticity.</strong> Every adult study reports it: Valencia 2023 (12 AAC users wanted suggestions to sound like them), "I, Robot?" 2026 (personalised model raised typing from 31 to 42 WPM but partners misattributed AI text to the user, and stored history resurfaced private details), Griffiths 2025 (LLMs risk removing the co-construction children need). Suggestions must be optional, visibly distinct, never spoken automatically, and the user must always be able to build something the model did not predict.</li>
+<li><strong>Intent-level possibilities, not just replies.</strong> Reasonable and not yet shipped by anyone. COMPA (CHI 2024) found that letting the AAC user pick an intent for a marked segment of conversation improved common ground. IrisSpeak already has intent labels on every card (affirm, refuse, request, question, repair, feeling...), which makes an intent row cheap to build.</li>
+<li><strong>Privacy.</strong> The amended COPPA rule (effective June 2025, compliance April 2026) treats voice recordings and voiceprints as personal information; the audio exception applies only when audio is transcribed and deleted immediately and never retained. AssistiveWare's published principles (no language activity monitoring, aggregate counts only, with consent) are the industry reference. IrisSpeak's design already fits: no account, local history, the only upload is the optional sentence step. It needs to be written down and shown in the app.</li>
+<li><strong>Metrics.</strong> Keystroke savings often fail to become speed gains (SpeakFaster: large keystroke savings, flat words per minute for mobile typists). Measure time to a usable message, selections per message, top-3 hit rate, repair rate and initiation, plus a validated participation measure (FOCUS for under-sixes, CPIB for older users) and a short authenticity rating.</li>
+</ul>
+<h2>4. Feature list, prioritised</h2>
+<p>Effort is relative to the current codebase (web app plus iPad port share the same engine).</p>
+<h3>P0: make the board clinically defensible (before any wider release)</h3>
+<table>
+<thead>
+<tr>
+<th>feature</th>
+<th>why</th>
+<th>effort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stable personal grid</strong>: a fixed layout of core and personal words whose positions never change, sized to the screen (start with the 60 highest-value cards from the vocabulary)</td>
+<td>motor planning; the market baseline; the strongest objection to the current design</td>
+<td>medium: new layout component, uses existing cards and images</td>
+</tr>
+<tr>
+<td><strong>Suggestion tray</strong>: 6 to 9 model suggestions in a reserved row, frozen while the child composes, refreshed only on a new partner turn or an explicit tap on "more"</td>
+<td>keeps the prediction, removes the churn</td>
+<td>small: the ranking exists; change when it re-renders</td>
+</tr>
+<tr>
+<td><strong>Intent row</strong>: fixed cells for Answer, Ask back, Add more, No / not that, Say it differently, Something else, using the existing intent labels to pick candidates</td>
+<td>differentiates from reply-only competitors; protects agency</td>
+<td>small to medium</td>
+</tr>
+<tr>
+<td>Speech controls: repeat, delete last, clear, speak word versus speak message</td>
+<td>every competitor has them; iPad lacks backspace</td>
+<td>small</td>
+</tr>
+<tr>
+<td><strong>Custom words with photo or camera image and recorded audio</strong>, stored outside the model vocabulary, always reachable from the stable grid and search</td>
+<td>the single most-requested customisation; the closed vocabulary blocks families today</td>
+<td>medium: search-only cards already exist; add photo capture, audio recording, storage</td>
+</tr>
+<tr>
+<td>Multiple profiles on one device, caregiver settings behind a simple gate</td>
+<td>baseline; siblings and classrooms</td>
+<td>small to medium</td>
+</tr>
+<tr>
+<td>Backup and restore (file export and import, iCloud on iPad)</td>
+<td>baseline; data loss is unacceptable for a communication device</td>
+<td>small</td>
+</tr>
+<tr>
+<td>Written privacy statement in the app and on the site; list exactly what the sentence endpoint sends; a one-tap "delete learned history" (exists in Profile, surface it)</td>
+<td>trust; COPPA; every AI competitor makes this claim</td>
+<td>small</td>
+</tr>
+<tr>
+<td>In-app instrumentation: time to first tap, time to confirmed message, taps per message, suggestion acceptance rate, whether the chosen card was in the tray, repairs</td>
+<td>needed for the evaluation in section 6 and for the published-evidence positioning</td>
+<td>small</td>
+</tr>
+</tbody>
+</table>
+<h3>P1: reach parity where parents and SLPs compare apps</h3>
+<table>
+<thead>
+<tr>
+<th>feature</th>
+<th>note</th>
+<th>effort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grid size and spacing options; button hold time; high-contrast and reduced-distraction modes</td>
+<td>accessibility baseline</td>
+<td>small</td>
+</tr>
+<tr>
+<td>Grammar forms: tap-and-hold for plural, past, -ing, possessive on the stable grid; keep the cloud sentence step as the "polish"</td>
+<td>Proloquo2Go and TD Snap set the bar; the cloud step already handles grammar but only online</td>
+<td>medium</td>
+</tr>
+<tr>
+<td>Separate label and spoken text; pronunciation override</td>
+<td>baseline</td>
+<td>small</td>
+</tr>
+<tr>
+<td>Switch scanning (row-column, auto and step) on the iPad app; iOS Switch Control on web</td>
+<td>TD Snap, TouchChat, CoughDrop, Sayella all have it; IrisSpeak already has eye gaze, which is rarer</td>
+<td>medium</td>
+</tr>
+<tr>
+<td>Personal Voice and neural voices on iPad; recorded familiar voice for cards</td>
+<td>Lighthouse and Grid market recorded voices for children</td>
+<td>small</td>
+</tr>
+<tr>
+<td>Printable low-tech board of the stable grid</td>
+<td>baseline in Grid and GoTalk; cheap</td>
+<td>small</td>
+</tr>
+<tr>
+<td>Pin, block and "why this?" on suggestions ("suggested because Dad asked about lunch")</td>
+<td>visible control over personalisation; Rejoin approves each learned phrase</td>
+<td>small: the reranker features already contain the reason</td>
+</tr>
+<tr>
+<td>Opt-in listening mode with a visible microphone indicator, on-device ASR, audio discarded immediately</td>
+<td>MaTalk and Rejoin already do this; IrisSpeak's dictation button is a safe default, but a hands-free mode is expected</td>
+<td>medium</td>
+</tr>
+</tbody>
+</table>
+<h3>P2: caregiver and professional layer (the paid tier)</h3>
+<table>
+<thead>
+<tr>
+<th>feature</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shared profiles between home and school, remote editing, role-based permissions</td>
+<td>CoughDrop, TD Snap, Grid, Avaz Live, Flexspeak, Proloquo all offer some form</td>
+</tr>
+<tr>
+<td>Modeling mode for partners with "show me where this word is" path highlighting</td>
+<td>Sayella and Proloquo Focus Mode; ASHA's aided language stimulation evidence is strong</td>
+</tr>
+<tr>
+<td>Caregiver dashboard with the metrics above, aggregate only, no transcripts by default</td>
+<td>keep AssistiveWare's line: no language activity monitoring</td>
+</tr>
+<tr>
+<td>Bilingual vocabulary (Spanish first)</td>
+<td>needs a second vocabulary mapping and retraining; the model is English-only today</td>
+</tr>
+<tr>
+<td>School and clinic purchasing, funding paperwork</td>
+<td>later</td>
+</tr>
+</tbody>
+</table>
+<h3>Do not build</h3>
+<ul>
+<li>A second listening product for literate adults (Rejoin owns it and IrisSpeak's model is symbol-based).</li>
+<li>Whole-sentence AI replies as the primary interface. Keep the sentence step as it is: after the child's own cards, with approval.</li>
+<li>More vocabulary for its own sake. 3,094 cards already exceeds LAMP; the gap is personal words, not general ones.</li>
+</ul>
+<h2>5. Proposed board (maps onto the current code)</h2>
+<p>Top: partner's words (existing banner). Below it the message bar (existing selection strip) with repeat, delete last, clear, speak.</p>
+<p>Middle, about 70 percent of the screen: the <strong>stable grid</strong>. Fixed positions, Fitzgerald colours, the 5 core cards where they are now plus roughly 55 more, chosen by the vocabulary's core and tier fields and the usage counts; personal words and photos live here in slots the caregiver chooses. Nothing here is ever re-ranked; "show and hide" grows it without moving learned buttons.</p>
+<p>One reserved row: the <strong>suggestion tray</strong>, 6 cards from the current ranking (model plus reranker plus personal bonus), each visibly marked as a suggestion. It fills when the partner speaks and stays frozen while the child taps; "more" pages it. This is the current Topic/Action/Feeling ranking, just confined.</p>
+<p>One fixed row: <strong>intents</strong>: Yes, No, I don't know, Not that, Ask back, Something else. Tapping Ask back or Something else refills the tray with question or new-topic candidates using the intent labels; the grid does not change.</p>
+<p>Bottom: Generate sentence, Done, menu, as now. The phone layout keeps the same three layers with smaller tiles.</p>
+<h2>6. Evaluation before broad release</h2>
+<p>Run the same 20 conversational situations (lunch, school, feelings, play, bedtime, illness, a change of topic, a refusal, a repair) through MaTalk AI, Prism, Rejoin, Lighthouse, Flexspeak, Tala, Context AAC, and Proloquo2Go or LAMP as the fixed-board baseline, and through IrisSpeak with the new board. Record per situation:</p>
+<ul>
+<li>time until a usable response is on screen, and time to a confirmed message</li>
+<li>whether the wanted card is in the tray's first three, and in the whole first screen</li>
+<li>number of taps and number of repairs</li>
+<li>whether suggestions stayed put during composition</li>
+<li>behaviour offline</li>
+<li>caregiver setup time for a new child</li>
+<li>a one-question rating from the communicator or parent: "does this sound like me / my child?"</li>
+</ul>
+<p>Then a small home deployment (aim for 10 parent-child pairs over two weeks, matching AACessTalk) with FOCUS or CPIB before and after, and publish the results on the research site alongside the model benchmarks. Honest reporting of where it fails is the part no competitor can copy quickly.</p>
+<h2>7. Pricing</h2>
+<p>Keep the communication board and speech free forever, including offline. Charge for the caregiver layer (sync, remote editing, dashboard, multiple devices) at $5 to $10 a month with a one-time option, free for verified SLPs and teachers, and never disable a child's voice when a subscription lapses. This matches Rejoin, Tala and CoughDrop and avoids competing with the free boards on price.</p>
+<h2>Sources</h2>
+<p>Verified store data: iTunes lookup, US storefront, 9 Sep 2026, plus vendor pages: assistiveware.com/products/proloquo2go, lampwflapp.com/features, us.tobiidynavox.com/products/td-snap, touchchatapp.com, avazapp.com, thinksmartbox.com, coughdrop.com, speakforyourself.org, verbali.io, rejoinvoice.com and its privacy policy, github.com/dcostenco/prism-aac, kinderhorizon.org/lighthouse, weavechat.com/context-aac, spokenaac.com, fastaac.com, flexspeak.com, talaaac.com, vocable.app, sayella.com, chirpbot.ai, prc-saltillo.com/blog/2026-ai-apps.</p>
+<p>Evidence: ASHA AAC Practice Portal; Thistle, Holmes, Horn and Reum 2018 (AJSLP); Trnka et al. 2008; Cai et al., SpeakFaster, Nature Communications 2024; Valencia et al., CHI 2023; COMPA, CHI 2024; Choi et al., AACessTalk, CHI 2025; Holyfield et al. 2024 (AJSLP) and 2025 (Folia Phoniatrica); Weinberg et al., "I, Robot?", CHI 2026; Griffiths et al. 2025 (J. Enabling Technologies); Frisch et al. 2026; FOCUS and CPIB instruments; amended COPPA Rule, Federal Register 22 Apr 2025; AssistiveWare, "AAC data collection and privacy".</p>
+<p><a href="/paper/data/COMPETITIVE-ANALYSIS.md">Download as Markdown</a></p>
+</main>
+<footer>IrisSpeak: Context-Aware AAC · research site, September 2026</footer>
+</body></html>

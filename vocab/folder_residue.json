@@ -1,0 +1,9474 @@
+[
+{
+"id": "card_0021",
+"word": "big",
+"speak": "Big",
+"category": "describing",
+"intent": "content",
+"freq": "20"
+},
+{
+"id": "card_0022",
+"word": "birthday",
+"speak": "Birthday",
+"category": "time",
+"intent": "content",
+"freq": "30"
+},
+{
+"id": "card_0025",
+"word": "bored",
+"speak": "Bored",
+"category": "feelings",
+"intent": "feeling",
+"freq": "37"
+},
+{
+"id": "card_0030",
+"word": "buy",
+"speak": "Buy",
+"category": "actions",
+"intent": "content",
+"freq": "96"
+},
+{
+"id": "card_0033",
+"word": "change",
+"speak": "Change",
+"category": "actions",
+"intent": "content",
+"freq": "69"
+},
+{
+"id": "card_0034",
+"word": "choose",
+"speak": "Choose",
+"category": "actions",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_0038",
+"word": "cold",
+"speak": "Cold",
+"category": "feelings",
+"intent": "feeling",
+"freq": "100"
+},
+{
+"id": "card_0040",
+"word": "come",
+"speak": "Come",
+"category": "actions",
+"intent": "content",
+"freq": "314"
+},
+{
+"id": "card_0045",
+"word": "dark",
+"speak": "Dark",
+"category": "describing",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_0049",
+"word": "different",
+"speak": "Different",
+"category": "describing",
+"intent": "request",
+"freq": "12"
+},
+{
+"id": "card_0050",
+"word": "difficult",
+"speak": "Difficult",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_0055",
+"word": "draw",
+"speak": "Draw",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_0060",
+"word": "easy",
+"speak": "Easy",
+"category": "describing",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_0061",
+"word": "eat",
+"speak": "Eat",
+"category": "actions",
+"intent": "content",
+"freq": "153"
+},
+{
+"id": "card_0065",
+"word": "fall",
+"speak": "Fall",
+"category": "actions",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_0069",
+"word": "feel",
+"speak": "Feel",
+"category": "feelings",
+"intent": "feeling",
+"freq": "179"
+},
+{
+"id": "card_0070",
+"word": "find",
+"speak": "Find",
+"category": "actions",
+"intent": "content",
+"freq": "127"
+},
+{
+"id": "card_0071",
+"word": "finished",
+"speak": "Finished",
+"category": "describing",
+"intent": "affirm",
+"freq": "33"
+},
+{
+"id": "card_0072",
+"word": "fix",
+"speak": "Fix",
+"category": "actions",
+"intent": "content",
+"freq": "29"
+},
+{
+"id": "card_0077",
+"word": "funny",
+"speak": "Funny",
+"category": "describing",
+"intent": "content",
+"freq": "31"
+},
+{
+"id": "card_0078",
+"word": "get",
+"speak": "Get",
+"category": "actions",
+"intent": "content",
+"freq": "789"
+},
+{
+"id": "card_0079",
+"word": "give",
+"speak": "Give",
+"category": "actions",
+"intent": "content",
+"freq": "167"
+},
+{
+"id": "card_0080",
+"word": "go",
+"speak": "Go",
+"category": "actions",
+"intent": "content",
+"freq": "1034"
+},
+{
+"id": "card_0083",
+"word": "grow",
+"speak": "Grow",
+"category": "actions",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_0084",
+"word": "guess",
+"speak": "Guess",
+"category": "actions",
+"intent": "content",
+"freq": "70"
+},
+{
+"id": "card_0092",
+"word": "help",
+"speak": "Help",
+"category": "actions",
+"intent": "request",
+"freq": "313"
+},
+{
+"id": "card_0096",
+"word": "hold",
+"speak": "Hold",
+"category": "actions",
+"intent": "content",
+"freq": "16"
+},
+{
+"id": "card_0099",
+"word": "hug",
+"speak": "Hug",
+"category": "actions",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_0101",
+"word": "hurt",
+"speak": "Hurt",
+"category": "feelings",
+"intent": "feeling",
+"freq": "63"
+},
+{
+"id": "card_0109",
+"word": "jump",
+"speak": "Jump",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_0111",
+"word": "keep",
+"speak": "Keep",
+"category": "actions",
+"intent": "content",
+"freq": "71"
+},
+{
+"id": "card_0112",
+"word": "kiss",
+"speak": "Kiss",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_0113",
+"word": "know",
+"speak": "Know",
+"category": "actions",
+"intent": "content",
+"freq": "380"
+},
+{
+"id": "card_0117",
+"word": "leave",
+"speak": "Leave",
+"category": "actions",
+"intent": "content",
+"freq": "135"
+},
+{
+"id": "card_0119",
+"word": "less",
+"speak": "Less",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_0120",
+"word": "like",
+"speak": "Like",
+"category": "feelings",
+"intent": "feeling",
+"freq": "669"
+},
+{
+"id": "card_0121",
+"word": "listen",
+"speak": "Listen",
+"category": "school",
+"intent": "content",
+"freq": "30"
+},
+{
+"id": "card_0123",
+"word": "live",
+"speak": "Live",
+"category": "actions",
+"intent": "content",
+"freq": "50"
+},
+{
+"id": "card_0125",
+"word": "look",
+"speak": "Look",
+"category": "actions",
+"intent": "content",
+"freq": "197"
+},
+{
+"id": "card_0128",
+"word": "love",
+"speak": "Love",
+"category": "feelings",
+"intent": "feeling",
+"freq": "288"
+},
+{
+"id": "card_0129",
+"word": "make",
+"speak": "Make",
+"category": "actions",
+"intent": "content",
+"freq": "259"
+},
+{
+"id": "card_0130",
+"word": "many",
+"speak": "Many",
+"category": "describing",
+"intent": "content",
+"freq": "43"
+},
+{
+"id": "card_0135",
+"word": "meet",
+"speak": "Meet",
+"category": "actions",
+"intent": "content",
+"freq": "125"
+},
+{
+"id": "card_0141",
+"word": "move",
+"speak": "Move",
+"category": "actions",
+"intent": "content",
+"freq": "42"
+},
+{
+"id": "card_0142",
+"word": "much",
+"speak": "Much",
+"category": "describing",
+"intent": "content",
+"freq": "175"
+},
+{
+"id": "card_0145",
+"word": "need",
+"speak": "Need",
+"category": "actions",
+"intent": "content",
+"freq": "529"
+},
+{
+"id": "card_0147",
+"word": "new",
+"speak": "New",
+"category": "describing",
+"intent": "content",
+"freq": "200"
+},
+{
+"id": "card_0149",
+"word": "nice",
+"speak": "Nice",
+"category": "describing",
+"intent": "content",
+"freq": "178"
+},
+{
+"id": "card_0158",
+"word": "okay",
+"speak": "Okay",
+"category": "describing",
+"intent": "affirm",
+"freq": "157"
+},
+{
+"id": "card_0170",
+"word": "play",
+"speak": "Play",
+"category": "actions",
+"intent": "content",
+"freq": "63"
+},
+{
+"id": "card_0171",
+"word": "please",
+"speak": "Please",
+"category": "actions",
+"intent": "request",
+"freq": "542"
+},
+{
+"id": "card_0176",
+"word": "push",
+"speak": "Push",
+"category": "actions",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_0177",
+"word": "put",
+"speak": "Put",
+"category": "actions",
+"intent": "content",
+"freq": "88"
+},
+{
+"id": "card_0179",
+"word": "read",
+"speak": "Read",
+"category": "actions",
+"intent": "content",
+"freq": "69"
+},
+{
+"id": "card_0183",
+"word": "remember",
+"speak": "Remember",
+"category": "actions",
+"intent": "content",
+"freq": "46"
+},
+{
+"id": "card_0189",
+"word": "say",
+"speak": "Say",
+"category": "actions",
+"intent": "content",
+"freq": "169"
+},
+{
+"id": "card_0190",
+"word": "scared",
+"speak": "Scared",
+"category": "feelings",
+"intent": "feeling",
+"freq": "12"
+},
+{
+"id": "card_0191",
+"word": "see",
+"speak": "See",
+"category": "actions",
+"intent": "content",
+"freq": "346"
+},
+{
+"id": "card_0196",
+"word": "show",
+"speak": "Show",
+"category": "actions",
+"intent": "content",
+"freq": "54"
+},
+{
+"id": "card_0197",
+"word": "sick",
+"speak": "Sick",
+"category": "feelings",
+"intent": "feeling",
+"freq": "23"
+},
+{
+"id": "card_0198",
+"word": "silly",
+"speak": "Silly",
+"category": "feelings",
+"intent": "feeling",
+"freq": "14"
+},
+{
+"id": "card_0199",
+"word": "sing",
+"speak": "Sing",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_0201",
+"word": "sit",
+"speak": "Sit",
+"category": "actions",
+"intent": "content",
+"freq": "44"
+},
+{
+"id": "card_0202",
+"word": "sleep",
+"speak": "Sleep",
+"category": "actions",
+"intent": "content",
+"freq": "64"
+},
+{
+"id": "card_0203",
+"word": "slow",
+"speak": "Slow",
+"category": "describing",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_0204",
+"word": "smart",
+"speak": "Smart",
+"category": "describing",
+"intent": "content",
+"freq": "15"
+},
+{
+"id": "card_0209",
+"word": "sorry",
+"speak": "Sorry",
+"category": "describing",
+"intent": "social",
+"freq": "178"
+},
+{
+"id": "card_0212",
+"word": "stand",
+"speak": "Stand",
+"category": "actions",
+"intent": "content",
+"freq": "18"
+},
+{
+"id": "card_0213",
+"word": "stop",
+"speak": "Stop",
+"category": "actions",
+"intent": "refuse",
+"freq": "63"
+},
+{
+"id": "card_0216",
+"word": "take",
+"speak": "Take",
+"category": "actions",
+"intent": "content",
+"freq": "311"
+},
+{
+"id": "card_0217",
+"word": "talk",
+"speak": "Talk",
+"category": "actions",
+"intent": "content",
+"freq": "77"
+},
+{
+"id": "card_0219",
+"word": "tell",
+"speak": "Tell",
+"category": "actions",
+"intent": "content",
+"freq": "161"
+},
+{
+"id": "card_0225",
+"word": "think",
+"speak": "Think",
+"category": "actions",
+"intent": "content",
+"freq": "428"
+},
+{
+"id": "card_0230",
+"word": "tired",
+"speak": "Tired",
+"category": "feelings",
+"intent": "feeling",
+"freq": "64"
+},
+{
+"id": "card_0238",
+"word": "try",
+"speak": "Try",
+"category": "actions",
+"intent": "content",
+"freq": "158"
+},
+{
+"id": "card_0245",
+"word": "wait",
+"speak": "Wait",
+"category": "actions",
+"intent": "request",
+"freq": "82"
+},
+{
+"id": "card_0246",
+"word": "walk",
+"speak": "Walk",
+"category": "actions",
+"intent": "content",
+"freq": "56"
+},
+{
+"id": "card_0247",
+"word": "want",
+"speak": "Want",
+"category": "actions",
+"intent": "content",
+"freq": "511"
+},
+{
+"id": "card_0249",
+"word": "wash",
+"speak": "Wash",
+"category": "actions",
+"intent": "content",
+"freq": "17"
+},
+{
+"id": "card_0269",
+"word": "wrong",
+"speak": "Wrong",
+"category": "describing",
+"intent": "content",
+"freq": "36"
+},
+{
+"id": "card_0292",
+"word": "are you",
+"speak": "Are you",
+"category": "phrases",
+"intent": "question",
+"freq": "444"
+},
+{
+"id": "card_0492",
+"word": "goodbye",
+"speak": "Goodbye",
+"category": "ideas",
+"intent": "social",
+"freq": "9"
+},
+{
+"id": "card_0531",
+"word": "i am",
+"speak": "I am",
+"category": "phrases",
+"intent": "statement",
+"freq": "498"
+},
+{
+"id": "card_0532",
+"word": "i can't speak",
+"speak": "I can't speak",
+"category": "phrases",
+"intent": "statement",
+"freq": "2"
+},
+{
+"id": "card_0533",
+"word": "i dislike",
+"speak": "I dislike",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_0534",
+"word": "i have",
+"speak": "I have",
+"category": "phrases",
+"intent": "statement",
+"freq": "322"
+},
+{
+"id": "card_0535",
+"word": "i have pain in",
+"speak": "I have pain in",
+"category": "health",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0536",
+"word": "i love",
+"speak": "I love",
+"category": "phrases",
+"intent": "statement",
+"freq": "153"
+},
+{
+"id": "card_0537",
+"word": "i need",
+"speak": "I need",
+"category": "phrases",
+"intent": "request",
+"freq": "279"
+},
+{
+"id": "card_0538",
+"word": "i saw",
+"speak": "I saw",
+"category": "phrases",
+"intent": "statement",
+"freq": "22"
+},
+{
+"id": "card_0539",
+"word": "i want",
+"speak": "I want",
+"category": "phrases",
+"intent": "request",
+"freq": "150"
+},
+{
+"id": "card_0540",
+"word": "i went by",
+"speak": "I went by",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_0550",
+"word": "it is",
+"speak": "It is",
+"category": "phrases",
+"intent": "statement",
+"freq": "166"
+},
+{
+"id": "card_0576",
+"word": "let's go by",
+"speak": "Let's go by",
+"category": "phrases",
+"intent": "request",
+"freq": "0"
+},
+{
+"id": "card_0686",
+"word": "relaxed",
+"speak": "Relaxed",
+"category": "feelings",
+"intent": "feeling",
+"freq": "9"
+},
+{
+"id": "card_0777",
+"word": "thank you",
+"speak": "Thank you",
+"category": "phrases",
+"intent": "social",
+"freq": "193"
+},
+{
+"id": "card_0794",
+"word": "to arrest",
+"speak": "To arrest",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0797",
+"word": "to bring",
+"speak": "To bring",
+"category": "activities",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_0798",
+"word": "to carry",
+"speak": "To carry",
+"category": "activities",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_0800",
+"word": "to change mind",
+"speak": "To change mind",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0801",
+"word": "to chase",
+"speak": "To chase",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0802",
+"word": "to climb up",
+"speak": "To climb up",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0803",
+"word": "to come",
+"speak": "To come",
+"category": "activities",
+"intent": "content",
+"freq": "31"
+},
+{
+"id": "card_0805",
+"word": "to crawl",
+"speak": "To crawl",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0810",
+"word": "to fall over",
+"speak": "To fall over",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0811",
+"word": "to find",
+"speak": "To find",
+"category": "activities",
+"intent": "content",
+"freq": "16"
+},
+{
+"id": "card_0813",
+"word": "to get",
+"speak": "To get",
+"category": "activities",
+"intent": "content",
+"freq": "121"
+},
+{
+"id": "card_0814",
+"word": "to give",
+"speak": "To give",
+"category": "activities",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_0815",
+"word": "to go",
+"speak": "To go",
+"category": "activities",
+"intent": "content",
+"freq": "239"
+},
+{
+"id": "card_0818",
+"word": "to hold",
+"speak": "To hold",
+"category": "activities",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_0819",
+"word": "to hop",
+"speak": "To hop",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0820",
+"word": "to jump",
+"speak": "To jump",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0821",
+"word": "to keep",
+"speak": "To keep",
+"category": "activities",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_0823",
+"word": "to make",
+"speak": "To make",
+"category": "activities",
+"intent": "content",
+"freq": "36"
+},
+{
+"id": "card_0824",
+"word": "to move",
+"speak": "To move",
+"category": "activities",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_0833",
+"word": "to put",
+"speak": "To put",
+"category": "activities",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_0834",
+"word": "to reach for",
+"speak": "To reach for",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0835",
+"word": "to rest",
+"speak": "To rest",
+"category": "activities",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_0838",
+"word": "to share",
+"speak": "To share",
+"category": "activities",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_0839",
+"word": "to shout",
+"speak": "To shout",
+"category": "activities",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_0840",
+"word": "to sit",
+"speak": "To sit",
+"category": "activities",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_0843",
+"word": "to stand",
+"speak": "To stand",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_0846",
+"word": "to take",
+"speak": "To take",
+"category": "activities",
+"intent": "content",
+"freq": "29"
+},
+{
+"id": "card_0847",
+"word": "to talk",
+"speak": "To talk",
+"category": "activities",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_0848",
+"word": "to think",
+"speak": "To think",
+"category": "activities",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_0850",
+"word": "to wait",
+"speak": "To wait",
+"category": "activities",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_0851",
+"word": "to wake up",
+"speak": "To wake up",
+"category": "activities",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_0900",
+"word": "where is",
+"speak": "Where is",
+"category": "phrases",
+"intent": "question",
+"freq": "95"
+},
+{
+"id": "card_0908",
+"word": "yes",
+"speak": "Yes",
+"category": "ideas",
+"intent": "affirm",
+"freq": "464"
+},
+{
+"id": "card_0910",
+"word": "you are",
+"speak": "You are",
+"category": "phrases",
+"intent": "statement",
+"freq": "162"
+},
+{
+"id": "card_0913",
+"word": "a little",
+"speak": "A little",
+"category": "describing",
+"intent": "content",
+"freq": "55"
+},
+{
+"id": "card_0914",
+"word": "a lot",
+"speak": "A lot",
+"category": "describing",
+"intent": "content",
+"freq": "59"
+},
+{
+"id": "card_0915",
+"word": "all done",
+"speak": "All done",
+"category": "phrases",
+"intent": "affirm",
+"freq": "0"
+},
+{
+"id": "card_0916",
+"word": "are you ok",
+"speak": "Are you ok",
+"category": "phrases",
+"intent": "question",
+"freq": "2"
+},
+{
+"id": "card_0917",
+"word": "ask me yes or no questions",
+"speak": "Ask me yes or no questions",
+"category": "phrases",
+"intent": "repair",
+"freq": "0"
+},
+{
+"id": "card_0918",
+"word": "awesome",
+"speak": "Awesome",
+"category": "describing",
+"intent": "social",
+"freq": "43"
+},
+{
+"id": "card_0920",
+"word": "call a doctor",
+"speak": "Call a doctor",
+"category": "health",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_0921",
+"word": "call for help",
+"speak": "Call for help",
+"category": "phrases",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_0922",
+"word": "call my dad",
+"speak": "Call my dad",
+"category": "phrases",
+"intent": "safety",
+"freq": "1"
+},
+{
+"id": "card_0923",
+"word": "call my mum",
+"speak": "Call my mum",
+"category": "phrases",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_0924",
+"word": "calm",
+"speak": "Calm",
+"category": "feelings",
+"intent": "feeling",
+"freq": "6"
+},
+{
+"id": "card_0925",
+"word": "can i",
+"speak": "Can I",
+"category": "phrases",
+"intent": "question",
+"freq": "197"
+},
+{
+"id": "card_0926",
+"word": "can i have",
+"speak": "Can I have",
+"category": "phrases",
+"intent": "request",
+"freq": "61"
+},
+{
+"id": "card_0927",
+"word": "can you",
+"speak": "Can you",
+"category": "phrases",
+"intent": "question",
+"freq": "457"
+},
+{
+"id": "card_0928",
+"word": "can you help me",
+"speak": "Can you help me",
+"category": "phrases",
+"intent": "request",
+"freq": "39"
+},
+{
+"id": "card_0929",
+"word": "come here",
+"speak": "Come here",
+"category": "phrases",
+"intent": "request",
+"freq": "14"
+},
+{
+"id": "card_0930",
+"word": "comfortable",
+"speak": "Comfortable",
+"category": "feelings",
+"intent": "feeling",
+"freq": "12"
+},
+{
+"id": "card_0931",
+"word": "congratulations",
+"speak": "Congratulations",
+"category": "ideas",
+"intent": "social",
+"freq": "3"
+},
+{
+"id": "card_0932",
+"word": "cool",
+"speak": "Cool",
+"category": "describing",
+"intent": "social",
+"freq": "44"
+},
+{
+"id": "card_0933",
+"word": "do you",
+"speak": "Do you",
+"category": "phrases",
+"intent": "question",
+"freq": "649"
+},
+{
+"id": "card_0934",
+"word": "don't touch me",
+"speak": "Don't touch me",
+"category": "phrases",
+"intent": "refuse",
+"freq": "0"
+},
+{
+"id": "card_0937",
+"word": "emergency",
+"speak": "Emergency",
+"category": "activities",
+"intent": "safety",
+"freq": "2"
+},
+{
+"id": "card_0940",
+"word": "excuse me",
+"speak": "Excuse me",
+"category": "phrases",
+"intent": "social",
+"freq": "11"
+},
+{
+"id": "card_0946",
+"word": "frustrated",
+"speak": "Frustrated",
+"category": "feelings",
+"intent": "feeling",
+"freq": "3"
+},
+{
+"id": "card_0947",
+"word": "give me",
+"speak": "Give me",
+"category": "phrases",
+"intent": "request",
+"freq": "98"
+},
+{
+"id": "card_0948",
+"word": "give me time",
+"speak": "Give me time",
+"category": "phrases",
+"intent": "repair",
+"freq": "0"
+},
+{
+"id": "card_0949",
+"word": "go away",
+"speak": "Go away",
+"category": "phrases",
+"intent": "refuse",
+"freq": "7"
+},
+{
+"id": "card_0950",
+"word": "good afternoon",
+"speak": "Good afternoon",
+"category": "phrases",
+"intent": "social",
+"freq": "1"
+},
+{
+"id": "card_0951",
+"word": "good idea",
+"speak": "Good idea",
+"category": "phrases",
+"intent": "affirm",
+"freq": "14"
+},
+{
+"id": "card_0952",
+"word": "good luck",
+"speak": "Good luck",
+"category": "phrases",
+"intent": "social",
+"freq": "8"
+},
+{
+"id": "card_0953",
+"word": "good morning",
+"speak": "Good morning",
+"category": "phrases",
+"intent": "social",
+"freq": "9"
+},
+{
+"id": "card_0954",
+"word": "good night",
+"speak": "Good night",
+"category": "phrases",
+"intent": "social",
+"freq": "9"
+},
+{
+"id": "card_0956",
+"word": "happy birthday",
+"speak": "Happy birthday",
+"category": "phrases",
+"intent": "social",
+"freq": "7"
+},
+{
+"id": "card_0957",
+"word": "have fun",
+"speak": "Have fun",
+"category": "phrases",
+"intent": "social",
+"freq": "10"
+},
+{
+"id": "card_0959",
+"word": "how are you",
+"speak": "How are you",
+"category": "phrases",
+"intent": "social",
+"freq": "76"
+},
+{
+"id": "card_0960",
+"word": "how long",
+"speak": "How long",
+"category": "phrases",
+"intent": "question",
+"freq": "35"
+},
+{
+"id": "card_0961",
+"word": "how much",
+"speak": "How much",
+"category": "phrases",
+"intent": "question",
+"freq": "49"
+},
+{
+"id": "card_0962",
+"word": "how was your day",
+"speak": "How was your day",
+"category": "phrases",
+"intent": "social",
+"freq": "20"
+},
+{
+"id": "card_0964",
+"word": "i agree",
+"speak": "I agree",
+"category": "phrases",
+"intent": "affirm",
+"freq": "10"
+},
+{
+"id": "card_0965",
+"word": "i can't breathe",
+"speak": "I can't breathe",
+"category": "phrases",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_0966",
+"word": "i don't feel safe",
+"speak": "I don't feel safe",
+"category": "phrases",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_0967",
+"word": "i don't know",
+"speak": "I don't know",
+"category": "phrases",
+"intent": "repair",
+"freq": "52"
+},
+{
+"id": "card_0968",
+"word": "i don't like that",
+"speak": "I don't like that",
+"category": "phrases",
+"intent": "refuse",
+"freq": "1"
+},
+{
+"id": "card_0969",
+"word": "i don't think so",
+"speak": "I don't think so",
+"category": "phrases",
+"intent": "statement",
+"freq": "7"
+},
+{
+"id": "card_0970",
+"word": "i don't understand",
+"speak": "I don't understand",
+"category": "phrases",
+"intent": "repair",
+"freq": "4"
+},
+{
+"id": "card_0971",
+"word": "i don't want to",
+"speak": "I don't want to",
+"category": "phrases",
+"intent": "refuse",
+"freq": "24"
+},
+{
+"id": "card_0972",
+"word": "i feel",
+"speak": "I feel",
+"category": "phrases",
+"intent": "statement",
+"freq": "57"
+},
+{
+"id": "card_0973",
+"word": "i feel dizzy",
+"speak": "I feel dizzy",
+"category": "health",
+"intent": "safety",
+"freq": "1"
+},
+{
+"id": "card_0974",
+"word": "i feel sick",
+"speak": "I feel sick",
+"category": "health",
+"intent": "safety",
+"freq": "3"
+},
+{
+"id": "card_0975",
+"word": "i like that",
+"speak": "I like that",
+"category": "phrases",
+"intent": "affirm",
+"freq": "4"
+},
+{
+"id": "card_0976",
+"word": "i love you",
+"speak": "I love you",
+"category": "phrases",
+"intent": "social",
+"freq": "71"
+},
+{
+"id": "card_0977",
+"word": "i mean",
+"speak": "I mean",
+"category": "phrases",
+"intent": "repair",
+"freq": "13"
+},
+{
+"id": "card_0978",
+"word": "i need a quiet place",
+"speak": "I need a quiet place",
+"category": "phrases",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_0979",
+"word": "i need help",
+"speak": "I need help",
+"category": "phrases",
+"intent": "request",
+"freq": "19"
+},
+{
+"id": "card_0980",
+"word": "i need help now",
+"speak": "I need help now",
+"category": "phrases",
+"intent": "request",
+"freq": "0"
+},
+{
+"id": "card_0981",
+"word": "i need my medicine",
+"speak": "I need my medicine",
+"category": "health",
+"intent": "request",
+"freq": "1"
+},
+{
+"id": "card_0983",
+"word": "i need to lie down",
+"speak": "I need to lie down",
+"category": "phrases",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_0984",
+"word": "i think so",
+"speak": "I think so",
+"category": "phrases",
+"intent": "statement",
+"freq": "3"
+},
+{
+"id": "card_0985",
+"word": "i want a break",
+"speak": "I want a break",
+"category": "phrases",
+"intent": "request",
+"freq": "0"
+},
+{
+"id": "card_0986",
+"word": "i want more",
+"speak": "I want more",
+"category": "phrases",
+"intent": "request",
+"freq": "1"
+},
+{
+"id": "card_0987",
+"word": "i want something else",
+"speak": "I want something else",
+"category": "phrases",
+"intent": "request",
+"freq": "0"
+},
+{
+"id": "card_0988",
+"word": "i want to be alone",
+"speak": "I want to be alone",
+"category": "phrases",
+"intent": "request",
+"freq": "0"
+},
+{
+"id": "card_0989",
+"word": "i want to drink",
+"speak": "I want to drink",
+"category": "drink",
+"intent": "request",
+"freq": "1"
+},
+{
+"id": "card_0990",
+"word": "i want to eat",
+"speak": "I want to eat",
+"category": "phrases",
+"intent": "request",
+"freq": "2"
+},
+{
+"id": "card_0991",
+"word": "i want to go",
+"speak": "I want to go",
+"category": "phrases",
+"intent": "request",
+"freq": "26"
+},
+{
+"id": "card_0992",
+"word": "i want to go home",
+"speak": "I want to go home",
+"category": "phrases",
+"intent": "request",
+"freq": "2"
+},
+{
+"id": "card_0993",
+"word": "i want to go outside",
+"speak": "I want to go outside",
+"category": "phrases",
+"intent": "request",
+"freq": "4"
+},
+{
+"id": "card_0994",
+"word": "i want to listen",
+"speak": "I want to listen",
+"category": "phrases",
+"intent": "request",
+"freq": "1"
+},
+{
+"id": "card_0995",
+"word": "i want to play",
+"speak": "I want to play",
+"category": "phrases",
+"intent": "request",
+"freq": "0"
+},
+{
+"id": "card_0996",
+"word": "i want to stop",
+"speak": "I want to stop",
+"category": "phrases",
+"intent": "request",
+"freq": "0"
+},
+{
+"id": "card_0997",
+"word": "i want to watch",
+"speak": "I want to watch",
+"category": "phrases",
+"intent": "request",
+"freq": "8"
+},
+{
+"id": "card_0998",
+"word": "i'll show you",
+"speak": "I'll show you",
+"category": "phrases",
+"intent": "repair",
+"freq": "2"
+},
+{
+"id": "card_0999",
+"word": "i'm angry",
+"speak": "I'm angry",
+"category": "feelings",
+"intent": "feeling",
+"freq": "0"
+},
+{
+"id": "card_1000",
+"word": "i'm bored",
+"speak": "I'm bored",
+"category": "feelings",
+"intent": "feeling",
+"freq": "3"
+},
+{
+"id": "card_1001",
+"word": "i'm fine",
+"speak": "I'm fine",
+"category": "feelings",
+"intent": "social",
+"freq": "4"
+},
+{
+"id": "card_1002",
+"word": "i'm going to be sick",
+"speak": "I'm going to be sick",
+"category": "feelings",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_1003",
+"word": "i'm good",
+"speak": "I'm good",
+"category": "phrases",
+"intent": "social",
+"freq": "4"
+},
+{
+"id": "card_1004",
+"word": "i'm happy",
+"speak": "I'm happy",
+"category": "feelings",
+"intent": "feeling",
+"freq": "4"
+},
+{
+"id": "card_1005",
+"word": "i'm happy to see you",
+"speak": "I'm happy to see you",
+"category": "phrases",
+"intent": "social",
+"freq": "0"
+},
+{
+"id": "card_1006",
+"word": "i'm hurt",
+"speak": "I'm hurt",
+"category": "feelings",
+"intent": "safety",
+"freq": "1"
+},
+{
+"id": "card_1007",
+"word": "i'm in pain",
+"speak": "I'm in pain",
+"category": "health",
+"intent": "safety",
+"freq": "2"
+},
+{
+"id": "card_1008",
+"word": "i'm listening",
+"speak": "I'm listening",
+"category": "phrases",
+"intent": "social",
+"freq": "0"
+},
+{
+"id": "card_1009",
+"word": "i'm not finished",
+"speak": "I'm not finished",
+"category": "phrases",
+"intent": "refuse",
+"freq": "0"
+},
+{
+"id": "card_1010",
+"word": "i'm ok",
+"speak": "I'm ok",
+"category": "feelings",
+"intent": "feeling",
+"freq": "3"
+},
+{
+"id": "card_1011",
+"word": "i'm sad",
+"speak": "I'm sad",
+"category": "feelings",
+"intent": "feeling",
+"freq": "0"
+},
+{
+"id": "card_1012",
+"word": "i'm scared",
+"speak": "I'm scared",
+"category": "feelings",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_1013",
+"word": "i'm thinking",
+"speak": "I'm thinking",
+"category": "phrases",
+"intent": "repair",
+"freq": "2"
+},
+{
+"id": "card_1014",
+"word": "i'm tired",
+"speak": "I'm tired",
+"category": "feelings",
+"intent": "feeling",
+"freq": "5"
+},
+{
+"id": "card_1015",
+"word": "i'm too cold",
+"speak": "I'm too cold",
+"category": "feelings",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_1016",
+"word": "i'm too hot",
+"speak": "I'm too hot",
+"category": "feelings",
+"intent": "safety",
+"freq": "1"
+},
+{
+"id": "card_1017",
+"word": "in pain",
+"speak": "In pain",
+"category": "feelings",
+"intent": "feeling",
+"freq": "6"
+},
+{
+"id": "card_1018",
+"word": "is it",
+"speak": "Is it",
+"category": "phrases",
+"intent": "question",
+"freq": "104"
+},
+{
+"id": "card_1019",
+"word": "it depends",
+"speak": "It depends",
+"category": "phrases",
+"intent": "statement",
+"freq": "2"
+},
+{
+"id": "card_1020",
+"word": "it hurts",
+"speak": "It hurts",
+"category": "health",
+"intent": "safety",
+"freq": "5"
+},
+{
+"id": "card_1021",
+"word": "it hurts here",
+"speak": "It hurts here",
+"category": "health",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_1022",
+"word": "kind of",
+"speak": "Kind of",
+"category": "describing",
+"intent": "content",
+"freq": "55"
+},
+{
+"id": "card_1023",
+"word": "leave me alone",
+"speak": "Leave me alone",
+"category": "phrases",
+"intent": "refuse",
+"freq": "8"
+},
+{
+"id": "card_1024",
+"word": "let me finish",
+"speak": "Let me finish",
+"category": "phrases",
+"intent": "repair",
+"freq": "2"
+},
+{
+"id": "card_1025",
+"word": "let's go",
+"speak": "Let's go",
+"category": "phrases",
+"intent": "request",
+"freq": "47"
+},
+{
+"id": "card_1026",
+"word": "lonely",
+"speak": "Lonely",
+"category": "feelings",
+"intent": "feeling",
+"freq": "7"
+},
+{
+"id": "card_1027",
+"word": "look at my board",
+"speak": "Look at my board",
+"category": "phrases",
+"intent": "repair",
+"freq": "0"
+},
+{
+"id": "card_1028",
+"word": "my name is",
+"speak": "My name is",
+"category": "phrases",
+"intent": "social",
+"freq": "20"
+},
+{
+"id": "card_1030",
+"word": "nervous",
+"speak": "Nervous",
+"category": "feelings",
+"intent": "feeling",
+"freq": "7"
+},
+{
+"id": "card_1031",
+"word": "never mind",
+"speak": "Never mind",
+"category": "phrases",
+"intent": "repair",
+"freq": "3"
+},
+{
+"id": "card_1032",
+"word": "nice to meet you",
+"speak": "Nice to meet you",
+"category": "phrases",
+"intent": "social",
+"freq": "16"
+},
+{
+"id": "card_1034",
+"word": "no thank you",
+"speak": "No thank you",
+"category": "phrases",
+"intent": "refuse",
+"freq": "5"
+},
+{
+"id": "card_1035",
+"word": "none",
+"speak": "None",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1036",
+"word": "not now",
+"speak": "Not now",
+"category": "phrases",
+"intent": "refuse",
+"freq": "1"
+},
+{
+"id": "card_1037",
+"word": "not really",
+"speak": "Not really",
+"category": "phrases",
+"intent": "refuse",
+"freq": "17"
+},
+{
+"id": "card_1038",
+"word": "not that",
+"speak": "Not that",
+"category": "phrases",
+"intent": "repair",
+"freq": "13"
+},
+{
+"id": "card_1039",
+"word": "not that one",
+"speak": "Not that one",
+"category": "phrases",
+"intent": "refuse",
+"freq": "1"
+},
+{
+"id": "card_1040",
+"word": "not yet",
+"speak": "Not yet",
+"category": "phrases",
+"intent": "refuse",
+"freq": "16"
+},
+{
+"id": "card_1042",
+"word": "of course",
+"speak": "Of course",
+"category": "describing",
+"intent": "content",
+"freq": "61"
+},
+{
+"id": "card_1043",
+"word": "ok",
+"speak": "Ok",
+"category": "feelings",
+"intent": "affirm",
+"freq": "162"
+},
+{
+"id": "card_1044",
+"word": "oops",
+"speak": "Oops",
+"category": "things",
+"intent": "repair",
+"freq": "1"
+},
+{
+"id": "card_1045",
+"word": "open it",
+"speak": "Open it",
+"category": "phrases",
+"intent": "request",
+"freq": "4"
+},
+{
+"id": "card_1046",
+"word": "probably",
+"speak": "Probably",
+"category": "describing",
+"intent": "content",
+"freq": "40"
+},
+{
+"id": "card_1047",
+"word": "proud",
+"speak": "Proud",
+"category": "feelings",
+"intent": "feeling",
+"freq": "4"
+},
+{
+"id": "card_1048",
+"word": "say it again",
+"speak": "Say it again",
+"category": "phrases",
+"intent": "repair",
+"freq": "0"
+},
+{
+"id": "card_1049",
+"word": "see you later",
+"speak": "See you later",
+"category": "phrases",
+"intent": "social",
+"freq": "4"
+},
+{
+"id": "card_1051",
+"word": "show me",
+"speak": "Show me",
+"category": "phrases",
+"intent": "request",
+"freq": "6"
+},
+{
+"id": "card_1053",
+"word": "someone is hurting me",
+"speak": "Someone is hurting me",
+"category": "health",
+"intent": "safety",
+"freq": "0"
+},
+{
+"id": "card_1054",
+"word": "something else",
+"speak": "Something else",
+"category": "phrases",
+"intent": "repair",
+"freq": "11"
+},
+{
+"id": "card_1056",
+"word": "spell it",
+"speak": "Spell it",
+"category": "phrases",
+"intent": "repair",
+"freq": "0"
+},
+{
+"id": "card_1057",
+"word": "start over",
+"speak": "Start over",
+"category": "phrases",
+"intent": "repair",
+"freq": "2"
+},
+{
+"id": "card_1058",
+"word": "sure",
+"speak": "Sure",
+"category": "describing",
+"intent": "affirm",
+"freq": "365"
+},
+{
+"id": "card_1060",
+"word": "tell me more",
+"speak": "Tell me more",
+"category": "phrases",
+"intent": "social",
+"freq": "3"
+},
+{
+"id": "card_1062",
+"word": "that's funny",
+"speak": "That's funny",
+"category": "phrases",
+"intent": "social",
+"freq": "1"
+},
+{
+"id": "card_1063",
+"word": "that's not what i meant",
+"speak": "That's not what I meant",
+"category": "phrases",
+"intent": "repair",
+"freq": "0"
+},
+{
+"id": "card_1064",
+"word": "that's right",
+"speak": "That's right",
+"category": "phrases",
+"intent": "affirm",
+"freq": "1"
+},
+{
+"id": "card_1068",
+"word": "turn it off",
+"speak": "Turn it off",
+"category": "phrases",
+"intent": "request",
+"freq": "0"
+},
+{
+"id": "card_1069",
+"word": "turn it on",
+"speak": "Turn it on",
+"category": "phrases",
+"intent": "request",
+"freq": "2"
+},
+{
+"id": "card_1072",
+"word": "uncomfortable",
+"speak": "Uncomfortable",
+"category": "feelings",
+"intent": "feeling",
+"freq": "1"
+},
+{
+"id": "card_1073",
+"word": "what are we doing",
+"speak": "What are we doing",
+"category": "phrases",
+"intent": "question",
+"freq": "1"
+},
+{
+"id": "card_1074",
+"word": "what do you think",
+"speak": "What do you think",
+"category": "phrases",
+"intent": "question",
+"freq": "17"
+},
+{
+"id": "card_1075",
+"word": "what happened",
+"speak": "What happened",
+"category": "phrases",
+"intent": "question",
+"freq": "28"
+},
+{
+"id": "card_1076",
+"word": "what is it",
+"speak": "What is it",
+"category": "phrases",
+"intent": "question",
+"freq": "8"
+},
+{
+"id": "card_1077",
+"word": "what time is it",
+"speak": "What time is it",
+"category": "phrases",
+"intent": "question",
+"freq": "22"
+},
+{
+"id": "card_1078",
+"word": "what's that",
+"speak": "What's that",
+"category": "phrases",
+"intent": "question",
+"freq": "0"
+},
+{
+"id": "card_1079",
+"word": "what's up",
+"speak": "What's up",
+"category": "phrases",
+"intent": "social",
+"freq": "3"
+},
+{
+"id": "card_1080",
+"word": "what's your name",
+"speak": "What's your name",
+"category": "phrases",
+"intent": "social",
+"freq": "1"
+},
+{
+"id": "card_1081",
+"word": "when are we going",
+"speak": "When are we going",
+"category": "phrases",
+"intent": "question",
+"freq": "1"
+},
+{
+"id": "card_1082",
+"word": "where are we going",
+"speak": "Where are we going",
+"category": "phrases",
+"intent": "question",
+"freq": "5"
+},
+{
+"id": "card_1083",
+"word": "where is it",
+"speak": "Where is it",
+"category": "phrases",
+"intent": "question",
+"freq": "1"
+},
+{
+"id": "card_1084",
+"word": "who is that",
+"speak": "Who is that",
+"category": "phrases",
+"intent": "question",
+"freq": "0"
+},
+{
+"id": "card_1086",
+"word": "wrong one",
+"speak": "Wrong one",
+"category": "phrases",
+"intent": "repair",
+"freq": "0"
+},
+{
+"id": "card_1087",
+"word": "you didn't understand me",
+"speak": "You didn't understand me",
+"category": "phrases",
+"intent": "repair",
+"freq": "0"
+},
+{
+"id": "card_1088",
+"word": "you understood me",
+"speak": "You understood me",
+"category": "phrases",
+"intent": "repair",
+"freq": "0"
+},
+{
+"id": "card_1089",
+"word": "you're welcome",
+"speak": "You're welcome",
+"category": "phrases",
+"intent": "social",
+"freq": "14"
+},
+{
+"id": "card_1090",
+"word": "'s",
+"speak": "'s",
+"category": "things",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1091",
+"word": "4th of july",
+"speak": "4th of july",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1092",
+"word": "ability",
+"speak": "Ability",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1093",
+"word": "able",
+"speak": "Able",
+"category": "describing",
+"intent": "content",
+"freq": "42"
+},
+{
+"id": "card_1096",
+"word": "accept",
+"speak": "Accept",
+"category": "actions",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_1097",
+"word": "accessible",
+"speak": "Accessible",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1098",
+"word": "accident",
+"speak": "Accident",
+"category": "activities",
+"intent": "content",
+"freq": "24"
+},
+{
+"id": "card_1099",
+"word": "according",
+"speak": "According",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1100",
+"word": "account",
+"speak": "Account",
+"category": "ideas",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1101",
+"word": "ache",
+"speak": "Ache",
+"category": "health",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1103",
+"word": "action",
+"speak": "Action",
+"category": "activities",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_1104",
+"word": "activity",
+"speak": "Activity",
+"category": "activities",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1106",
+"word": "actual",
+"speak": "Actual",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1107",
+"word": "actually",
+"speak": "Actually",
+"category": "describing",
+"intent": "content",
+"freq": "38"
+},
+{
+"id": "card_1110",
+"word": "adjust",
+"speak": "Adjust",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1111",
+"word": "admire",
+"speak": "Admire",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1112",
+"word": "admit",
+"speak": "Admit",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1113",
+"word": "adopt",
+"speak": "Adopt",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1115",
+"word": "adorable",
+"speak": "Adorable",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1118",
+"word": "affection",
+"speak": "Affection",
+"category": "feelings",
+"intent": "feeling",
+"freq": "0"
+},
+{
+"id": "card_1119",
+"word": "afford",
+"speak": "Afford",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1120",
+"word": "age",
+"speak": "Age",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_1122",
+"word": "agree",
+"speak": "Agree",
+"category": "actions",
+"intent": "content",
+"freq": "18"
+},
+{
+"id": "card_1123",
+"word": "ah",
+"speak": "Ah",
+"category": "things",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1133",
+"word": "alarm",
+"speak": "Alarm",
+"category": "feelings",
+"intent": "feeling",
+"freq": "10"
+},
+{
+"id": "card_1134",
+"word": "album",
+"speak": "Album",
+"category": "ideas",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1135",
+"word": "alive",
+"speak": "Alive",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1136",
+"word": "allergic",
+"speak": "Allergic",
+"category": "health",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_1137",
+"word": "allergy",
+"speak": "Allergy",
+"category": "health",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1139",
+"word": "allow",
+"speak": "Allow",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1142",
+"word": "alone",
+"speak": "Alone",
+"category": "describing",
+"intent": "content",
+"freq": "22"
+},
+{
+"id": "card_1145",
+"word": "alright",
+"speak": "Alright",
+"category": "describing",
+"intent": "content",
+"freq": "31"
+},
+{
+"id": "card_1147",
+"word": "am i",
+"speak": "Am I",
+"category": "phrases",
+"intent": "statement",
+"freq": "16"
+},
+{
+"id": "card_1148",
+"word": "amaze",
+"speak": "Amaze",
+"category": "actions",
+"intent": "content",
+"freq": "19"
+},
+{
+"id": "card_1154",
+"word": "anger",
+"speak": "Anger",
+"category": "feelings",
+"intent": "feeling",
+"freq": "1"
+},
+{
+"id": "card_1158",
+"word": "anniversary",
+"speak": "Anniversary",
+"category": "time",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1159",
+"word": "annoy",
+"speak": "Annoy",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1162",
+"word": "anxious",
+"speak": "Anxious",
+"category": "feelings",
+"intent": "feeling",
+"freq": "0"
+},
+{
+"id": "card_1169",
+"word": "anyway",
+"speak": "Anyway",
+"category": "describing",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_1172",
+"word": "apologize",
+"speak": "Apologize",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1174",
+"word": "appear",
+"speak": "Appear",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1177",
+"word": "apply",
+"speak": "Apply",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1178",
+"word": "appointment",
+"speak": "Appointment",
+"category": "health",
+"intent": "content",
+"freq": "30"
+},
+{
+"id": "card_1179",
+"word": "appreciate",
+"speak": "Appreciate",
+"category": "actions",
+"intent": "content",
+"freq": "33"
+},
+{
+"id": "card_1180",
+"word": "arctic",
+"speak": "Arctic",
+"category": "places",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1181",
+"word": "are you kidding me",
+"speak": "Are you kidding me",
+"category": "phrases",
+"intent": "question",
+"freq": "2"
+},
+{
+"id": "card_1185",
+"word": "argue",
+"speak": "Argue",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1188",
+"word": "arrange",
+"speak": "Arrange",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1190",
+"word": "arrive",
+"speak": "Arrive",
+"category": "actions",
+"intent": "content",
+"freq": "18"
+},
+{
+"id": "card_1195",
+"word": "ashamed",
+"speak": "Ashamed",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1197",
+"word": "ask",
+"speak": "Ask",
+"category": "actions",
+"intent": "content",
+"freq": "112"
+},
+{
+"id": "card_1198",
+"word": "asleep",
+"speak": "Asleep",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1200",
+"word": "assume",
+"speak": "Assume",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1201",
+"word": "asteroid",
+"speak": "Asteroid",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1204",
+"word": "attack",
+"speak": "Attack",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1207",
+"word": "attractive",
+"speak": "Attractive",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1211",
+"word": "available",
+"speak": "Available",
+"category": "describing",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_1212",
+"word": "avalanche",
+"speak": "Avalanche",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1213",
+"word": "average",
+"speak": "Average",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1214",
+"word": "avoid",
+"speak": "Avoid",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1216",
+"word": "aware",
+"speak": "Aware",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1218",
+"word": "awful",
+"speak": "Awful",
+"category": "feelings",
+"intent": "feeling",
+"freq": "4"
+},
+{
+"id": "card_1219",
+"word": "ax",
+"speak": "Ax",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1221",
+"word": "backhoe",
+"speak": "Backhoe",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1224",
+"word": "bacteria",
+"speak": "Bacteria",
+"category": "animals",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1225",
+"word": "bag",
+"speak": "Bag",
+"category": "things",
+"intent": "content",
+"freq": "21"
+},
+{
+"id": "card_1231",
+"word": "bandage",
+"speak": "Bandage",
+"category": "health",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1232",
+"word": "bar",
+"speak": "Bar",
+"category": "things",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_1233",
+"word": "bar mitzveh",
+"speak": "Bar mitzveh",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1243",
+"word": "bay",
+"speak": "Bay",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1247",
+"word": "beat",
+"speak": "Beat",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1248",
+"word": "beautiful",
+"speak": "Beautiful",
+"category": "describing",
+"intent": "content",
+"freq": "23"
+},
+{
+"id": "card_1250",
+"word": "become",
+"speak": "Become",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1256",
+"word": "begin",
+"speak": "Begin",
+"category": "actions",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_1257",
+"word": "believe",
+"speak": "Believe",
+"category": "actions",
+"intent": "content",
+"freq": "31"
+},
+{
+"id": "card_1259",
+"word": "belong",
+"speak": "Belong",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1263",
+"word": "bend",
+"speak": "Bend",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1265",
+"word": "best",
+"speak": "Best",
+"category": "describing",
+"intent": "content",
+"freq": "62"
+},
+{
+"id": "card_1267",
+"word": "bet",
+"speak": "Bet",
+"category": "actions",
+"intent": "content",
+"freq": "22"
+},
+{
+"id": "card_1268",
+"word": "better",
+"speak": "Better",
+"category": "describing",
+"intent": "content",
+"freq": "109"
+},
+{
+"id": "card_1269",
+"word": "bible",
+"speak": "Bible",
+"category": "ideas",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1271",
+"word": "bill",
+"speak": "Bill",
+"category": "ideas",
+"intent": "content",
+"freq": "19"
+},
+{
+"id": "card_1273",
+"word": "bite",
+"speak": "Bite",
+"category": "actions",
+"intent": "content",
+"freq": "59"
+},
+{
+"id": "card_1274",
+"word": "bitter",
+"speak": "Bitter",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1276",
+"word": "bland",
+"speak": "Bland",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1277",
+"word": "bleed",
+"speak": "Bleed",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1282",
+"word": "blonde",
+"speak": "Blonde",
+"category": "people",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1284",
+"word": "blow",
+"speak": "Blow",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1286",
+"word": "blush",
+"speak": "Blush",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1290",
+"word": "book",
+"speak": "Book",
+"category": "school",
+"intent": "content",
+"freq": "94"
+},
+{
+"id": "card_1292",
+"word": "boring",
+"speak": "Boring",
+"category": "describing",
+"intent": "content",
+"freq": "37"
+},
+{
+"id": "card_1293",
+"word": "borrow",
+"speak": "Borrow",
+"category": "actions",
+"intent": "content",
+"freq": "15"
+},
+{
+"id": "card_1295",
+"word": "bother",
+"speak": "Bother",
+"category": "actions",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_1297",
+"word": "bounce",
+"speak": "Bounce",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1300",
+"word": "box",
+"speak": "Box",
+"category": "things",
+"intent": "content",
+"freq": "21"
+},
+{
+"id": "card_1306",
+"word": "brave",
+"speak": "Brave",
+"category": "feelings",
+"intent": "feeling",
+"freq": "2"
+},
+{
+"id": "card_1311",
+"word": "breathe",
+"speak": "Breathe",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1312",
+"word": "brick",
+"speak": "Brick",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1315",
+"word": "bring",
+"speak": "Bring",
+"category": "actions",
+"intent": "content",
+"freq": "137"
+},
+{
+"id": "card_1325",
+"word": "bug spray",
+"speak": "Bug spray",
+"category": "things",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1326",
+"word": "build",
+"speak": "Build",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1330",
+"word": "burp",
+"speak": "Burp",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1340",
+"word": "bye",
+"speak": "Bye",
+"category": "ideas",
+"intent": "social",
+"freq": "15"
+},
+{
+"id": "card_1346",
+"word": "campfire",
+"speak": "Campfire",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1347",
+"word": "can i have a turn",
+"speak": "Can I have a turn",
+"category": "phrases",
+"intent": "question",
+"freq": "0"
+},
+{
+"id": "card_1352",
+"word": "canyon",
+"speak": "Canyon",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1357",
+"word": "care",
+"speak": "Care",
+"category": "actions",
+"intent": "content",
+"freq": "68"
+},
+{
+"id": "card_1359",
+"word": "careful",
+"speak": "Careful",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_1360",
+"word": "carolers",
+"speak": "Carolers",
+"category": "people",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1362",
+"word": "carry",
+"speak": "Carry",
+"category": "actions",
+"intent": "content",
+"freq": "17"
+},
+{
+"id": "card_1365",
+"word": "case",
+"speak": "Case",
+"category": "activities",
+"intent": "content",
+"freq": "15"
+},
+{
+"id": "card_1366",
+"word": "cash",
+"speak": "Cash",
+"category": "things",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_1368",
+"word": "catch",
+"speak": "Catch",
+"category": "actions",
+"intent": "content",
+"freq": "22"
+},
+{
+"id": "card_1369",
+"word": "cause",
+"speak": "Cause",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1370",
+"word": "cave",
+"speak": "Cave",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1371",
+"word": "cd",
+"speak": "Cd",
+"category": "things",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1376",
+"word": "cello",
+"speak": "Cello",
+"category": "music",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1379",
+"word": "cent",
+"speak": "Cent",
+"category": "quantity",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1382",
+"word": "certain",
+"speak": "Certain",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1383",
+"word": "certainly",
+"speak": "Certainly",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_1385",
+"word": "chance",
+"speak": "Chance",
+"category": "describing",
+"intent": "content",
+"freq": "16"
+},
+{
+"id": "card_1389",
+"word": "chat",
+"speak": "Chat",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1390",
+"word": "cheap",
+"speak": "Cheap",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1391",
+"word": "cheat",
+"speak": "Cheat",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1392",
+"word": "check",
+"speak": "Check",
+"category": "actions",
+"intent": "content",
+"freq": "82"
+},
+{
+"id": "card_1394",
+"word": "cheerful",
+"speak": "Cheerful",
+"category": "feelings",
+"intent": "feeling",
+"freq": "1"
+},
+{
+"id": "card_1400",
+"word": "chew",
+"speak": "Chew",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1406",
+"word": "chill",
+"speak": "Chill",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1408",
+"word": "chinese",
+"speak": "Chinese",
+"category": "describing",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_1412",
+"word": "choice",
+"speak": "Choice",
+"category": "ideas",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_1413",
+"word": "choir",
+"speak": "Choir",
+"category": "people",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1423",
+"word": "claim",
+"speak": "Claim",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1426",
+"word": "clarinet",
+"speak": "Clarinet",
+"category": "music",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1428",
+"word": "classic",
+"speak": "Classic",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1431",
+"word": "clean up",
+"speak": "Clean up",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1433",
+"word": "cliff",
+"speak": "Cliff",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1434",
+"word": "climb",
+"speak": "Climb",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1442",
+"word": "clue",
+"speak": "Clue",
+"category": "ideas",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1457",
+"word": "common",
+"speak": "Common",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1458",
+"word": "communicate",
+"speak": "Communicate",
+"category": "actions",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_1460",
+"word": "complain",
+"speak": "Complain",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1461",
+"word": "complete",
+"speak": "Complete",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1462",
+"word": "concern",
+"speak": "Concern",
+"category": "actions",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_1463",
+"word": "concert",
+"speak": "Concert",
+"category": "ideas",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_1465",
+"word": "concrete",
+"speak": "Concrete",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1467",
+"word": "condition",
+"speak": "Condition",
+"category": "describing",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_1471",
+"word": "confident",
+"speak": "Confident",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1473",
+"word": "consider",
+"speak": "Consider",
+"category": "actions",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_1474",
+"word": "constipated",
+"speak": "Constipated",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1475",
+"word": "contain",
+"speak": "Contain",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1477",
+"word": "continent",
+"speak": "Continent",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1478",
+"word": "continue",
+"speak": "Continue",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1481",
+"word": "conversation",
+"speak": "Conversation",
+"category": "ideas",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_1488",
+"word": "cost",
+"speak": "Cost",
+"category": "things",
+"intent": "content",
+"freq": "24"
+},
+{
+"id": "card_1489",
+"word": "costume",
+"speak": "Costume",
+"category": "clothes",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1492",
+"word": "cough",
+"speak": "Cough",
+"category": "health",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1501",
+"word": "cover",
+"speak": "Cover",
+"category": "actions",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_1505",
+"word": "cramp",
+"speak": "Cramp",
+"category": "health",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1507",
+"word": "crawl",
+"speak": "Crawl",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1509",
+"word": "crazy",
+"speak": "Crazy",
+"category": "describing",
+"intent": "content",
+"freq": "16"
+},
+{
+"id": "card_1512",
+"word": "create",
+"speak": "Create",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1514",
+"word": "credit",
+"speak": "Credit",
+"category": "ideas",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_1515",
+"word": "credit card",
+"speak": "Credit card",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1526",
+"word": "cry",
+"speak": "Cry",
+"category": "actions",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_1532",
+"word": "curious",
+"speak": "Curious",
+"category": "feelings",
+"intent": "feeling",
+"freq": "1"
+},
+{
+"id": "card_1533",
+"word": "current",
+"speak": "Current",
+"category": "weather",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1535",
+"word": "cute",
+"speak": "Cute",
+"category": "describing",
+"intent": "content",
+"freq": "15"
+},
+{
+"id": "card_1539",
+"word": "cymbal",
+"speak": "Cymbal",
+"category": "music",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1540",
+"word": "dance",
+"speak": "Dance",
+"category": "actions",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_1541",
+"word": "dangerous",
+"speak": "Dangerous",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1542",
+"word": "dare",
+"speak": "Dare",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1547",
+"word": "deaf",
+"speak": "Deaf",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1548",
+"word": "deal",
+"speak": "Deal",
+"category": "actions",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_1549",
+"word": "dear",
+"speak": "Dear",
+"category": "describing",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_1550",
+"word": "death",
+"speak": "Death",
+"category": "activities",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_1552",
+"word": "decide",
+"speak": "Decide",
+"category": "actions",
+"intent": "content",
+"freq": "18"
+},
+{
+"id": "card_1554",
+"word": "decision",
+"speak": "Decision",
+"category": "activities",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1556",
+"word": "decorate",
+"speak": "Decorate",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1558",
+"word": "definitely",
+"speak": "Definitely",
+"category": "describing",
+"intent": "content",
+"freq": "19"
+},
+{
+"id": "card_1560",
+"word": "delay",
+"speak": "Delay",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1561",
+"word": "delicious",
+"speak": "Delicious",
+"category": "describing",
+"intent": "content",
+"freq": "20"
+},
+{
+"id": "card_1562",
+"word": "deliver",
+"speak": "Deliver",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1563",
+"word": "depend",
+"speak": "Depend",
+"category": "actions",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_1564",
+"word": "depressed",
+"speak": "Depressed",
+"category": "describing",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1565",
+"word": "describe",
+"speak": "Describe",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1566",
+"word": "desert",
+"speak": "Desert",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1575",
+"word": "die",
+"speak": "Die",
+"category": "actions",
+"intent": "content",
+"freq": "27"
+},
+{
+"id": "card_1577",
+"word": "difference",
+"speak": "Difference",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1578",
+"word": "dig",
+"speak": "Dig",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1579",
+"word": "dime",
+"speak": "Dime",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1584",
+"word": "dirt",
+"speak": "Dirt",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1585",
+"word": "disagree",
+"speak": "Disagree",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1586",
+"word": "disappointed",
+"speak": "Disappointed",
+"category": "feelings",
+"intent": "feeling",
+"freq": "2"
+},
+{
+"id": "card_1587",
+"word": "disaster",
+"speak": "Disaster",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1588",
+"word": "discover",
+"speak": "Discover",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1589",
+"word": "discuss",
+"speak": "Discuss",
+"category": "actions",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_1590",
+"word": "disgust",
+"speak": "Disgust",
+"category": "feelings",
+"intent": "feeling",
+"freq": "6"
+},
+{
+"id": "card_1593",
+"word": "dislike",
+"speak": "Dislike",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1597",
+"word": "dizzy",
+"speak": "Dizzy",
+"category": "health",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1600",
+"word": "do you have any pets",
+"speak": "Do you have any pets",
+"category": "phrases",
+"intent": "question",
+"freq": "4"
+},
+{
+"id": "card_1601",
+"word": "do you like",
+"speak": "Do you like",
+"category": "phrases",
+"intent": "question",
+"freq": "69"
+},
+{
+"id": "card_1602",
+"word": "do you want to play",
+"speak": "Do you want to play",
+"category": "phrases",
+"intent": "question",
+"freq": "0"
+},
+{
+"id": "card_1603",
+"word": "doctor's office",
+"speak": "Doctor's office",
+"category": "things",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1606",
+"word": "dollar",
+"speak": "Dollar",
+"category": "quantity",
+"intent": "content",
+"freq": "20"
+},
+{
+"id": "card_1609",
+"word": "done",
+"speak": "Done",
+"category": "describing",
+"intent": "content",
+"freq": "2026"
+},
+{
+"id": "card_1613",
+"word": "doubt",
+"speak": "Doubt",
+"category": "ideas",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_1618",
+"word": "dream",
+"speak": "Dream",
+"category": "ideas",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_1620",
+"word": "drill",
+"speak": "Drill",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1624",
+"word": "drop",
+"speak": "Drop",
+"category": "actions",
+"intent": "content",
+"freq": "15"
+},
+{
+"id": "card_1625",
+"word": "drug",
+"speak": "Drug",
+"category": "things",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1629",
+"word": "due",
+"speak": "Due",
+"category": "describing",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_1630",
+"word": "dull",
+"speak": "Dull",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1631",
+"word": "dumb",
+"speak": "Dumb",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1640",
+"word": "earn",
+"speak": "Earn",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1643",
+"word": "earth day",
+"speak": "Earth day",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1644",
+"word": "earthquake",
+"speak": "Earthquake",
+"category": "activities",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1646",
+"word": "easter",
+"speak": "Easter",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1647",
+"word": "eclipse",
+"speak": "Eclipse",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1649",
+"word": "edit",
+"speak": "Edit",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1653",
+"word": "election",
+"speak": "Election",
+"category": "activities",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1655",
+"word": "electricity",
+"speak": "Electricity",
+"category": "weather",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1656",
+"word": "elevator",
+"speak": "Elevator",
+"category": "things",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1657",
+"word": "else",
+"speak": "Else",
+"category": "describing",
+"intent": "content",
+"freq": "57"
+},
+{
+"id": "card_1659",
+"word": "embarrassed",
+"speak": "Embarrassed",
+"category": "feelings",
+"intent": "feeling",
+"freq": "2"
+},
+{
+"id": "card_1663",
+"word": "end",
+"speak": "End",
+"category": "places",
+"intent": "content",
+"freq": "22"
+},
+{
+"id": "card_1664",
+"word": "engage",
+"speak": "Engage",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1667",
+"word": "enjoy",
+"speak": "Enjoy",
+"category": "actions",
+"intent": "content",
+"freq": "61"
+},
+{
+"id": "card_1669",
+"word": "entire",
+"speak": "Entire",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1671",
+"word": "equator",
+"speak": "Equator",
+"category": "places",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1672",
+"word": "erase",
+"speak": "Erase",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1674",
+"word": "eruption",
+"speak": "Eruption",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1677",
+"word": "event",
+"speak": "Event",
+"category": "things",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1678",
+"word": "ever",
+"speak": "Ever",
+"category": "describing",
+"intent": "content",
+"freq": "46"
+},
+{
+"id": "card_1682",
+"word": "everywhere",
+"speak": "Everywhere",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1683",
+"word": "exactly",
+"speak": "Exactly",
+"category": "describing",
+"intent": "content",
+"freq": "15"
+},
+{
+"id": "card_1685",
+"word": "examine",
+"speak": "Examine",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1686",
+"word": "excellent",
+"speak": "Excellent",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1687",
+"word": "excite",
+"speak": "Excite",
+"category": "actions",
+"intent": "content",
+"freq": "28"
+},
+{
+"id": "card_1688",
+"word": "excuse",
+"speak": "Excuse",
+"category": "ideas",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_1690",
+"word": "exhaust",
+"speak": "Exhaust",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1692",
+"word": "expand",
+"speak": "Expand",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1693",
+"word": "expect",
+"speak": "Expect",
+"category": "actions",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_1694",
+"word": "expensive",
+"speak": "Expensive",
+"category": "describing",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_1695",
+"word": "experiment",
+"speak": "Experiment",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1696",
+"word": "explain",
+"speak": "Explain",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1697",
+"word": "explore",
+"speak": "Explore",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1701",
+"word": "fact",
+"speak": "Fact",
+"category": "ideas",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_1703",
+"word": "fail",
+"speak": "Fail",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1704",
+"word": "fair",
+"speak": "Fair",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1705",
+"word": "false",
+"speak": "False",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1706",
+"word": "famous",
+"speak": "Famous",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1708",
+"word": "fantastic",
+"speak": "Fantastic",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1714",
+"word": "father's day",
+"speak": "Father's day",
+"category": "time",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1715",
+"word": "favorite",
+"speak": "Favorite",
+"category": "ideas",
+"intent": "content",
+"freq": "93"
+},
+{
+"id": "card_1716",
+"word": "fear",
+"speak": "Fear",
+"category": "feelings",
+"intent": "feeling",
+"freq": "1"
+},
+{
+"id": "card_1718",
+"word": "feed",
+"speak": "Feed",
+"category": "actions",
+"intent": "content",
+"freq": "18"
+},
+{
+"id": "card_1719",
+"word": "feelings",
+"speak": "Feelings",
+"category": "feelings",
+"intent": "feeling",
+"freq": "1"
+},
+{
+"id": "card_1721",
+"word": "felt",
+"speak": "Felt",
+"category": "things",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1722",
+"word": "female",
+"speak": "Female",
+"category": "animals",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1723",
+"word": "fever",
+"speak": "Fever",
+"category": "health",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1724",
+"word": "few",
+"speak": "Few",
+"category": "describing",
+"intent": "content",
+"freq": "31"
+},
+{
+"id": "card_1725",
+"word": "fiction",
+"speak": "Fiction",
+"category": "ideas",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1726",
+"word": "fight",
+"speak": "Fight",
+"category": "actions",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_1727",
+"word": "figure",
+"speak": "Figure",
+"category": "ideas",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1729",
+"word": "fill",
+"speak": "Fill",
+"category": "actions",
+"intent": "content",
+"freq": "15"
+},
+{
+"id": "card_1730",
+"word": "final",
+"speak": "Final",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1731",
+"word": "finally",
+"speak": "Finally",
+"category": "describing",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_1732",
+"word": "fine",
+"speak": "Fine",
+"category": "feelings",
+"intent": "feeling",
+"freq": "111"
+},
+{
+"id": "card_1740",
+"word": "fit",
+"speak": "Fit",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1744",
+"word": "flavor",
+"speak": "Flavor",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1749",
+"word": "flu",
+"speak": "Flu",
+"category": "health",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1754",
+"word": "fold",
+"speak": "Fold",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1755",
+"word": "follow",
+"speak": "Follow",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1761",
+"word": "forest",
+"speak": "Forest",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1762",
+"word": "forever",
+"speak": "Forever",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1763",
+"word": "forget",
+"speak": "Forget",
+"category": "actions",
+"intent": "content",
+"freq": "65"
+},
+{
+"id": "card_1764",
+"word": "forgive",
+"speak": "Forgive",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1766",
+"word": "form",
+"speak": "Form",
+"category": "ideas",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1769",
+"word": "found",
+"speak": "Found",
+"category": "actions",
+"intent": "content",
+"freq": "127"
+},
+{
+"id": "card_1770",
+"word": "fourth of july",
+"speak": "Fourth of july",
+"category": "time",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1772",
+"word": "free",
+"speak": "Free",
+"category": "describing",
+"intent": "content",
+"freq": "32"
+},
+{
+"id": "card_1773",
+"word": "freeze",
+"speak": "Freeze",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1777",
+"word": "fresh",
+"speak": "Fresh",
+"category": "describing",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_1780",
+"word": "friendly",
+"speak": "Friendly",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1785",
+"word": "frustrate",
+"speak": "Frustrate",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1787",
+"word": "fun",
+"speak": "Fun",
+"category": "activities",
+"intent": "content",
+"freq": "53"
+},
+{
+"id": "card_1789",
+"word": "furious",
+"speak": "Furious",
+"category": "feelings",
+"intent": "feeling",
+"freq": "0"
+},
+{
+"id": "card_1792",
+"word": "galaxy",
+"speak": "Galaxy",
+"category": "things",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1793",
+"word": "gallon",
+"speak": "Gallon",
+"category": "quantity",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1802",
+"word": "gate",
+"speak": "Gate",
+"category": "things",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1804",
+"word": "gay",
+"speak": "Gay",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1805",
+"word": "generous",
+"speak": "Generous",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1809",
+"word": "get ready",
+"speak": "Get ready",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_1810",
+"word": "giant",
+"speak": "Giant",
+"category": "animals",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1811",
+"word": "gift",
+"speak": "Gift",
+"category": "things",
+"intent": "content",
+"freq": "26"
+},
+{
+"id": "card_1815",
+"word": "glad",
+"speak": "Glad",
+"category": "feelings",
+"intent": "feeling",
+"freq": "36"
+},
+{
+"id": "card_1820",
+"word": "god",
+"speak": "God",
+"category": "things",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_1823",
+"word": "gone",
+"speak": "Gone",
+"category": "describing",
+"intent": "content",
+"freq": "1034"
+},
+{
+"id": "card_1824",
+"word": "goodnight",
+"speak": "Goodnight",
+"category": "things",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1833",
+"word": "grateful",
+"speak": "Grateful",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1843",
+"word": "grocery",
+"speak": "Grocery",
+"category": "things",
+"intent": "content",
+"freq": "22"
+},
+{
+"id": "card_1844",
+"word": "grocery store",
+"speak": "Grocery store",
+"category": "things",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_1847",
+"word": "groundhog day",
+"speak": "Groundhog day",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1849",
+"word": "grow up",
+"speak": "Grow up",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1850",
+"word": "grumpy",
+"speak": "Grumpy",
+"category": "feelings",
+"intent": "feeling",
+"freq": "1"
+},
+{
+"id": "card_1852",
+"word": "guess what",
+"speak": "Guess what",
+"category": "things",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1853",
+"word": "guilty",
+"speak": "Guilty",
+"category": "feelings",
+"intent": "feeling",
+"freq": "2"
+},
+{
+"id": "card_1867",
+"word": "handle",
+"speak": "Handle",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1869",
+"word": "hang",
+"speak": "Hang",
+"category": "actions",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_1870",
+"word": "hannukah",
+"speak": "Hannukah",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1871",
+"word": "hanukkah",
+"speak": "Hanukkah",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1872",
+"word": "happen",
+"speak": "Happen",
+"category": "actions",
+"intent": "content",
+"freq": "69"
+},
+{
+"id": "card_1873",
+"word": "harmonica",
+"speak": "Harmonica",
+"category": "music",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1874",
+"word": "harp",
+"speak": "Harp",
+"category": "music",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1877",
+"word": "hate",
+"speak": "Hate",
+"category": "feelings",
+"intent": "feeling",
+"freq": "43"
+},
+{
+"id": "card_1878",
+"word": "have a good day",
+"speak": "Have a good day",
+"category": "phrases",
+"intent": "statement",
+"freq": "3"
+},
+{
+"id": "card_1880",
+"word": "health",
+"speak": "Health",
+"category": "describing",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_1886",
+"word": "heaven",
+"speak": "Heaven",
+"category": "places",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_1887",
+"word": "hell",
+"speak": "Hell",
+"category": "places",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_1888",
+"word": "helpful",
+"speak": "Helpful",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1891",
+"word": "hesitate",
+"speak": "Hesitate",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1892",
+"word": "hey",
+"speak": "Hey",
+"category": "things",
+"intent": "content",
+"freq": "35"
+},
+{
+"id": "card_1893",
+"word": "hi",
+"speak": "Hi",
+"category": "ideas",
+"intent": "social",
+"freq": "39"
+},
+{
+"id": "card_1894",
+"word": "hide",
+"speak": "Hide",
+"category": "actions",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_1896",
+"word": "hilarious",
+"speak": "Hilarious",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1897",
+"word": "hill",
+"speak": "Hill",
+"category": "nature",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1899",
+"word": "hire",
+"speak": "Hire",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1902",
+"word": "hit",
+"speak": "Hit",
+"category": "actions",
+"intent": "content",
+"freq": "16"
+},
+{
+"id": "card_1905",
+"word": "holiday",
+"speak": "Holiday",
+"category": "time",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_1906",
+"word": "holy",
+"speak": "Holy",
+"category": "places",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1908",
+"word": "honest",
+"speak": "Honest",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_1912",
+"word": "hop",
+"speak": "Hop",
+"category": "actions",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_1913",
+"word": "hope",
+"speak": "Hope",
+"category": "feelings",
+"intent": "feeling",
+"freq": "102"
+},
+{
+"id": "card_1917",
+"word": "hospital",
+"speak": "Hospital",
+"category": "health",
+"intent": "content",
+"freq": "21"
+},
+{
+"id": "card_1922",
+"word": "how 'bout you",
+"speak": "How 'bout you",
+"category": "phrases",
+"intent": "question",
+"freq": "0"
+},
+{
+"id": "card_1923",
+"word": "how old are you",
+"speak": "How old are you",
+"category": "phrases",
+"intent": "question",
+"freq": "13"
+},
+{
+"id": "card_1924",
+"word": "however",
+"speak": "However",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1925",
+"word": "huge",
+"speak": "Huge",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1927",
+"word": "hunt",
+"speak": "Hunt",
+"category": "actions",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_1929",
+"word": "hurry",
+"speak": "Hurry",
+"category": "actions",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_1931",
+"word": "i am years old",
+"speak": "I am years old",
+"category": "phrases",
+"intent": "feeling",
+"freq": "0"
+},
+{
+"id": "card_1932",
+"word": "i didn't know that",
+"speak": "I didn't know that",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_1933",
+"word": "i don't want",
+"speak": "I don't want",
+"category": "phrases",
+"intent": "refuse",
+"freq": "30"
+},
+{
+"id": "card_1934",
+"word": "i go to school at",
+"speak": "I go to school at",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_1935",
+"word": "i have a",
+"speak": "I have a",
+"category": "phrases",
+"intent": "statement",
+"freq": "76"
+},
+{
+"id": "card_1936",
+"word": "i have a problem",
+"speak": "I have a problem",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_1937",
+"word": "i have a question",
+"speak": "I have a question",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_1938",
+"word": "i have to get going",
+"speak": "I have to get going",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_1939",
+"word": "i like",
+"speak": "I like",
+"category": "phrases",
+"intent": "statement",
+"freq": "74"
+},
+{
+"id": "card_1940",
+"word": "i like to",
+"speak": "I like to",
+"category": "phrases",
+"intent": "statement",
+"freq": "10"
+},
+{
+"id": "card_1941",
+"word": "i live at",
+"speak": "I live at",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_1942",
+"word": "i live in",
+"speak": "I live in",
+"category": "phrases",
+"intent": "statement",
+"freq": "4"
+},
+{
+"id": "card_1943",
+"word": "i love it",
+"speak": "I love it",
+"category": "phrases",
+"intent": "statement",
+"freq": "6"
+},
+{
+"id": "card_1944",
+"word": "i need a break",
+"speak": "I need a break",
+"category": "phrases",
+"intent": "request",
+"freq": "2"
+},
+{
+"id": "card_1945",
+"word": "i need to use the bathroom",
+"speak": "I need to use the bathroom",
+"category": "phrases",
+"intent": "request",
+"freq": "7"
+},
+{
+"id": "card_1946",
+"word": "i play outside everyday",
+"speak": "I play outside everyday",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_1947",
+"word": "i want to add a button",
+"speak": "I want to add a button",
+"category": "phrases",
+"intent": "request",
+"freq": "0"
+},
+{
+"id": "card_1948",
+"word": "i want to read",
+"speak": "I want to read",
+"category": "phrases",
+"intent": "request",
+"freq": "1"
+},
+{
+"id": "card_1949",
+"word": "i work at",
+"speak": "I work at",
+"category": "phrases",
+"intent": "statement",
+"freq": "2"
+},
+{
+"id": "card_1950",
+"word": "i'd",
+"speak": "I'd",
+"category": "things",
+"intent": "content",
+"freq": "70"
+},
+{
+"id": "card_1951",
+"word": "i'll",
+"speak": "I'll",
+"category": "things",
+"intent": "content",
+"freq": "239"
+},
+{
+"id": "card_1952",
+"word": "i'm",
+"speak": "I'm",
+"category": "things",
+"intent": "content",
+"freq": "529"
+},
+{
+"id": "card_1953",
+"word": "i'm looking at you",
+"speak": "I'm looking at you",
+"category": "phrases",
+"intent": "feeling",
+"freq": "0"
+},
+{
+"id": "card_1954",
+"word": "i'm sorry",
+"speak": "I'm sorry",
+"category": "phrases",
+"intent": "feeling",
+"freq": "54"
+},
+{
+"id": "card_1955",
+"word": "i've",
+"speak": "I've",
+"category": "things",
+"intent": "content",
+"freq": "84"
+},
+{
+"id": "card_1956",
+"word": "ibuprofen",
+"speak": "Ibuprofen",
+"category": "things",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1960",
+"word": "idea",
+"speak": "Idea",
+"category": "ideas",
+"intent": "content",
+"freq": "43"
+},
+{
+"id": "card_1961",
+"word": "ignore",
+"speak": "Ignore",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_1963",
+"word": "ill",
+"speak": "Ill",
+"category": "health",
+"intent": "content",
+"freq": "17"
+},
+{
+"id": "card_1965",
+"word": "imagine",
+"speak": "Imagine",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1966",
+"word": "important",
+"speak": "Important",
+"category": "describing",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_1967",
+"word": "impossible",
+"speak": "Impossible",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1968",
+"word": "improve",
+"speak": "Improve",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_1970",
+"word": "inform",
+"speak": "Inform",
+"category": "actions",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_1974",
+"word": "insist",
+"speak": "Insist",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_1976",
+"word": "instead",
+"speak": "Instead",
+"category": "describing",
+"intent": "content",
+"freq": "30"
+},
+{
+"id": "card_1977",
+"word": "instrument",
+"speak": "Instrument",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1978",
+"word": "interest",
+"speak": "Interest",
+"category": "ideas",
+"intent": "content",
+"freq": "29"
+},
+{
+"id": "card_1980",
+"word": "interview",
+"speak": "Interview",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1983",
+"word": "invitation",
+"speak": "Invitation",
+"category": "ideas",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_1984",
+"word": "invite",
+"speak": "Invite",
+"category": "actions",
+"intent": "content",
+"freq": "16"
+},
+{
+"id": "card_1985",
+"word": "involve",
+"speak": "Involve",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1990",
+"word": "is finished",
+"speak": "Is finished",
+"category": "phrases",
+"intent": "question",
+"freq": "1"
+},
+{
+"id": "card_1991",
+"word": "island",
+"speak": "Island",
+"category": "nature",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1993",
+"word": "it was nice to see you",
+"speak": "It was nice to see you",
+"category": "phrases",
+"intent": "statement",
+"freq": "1"
+},
+{
+"id": "card_1994",
+"word": "it's",
+"speak": "It's",
+"category": "things",
+"intent": "content",
+"freq": "357"
+},
+{
+"id": "card_1995",
+"word": "itchy",
+"speak": "Itchy",
+"category": "health",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_1996",
+"word": "itself",
+"speak": "Itself",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_1997",
+"word": "jack-o-lantern",
+"speak": "Jack-o-lantern",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2008",
+"word": "jewish holiday",
+"speak": "Jewish holiday",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2011",
+"word": "join",
+"speak": "Join",
+"category": "actions",
+"intent": "content",
+"freq": "20"
+},
+{
+"id": "card_2012",
+"word": "joke",
+"speak": "Joke",
+"category": "ideas",
+"intent": "content",
+"freq": "20"
+},
+{
+"id": "card_2014",
+"word": "joy",
+"speak": "Joy",
+"category": "feelings",
+"intent": "feeling",
+"freq": "2"
+},
+{
+"id": "card_2017",
+"word": "jungle",
+"speak": "Jungle",
+"category": "places",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2023",
+"word": "karaoke",
+"speak": "Karaoke",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2028",
+"word": "kick",
+"speak": "Kick",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2031",
+"word": "kill",
+"speak": "Kill",
+"category": "actions",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2032",
+"word": "kilogram",
+"speak": "Kilogram",
+"category": "quantity",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2033",
+"word": "kind",
+"speak": "Kind",
+"category": "ideas",
+"intent": "content",
+"freq": "74"
+},
+{
+"id": "card_2037",
+"word": "knit",
+"speak": "Knit",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2038",
+"word": "knock",
+"speak": "Knock",
+"category": "actions",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2039",
+"word": "kwanzaa",
+"speak": "Kwanzaa",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2040",
+"word": "labor day",
+"speak": "Labor day",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2041",
+"word": "ladder",
+"speak": "Ladder",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2044",
+"word": "lake",
+"speak": "Lake",
+"category": "nature",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_2047",
+"word": "landscape",
+"speak": "Landscape",
+"category": "places",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2054",
+"word": "law",
+"speak": "Law",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2055",
+"word": "lawn mower",
+"speak": "Lawn mower",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2057",
+"word": "lay",
+"speak": "Lay",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2058",
+"word": "lazy",
+"speak": "Lazy",
+"category": "describing",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_2059",
+"word": "learn",
+"speak": "Learn",
+"category": "school",
+"intent": "content",
+"freq": "20"
+},
+{
+"id": "card_2060",
+"word": "least",
+"speak": "Least",
+"category": "describing",
+"intent": "content",
+"freq": "24"
+},
+{
+"id": "card_2064",
+"word": "lend",
+"speak": "Lend",
+"category": "actions",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2066",
+"word": "let",
+"speak": "Let",
+"category": "actions",
+"intent": "content",
+"freq": "169"
+},
+{
+"id": "card_2067",
+"word": "let's",
+"speak": "Let's",
+"category": "things",
+"intent": "request",
+"freq": "111"
+},
+{
+"id": "card_2069",
+"word": "level",
+"speak": "Level",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2073",
+"word": "lie",
+"speak": "Lie",
+"category": "actions",
+"intent": "content",
+"freq": "16"
+},
+{
+"id": "card_2074",
+"word": "life",
+"speak": "Life",
+"category": "describing",
+"intent": "content",
+"freq": "29"
+},
+{
+"id": "card_2080",
+"word": "list",
+"speak": "List",
+"category": "ideas",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2086",
+"word": "local",
+"speak": "Local",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2087",
+"word": "lock",
+"speak": "Lock",
+"category": "actions",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_2089",
+"word": "loose",
+"speak": "Loose",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2090",
+"word": "lot",
+"speak": "Lot",
+"category": "quantity",
+"intent": "content",
+"freq": "84"
+},
+{
+"id": "card_2092",
+"word": "lovely",
+"speak": "Lovely",
+"category": "describing",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2093",
+"word": "low",
+"speak": "Low",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2099",
+"word": "mad",
+"speak": "Mad",
+"category": "feelings",
+"intent": "feeling",
+"freq": "9"
+},
+{
+"id": "card_2100",
+"word": "magazine",
+"speak": "Magazine",
+"category": "ideas",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_2101",
+"word": "magic school bus",
+"speak": "Magic school bus",
+"category": "transport",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2102",
+"word": "mail",
+"speak": "Mail",
+"category": "actions",
+"intent": "content",
+"freq": "34"
+},
+{
+"id": "card_2106",
+"word": "main",
+"speak": "Main",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2107",
+"word": "major",
+"speak": "Major",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2110",
+"word": "male",
+"speak": "Male",
+"category": "animals",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2111",
+"word": "mall",
+"speak": "Mall",
+"category": "things",
+"intent": "content",
+"freq": "23"
+},
+{
+"id": "card_2114",
+"word": "manage",
+"speak": "Manage",
+"category": "actions",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_2117",
+"word": "map",
+"speak": "Map",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2119",
+"word": "mardi gras",
+"speak": "Mardi gras",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2132",
+"word": "material",
+"speak": "Material",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2134",
+"word": "matter",
+"speak": "Matter",
+"category": "ideas",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2138",
+"word": "meadow",
+"speak": "Meadow",
+"category": "places",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2140",
+"word": "mean",
+"speak": "Mean",
+"category": "actions",
+"intent": "content",
+"freq": "91"
+},
+{
+"id": "card_2141",
+"word": "measure",
+"speak": "Measure",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2146",
+"word": "medical",
+"speak": "Medical",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2150",
+"word": "memorial day",
+"speak": "Memorial day",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2151",
+"word": "mention",
+"speak": "Mention",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2157",
+"word": "messy",
+"speak": "Messy",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2158",
+"word": "metal",
+"speak": "Metal",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2159",
+"word": "meteor",
+"speak": "Meteor",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2160",
+"word": "meter",
+"speak": "Meter",
+"category": "quantity",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2167",
+"word": "mile",
+"speak": "Mile",
+"category": "quantity",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_2169",
+"word": "mind",
+"speak": "Mind",
+"category": "ideas",
+"intent": "content",
+"freq": "46"
+},
+{
+"id": "card_2176",
+"word": "miss",
+"speak": "Miss",
+"category": "actions",
+"intent": "content",
+"freq": "68"
+},
+{
+"id": "card_2192",
+"word": "mother's day",
+"speak": "Mother's day",
+"category": "time",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2196",
+"word": "movement",
+"speak": "Movement",
+"category": "activities",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2197",
+"word": "movie",
+"speak": "Movie",
+"category": "ideas",
+"intent": "content",
+"freq": "132"
+},
+{
+"id": "card_2201",
+"word": "mud",
+"speak": "Mud",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2213",
+"word": "my birthday is",
+"speak": "My birthday is",
+"category": "phrases",
+"intent": "statement",
+"freq": "1"
+},
+{
+"id": "card_2214",
+"word": "my email address is",
+"speak": "My email address is",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_2215",
+"word": "my favorite tv show is",
+"speak": "My favorite tv show is",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_2216",
+"word": "my name is sebastian",
+"speak": "My name is sebastian",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_2217",
+"word": "my phone number is",
+"speak": "My phone number is",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_2218",
+"word": "my room",
+"speak": "My room",
+"category": "phrases",
+"intent": "statement",
+"freq": "9"
+},
+{
+"id": "card_2219",
+"word": "my turn",
+"speak": "My turn",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_2222",
+"word": "name",
+"speak": "Name",
+"category": "ideas",
+"intent": "content",
+"freq": "62"
+},
+{
+"id": "card_2223",
+"word": "nap",
+"speak": "Nap",
+"category": "time",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_2225",
+"word": "nasty",
+"speak": "Nasty",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2227",
+"word": "national",
+"speak": "National",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2228",
+"word": "nature",
+"speak": "Nature",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2231",
+"word": "needle",
+"speak": "Needle",
+"category": "nature",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2232",
+"word": "negative",
+"speak": "Negative",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2236",
+"word": "new year's",
+"speak": "New year's",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2237",
+"word": "new year's day",
+"speak": "New year's day",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2238",
+"word": "news",
+"speak": "News",
+"category": "ideas",
+"intent": "content",
+"freq": "41"
+},
+{
+"id": "card_2241",
+"word": "nickel",
+"speak": "Nickel",
+"category": "things",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2242",
+"word": "no one",
+"speak": "No one",
+"category": "phrases",
+"intent": "refuse",
+"freq": "14"
+},
+{
+"id": "card_2243",
+"word": "no way",
+"speak": "No way",
+"category": "phrases",
+"intent": "refuse",
+"freq": "10"
+},
+{
+"id": "card_2246",
+"word": "normal",
+"speak": "Normal",
+"category": "describing",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_2249",
+"word": "not so good",
+"speak": "Not so good",
+"category": "phrases",
+"intent": "refuse",
+"freq": "1"
+},
+{
+"id": "card_2251",
+"word": "notice",
+"speak": "Notice",
+"category": "actions",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2252",
+"word": "novel",
+"speak": "Novel",
+"category": "ideas",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2255",
+"word": "numb",
+"speak": "Numb",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2260",
+"word": "ocean",
+"speak": "Ocean",
+"category": "nature",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2262",
+"word": "odd",
+"speak": "Odd",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2263",
+"word": "offer",
+"speak": "Offer",
+"category": "actions",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_2265",
+"word": "often",
+"speak": "Often",
+"category": "describing",
+"intent": "content",
+"freq": "17"
+},
+{
+"id": "card_2269",
+"word": "older",
+"speak": "Older",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2272",
+"word": "order",
+"speak": "Order",
+"category": "ideas",
+"intent": "content",
+"freq": "39"
+},
+{
+"id": "card_2274",
+"word": "organize",
+"speak": "Organize",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2276",
+"word": "other",
+"speak": "Other",
+"category": "describing",
+"intent": "content",
+"freq": "47"
+},
+{
+"id": "card_2278",
+"word": "otherwise",
+"speak": "Otherwise",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2279",
+"word": "ounce",
+"speak": "Ounce",
+"category": "quantity",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2281",
+"word": "our schedule",
+"speak": "Our schedule",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_2284",
+"word": "outdoors",
+"speak": "Outdoors",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2285",
+"word": "outer space",
+"speak": "Outer space",
+"category": "places",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2287",
+"word": "owe",
+"speak": "Owe",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2288",
+"word": "own",
+"speak": "Own",
+"category": "describing",
+"intent": "content",
+"freq": "31"
+},
+{
+"id": "card_2290",
+"word": "oxygen",
+"speak": "Oxygen",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2291",
+"word": "pack",
+"speak": "Pack",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2292",
+"word": "package",
+"speak": "Package",
+"category": "things",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_2293",
+"word": "pad",
+"speak": "Pad",
+"category": "things",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2294",
+"word": "pain",
+"speak": "Pain",
+"category": "health",
+"intent": "content",
+"freq": "31"
+},
+{
+"id": "card_2295",
+"word": "paintbrush",
+"speak": "Paintbrush",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2296",
+"word": "pair",
+"speak": "Pair",
+"category": "things",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2308",
+"word": "particular",
+"speak": "Particular",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2310",
+"word": "party",
+"speak": "Party",
+"category": "people",
+"intent": "content",
+"freq": "51"
+},
+{
+"id": "card_2311",
+"word": "pass",
+"speak": "Pass",
+"category": "actions",
+"intent": "content",
+"freq": "35"
+},
+{
+"id": "card_2312",
+"word": "passion",
+"speak": "Passion",
+"category": "feelings",
+"intent": "feeling",
+"freq": "0"
+},
+{
+"id": "card_2319",
+"word": "patient",
+"speak": "Patient",
+"category": "people",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2321",
+"word": "pay",
+"speak": "Pay",
+"category": "actions",
+"intent": "content",
+"freq": "50"
+},
+{
+"id": "card_2329",
+"word": "penny",
+"speak": "Penny",
+"category": "quantity",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2332",
+"word": "percussion",
+"speak": "Percussion",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2333",
+"word": "perfect",
+"speak": "Perfect",
+"category": "describing",
+"intent": "content",
+"freq": "20"
+},
+{
+"id": "card_2334",
+"word": "perform",
+"speak": "Perform",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2336",
+"word": "perhaps",
+"speak": "Perhaps",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2337",
+"word": "period",
+"speak": "Period",
+"category": "health",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2339",
+"word": "personal",
+"speak": "Personal",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2345",
+"word": "physical",
+"speak": "Physical",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2347",
+"word": "pick",
+"speak": "Pick",
+"category": "actions",
+"intent": "content",
+"freq": "64"
+},
+{
+"id": "card_2350",
+"word": "piece",
+"speak": "Piece",
+"category": "things",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_2353",
+"word": "pill",
+"speak": "Pill",
+"category": "health",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2359",
+"word": "plain",
+"speak": "Plain",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2360",
+"word": "plan",
+"speak": "Plan",
+"category": "actions",
+"intent": "content",
+"freq": "62"
+},
+{
+"id": "card_2366",
+"word": "please ask yes no questions",
+"speak": "Please ask yes no questions",
+"category": "phrases",
+"intent": "social",
+"freq": "0"
+},
+{
+"id": "card_2367",
+"word": "please rub my",
+"speak": "Please rub my",
+"category": "phrases",
+"intent": "social",
+"freq": "0"
+},
+{
+"id": "card_2368",
+"word": "please say that again",
+"speak": "Please say that again",
+"category": "phrases",
+"intent": "social",
+"freq": "0"
+},
+{
+"id": "card_2374",
+"word": "pms",
+"speak": "Pms",
+"category": "describing",
+"intent": "content",
+"freq": "29"
+},
+{
+"id": "card_2384",
+"word": "poor",
+"speak": "Poor",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2385",
+"word": "pop",
+"speak": "Pop",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2388",
+"word": "popular",
+"speak": "Popular",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2392",
+"word": "positive",
+"speak": "Positive",
+"category": "describing",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2393",
+"word": "possible",
+"speak": "Possible",
+"category": "describing",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2396",
+"word": "pound",
+"speak": "Pound",
+"category": "quantity",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2397",
+"word": "powder",
+"speak": "Powder",
+"category": "things",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2399",
+"word": "power",
+"speak": "Power",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2400",
+"word": "power wheelchair",
+"speak": "Power wheelchair",
+"category": "health",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2401",
+"word": "powerful",
+"speak": "Powerful",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2405",
+"word": "prefer",
+"speak": "Prefer",
+"category": "actions",
+"intent": "content",
+"freq": "37"
+},
+{
+"id": "card_2406",
+"word": "pregnant",
+"speak": "Pregnant",
+"category": "describing",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2407",
+"word": "prepare",
+"speak": "Prepare",
+"category": "actions",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2408",
+"word": "prescription",
+"speak": "Prescription",
+"category": "ideas",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2410",
+"word": "president's day",
+"speak": "President's day",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2414",
+"word": "price",
+"speak": "Price",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2420",
+"word": "problem",
+"speak": "Problem",
+"category": "describing",
+"intent": "content",
+"freq": "63"
+},
+{
+"id": "card_2424",
+"word": "promise",
+"speak": "Promise",
+"category": "actions",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_2425",
+"word": "propose",
+"speak": "Propose",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2426",
+"word": "protect",
+"speak": "Protect",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2427",
+"word": "prove",
+"speak": "Prove",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2431",
+"word": "public",
+"speak": "Public",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2433",
+"word": "pull",
+"speak": "Pull",
+"category": "actions",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2434",
+"word": "punch",
+"speak": "Punch",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2436",
+"word": "pus",
+"speak": "Pus",
+"category": "time",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2437",
+"word": "put on",
+"speak": "Put on",
+"category": "actions",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_2443",
+"word": "question",
+"speak": "Question",
+"category": "ideas",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_2444",
+"word": "quickly",
+"speak": "Quickly",
+"category": "describing",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_2445",
+"word": "quit",
+"speak": "Quit",
+"category": "actions",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_2446",
+"word": "quite",
+"speak": "Quite",
+"category": "describing",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_2454",
+"word": "raise",
+"speak": "Raise",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2456",
+"word": "ramadan",
+"speak": "Ramadan",
+"category": "time",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2459",
+"word": "rate",
+"speak": "Rate",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2460",
+"word": "rather",
+"speak": "Rather",
+"category": "describing",
+"intent": "content",
+"freq": "21"
+},
+{
+"id": "card_2463",
+"word": "reach",
+"speak": "Reach",
+"category": "actions",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_2464",
+"word": "real",
+"speak": "Real",
+"category": "describing",
+"intent": "content",
+"freq": "20"
+},
+{
+"id": "card_2465",
+"word": "realize",
+"speak": "Realize",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2467",
+"word": "reason",
+"speak": "Reason",
+"category": "feelings",
+"intent": "feeling",
+"freq": "10"
+},
+{
+"id": "card_2468",
+"word": "rebellion",
+"speak": "Rebellion",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2469",
+"word": "receipt",
+"speak": "Receipt",
+"category": "activities",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2470",
+"word": "receive",
+"speak": "Receive",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2475",
+"word": "recognize",
+"speak": "Recognize",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2476",
+"word": "recommend",
+"speak": "Recommend",
+"category": "actions",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2477",
+"word": "reduce",
+"speak": "Reduce",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2481",
+"word": "refuse",
+"speak": "Refuse",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2485",
+"word": "relieve",
+"speak": "Relieve",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2486",
+"word": "remain",
+"speak": "Remain",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2487",
+"word": "remind",
+"speak": "Remind",
+"category": "actions",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2490",
+"word": "repeat",
+"speak": "Repeat",
+"category": "actions",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2491",
+"word": "replace",
+"speak": "Replace",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2492",
+"word": "reply",
+"speak": "Reply",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2493",
+"word": "report",
+"speak": "Report",
+"category": "actions",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2496",
+"word": "require",
+"speak": "Require",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2498",
+"word": "respond",
+"speak": "Respond",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2499",
+"word": "responsible",
+"speak": "Responsible",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2500",
+"word": "rest",
+"speak": "Rest",
+"category": "ideas",
+"intent": "content",
+"freq": "35"
+},
+{
+"id": "card_2502",
+"word": "resume",
+"speak": "Resume",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2503",
+"word": "return",
+"speak": "Return",
+"category": "actions",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2505",
+"word": "rich",
+"speak": "Rich",
+"category": "describing",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2509",
+"word": "risk",
+"speak": "Risk",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2510",
+"word": "river",
+"speak": "River",
+"category": "nature",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2515",
+"word": "rock",
+"speak": "Rock",
+"category": "nature",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_2518",
+"word": "roll",
+"speak": "Roll",
+"category": "actions",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2524",
+"word": "rough",
+"speak": "Rough",
+"category": "describing",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2526",
+"word": "routine",
+"speak": "Routine",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2528",
+"word": "rub",
+"speak": "Rub",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2529",
+"word": "rude",
+"speak": "Rude",
+"category": "describing",
+"intent": "content",
+"freq": "15"
+},
+{
+"id": "card_2532",
+"word": "sadness",
+"speak": "Sadness",
+"category": "feelings",
+"intent": "feeling",
+"freq": "0"
+},
+{
+"id": "card_2533",
+"word": "safe",
+"speak": "Safe",
+"category": "feelings",
+"intent": "feeling",
+"freq": "10"
+},
+{
+"id": "card_2535",
+"word": "saint patrick's day",
+"speak": "Saint patrick's day",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2541",
+"word": "sand",
+"speak": "Sand",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2548",
+"word": "saxophone",
+"speak": "Saxophone",
+"category": "music",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2555",
+"word": "scratch",
+"speak": "Scratch",
+"category": "actions",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_2556",
+"word": "scream",
+"speak": "Scream",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2560",
+"word": "sea",
+"speak": "Sea",
+"category": "nature",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2563",
+"word": "search",
+"speak": "Search",
+"category": "actions",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2565",
+"word": "seaweed",
+"speak": "Seaweed",
+"category": "animals",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2566",
+"word": "secret",
+"speak": "Secret",
+"category": "describing",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2567",
+"word": "seem",
+"speak": "Seem",
+"category": "actions",
+"intent": "content",
+"freq": "37"
+},
+{
+"id": "card_2568",
+"word": "self",
+"speak": "Self",
+"category": "ideas",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2569",
+"word": "sell",
+"speak": "Sell",
+"category": "actions",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2570",
+"word": "send",
+"speak": "Send",
+"category": "actions",
+"intent": "content",
+"freq": "22"
+},
+{
+"id": "card_2572",
+"word": "separate",
+"speak": "Separate",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2573",
+"word": "serious",
+"speak": "Serious",
+"category": "describing",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2574",
+"word": "seriously",
+"speak": "Seriously",
+"category": "describing",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2576",
+"word": "set",
+"speak": "Set",
+"category": "actions",
+"intent": "content",
+"freq": "21"
+},
+{
+"id": "card_2577",
+"word": "sex",
+"speak": "Sex",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2578",
+"word": "sexual",
+"speak": "Sexual",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2582",
+"word": "share",
+"speak": "Share",
+"category": "actions",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2589",
+"word": "shift",
+"speak": "Shift",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2592",
+"word": "shoot",
+"speak": "Shoot",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2595",
+"word": "shout",
+"speak": "Shout",
+"category": "actions",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2596",
+"word": "shovel",
+"speak": "Shovel",
+"category": "things",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2598",
+"word": "shut",
+"speak": "Shut",
+"category": "actions",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_2599",
+"word": "shut up",
+"speak": "Shut up",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2600",
+"word": "shy",
+"speak": "Shy",
+"category": "feelings",
+"intent": "feeling",
+"freq": "1"
+},
+{
+"id": "card_2603",
+"word": "sign",
+"speak": "Sign",
+"category": "actions",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_2605",
+"word": "simple",
+"speak": "Simple",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2608",
+"word": "single",
+"speak": "Single",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2609",
+"word": "size",
+"speak": "Size",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_2611",
+"word": "skip",
+"speak": "Skip",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2620",
+"word": "slip",
+"speak": "Slip",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2622",
+"word": "small",
+"speak": "Small",
+"category": "describing",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_2623",
+"word": "smell",
+"speak": "Smell",
+"category": "actions",
+"intent": "content",
+"freq": "16"
+},
+{
+"id": "card_2624",
+"word": "smile",
+"speak": "Smile",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2629",
+"word": "sneeze",
+"speak": "Sneeze",
+"category": "describing",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2630",
+"word": "snore",
+"speak": "Snore",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2642",
+"word": "solid",
+"speak": "Solid",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2643",
+"word": "solo",
+"speak": "Solo",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2644",
+"word": "solve",
+"speak": "Solve",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2646",
+"word": "somehow",
+"speak": "Somehow",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2652",
+"word": "song",
+"speak": "Song",
+"category": "ideas",
+"intent": "content",
+"freq": "21"
+},
+{
+"id": "card_2653",
+"word": "sore",
+"speak": "Sore",
+"category": "health",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_2654",
+"word": "sore throat",
+"speak": "Sore throat",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2655",
+"word": "sort",
+"speak": "Sort",
+"category": "ideas",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2656",
+"word": "soul",
+"speak": "Soul",
+"category": "things",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2657",
+"word": "sound",
+"speak": "Sound",
+"category": "describing",
+"intent": "content",
+"freq": "126"
+},
+{
+"id": "card_2658",
+"word": "sounds good",
+"speak": "Sounds good",
+"category": "describing",
+"intent": "content",
+"freq": "21"
+},
+{
+"id": "card_2665",
+"word": "spare",
+"speak": "Spare",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2669",
+"word": "special",
+"speak": "Special",
+"category": "describing",
+"intent": "content",
+"freq": "26"
+},
+{
+"id": "card_2670",
+"word": "specific",
+"speak": "Specific",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_2671",
+"word": "speed",
+"speak": "Speed",
+"category": "time",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2673",
+"word": "spend",
+"speak": "Spend",
+"category": "actions",
+"intent": "content",
+"freq": "18"
+},
+{
+"id": "card_2678",
+"word": "spill",
+"speak": "Spill",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2680",
+"word": "spirit",
+"speak": "Spirit",
+"category": "things",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2681",
+"word": "splash",
+"speak": "Splash",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2684",
+"word": "spray",
+"speak": "Spray",
+"category": "things",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2689",
+"word": "squeeze",
+"speak": "Squeeze",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2692",
+"word": "st",
+"speak": "St",
+"category": "things",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2695",
+"word": "stamp",
+"speak": "Stamp",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2696",
+"word": "start",
+"speak": "Start",
+"category": "actions",
+"intent": "content",
+"freq": "87"
+},
+{
+"id": "card_2699",
+"word": "stay",
+"speak": "Stay",
+"category": "actions",
+"intent": "content",
+"freq": "46"
+},
+{
+"id": "card_2701",
+"word": "steal",
+"speak": "Steal",
+"category": "actions",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_2703",
+"word": "step",
+"speak": "Step",
+"category": "activities",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_2706",
+"word": "sting",
+"speak": "Sting",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2709",
+"word": "stinky",
+"speak": "Stinky",
+"category": "describing",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2713",
+"word": "store",
+"speak": "Store",
+"category": "things",
+"intent": "content",
+"freq": "88"
+},
+{
+"id": "card_2716",
+"word": "story",
+"speak": "Story",
+"category": "ideas",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2719",
+"word": "strange",
+"speak": "Strange",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2722",
+"word": "stretch",
+"speak": "Stretch",
+"category": "actions",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2729",
+"word": "stupid",
+"speak": "Stupid",
+"category": "describing",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_2733",
+"word": "success",
+"speak": "Success",
+"category": "activities",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2734",
+"word": "such",
+"speak": "Such",
+"category": "describing",
+"intent": "content",
+"freq": "26"
+},
+{
+"id": "card_2735",
+"word": "suck",
+"speak": "Suck",
+"category": "actions",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_2737",
+"word": "suggest",
+"speak": "Suggest",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2744",
+"word": "super",
+"speak": "Super",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2745",
+"word": "support",
+"speak": "Support",
+"category": "actions",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_2746",
+"word": "suppose",
+"speak": "Suppose",
+"category": "actions",
+"intent": "content",
+"freq": "24"
+},
+{
+"id": "card_2748",
+"word": "surgery",
+"speak": "Surgery",
+"category": "ideas",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2749",
+"word": "surprise",
+"speak": "Surprise",
+"category": "feelings",
+"intent": "feeling",
+"freq": "23"
+},
+{
+"id": "card_2751",
+"word": "swear",
+"speak": "Swear",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2755",
+"word": "sweep",
+"speak": "Sweep",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2767",
+"word": "take off",
+"speak": "Take off",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2768",
+"word": "tambourine",
+"speak": "Tambourine",
+"category": "music",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2771",
+"word": "tape",
+"speak": "Tape",
+"category": "things",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2774",
+"word": "tasty",
+"speak": "Tasty",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2775",
+"word": "teach",
+"speak": "Teach",
+"category": "actions",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_2778",
+"word": "tear",
+"speak": "Tear",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2779",
+"word": "tease",
+"speak": "Tease",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2782",
+"word": "telescope",
+"speak": "Telescope",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2786",
+"word": "tent",
+"speak": "Tent",
+"category": "things",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2788",
+"word": "terrible",
+"speak": "Terrible",
+"category": "feelings",
+"intent": "feeling",
+"freq": "9"
+},
+{
+"id": "card_2795",
+"word": "thank",
+"speak": "Thank",
+"category": "actions",
+"intent": "social",
+"freq": "427"
+},
+{
+"id": "card_2796",
+"word": "thanks",
+"speak": "Thanks",
+"category": "ideas",
+"intent": "social",
+"freq": "427"
+},
+{
+"id": "card_2797",
+"word": "thanksgiving",
+"speak": "Thanksgiving",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2798",
+"word": "that's",
+"speak": "That's",
+"category": "things",
+"intent": "content",
+"freq": "244"
+},
+{
+"id": "card_2805",
+"word": "therapy",
+"speak": "Therapy",
+"category": "health",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2806",
+"word": "there's",
+"speak": "There's",
+"category": "things",
+"intent": "content",
+"freq": "41"
+},
+{
+"id": "card_2808",
+"word": "thing",
+"speak": "Thing",
+"category": "describing",
+"intent": "content",
+"freq": "115"
+},
+{
+"id": "card_2809",
+"word": "things",
+"speak": "Things",
+"category": "things",
+"intent": "content",
+"freq": "115"
+},
+{
+"id": "card_2810",
+"word": "this app is called coughdrop",
+"speak": "This app is called coughdrop",
+"category": "phrases",
+"intent": "statement",
+"freq": "0"
+},
+{
+"id": "card_2813",
+"word": "thread",
+"speak": "Thread",
+"category": "actions",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2814",
+"word": "throw",
+"speak": "Throw",
+"category": "actions",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_2817",
+"word": "ticket",
+"speak": "Ticket",
+"category": "ideas",
+"intent": "content",
+"freq": "21"
+},
+{
+"id": "card_2818",
+"word": "tight",
+"speak": "Tight",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2824",
+"word": "today is",
+"speak": "Today is",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2826",
+"word": "together",
+"speak": "Together",
+"category": "describing",
+"intent": "content",
+"freq": "33"
+},
+{
+"id": "card_2829",
+"word": "ton",
+"speak": "Ton",
+"category": "quantity",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2832",
+"word": "tool",
+"speak": "Tool",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2838",
+"word": "total",
+"speak": "Total",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2839",
+"word": "totally",
+"speak": "Totally",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_2840",
+"word": "touch",
+"speak": "Touch",
+"category": "actions",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_2841",
+"word": "tough",
+"speak": "Tough",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2847",
+"word": "trade",
+"speak": "Trade",
+"category": "activities",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2854",
+"word": "treatment",
+"speak": "Treatment",
+"category": "activities",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2855",
+"word": "trial",
+"speak": "Trial",
+"category": "activities",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2856",
+"word": "triassic",
+"speak": "Triassic",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2861",
+"word": "trombone",
+"speak": "Trombone",
+"category": "music",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2863",
+"word": "trouble",
+"speak": "Trouble",
+"category": "ideas",
+"intent": "content",
+"freq": "15"
+},
+{
+"id": "card_2866",
+"word": "true",
+"speak": "True",
+"category": "describing",
+"intent": "content",
+"freq": "18"
+},
+{
+"id": "card_2867",
+"word": "trumpet",
+"speak": "Trumpet",
+"category": "music",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2868",
+"word": "trunk",
+"speak": "Trunk",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2869",
+"word": "truth",
+"speak": "Truth",
+"category": "ideas",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2876",
+"word": "tylenol",
+"speak": "Tylenol",
+"category": "things",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2879",
+"word": "uh oh",
+"speak": "Uh oh",
+"category": "places",
+"intent": "content",
+"freq": "2"
+},
+{
+"id": "card_2880",
+"word": "um",
+"speak": "Um",
+"category": "things",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_2883",
+"word": "understand",
+"speak": "Understand",
+"category": "actions",
+"intent": "content",
+"freq": "26"
+},
+{
+"id": "card_2886",
+"word": "unfair",
+"speak": "Unfair",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2890",
+"word": "universe",
+"speak": "Universe",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2894",
+"word": "upset",
+"speak": "Upset",
+"category": "feelings",
+"intent": "feeling",
+"freq": "10"
+},
+{
+"id": "card_2896",
+"word": "urgent",
+"speak": "Urgent",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2898",
+"word": "use",
+"speak": "Use",
+"category": "actions",
+"intent": "content",
+"freq": "112"
+},
+{
+"id": "card_2899",
+"word": "usual",
+"speak": "Usual",
+"category": "describing",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_2900",
+"word": "usually",
+"speak": "Usually",
+"category": "describing",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_2901",
+"word": "vacation",
+"speak": "Vacation",
+"category": "time",
+"intent": "content",
+"freq": "18"
+},
+{
+"id": "card_2904",
+"word": "valentine's day",
+"speak": "Valentine's day",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2905",
+"word": "value",
+"speak": "Value",
+"category": "ideas",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2912",
+"word": "veteran's day",
+"speak": "Veteran's day",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2916",
+"word": "view",
+"speak": "View",
+"category": "ideas",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_2917",
+"word": "violin",
+"speak": "Violin",
+"category": "music",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2918",
+"word": "virus",
+"speak": "Virus",
+"category": "animals",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2919",
+"word": "visit",
+"speak": "Visit",
+"category": "actions",
+"intent": "content",
+"freq": "66"
+},
+{
+"id": "card_2921",
+"word": "voice",
+"speak": "Voice",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_2922",
+"word": "volcano",
+"speak": "Volcano",
+"category": "nature",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2924",
+"word": "volunteer",
+"speak": "Volunteer",
+"category": "actions",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2926",
+"word": "vote",
+"speak": "Vote",
+"category": "actions",
+"intent": "content",
+"freq": "25"
+},
+{
+"id": "card_2930",
+"word": "wake",
+"speak": "Wake",
+"category": "actions",
+"intent": "content",
+"freq": "17"
+},
+{
+"id": "card_2934",
+"word": "war",
+"speak": "War",
+"category": "activities",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2937",
+"word": "warn",
+"speak": "Warn",
+"category": "actions",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_2941",
+"word": "wave",
+"speak": "Wave",
+"category": "activities",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2942",
+"word": "way",
+"speak": "Way",
+"category": "describing",
+"intent": "content",
+"freq": "109"
+},
+{
+"id": "card_2943",
+"word": "ways",
+"speak": "Ways",
+"category": "things",
+"intent": "content",
+"freq": "109"
+},
+{
+"id": "card_2944",
+"word": "weak",
+"speak": "Weak",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2945",
+"word": "wear",
+"speak": "Wear",
+"category": "actions",
+"intent": "content",
+"freq": "43"
+},
+{
+"id": "card_2947",
+"word": "web",
+"speak": "Web",
+"category": "nature",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2949",
+"word": "wedding",
+"speak": "Wedding",
+"category": "activities",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_2953",
+"word": "weird",
+"speak": "Weird",
+"category": "describing",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_2954",
+"word": "welcome",
+"speak": "Welcome",
+"category": "actions",
+"intent": "content",
+"freq": "46"
+},
+{
+"id": "card_2955",
+"word": "well",
+"speak": "Well",
+"category": "describing",
+"intent": "content",
+"freq": "348"
+},
+{
+"id": "card_2957",
+"word": "went",
+"speak": "Went",
+"category": "actions",
+"intent": "content",
+"freq": "1034"
+},
+{
+"id": "card_2961",
+"word": "what are you doing",
+"speak": "What are you doing",
+"category": "phrases",
+"intent": "question",
+"freq": "12"
+},
+{
+"id": "card_2962",
+"word": "what do you like to do",
+"speak": "What do you like to do",
+"category": "phrases",
+"intent": "question",
+"freq": "1"
+},
+{
+"id": "card_2963",
+"word": "what kind of work do you do",
+"speak": "What kind of work do you do",
+"category": "phrases",
+"intent": "question",
+"freq": "0"
+},
+{
+"id": "card_2964",
+"word": "what time",
+"speak": "What time",
+"category": "phrases",
+"intent": "question",
+"freq": "109"
+},
+{
+"id": "card_2965",
+"word": "what will we do",
+"speak": "What will we do",
+"category": "phrases",
+"intent": "question",
+"freq": "0"
+},
+{
+"id": "card_2966",
+"word": "what's",
+"speak": "What's",
+"category": "things",
+"intent": "content",
+"freq": "97"
+},
+{
+"id": "card_2967",
+"word": "whatever",
+"speak": "Whatever",
+"category": "describing",
+"intent": "content",
+"freq": "13"
+},
+{
+"id": "card_2969",
+"word": "when is your birthday",
+"speak": "When is your birthday",
+"category": "phrases",
+"intent": "question",
+"freq": "2"
+},
+{
+"id": "card_2971",
+"word": "where do you go to school",
+"speak": "Where do you go to school",
+"category": "phrases",
+"intent": "question",
+"freq": "0"
+},
+{
+"id": "card_2972",
+"word": "where do you live",
+"speak": "Where do you live",
+"category": "phrases",
+"intent": "question",
+"freq": "4"
+},
+{
+"id": "card_2974",
+"word": "whip",
+"speak": "Whip",
+"category": "actions",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2975",
+"word": "whisper",
+"speak": "Whisper",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2976",
+"word": "whistle",
+"speak": "Whistle",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2979",
+"word": "whose",
+"speak": "Whose",
+"category": "questions",
+"intent": "question",
+"freq": "4"
+},
+{
+"id": "card_2980",
+"word": "wide",
+"speak": "Wide",
+"category": "describing",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_2983",
+"word": "wild",
+"speak": "Wild",
+"category": "describing",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_2984",
+"word": "wildfire",
+"speak": "Wildfire",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2989",
+"word": "wipe",
+"speak": "Wipe",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_2990",
+"word": "wish",
+"speak": "Wish",
+"category": "feelings",
+"intent": "feeling",
+"freq": "65"
+},
+{
+"id": "card_2994",
+"word": "wonder",
+"speak": "Wonder",
+"category": "actions",
+"intent": "content",
+"freq": "19"
+},
+{
+"id": "card_2995",
+"word": "wonderful",
+"speak": "Wonderful",
+"category": "describing",
+"intent": "content",
+"freq": "22"
+},
+{
+"id": "card_2999",
+"word": "woods",
+"speak": "Woods",
+"category": "things",
+"intent": "content",
+"freq": "1"
+},
+{
+"id": "card_3000",
+"word": "word",
+"speak": "Word",
+"category": "ideas",
+"intent": "content",
+"freq": "3"
+},
+{
+"id": "card_3005",
+"word": "worry",
+"speak": "Worry",
+"category": "actions",
+"intent": "content",
+"freq": "44"
+},
+{
+"id": "card_3006",
+"word": "worse",
+"speak": "Worse",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3007",
+"word": "worship",
+"speak": "Worship",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3008",
+"word": "worst",
+"speak": "Worst",
+"category": "describing",
+"intent": "content",
+"freq": "4"
+},
+{
+"id": "card_3009",
+"word": "worth",
+"speak": "Worth",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_3011",
+"word": "wow",
+"speak": "Wow",
+"category": "ideas",
+"intent": "backlog",
+"freq": "40"
+},
+{
+"id": "card_3013",
+"word": "wreath",
+"speak": "Wreath",
+"category": "things",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3017",
+"word": "write",
+"speak": "Write",
+"category": "actions",
+"intent": "content",
+"freq": "30"
+},
+{
+"id": "card_3021",
+"word": "yawn",
+"speak": "Yawn",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3022",
+"word": "yeah",
+"speak": "Yeah",
+"category": "describing",
+"intent": "affirm",
+"freq": "141"
+},
+{
+"id": "card_3025",
+"word": "yell",
+"speak": "Yell",
+"category": "actions",
+"intent": "content",
+"freq": "20"
+},
+{
+"id": "card_3028",
+"word": "yom kippur",
+"speak": "Yom kippur",
+"category": "time",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3029",
+"word": "you too",
+"speak": "You too",
+"category": "phrases",
+"intent": "statement",
+"freq": "14"
+},
+{
+"id": "card_3030",
+"word": "you're",
+"speak": "You're",
+"category": "things",
+"intent": "content",
+"freq": "171"
+},
+{
+"id": "card_3032",
+"word": "your turn",
+"speak": "Your turn",
+"category": "phrases",
+"intent": "statement",
+"freq": "5"
+},
+{
+"id": "card_3035",
+"word": "zap",
+"speak": "Zap",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3040",
+"word": "clear",
+"speak": "Clear",
+"category": "describing",
+"intent": "backlog",
+"freq": "9"
+},
+{
+"id": "card_3041",
+"word": "aid",
+"speak": "Aid",
+"category": "actions",
+"intent": "backlog",
+"freq": "8"
+},
+{
+"id": "card_3044",
+"word": "convey",
+"speak": "Convey",
+"category": "actions",
+"intent": "backlog",
+"freq": "6"
+},
+{
+"id": "card_3046",
+"word": "everyday",
+"speak": "Everyday",
+"category": "describing",
+"intent": "backlog",
+"freq": "8"
+},
+{
+"id": "card_3048",
+"word": "grab",
+"speak": "Grab",
+"category": "actions",
+"intent": "backlog",
+"freq": "40"
+},
+{
+"id": "card_3049",
+"word": "i use this to talk",
+"speak": "I use this to talk",
+"category": "phrases",
+"intent": "backlog",
+"freq": "1"
+},
+{
+"id": "card_3050",
+"word": "i'll type it",
+"speak": "I'll type it",
+"category": "phrases",
+"intent": "backlog",
+"freq": "0"
+},
+{
+"id": "card_3051",
+"word": "indeed",
+"speak": "Indeed",
+"category": "describing",
+"intent": "backlog",
+"freq": "12"
+},
+{
+"id": "card_3053",
+"word": "loudly",
+"speak": "Loudly",
+"category": "describing",
+"intent": "backlog",
+"freq": "6"
+},
+{
+"id": "card_3054",
+"word": "machine",
+"speak": "Machine",
+"category": "things",
+"intent": "backlog",
+"freq": "9"
+},
+{
+"id": "card_3055",
+"word": "market",
+"speak": "Market",
+"category": "activities",
+"intent": "backlog",
+"freq": "6"
+},
+{
+"id": "card_3056",
+"word": "medication",
+"speak": "Medication",
+"category": "health",
+"intent": "backlog",
+"freq": "22"
+},
+{
+"id": "card_3058",
+"word": "my talker",
+"speak": "My talker",
+"category": "phrases",
+"intent": "backlog",
+"freq": "0"
+},
+{
+"id": "card_3060",
+"word": "sleepy",
+"speak": "Sleepy",
+"category": "feelings",
+"intent": "backlog",
+"freq": "12"
+},
+{
+"id": "card_3061",
+"word": "speak",
+"speak": "Speak",
+"category": "actions",
+"intent": "backlog",
+"freq": "50"
+},
+{
+"id": "card_3063",
+"word": "thankful",
+"speak": "Thankful",
+"category": "describing",
+"intent": "backlog",
+"freq": "6"
+},
+{
+"id": "card_3065",
+"word": "trust",
+"speak": "Trust",
+"category": "actions",
+"intent": "backlog",
+"freq": "16"
+},
+{
+"id": "card_3067",
+"word": "wait for me to finish",
+"speak": "Wait for me to finish",
+"category": "actions",
+"intent": "backlog",
+"freq": "0"
+},
+{
+"id": "card_3069",
+"word": "absolutely",
+"speak": "Absolutely",
+"category": "describing",
+"intent": "backlog",
+"freq": "11"
+},
+{
+"id": "card_3070",
+"word": "advice",
+"speak": "Advice",
+"category": "ideas",
+"intent": "backlog",
+"freq": "5"
+},
+{
+"id": "card_3071",
+"word": "comedy",
+"speak": "Comedy",
+"category": "ideas",
+"intent": "backlog",
+"freq": "3"
+},
+{
+"id": "card_3073",
+"word": "culture",
+"speak": "Culture",
+"category": "people",
+"intent": "backlog",
+"freq": "2"
+},
+{
+"id": "card_3075",
+"word": "doctor's",
+"speak": "Doctor's",
+"category": "things",
+"intent": "backlog",
+"freq": "8"
+},
+{
+"id": "card_3076",
+"word": "energy",
+"speak": "Energy",
+"category": "weather",
+"intent": "backlog",
+"freq": "2"
+},
+{
+"id": "card_3077",
+"word": "experience",
+"speak": "Experience",
+"category": "ideas",
+"intent": "backlog",
+"freq": "3"
+},
+{
+"id": "card_3079",
+"word": "festival",
+"speak": "Festival",
+"category": "time",
+"intent": "backlog",
+"freq": "2"
+},
+{
+"id": "card_3080",
+"word": "haha",
+"speak": "Haha",
+"category": "things",
+"intent": "backlog",
+"freq": "12"
+},
+{
+"id": "card_3082",
+"word": "hmm",
+"speak": "Hmm",
+"category": "things",
+"intent": "backlog",
+"freq": "2"
+},
+{
+"id": "card_3083",
+"word": "hopefully",
+"speak": "Hopefully",
+"category": "describing",
+"intent": "backlog",
+"freq": "15"
+},
+{
+"id": "card_3085",
+"word": "massage",
+"speak": "Massage",
+"category": "actions",
+"intent": "backlog",
+"freq": "5"
+},
+{
+"id": "card_3086",
+"word": "noise",
+"speak": "Noise",
+"category": "activities",
+"intent": "backlog",
+"freq": "8"
+},
+{
+"id": "card_3087",
+"word": "oh",
+"speak": "Oh",
+"category": "places",
+"intent": "backlog",
+"freq": "197"
+},
+{
+"id": "card_3089",
+"word": "sale",
+"speak": "Sale",
+"category": "activities",
+"intent": "backlog",
+"freq": "14"
+},
+{
+"id": "card_3091",
+"word": "tradition",
+"speak": "Tradition",
+"category": "ideas",
+"intent": "backlog",
+"freq": "0"
+},
+{
+"id": "card_3092",
+"word": "unfortunately",
+"speak": "Unfortunately",
+"category": "describing",
+"intent": "backlog",
+"freq": "8"
+},
+{
+"id": "card_3093",
+"word": "yum",
+"speak": "Yum",
+"category": "things",
+"intent": "backlog",
+"freq": "1"
+},
+{
+"id": "card_3095",
+"word": "quick",
+"speak": "Quick",
+"category": "describing",
+"intent": "content",
+"freq": "26"
+},
+{
+"id": "card_3096",
+"word": "space",
+"speak": "Space",
+"category": "things",
+"intent": "content",
+"freq": "24"
+},
+{
+"id": "card_3097",
+"word": "drama",
+"speak": "Drama",
+"category": "activities",
+"intent": "content",
+"freq": "19"
+},
+{
+"id": "card_3099",
+"word": "mood",
+"speak": "Mood",
+"category": "feelings",
+"intent": "feeling",
+"freq": "17"
+},
+{
+"id": "card_3104",
+"word": "yummy",
+"speak": "Yummy",
+"category": "describing",
+"intent": "content",
+"freq": "15"
+},
+{
+"id": "card_3108",
+"word": "slowly",
+"speak": "Slowly",
+"category": "describing",
+"intent": "content",
+"freq": "14"
+},
+{
+"id": "card_3109",
+"word": "laughter",
+"speak": "Laughter",
+"category": "feelings",
+"intent": "feeling",
+"freq": "14"
+},
+{
+"id": "card_3112",
+"word": "stress",
+"speak": "Stress",
+"category": "feelings",
+"intent": "feeling",
+"freq": "12"
+},
+{
+"id": "card_3114",
+"word": "memories",
+"speak": "Memories",
+"category": "ideas",
+"intent": "content",
+"freq": "12"
+},
+{
+"id": "card_3116",
+"word": "comfort",
+"speak": "Comfort",
+"category": "feelings",
+"intent": "feeling",
+"freq": "12"
+},
+{
+"id": "card_3120",
+"word": "cozy",
+"speak": "Cozy",
+"category": "describing",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_3121",
+"word": "adventure",
+"speak": "Adventure",
+"category": "activities",
+"intent": "content",
+"freq": "11"
+},
+{
+"id": "card_3123",
+"word": "magic",
+"speak": "Magic",
+"category": "ideas",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_3124",
+"word": "peaceful",
+"speak": "Peaceful",
+"category": "feelings",
+"intent": "feeling",
+"freq": "10"
+},
+{
+"id": "card_3125",
+"word": "lively",
+"speak": "Lively",
+"category": "describing",
+"intent": "content",
+"freq": "10"
+},
+{
+"id": "card_3126",
+"word": "excitement",
+"speak": "Excitement",
+"category": "feelings",
+"intent": "feeling",
+"freq": "10"
+},
+{
+"id": "card_3129",
+"word": "luck",
+"speak": "Luck",
+"category": "ideas",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_3130",
+"word": "film",
+"speak": "Film",
+"category": "activities",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_3131",
+"word": "comfy",
+"speak": "Comfy",
+"category": "describing",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_3132",
+"word": "acting",
+"speak": "Acting",
+"category": "activities",
+"intent": "content",
+"freq": "9"
+},
+{
+"id": "card_3133",
+"word": "restless",
+"speak": "Restless",
+"category": "feelings",
+"intent": "feeling",
+"freq": "8"
+},
+{
+"id": "card_3134",
+"word": "mystery",
+"speak": "Mystery",
+"category": "ideas",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_3136",
+"word": "horrible",
+"speak": "Horrible",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_3137",
+"word": "harsh",
+"speak": "Harsh",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_3138",
+"word": "gentle",
+"speak": "Gentle",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_3139",
+"word": "dial",
+"speak": "Dial",
+"category": "actions",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_3140",
+"word": "celebration",
+"speak": "Celebration",
+"category": "activities",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_3141",
+"word": "carnival",
+"speak": "Carnival",
+"category": "activities",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_3143",
+"word": "blast",
+"speak": "Blast",
+"category": "describing",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_3144",
+"word": "band",
+"speak": "Band",
+"category": "music",
+"intent": "content",
+"freq": "8"
+},
+{
+"id": "card_3148",
+"word": "rush",
+"speak": "Rush",
+"category": "actions",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_3149",
+"word": "refreshing",
+"speak": "Refreshing",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_3152",
+"word": "kindness",
+"speak": "Kindness",
+"category": "feelings",
+"intent": "feeling",
+"freq": "7"
+},
+{
+"id": "card_3153",
+"word": "intense",
+"speak": "Intense",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_3154",
+"word": "hopeful",
+"speak": "Hopeful",
+"category": "feelings",
+"intent": "feeling",
+"freq": "7"
+},
+{
+"id": "card_3155",
+"word": "honestly",
+"speak": "Honestly",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_3157",
+"word": "friendship",
+"speak": "Friendship",
+"category": "ideas",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_3158",
+"word": "fascinating",
+"speak": "Fascinating",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_3159",
+"word": "enjoyable",
+"speak": "Enjoyable",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_3160",
+"word": "confusing",
+"speak": "Confusing",
+"category": "describing",
+"intent": "content",
+"freq": "7"
+},
+{
+"id": "card_3161",
+"word": "awkward",
+"speak": "Awkward",
+"category": "feelings",
+"intent": "feeling",
+"freq": "7"
+},
+{
+"id": "card_3162",
+"word": "tunes",
+"speak": "Tunes",
+"category": "music",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3164",
+"word": "thrilling",
+"speak": "Thrilling",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3165",
+"word": "tap",
+"speak": "Tap",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3169",
+"word": "playlist",
+"speak": "Playlist",
+"category": "music",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3171",
+"word": "horror",
+"speak": "Horror",
+"category": "activities",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3172",
+"word": "hobby",
+"speak": "Hobby",
+"category": "activities",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3175",
+"word": "fluffy",
+"speak": "Fluffy",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3177",
+"word": "fake",
+"speak": "Fake",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3180",
+"word": "delivery",
+"speak": "Delivery",
+"category": "things",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3181",
+"word": "decoration",
+"speak": "Decoration",
+"category": "things",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3184",
+"word": "cheer",
+"speak": "Cheer",
+"category": "actions",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3187",
+"word": "badly",
+"speak": "Badly",
+"category": "describing",
+"intent": "content",
+"freq": "6"
+},
+{
+"id": "card_3190",
+"word": "treasure",
+"speak": "Treasure",
+"category": "things",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3192",
+"word": "talent",
+"speak": "Talent",
+"category": "ideas",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3195",
+"word": "stressed",
+"speak": "Stressed",
+"category": "feelings",
+"intent": "feeling",
+"freq": "5"
+},
+{
+"id": "card_3196",
+"word": "stinks",
+"speak": "Stinks",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3197",
+"word": "reggae",
+"speak": "Reggae",
+"category": "music",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3198",
+"word": "recover",
+"speak": "Recover",
+"category": "health",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3199",
+"word": "mistake",
+"speak": "Mistake",
+"category": "ideas",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3200",
+"word": "mild",
+"speak": "Mild",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3203",
+"word": "jazz",
+"speak": "Jazz",
+"category": "music",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3206",
+"word": "favor",
+"speak": "Favor",
+"category": "ideas",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3208",
+"word": "errands",
+"speak": "Errands",
+"category": "activities",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3209",
+"word": "episode",
+"speak": "Episode",
+"category": "activities",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3211",
+"word": "clever",
+"speak": "Clever",
+"category": "describing",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3216",
+"word": "aisle",
+"speak": "Aisle",
+"category": "places",
+"intent": "content",
+"freq": "5"
+},
+{
+"id": "card_3220",
+"word": "dust",
+"speak": "Dust",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3221",
+"word": "escape",
+"speak": "Escape",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3222",
+"word": "trim",
+"speak": "Trim",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3228",
+"word": "sew",
+"speak": "Sew",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3229",
+"word": "parade",
+"speak": "Parade",
+"category": "activities",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3232",
+"word": "flip",
+"speak": "Flip",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3233",
+"word": "fasten",
+"speak": "Fasten",
+"category": "actions",
+"intent": "content",
+"freq": "0"
+},
+{
+"id": "card_3237",
+"word": "fuzzy",
+"speak": "Fuzzy",
+"category": "describing",
+"intent": "content",
+"freq": "0"
+}
+]

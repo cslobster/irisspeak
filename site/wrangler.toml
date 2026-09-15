@@ -1,0 +1,7 @@
+name = "irisspeak-research"
+pages_build_output_dir = "public"
+compatibility_date = "2025-06-01"
+
+[vars]
+RESEARCH_USER = "research"
+RESEARCH_PASS = "paper"

@@ -1,0 +1,52 @@
+{
+ "systems": [
+  {
+   "name": "S1 frequency (bigram + unigram counts)",
+   "r1_general": 0.268,
+   "r16_general": 0.5986666666666667,
+   "r1_qa": null,
+   "r16_qa": null,
+   "notes": "3,000 general states; earlier state build"
+  },
+  {
+   "name": "S2 MiniLM similarity + S1",
+   "r1_general": 0.2813333333333333,
+   "r16_general": 0.6106666666666667,
+   "r1_qa": null,
+   "r16_qa": null,
+   "notes": "zero-shot encoder, no training"
+  },
+  {
+   "name": "v1 Gemini-2.5-Flash prototype (cloud LLM per grid)",
+   "r1_general": null,
+   "r16_general": null,
+   "r1_qa": null,
+   "r16_qa": 0.33,
+   "notes": "acceptable card on the full grid at step 0, 6-utterance question-answer sample, its prompt run on gpt-5.6-luna"
+  },
+  {
+   "name": "IrisSpeak-135M, model alone",
+   "r1_general": 0.284,
+   "r16_general": 0.541,
+   "r1_qa": 0.306,
+   "r16_qa": 0.622,
+   "notes": "1,500 general + 1,500 question-answer states",
+   "pick": false
+  },
+  {
+   "name": "IrisSpeak-135M, model + reranker",
+   "r1_general": 0.349,
+   "r16_general": 0.645,
+   "r1_qa": 0.377,
+   "r16_qa": 0.701,
+   "notes": "1,500 general + 1,500 question-answer states",
+   "pick": true
+  }
+ ],
+ "headline": {
+  "qa_r16_rerank": 0.701
+ },
+ "v2_status": "final: 2 weighted epochs, 4,356 steps, 125 min; this is the model in the live demo",
+ "v2_final": "test R@1 0.292 / R@16 0.550 / R@100 0.775, question-answer R@16 0.599 / R@100 0.800, end precision 0.43 (model alone, trainer evaluation on 2,000 states each); with the reranker on 1,500 states: R@16 0.645 general, 0.701 question-answer",
+ "parity": "Final IrisSpeak-135M export: fp32 ONNX matches PyTorch exactly (top-100 overlap 1.000); fp16 keeps overlap 0.999 and top-1 agreement 1.000 at 274 MB; dynamic int8 drops to 0.56 and 4-bit block-wise to 0.82, so fp16 is what the demo serves."
+}

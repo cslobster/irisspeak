@@ -1,0 +1,29 @@
+/*
+  Cache-Control: public, max-age=3600
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: credentialless
+/
+  ! Cache-Control
+  Cache-Control: no-cache
+/index.html
+  ! Cache-Control
+  Cache-Control: no-cache
+/model/*.json
+  ! Cache-Control
+  Cache-Control: public, max-age=300
+/paper/*
+  ! Cache-Control
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow
+/model/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+/symbols/*
+  ! Cache-Control
+  Cache-Control: public, max-age=604800
+/ort/*
+  ! Cache-Control
+  Cache-Control: public, max-age=604800

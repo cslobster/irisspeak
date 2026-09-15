@@ -1,0 +1,17 @@
+/app / 301
+/app/ / 301
+/research /paper/ 301
+/demo /paper/ 301
+/demo.html /paper/ 301
+/plan /paper/architecture 301
+/plan.html /paper/architecture.html 301
+/overview /paper/overview 301
+/overview.html /paper/overview.html 301
+/architecture /paper/architecture 301
+/architecture.html /paper/architecture.html 301
+/data.html /paper/data.html 301
+/training /paper/training 301
+/training.html /paper/training.html 301
+/benchmark /paper/benchmark 301
+/benchmark.html /paper/benchmark.html 301
+/model.html /paper/model.html 301

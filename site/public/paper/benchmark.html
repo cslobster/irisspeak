@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GB4F42F02M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GB4F42F02M');
+</script>
+<title>Benchmarks · IrisSpeak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/paper/style.css"><meta name="robots" content="noindex,nofollow"></head>
+<body>
+<header class="top"><div class="in"><a class="brand" href="/paper/">IrisSpeak</a><a class="brand" href="/paper/" style="margin-left:-12px"><span>Live demo</span></a>
+<nav><a href="/paper/overview.html">Overview</a><a href="/paper/architecture.html">Architecture</a><a href="/paper/data.html">Data</a><a href="/paper/training.html">Training</a><a class="on" href="/paper/benchmark.html">Benchmarks</a><a href="/paper/model.html">Model</a><a href="/paper/howitworks.html">How it works</a><a href="/paper/competition.html">Competition</a></nav></div></header>
+<main class="narrow">
+<span class="eyebrow">Benchmarks</span>
+<h1>How the systems compare</h1>
+<p class="lede">All systems are scored on the same held-out states with the same metric: is an acceptable next card in the top k? Two test sets: the general held-out set from the three corpora, and the question-answer subset where the partner asked a question and an AAC user replied in at most 5 cards.</p>
+<h2>Next-card ranking</h2>
+<figure><img src="/paper/img/bench_recall16.png" alt="Recall@16 by system on the general and question-answer test sets"><figcaption>Recall@16 per system. Baselines were scored on 3,000 general states; the fine-tuned systems on 1,500 general and 1,500 question-answer states.</figcaption></figure>
+<div class="tablewrap"><table id="benchtable">
+<tr><th>system</th><th class="num">R@1 general</th><th class="num">R@16 general</th><th class="num">R@1 Q&amp;A</th><th class="num">R@16 Q&amp;A</th><th>notes</th></tr>
+</table></div>
+<h2>v1 Gemini-2.5-Flash prototype versus v2 IrisSpeak-135M</h2>
+<p>The Gemini 2.5 Flash prototype asks a cloud model, once per parent message, for 12 topic nouns and 12 action verbs chosen from the full vocabulary pasted into the prompt, and shows the first four of each with fixed core and feeling cards. For this measurement its prompt was run with gpt-5.6-luna on the same vocabulary and the same question-answer states as IrisSpeak-135M plus the reranker. Six utterances, two steps each, so a sketch rather than a measurement.</p>
+<div class="tablewrap"><table>
+<tr><th>metric</th><th class="num">v1: Gemini-2.5-Flash prototype</th><th class="num">v2: IrisSpeak-135M + reranker</th></tr>
+<tr><td>step 0: acceptable card on the full grid</td><td class="num">0.33</td><td class="num">0.83</td></tr>
+<tr><td>step 0: on dynamic cells only</td><td class="num">0.17</td><td class="num">0.67</td></tr>
+<tr><td>step 1: acceptable card on the full grid</td><td class="num">0.17</td><td class="num">0.50</td></tr>
+<tr><td>latency per grid, median</td><td class="num">1.90 s</td><td class="num">113 ms</td></tr>
+<tr><td>tokens per grid</td><td class="num">5,380</td><td class="num">0</td></tr>
+</table></div>
+<p>Reading the examples: the LLM's picks are on the question's theme ("slice, two, one, pizza" for "one slice or two?") but often not the reply ("choice, decision, answer" for "did you pick the best option?", where the reply was "not sure"). The fine-tuned model has learned how people reply; the theme-locked prompt learns what the question is about.</p>
+<h2>Zero-shot use of the same small model</h2>
+<p>Before fine-tuning, SmolLM2-135M was tried as a scorer and as a generator. As a scorer with an instruction prompt it ranked the same generic phrases for every question and the true card sat in the thousands. As a few-shot dialogue generator it produced plausible AAC-style replies about half the time on question-answer states, but greedy decoding copied the examples and the outputs had to be mapped to cards. Neither approach beat counting; the pretrained model's value is realised by fine-tuning with card rows.</p>
+<h2>What each number means</h2>
+<ul>
+<li><strong>Recall@1</strong>: the top prediction is acceptable. What the user sees first.</li>
+<li><strong>Recall@16</strong>: an acceptable card is on a 16-cell grid. The number that decides whether the user taps or searches.</li>
+<li><strong>Recall@100</strong>: the reranker's pool contains an acceptable card; the ceiling for anything downstream.</li>
+<li><strong>NDCG@16</strong>: ranking quality with graded labels (reference card 3, other acceptable 2).</li>
+</ul>
+<div class="callout">Not yet measured: taps per utterance with a simulated user, cards moved per step, the cloud planner's contribution, and any human session. Those are in the experiment plan.</div>
+</main>
+<footer>IrisSpeak: Context-Aware AAC</footer>
+<script>
+fetch('/paper/results.json').then(r=>r.json()).then(j=>{
+  const t=document.getElementById('benchtable');
+  for(const r of j.systems){const tr=t.insertRow(); tr.insertCell().textContent=r.name;
+    for(const k of ['r1_general','r16_general','r1_qa','r16_qa']){const c=tr.insertCell(); c.className='num'; c.textContent=(r[k]==null?'–':r[k].toFixed(3));}
+    tr.insertCell().textContent=r.notes||''; if(r.pick) tr.className='pick';}
+}).catch(()=>{});
+</script>
+</body></html>

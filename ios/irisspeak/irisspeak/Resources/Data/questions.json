@@ -1,0 +1,213 @@
+{
+ "note": "Top 6 partner questions per place, ranked by how often each was actually asked in the AAC training material (AAC Conversations dataset + aactext.org Turk AAC dialogues, ~26,000 turns). Counts are real occurrences. Where a place had too few tagged examples of its own, the remaining slots came from the corpus's most frequent questions overall -- see docs/QUESTION-BANK.md.",
+ "settings": {
+  "home": [
+   {
+    "q": "How was your day?",
+    "n": 48
+   },
+   {
+    "q": "What's on your mind?",
+    "n": 33
+   },
+   {
+    "q": "How are you feeling today?",
+    "n": 31
+   },
+   {
+    "q": "How did you sleep?",
+    "n": 31
+   },
+   {
+    "q": "What happened?",
+    "n": 29
+   },
+   {
+    "q": "What do you want to eat?",
+    "n": 22
+   }
+  ],
+  "school": [
+   {
+    "q": "How's it going today?",
+    "n": 1
+   },
+   {
+    "q": "What did you learn?",
+    "n": 9
+   },
+   {
+    "q": "What do you need help with?",
+    "n": 19
+   },
+   {
+    "q": "What did you do?",
+    "n": 13
+   },
+   {
+    "q": "Ready for the day?",
+    "n": 12
+   },
+   {
+    "q": "Anything else?",
+    "n": 62
+   }
+  ],
+  "restaurant": [
+   {
+    "q": "What do you want to eat?",
+    "n": 24
+   },
+   {
+    "q": "Anything to drink?",
+    "n": 2
+   },
+   {
+    "q": "Any favorites?",
+    "n": 23
+   },
+   {
+    "q": "Anything else?",
+    "n": 62
+   },
+   {
+    "q": "What do you like most?",
+    "n": 10
+   },
+   {
+    "q": "What kind?",
+    "n": 14
+   }
+  ],
+  "doctor": [
+   {
+    "q": "How are you feeling today?",
+    "n": 40
+   },
+   {
+    "q": "What do you need?",
+    "n": 24
+   },
+   {
+    "q": "Anything else?",
+    "n": 62
+   },
+   {
+    "q": "How do you feel about that?",
+    "n": 9
+   },
+   {
+    "q": "Want me to come with you?",
+    "n": 2
+   },
+   {
+    "q": "Are you ready for our session?",
+    "n": 1
+   }
+  ],
+  "play": [
+   {
+    "q": "What do you want to do?",
+    "n": 8
+   },
+   {
+    "q": "Did you enjoy it?",
+    "n": 9
+   },
+   {
+    "q": "Any plans for today?",
+    "n": 22
+   },
+   {
+    "q": "What do you like most about it?",
+    "n": 13
+   },
+   {
+    "q": "Ready for today?",
+    "n": 8
+   },
+   {
+    "q": "Do you need help?",
+    "n": 1
+   }
+  ],
+  "transport": [
+   {
+    "q": "Where are you going?",
+    "n": 7
+   },
+   {
+    "q": "Are you sure?",
+    "n": 14
+   },
+   {
+    "q": "What time is it?",
+    "n": 8
+   },
+   {
+    "q": "How long will that take?",
+    "n": 2
+   },
+   {
+    "q": "What did you do?",
+    "n": 13
+   },
+   {
+    "q": "Are you okay?",
+    "n": 1
+   }
+  ],
+  "selfcare": [
+   {
+    "q": "Ready for sleep?",
+    "n": 1
+   },
+   {
+    "q": "Want a story before bed?",
+    "n": 1
+   },
+   {
+    "q": "Do you want a blanket?",
+    "n": 1
+   },
+   {
+    "q": "Any dreams?",
+    "n": 1
+   },
+   {
+    "q": "How was your day?",
+    "n": 70
+   },
+   {
+    "q": "Got a favorite?",
+    "n": 1
+   }
+  ],
+  "unknown": [
+   {
+    "q": "What happened?",
+    "n": 8
+   },
+   {
+    "q": "How are you feeling today?",
+    "n": 6
+   },
+   {
+    "q": "What do you mean by that?",
+    "n": 5
+   },
+   {
+    "q": "Any favorites?",
+    "n": 5
+   },
+   {
+    "q": "What do you need?",
+    "n": 4
+   },
+   {
+    "q": "How's it going?",
+    "n": 4
+   }
+  ]
+ }
+}

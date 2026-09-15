@@ -1,0 +1,375 @@
+<title>Next-Card AAC Proposal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F6F7F5; --surface:#FFFFFF; --ink:#1A212B; --ink-2:#3E4956; --muted:#5C6875;
+  --line:#D9DED9; --line-soft:#E8ECE8;
+  --accent:#0E6B72; --accent-ink:#0B565C; --accent-soft:#E1EFEF;
+  --warn:#A8681A; --warn-soft:#F6EBD9;
+  --code-bg:#EEF1EE;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12171C; --surface:#181E24; --ink:#E4E9EC; --ink-2:#C2CAD1; --muted:#8E9AA5;
+    --line:#2C353E; --line-soft:#232B33;
+    --accent:#57BFC4; --accent-ink:#7FD0D4; --accent-soft:#16333A;
+    --warn:#D9A05B; --warn-soft:#332A1B; --code-bg:#1F272E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12171C; --surface:#181E24; --ink:#E4E9EC; --ink-2:#C2CAD1; --muted:#8E9AA5;
+  --line:#2C353E; --line-soft:#232B33;
+  --accent:#57BFC4; --accent-ink:#7FD0D4; --accent-soft:#16333A;
+  --warn:#D9A05B; --warn-soft:#332A1B; --code-bg:#1F272E;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:16.5px;line-height:1.6}
+main{max-width:74ch;margin:0 auto;padding:56px 24px 96px}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2.2rem;font-weight:700;letter-spacing:-0.01em}
+h2{font-size:1.4rem;font-weight:600;margin-top:64px;padding-top:20px;border-top:2px solid var(--ink)}
+h3{font-size:1.05rem;font-weight:600;margin-top:30px}
+p{margin:14px 0}
+.eyebrow{font-family:var(--sans);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.lede{font-size:1.12rem;color:var(--ink-2);margin-top:12px}
+.meta{font-family:var(--sans);font-size:.85rem;color:var(--muted);margin-top:18px;display:flex;gap:18px;flex-wrap:wrap}
+nav.toc{font-family:var(--sans);font-size:.88rem;margin:28px 0 0;padding:14px 18px;background:var(--surface);border:1px solid var(--line);border-radius:4px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px 18px}
+nav.toc a{color:var(--accent-ink);text-decoration:none}
+nav.toc a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:.86em;background:var(--code-bg);padding:1px 5px;border-radius:3px}
+pre{font-family:var(--mono);font-size:.8rem;line-height:1.5;background:var(--code-bg);padding:14px 16px;border-radius:4px;overflow-x:auto;margin:16px 0}
+pre code{background:none;padding:0}
+ul,ol{padding-left:22px;margin:12px 0}
+li{margin:6px 0}
+li::marker{color:var(--muted)}
+strong{font-weight:600}
+a{color:var(--accent)}
+.tablewrap{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:.88rem;line-height:1.45}
+th{text-align:left;font-weight:600;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px 8px 0;border-bottom:1px solid var(--ink)}
+td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line-soft);vertical-align:top}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td:last-child,th:last-child{padding-right:0}
+tr.pick td{background:var(--accent-soft)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:12px 14px}
+.kpi .v{font-family:var(--sans);font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent-ink)}
+.kpi .l{font-family:var(--sans);font-size:.78rem;color:var(--muted);margin-top:2px}
+.pipe{display:flex;flex-direction:column;margin:22px 0;font-family:var(--sans);font-size:.88rem}
+.pipe .node{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:10px 14px;display:flex;justify-content:space-between;gap:16px;align-items:baseline}
+.pipe .node.hot{border-color:var(--accent);background:var(--accent-soft)}
+.pipe .node .lbl{font-weight:600}
+.pipe .node .note{color:var(--muted);font-size:.8rem;text-align:right}
+.pipe .arrow{height:18px;width:2px;background:var(--line);margin-left:24px;position:relative}
+.pipe .arrow::after{content:"";position:absolute;left:-4px;bottom:-1px;border:5px solid transparent;border-top:6px solid var(--line);border-bottom:0}
+.callout{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:4px;padding:14px 18px;margin:20px 0;font-family:var(--sans);font-size:.92rem}
+.callout.measured{border-left-color:var(--warn)}
+.callout .eyebrow{display:block;margin-bottom:6px}
+.callout.measured .eyebrow{color:var(--warn)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0;font-family:var(--sans);font-size:.8rem}
+.grid .cell{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:8px 6px;text-align:center;min-height:44px;display:flex;align-items:center;justify-content:center}
+.grid .cell.core{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
+.grid .cell.boost{border-color:var(--warn);background:var(--warn-soft)}
+.legend{font-family:var(--sans);font-size:.78rem;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;border:1px solid var(--line);background:var(--surface)}
+.legend span.core::before{background:var(--accent-soft);border-color:var(--accent)}
+.legend span.boost::before{background:var(--warn-soft);border-color:var(--warn)}
+.foot{margin-top:48px;color:var(--muted);font-family:var(--sans);font-size:.84rem}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+<main>
+<span class="eyebrow">Research proposal · revised 2 September 2026</span>
+<h1>Next-Card AAC Proposal</h1>
+<p class="lede">A context-aware communication board that predicts the next card from a closed vocabulary of 3,094 cards. A 135-million-parameter language model, SmolLM2-135M-Instruct fine-tuned for card prediction, runs in the browser and answers every tap instantly; a cloud planner is consulted a few times per utterance; the communicator always chooses what is said. This document sets out the vocabulary, the training data, the models, the tests, and the evaluation against a frontier model.</p>
+<div class="meta"><span>Vocabulary version 202e136b586a</span><span>Data ingested and mapped</span><span>Planner tested live on gpt-5.6-luna</span><span>Local model: SmolLM2-135M-Instruct</span></div>
+
+<nav class="toc" aria-label="Sections">
+<a href="#summary">1. Summary</a><a href="#problem">2. Problem and hypotheses</a><a href="#system">3. System design</a><a href="#local">4. The local model</a><a href="#vocab">5. Vocabulary</a><a href="#data">6. Training data</a><a href="#models">7. Models compared</a><a href="#tests">8. Test sets</a><a href="#eval">9. Evaluation</a><a href="#prelim">10. Preliminary results</a><a href="#risks">11. Risks and ethics</a><a href="#timeline">12. Timeline</a><a href="#appendix">Appendix</a>
+</nav>
+
+<h2 id="summary">1. Summary</h2>
+<p>People who use symbol-based AAC spend most of their effort finding the card they want. Prediction can cut that effort, but only if it is instant, stable on the screen, and never takes the choice away. We propose a layered system: a pretrained small language model that reads the partner's words and the cards tapped so far, a personal layer that learns one user's habits on the device, and an optional cloud planner that contributes intent paths a few times per utterance. All layers rank cards from one curated vocabulary, and a slate policy keeps safety and refusal cards in fixed positions.</p>
+<div class="kpis">
+<div class="kpi"><div class="v">3,094</div><div class="l">cards in the vocabulary</div></div>
+<div class="kpi"><div class="v">135M</div><div class="l">local model parameters</div></div>
+<div class="kpi"><div class="v">≈80 MB</div><div class="l">local model download after pruning</div></div>
+<div class="kpi"><div class="v">~25k</div><div class="l">real utterances ingested</div></div>
+<div class="kpi"><div class="v">~15k</div><div class="l">mapped to card sequences</div></div>
+<div class="kpi"><div class="v">~3 s</div><div class="l">planner latency, measured</div></div>
+</div>
+<p>The study answers three questions. Does a pretrained 135M model, adapted to card prediction, beat cheaper predictors on questions it has never seen, and does it still do so after quantisation? Does the cloud planner reduce taps enough to justify its cost and privacy exposure? How far does the whole system sit from a frontier model used directly, in quality, latency, and cost?</p>
+
+<h2 id="problem">2. Problem and hypotheses</h2>
+<p>A parent asks "What did you do today at school?". A static board offers the same 36 cells it always offers, and the child navigates three pages to reach "football". A predictive board should offer "I", "played", "football", "nothing", and "I don't know" before any tap, then narrow with each tap, while keeping "no" and "help" where they always are.</p>
+<ul>
+<li><strong>H1.</strong> SmolLM2-135M-Instruct fine-tuned on card states beats frequency and encoder-only predictors on unseen questions by a wide margin, and covers cards the training data never shows because it already knows what those words mean.</li>
+<li><strong>H2.</strong> A cloud planner, called at partner turns and sentence starts only, reduces taps per utterance beyond the local model, and the reduction is larger on unseen questions than on seen ones.</li>
+<li><strong>H3.</strong> Position stability and fixed safety cells do not cost recall, and users rate stable boards as more usable than reshuffling ones.</li>
+<li><strong>H4.</strong> The layered local plus planner system reaches at least 85 percent of a frontier model's improvement over a static board, at a per-tap latency the frontier model cannot meet.</li>
+</ul>
+
+<h2 id="system">3. System design</h2>
+<div class="pipe">
+<div class="node"><span class="lbl">Partner input</span><span class="note">typed or on-device speech; may be absent</span></div>
+<div class="arrow"></div>
+<div class="node hot"><span class="lbl">Local scorer on every tap: SmolLM2-135M-Instruct</span><span class="note">partner prefilled once, one card token per tap, KV cache kept; MiniLM bi-encoder fallback on CPU-only devices</span></div>
+<div class="arrow"></div>
+<div class="node"><span class="lbl">Personal layer</span><span class="note">decayed card n-grams, recency, rejections; on device only</span></div>
+<div class="arrow"></div>
+<div class="node hot"><span class="lbl">Cloud planner, a few calls per utterance</span><span class="note">intent paths + category boosts, Structured Outputs</span></div>
+<div class="arrow"></div>
+<div class="node"><span class="lbl">Log-linear blend, learned weights</span><span class="note">score = a·llm + b·ngram + c·personal + d·setting + e·cloud</span></div>
+<div class="arrow"></div>
+<div class="node hot"><span class="lbl">Slate policy</span><span class="note">fixed safety cells, position stability, 16 / 24 / 36 grid</span></div>
+</div>
+<h3>What the user sees</h3>
+<p>Prefix "I, played" after the school question, 16-cell grid. Teal cells never move. Amber cells were lifted by the planner after its reply arrived; they filled vacated cells only.</p>
+<div class="grid">
+<div class="cell boost">football</div><div class="cell">with</div><div class="cell boost">Sam</div><div class="cell">outside</div>
+<div class="cell">recess</div><div class="cell">fun</div><div class="cell">lunch</div><div class="cell">game</div>
+<div class="cell">nothing</div><div class="cell">I don't know</div><div class="cell">Mia</div><div class="cell">more</div>
+<div class="cell core">yes</div><div class="cell core">no</div><div class="cell core">help</div><div class="cell core">I'm tired</div>
+</div>
+<div class="legend"><span>contextual</span><span class="core">fixed core and safety</span><span class="boost">planner-boosted</span></div>
+<h3>Planner contract</h3>
+<p>The planner receives a short profile, the setting, the last turns, the tapped prefix, and the full card list as a cached prompt prefix. It returns a strict JSON object. Ids are validated against the registry, paths that repeat the prefix are trimmed, and the boost decays with every tap and dies when the user diverges from every path.</p>
+<pre><code>{"context": "Answering a school-day question with a short activity reply",
+ "confidence": 0.93,
+ "category_boosts": [{"category":"school","boost":0.95},{"category":"play","boost":0.7}],
+ "intent_paths": [
+   {"cards":["card_0170","card_1758"], "intent":"I played football"},
+   {"cards":["card_0055","card_0296"], "intent":"I drew in art class"},
+   {"cards":["card_0967"],             "intent":"I don't know"}]}</code></pre>
+
+<h2 id="local">4. The local model: SmolLM2-135M-Instruct</h2>
+<p>SmolLM2-135M-Instruct is a 30-layer decoder with a 576-wide hidden state and a 49,152-token vocabulary, released by Hugging Face under Apache 2.0, with a maintained ONNX build that runs on transformers.js with WebGPU. It replaces the recurrent model in earlier drafts for one reason: it arrives knowing English. A recurrent model trained from scratch cannot rank a card it has never seen as a target, and the real data leaves 1,113 of 3,094 cards unseen. A pretrained model already knows that "koala" is an animal and "recess" belongs to school, so a card token initialised from those words starts in the right place with zero examples.</p>
+<h3>Adaptation for card prediction</h3>
+<ol>
+<li><strong>Card tokens.</strong> 3,094 card tokens plus <code>&lt;aac_start&gt;</code> and <code>&lt;aac_end&gt;</code> are added. Each card embedding is initialised from the mean of the model's own token embeddings of the card's spoken form; composable cards average that with their component cards.</li>
+<li><strong>Prompt.</strong> A short profile header, the partner turn, the last two turns, then <code>&lt;aac_start&gt;</code> and the tapped card tokens. The model predicts the next card token or <code>&lt;aac_end&gt;</code>.</li>
+<li><strong>Loss.</strong> Cross-entropy against the soft target set at card positions only; partner and formatting tokens are masked. Logits are restricted to the 3,095 card rows.</li>
+<li><strong>Sliced head.</strong> After training, the 3,095 output rows are exported as a separate head. This is mathematically identical to masking and removes 49,152 useless rows from every tap.</li>
+<li><strong>Pruned input embedding.</strong> The input table is reduced to the tokens that occur in the mapped corpora and partner turns, about 25k of 49k; the rest map to a placeholder. Unseen-question recall is measured before and after pruning.</li>
+<li><strong>Inference.</strong> The partner turn is prefilled once per turn. Each tap appends one card token, so a tap is one decoder step over a warm KV cache. Deleting a card truncates the cache. The final hidden state is returned as the context vector for the reranker, so no second encoder is needed.</li>
+<li><strong>Export.</strong> ONNX, 4-bit weights for the transformer, 16-bit for the embedding table and the sliced head, transformers.js v4 on WebGPU with a WASM path measured separately.</li>
+</ol>
+<div class="tablewrap"><table>
+<tr><th>quantity</th><th class="num">value</th><th>note</th></tr>
+<tr><td>parameters</td><td class="num">135M</td><td>28M of them in the embedding table</td></tr>
+<tr><td>download, stock ONNX q4f16</td><td class="num">117 MB</td><td>measured from the onnx-community repository</td></tr>
+<tr><td>download after head slicing and embedding pruning</td><td class="num">≈80 MB</td><td>estimate; to confirm at export</td></tr>
+<tr><td>prefill of a 40-token partner turn, WebGPU</td><td class="num">&lt; 200 ms</td><td>budget, once per partner turn</td></tr>
+<tr><td>per tap, WebGPU</td><td class="num">&lt; 40 ms</td><td>budget; one decoder step plus a 576×3,095 head</td></tr>
+<tr><td>per tap, WASM fallback</td><td class="num">to measure</td><td>if above 300 ms, the MiniLM bi-encoder serves that device</td></tr>
+</table></div>
+<div class="callout"><span class="eyebrow">Why not the 270M or 500M models first</span>Gemma 3 270M downloads 273 MB because of its 262k-token vocabulary, and Qwen2.5-0.5B downloads 483 MB. Both are kept as step-ups (S4, S5). Each must beat SmolLM2-135M on unseen-question Recall@16 by at least 5 points to justify its download. Sizes are measured onnx-community q4f16 files.</div>
+
+<h2 id="vocab">5. Vocabulary</h2>
+<p>The vocabulary is a curated selection, not a merge. It starts from CBoard Classic and grows to 3,094 cards under rules that favour what AAC users actually say.</p>
+<div class="tablewrap"><table>
+<tr><th>source</th><th>rule</th><th class="num">cards</th></tr>
+<tr><td>CBoard Classic</td><td>always kept; 6 broken entries removed, 5 spellings fixed, US aliases added</td><td class="num">717</td></tr>
+<tr><td>Project Core Universal Core</td><td>always kept, flagged core</td><td class="num">36</td></tr>
+<tr><td>Curated safety, refusal, repair, social, request, feeling, backlog</td><td>always kept; refusal and repair cards flagged safety</td><td class="num">~200</td></tr>
+<tr><td>25 vocabularies from the Open Board Format comparison tool</td><td>candidate pool: in ≥ 4 lists, or ≥ 2 lists and corpus frequency ≥ 25; scored by consensus share and log corpus frequency; per-category quotas</td><td class="num">~2,100</td></tr>
+</table></div>
+<p>Cleaning folds inflections into lemmas as aliases (1,839 folded), removes proper-noun instances (191), infinitive duplicates, and a hand blocklist. Every card carries id, label, spoken form, aliases, category, part of speech, intent class, core and safety flags, and its evidence.</p>
+<div class="kpis">
+<div class="kpi"><div class="v">277</div><div class="l">core cards</div></div>
+<div class="kpi"><div class="v">62</div><div class="l">safety-flagged cards</div></div>
+<div class="kpi"><div class="v">571</div><div class="l">multiword cards</div></div>
+<div class="kpi"><div class="v">418</div><div class="l">of them composable</div></div>
+<div class="kpi"><div class="v">95.2%</div><div class="l">token coverage of AAC corpora</div></div>
+</div>
+<h3>Multiword cards and training</h3>
+<p>A composable card such as "i want" lists its component cards. The mapper emits both the phrase and the expanded sequence as acceptable targets, the loss puts mass on both, and any reward compares sequences after expansion. Lexicalised cards such as "ice cream" and pragmatic ones such as "say it again" stay atomic. Free compositions that the single cards already express were pruned (69). Ids are append-only with a version hash embedded in every export; a rebuild with new backlog words changed no existing id.</p>
+
+<h2 id="data">6. Training data</h2>
+<h3>Sources ingested</h3>
+<div class="tablewrap"><table>
+<tr><th>corpus</th><th>content</th><th class="num">rows</th><th>licence</th></tr>
+<tr><td>AAC Conversations (Hugging Face, willwade)</td><td>GPT-generated scenario dialogues; each row an AAC-user utterance with scene, context turns, typed and intended text; English locales en-US/GB/CA/AU/NZ/ZA</td><td class="num">10,218 train<br>2,611 test</td><td>CC BY 4.0, gated (access granted)</td></tr>
+<tr><td>Turk dialogues (aactext.org)</td><td>invented two-sided dialogues, 6 turns, published train/dev/test; filtered version used, unfiltered kept raw</td><td class="num">1,154 dialogues<br>6,521 turns</td><td>CC BY-ND 3.0 per readme; train on, do not redistribute derived text</td></tr>
+<tr><td>AACText imagine (aactext.org)</td><td>isolated AAC-style messages, official split, no partner turns invented</td><td class="num">6,142</td><td>CC BY 4.0; separately licensed test files excluded</td></tr>
+</table></div>
+<p>Ingestion is resumable and records a manifest. The filtered Turk file has corrupted delimiters, so turn boundaries are recovered by aligning each line with its unfiltered dialogue. AAC Conversations context lists are parsed and a partner utterance derived (present for 89.5 percent of rows).</p>
+<h3>Mapping English to card sequences</h3>
+<p>Longest-phrase-first matching over labels and aliases, lemma fallback, contraction handling, digits to number words, personal names to a <code>&lt;name&gt;</code> slot (capitalised words that are themselves cards, such as Monday, are not names). Coverage is the share of content tokens that found a card; an utterance is accepted at coverage ≥ 0.85 and at most 8 cards.</p>
+<div class="tablewrap"><table>
+<tr><th>corpus</th><th class="num">utterances</th><th class="num">accepted</th><th class="num">mean coverage</th><th>main rejection causes</th></tr>
+<tr><td>AACText imagine</td><td class="num">6,142</td><td class="num">83.6%</td><td class="num">0.945</td><td>slang, misspellings</td></tr>
+<tr><td>Turk dialogues</td><td class="num">6,521</td><td class="num">61.1%</td><td class="num">0.919</td><td>turns needing more than 8 cards; low coverage</td></tr>
+<tr><td>AAC Conversations train</td><td class="num">10,218</td><td class="num">58.5%</td><td class="num">0.876</td><td>long replies; names; topic bias toward "diversity", "cultural", "community"</td></tr>
+<tr><td>AAC Conversations test</td><td class="num">2,611</td><td class="num">59.4%</td><td class="num">0.876</td><td>same</td></tr>
+</table></div>
+<h3>Is the real data enough?</h3>
+<p>No, on its own. The accepted utterances expand to about 81,000 next-card states from reference sequences, but they cover the vocabulary unevenly.</p>
+<div class="tablewrap"><table>
+<tr><th>quantity</th><th class="num">value</th></tr>
+<tr><td>accepted utterances, three corpora</td><td class="num">15,100</td></tr>
+<tr><td>with a partner utterance</td><td class="num">8,300</td></tr>
+<tr><td>cards that appear as a target at least once</td><td class="num">1,981 of 3,094</td></tr>
+<tr><td>cards with at least 20 target examples</td><td class="num">497</td></tr>
+<tr><td>share of all targets taken by the top 50 cards</td><td class="num">42%</td></tr>
+</table></div>
+<p>This is the argument for a pretrained local model and for synthetic expansion together. The model covers the unseen tail through what it already knows; the synthetic data gives every card real examples. Generation is quota-driven: every card must appear as a target at least 30 times, and the generator is steered toward unseen cards rather than left to prefer "yes" and "pizza".</p>
+<h3>From utterances to training states</h3>
+<pre><code>"No, I'm fine standing up"   cards: no · i'm fine · stand · up
+state 0  prefix []                    → soft {no}
+state 1  prefix [no]                  → soft {i'm fine, i}      ← phrase card and its expansion
+state 2  prefix [no, i'm fine]        → soft {stand, &lt;aac_end&gt;}   ← telegraphic variant may stop here
+state 3  prefix [no, i'm fine, stand] → soft {up}
+state 4  full                         → soft {&lt;aac_end&gt;}</code></pre>
+<h3>Cleaning and expansion before training</h3>
+<ul>
+<li>Drop AAC Conversations rows dominated by the topic-bias tokens unless the partner turn shares them (about 8 percent).</li>
+<li>Use every acceptable sequence, not only the reference; this roughly doubles the state count.</li>
+<li>Paraphrase each real partner question 3 to 5 ways.</li>
+<li>Deduplicate exact partner and target pairs; cap any single card at 2 percent of next-card targets.</li>
+<li>Skip Turk partner context where the filter emptied the previous turn; those become no-question states. A quarter of all states drop the partner turn.</li>
+<li>Hold out 10 percent of distinct partner questions from every source before anything is trained.</li>
+<li>Synthetic set: 25k conversations seeded from real partner turns and scenes, written directly as card ids with 3 to 6 acceptable replies per AAC turn under sampled personas, validated (ids exist, ≤ 6 cards, no repeats, weights sum to 1, one core card per conversation), with a 400-state stratified sample reviewed by a speech-language professional. Target about 350k states, 410k in total.</li>
+</ul>
+
+<h2 id="models">7. Models compared</h2>
+<h3>Candidate local models surveyed</h3>
+<p>Parameter counts and download sizes are from the Hugging Face Hub API and the onnx-community repositories; the q4f16 column is the file set a browser would fetch.</p>
+<div class="tablewrap"><table>
+<tr><th>model</th><th class="num">params</th><th>hidden / layers / vocab</th><th class="num">q4f16 download</th><th>note</th></tr>
+<tr><td>MobileLLM-125M</td><td class="num">~125M</td><td>576 / 30 / 32k</td><td class="num">108 MB</td><td>non-commercial licence; research comparison only</td></tr>
+<tr class="pick"><td>SmolLM2-135M-Instruct</td><td class="num">135M</td><td>576 / 30 / 49k</td><td class="num">117 MB</td><td>Apache 2.0; best-tested tiny port on transformers.js; chosen</td></tr>
+<tr><td>granite-4.0-h-350m</td><td class="num">340M</td><td>768 / 32 / 100k</td><td class="num">238 MB</td><td>hybrid architecture, fewer browser reports</td></tr>
+<tr><td>LFM2-350M</td><td class="num">354M</td><td>1024 / 16 / 65k</td><td class="num">255 MB</td><td>fast hybrid; ONNX port exists</td></tr>
+<tr><td>SmolLM2-360M-Instruct</td><td class="num">362M</td><td>960 / 32 / 49k</td><td class="num">272 MB</td><td>same family, step up</td></tr>
+<tr><td>Gemma 3 270M</td><td class="num">268M</td><td>640 / 18 / 262k</td><td class="num">273 MB</td><td>tiny transformer, huge vocabulary; S4</td></tr>
+<tr><td>Qwen2.5-0.5B-Instruct</td><td class="num">494M</td><td>896 / 24 / 152k</td><td class="num">483 MB</td><td>S5 and local planner backend</td></tr>
+<tr><td>Qwen3-0.6B</td><td class="num">752M</td><td>1024 / 28 / 152k</td><td class="num">570 MB</td><td>too large for this use</td></tr>
+</table></div>
+<h3>Systems in the study</h3>
+<p>Ten systems share one interface, <code>(profile, setting, history, partner, prefix) → ranked card ids</code>, and one slate policy, so differences come from ranking alone.</p>
+<div class="tablewrap"><table>
+<tr><th>id</th><th>system</th><th>what it is</th><th>role</th></tr>
+<tr><td>S0</td><td>Static board</td><td>CBoard Classic layout, no prediction</td><td>floor users already have</td></tr>
+<tr><td>S1</td><td>Frequency</td><td>global unigram + personal counts + setting boost</td><td>cheapest predictor</td></tr>
+<tr><td>S2</td><td>MiniLM bi-encoder</td><td>22M sentence encoder; partner vector · card table + prefix bigram</td><td>CPU-only fallback and the floor a pretrained LLM must beat</td></tr>
+<tr class="pick"><td>S3</td><td>SmolLM2-135M-Instruct</td><td>card tokens, sliced head, pruned embeddings, KV cache per tap</td><td>primary local model</td></tr>
+<tr><td>S4</td><td>Gemma 3 270M</td><td>same recipe</td><td>step-up if S3 leaves recall on the table</td></tr>
+<tr><td>S5</td><td>Qwen2.5-0.5B</td><td>same recipe</td><td>upper local candidate; also the local planner backend</td></tr>
+<tr><td>S6</td><td>S3 + cloud planner</td><td>SmolLM2 scoring plus planner boosts from gpt-5.6-luna</td><td>the hybrid proposal</td></tr>
+<tr><td>S7</td><td>S4 + cloud planner</td><td>same with Gemma local</td><td>hybrid, larger local</td></tr>
+<tr><td>S8</td><td>Frontier direct</td><td>gpt-5.6-luna asked for 16 cards directly, Structured Outputs, effort medium</td><td>quality ceiling; latency and cost reference</td></tr>
+<tr><td>S9</td><td>S3 + local planner</td><td>SmolLM2 scorer with Qwen2.5-0.5B as planner, all in browser</td><td>privacy-preserving alternative</td></tr>
+</table></div>
+<h3>Training recipes</h3>
+<div class="tablewrap"><table>
+<tr><th>system</th><th>recipe</th><th>time</th></tr>
+<tr><td>S2</td><td>contrastive fine-tune of MiniLM, in-batch negatives, 2 epochs; card table encoded once</td><td>20 min</td></tr>
+<tr class="pick"><td>S3</td><td>full fine-tune bf16; 3,096 new tokens mean-initialised; LR 3e-5 backbone, 1e-3 for new rows for the first 300 steps; batch 64, sequence ≤ 320; 3 epochs over ~410k states; soft-target cross-entropy at card positions; partner dropout 0.25; final short epoch on real states only; ablation of atomic card tokens versus text prefix; embedding pruning and head slicing after training</td><td>≈40 min per epoch on one 24 GB GPU</td></tr>
+<tr><td>S4 / S5</td><td>same recipe, LR 2e-5</td><td>1 to 6 h</td></tr>
+<tr><td>S6 / S7 / S9</td><td>blend weights a..e by logistic regression on dev replay logs; personal n-gram with decay</td><td>minutes</td></tr>
+<tr><td>Preference tuning</td><td>DPO on reviewed chosen and rejected sequences with hard negatives from the model's own top-100; GRPO only if a named sequence metric stays short</td><td>1 h</td></tr>
+</table></div>
+<div class="callout"><span class="eyebrow">Decision rules</span>S3 must beat S2 by at least 8 points of unseen-question Recall@16 to justify its download; otherwise S2 ships and S3 becomes the WebGPU-only upgrade. S4 or S5 must beat S3 by at least 5 points to justify two to four times the download. Every shipped model must keep top-100 overlap ≥ 0.97 after quantisation and pruning.</div>
+
+<h2 id="tests">8. Test sets</h2>
+<div class="tablewrap"><table>
+<tr><th>set</th><th>content</th><th class="num">size</th><th>measures</th></tr>
+<tr><td>T1 held-out corpora</td><td>AAC Conversations en test, Turk test chains, AACText test, mapped identically</td><td class="num">~1,800 utterances<br>~9k states</td><td>in-distribution next-card quality</td></tr>
+<tr><td>T2 unseen questions</td><td>10 percent of distinct partner questions removed from all training, plus 150 hand-written parent, teacher, and clinician questions</td><td class="num">~600 utterances</td><td>generalisation; about ±4 points on Recall@16</td></tr>
+<tr><td>T3 scripted dialogues</td><td>40 multi-turn scenarios, 5 per setting, each AAC turn with 3 to 6 reviewed acceptable replies; every dialogue has a turn where the right answer is "no", "nothing", or "I don't know"</td><td class="num">40 dialogues<br>~250 AAC turns</td><td>whole system; scripts for human tests</td></tr>
+<tr><td>T4 personalisation probe</td><td>5 synthetic user histories, 200 utterances each, 30 favourite cards per user</td><td class="num">1,000 utterances</td><td>whether the personal layer learns</td></tr>
+</table></div>
+<p>All four are frozen before any model is trained. T3 is written by, or reviewed with, a speech-language professional.</p>
+<h3>Live dialogue tests</h3>
+<ol>
+<li><strong>Scripted sessions by the team.</strong> One person speaks the partner turns from T3, one answers on a tablet with the scripted intent, for S3, S6, and S8. Catches latency and grid-stability problems replay cannot.</li>
+<li><strong>AAC user sessions.</strong> 8 to 10 participants who use symbol-based AAC, consent from them and carers, clinician present. Six T3 dialogues in the participant's usual settings plus ten minutes of free conversation. Within-subject, counterbalanced: static (S0), local-only (S3, or S2 on CPU-only devices), hybrid (S6). Measures: taps per utterance, words per minute, completion rate, abandoned utterances, deletions, partner comprehension per turn, and a five-item questionnaire including "I could say no easily" and "it moved things around too much".</li>
+<li><strong>Two-week pilot.</strong> Three participants, one week local-only and one week hybrid, logs kept on device and exported with consent.</li>
+</ol>
+
+<h2 id="eval">9. Evaluation</h2>
+<h3>Next-card metrics, T1 and T2, every system</h3>
+<ul>
+<li>Recall@1, @8, @16, @100 against the soft-target set; MRR; split by partner present or absent, seen or unseen question, setting, and by whether the target card had any training examples (the tail test that H1 depends on).</li>
+<li><code>&lt;aac_end&gt;</code> precision and recall.</li>
+<li>Top-100 overlap after quantisation and embedding pruning for S3, S4, S5, required ≥ 0.97.</li>
+</ul>
+<h3>Simulated-user replay, T1 to T3</h3>
+<p>A scripted user holds the best acceptable sequence, taps the target if it is on the grid, otherwise pays a search cost of 3 taps and inserts it. Reported: taps per utterance (primary), search rate, time to first grid, cards moved per step. Hybrids are also run with the planner switched off, so its contribution is a subtraction. Cloud responses are cached per state, making replays deterministic and free to repeat.</p>
+<h3>Device latency</h3>
+<p>For S2, S3, S4, S5: prefill time for a 40-token partner turn and per-tap time, on an iPad, a mid-range Android tablet, and a Chromebook without WebGPU, plus download size and peak memory. Budgets: first grid under 600 ms, per tap under 120 ms on WebGPU, under 300 ms on WASM.</p>
+<h3>Slate quality, T3</h3>
+<p>NDCG@16 against graded labels, intent diversity (distinct intents on the grid, target ≥ 3), refusal and repair reachable in one tap (must be 100 percent), unwanted-suggestion rate from the judge.</p>
+<h3>Comparison against a frontier model</h3>
+<ol>
+<li><strong>Ceiling.</strong> S8 on T2 and T3. The gap to S6 in taps per utterance is the cost of running locally. Its latency and cost per utterance are reported beside it, because a grid that takes several seconds is not a usable AAC product regardless of recall.</li>
+<li><strong>Planner backend swap.</strong> S6 with the frontier model as planner, versus a mid-tier model, versus S9 with local Qwen. Shows how much planner quality matters once a local scorer sits in front of it.</li>
+<li><strong>Judge.</strong> Blind to system identity, the model rates each T3 grid for containing an appropriate answer, a way to refuse or repair, and nothing inappropriate for the profile. Agreement with the human reviewer on 200 grids is reported so the judge is calibrated rather than trusted.</li>
+</ol>
+<div class="callout"><span class="eyebrow">Pass criteria</span>S6 reaches ≥ 85 percent of S8's taps-per-utterance improvement over S0 on T2, at under 120 ms per tap and under 2 planner calls per utterance. In user sessions, hybrid reduces taps by ≥ 30 percent versus static without more abandoned utterances, and "I could say no easily" scores no worse than static.</div>
+
+<h2 id="prelim">10. Preliminary results</h2>
+<div class="callout measured"><span class="eyebrow">Measured on 2 September 2026</span>Planner and direct calls to gpt-5.6-luna through the OpenAI Responses API, strict JSON schema, full vocabulary in the prompt, school-day example with an 8-year-old profile.</div>
+<div class="tablewrap"><table>
+<tr><th>call</th><th>effort</th><th class="num">latency</th><th class="num">input tokens</th><th class="num">cached</th><th class="num">output</th><th class="num">reasoning</th></tr>
+<tr><td>planner, empty prefix, cold</td><td>none</td><td class="num">3.32 s</td><td class="num">20,717</td><td class="num">0</td><td class="num">205</td><td class="num">0</td></tr>
+<tr><td>planner, prefix "I, play"</td><td>none</td><td class="num">3.40 s</td><td class="num">20,733</td><td class="num">20,667</td><td class="num">175</td><td class="num">0</td></tr>
+<tr><td>planner, no partner, doctor setting</td><td>none</td><td class="num">2.90 s</td><td class="num">20,708</td><td class="num">20,667</td><td class="num">218</td><td class="num">0</td></tr>
+<tr><td>planner, empty prefix</td><td>low</td><td class="num">3.33 s</td><td class="num">20,717</td><td class="num">0</td><td class="num">326</td><td class="num">115</td></tr>
+<tr><td>direct 16 cards (S8)</td><td>medium</td><td class="num">12.26 s</td><td class="num">20,604</td><td class="num">0</td><td class="num">598</td><td class="num">495</td></tr>
+</table></div>
+<ul>
+<li><strong>Prompt caching works.</strong> After the first call, 20,667 of 20,733 input tokens are served from cache, so the vocabulary listing costs almost nothing per call. The model reports 24-hour cache retention.</li>
+<li><strong>Latency is above budget.</strong> About 3 seconds at effort "none" against a 1 to 2 second target; the 20k-token prefix dominates. Next steps: a compact listing (numeric ids, no category headers, roughly 10k tokens), the priority service tier (accepted in a probe), and a mid-tier model for comparison. The "minimal" effort value is not supported by this model; "none" and "low" are.</li>
+<li><strong>Quality is usable with validation.</strong> The direct ranking for the empty prefix was I, play, football, draw, art class, homework, recess, learn, nothing, I don't know, I don't understand, I don't want to, and, today, school, no. The planner's paths were good at effort "low" and weaker at "none", where one path restated the prefix and one contained an unrelated card; the client now strips prefix repeats and drops invalid ids, and those cases become a logged metric.</li>
+<li><strong>Refusal paths appear only when the contract asks for them.</strong> The schema instruction to include a refusal or uncertain path was followed in every call.</li>
+</ul>
+<p>Data-side results from the same session: the vocabulary covers 95.2 percent of tokens in the AAC corpora; the mapper accepts 58 to 84 percent of utterances depending on corpus, with the rest reusable as partner context; the real data alone reaches 1,981 of 3,094 cards.</p>
+
+<h2 id="risks">11. Risks and ethics</h2>
+<ul>
+<li><strong>Putting words in the user's mouth.</strong> Prediction must never make refusal harder than assent. Fixed safety cells, mandatory refusal paths from the planner, and the "I could say no easily" questionnaire item are the guards, and the one-tap refusal metric must stay at 100 percent.</li>
+<li><strong>Privacy.</strong> Partner speech and user utterances include health and family details, and school users are children. Names are replaced by slots before any cloud call, the API is configured for no retention, cloud use is opt-in, and local-only mode is the default. S9 exists so a fully on-device configuration is measured, not assumed.</li>
+<li><strong>Synthetic data bias.</strong> GPT-written replies are fluent, adult, and topically skewed. Persona sampling, telegraphic-style constraints, the topic filter, the per-card quota, and the professional review gate address it, and every metric is reported on real held-out data as well as synthetic.</li>
+<li><strong>Pretraining leakage into predictions.</strong> A pretrained model may prefer fluent adult continuations over what a child would tap. The final training epoch on real states only, and the intent-diversity metric, check for this.</li>
+<li><strong>Rich-get-richer.</strong> Displayed cards get picked, picked cards get displayed. Unselected cards receive zero reward, exploration is confined to one cell, personal counts decay.</li>
+<li><strong>Device floor.</strong> If the pilot fleet is mostly WASM-only, the MiniLM bi-encoder is the product and SmolLM2 is the upgrade. Decided from measurements.</li>
+<li><strong>Licences.</strong> SmolLM2 is Apache 2.0. Turk dialogues are CC BY-ND 3.0, so derived dialogue text is not redistributed; vendor vocabularies contributed only word-level consensus evidence.</li>
+</ul>
+
+<h2 id="timeline">12. Timeline</h2>
+<div class="tablewrap"><table>
+<tr><th>week</th><th>work</th><th>output</th></tr>
+<tr><td>1</td><td>freeze T1 and T2; write 150 hand questions and 40 T3 dialogues; professional review</td><td>test sets</td></tr>
+<tr><td>2</td><td>state builder, cleaning, quota-driven synthetic generation and validation, review sample</td><td>~410k states</td></tr>
+<tr><td>3</td><td>S1, S2 trained; S3 SmolLM2 fine-tune with the token-representation ablation; replay; blend weights fitted</td><td>local-model floor and primary numbers</td></tr>
+<tr><td>4</td><td>S3 export: head slicing, embedding pruning, q4f16, parity test, device latency on three tablets; S4 and S5 trained for comparison</td><td>local-model decision</td></tr>
+<tr><td>5</td><td>compact planner prompt, caching, S6, S7, S9 replay; S8 ceiling and judge runs</td><td>planner decision</td></tr>
+<tr><td>6 to 8</td><td>scripted sessions, then AAC user sessions</td><td>human results</td></tr>
+<tr><td>9 to 11</td><td>two-week pilot, analysis, report</td><td>final report</td></tr>
+</table></div>
+
+<h2 id="appendix">Appendix: files and commands</h2>
+<pre><code>vocab/build_vocab.py      curated vocabulary builder      → vocab/vocab.csv, registry.json, report.md
+vocab/sources/obf_lists/  25 comparison word lists (openboardformat.org/words?list=&lt;code&gt;)
+data/ingest.py            resumable ingestion of the three corpora → data/processed/*.jsonl + manifest
+data/map.py               English → card sequences, coverage gate  → data/mapped/*.jsonl + unmapped backlog
+cloud/planner.py          gpt-5.6-luna planner / direct client, strict schema, disk cache
+PLAN.md                   architecture review
+PLAN-DATA-TRAINING.md     data, training, evaluation detail
+PLAN-EXPERIMENTS.md       systems, test sets, evaluation protocol
+
+python3 data/ingest.py
+python3 data/map.py --in data/processed/turk_dialogues_turns.jsonl --text-field utterance --out data/mapped/turk_dialogues_turns.jsonl
+python3 vocab/build_vocab.py --lists vocab/sources/obf_lists --scratch &lt;scratch&gt; --out vocab --registry vocab/registry.json
+python3 cloud/planner.py --mode planner --partner "What did you do today at school?" --profile "age 8, likes football" --setting school
+
+Local model: HuggingFaceTB/SmolLM2-135M-Instruct (Apache 2.0); browser build: onnx-community/SmolLM2-135M-Instruct-ONNX</code></pre>
+<p class="foot">Latency and token figures are single measurements from one session and will vary. Download sizes are the onnx-community q4f16 file sets; the pruned size for SmolLM2 is an estimate until export. The frontier model id used in the final report will be fixed at test time.</p>
+</main>

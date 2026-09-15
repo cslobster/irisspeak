@@ -1,0 +1,196 @@
+top-100 computed for 4000+1500+1500 states in 70s
+
+test (n=1500):
+  fine-tuned model alone : R@1 0.284  R@8 0.463  R@16 0.541  NDCG@16 0.377
+  model + reranker       : R@1 0.349  R@8 0.579  R@16 0.645  NDCG@16 0.454
+
+qa (n=1500):
+  fine-tuned model alone : R@1 0.306  R@8 0.538  R@16 0.622  NDCG@16 0.430
+  model + reranker       : R@1 0.377  R@8 0.635  R@16 0.701  NDCG@16 0.504
+
+==============================================================================
+END-TO-END (fine-tuned SmolLM2 -> reranker -> slate)
+==============================================================================
+#1 [aacconv] PARTNER: Yeah, they have such a diverse menu. Do you have a favorite dish?
+   TRUE REPLY: Butter Chicken
+
+   STEP 0: prefix = (empty)
+      model top-8    : ['Spicy', 'Taco', 'Pizza', 'His', 'Chicken', 'Sushi', 'I', 'The']
+      reranked top-8 : ['I', 'Pizza', 'Spicy', 'Sushi', 'Chicken', 'Taco', 'Cheese', 'I like']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         I                | Pizza            | Spicy            | Sushi           
+         Chicken          | Taco             | Cheese           | I like          
+         Good             | Salad            | The              | I love          
+      truth next: ['Butter'] -> on grid: NO   (model rank of best: 23, reranked: 29)
+
+   STEP 1: prefix = ['Butter']
+      model top-8    : ['Spicy', 'Curry', 'end of message', 'Taco', 'Cheese', 'And', 'Sushi', 'Salad']
+      reranked top-8 : ['end of message', 'Cheese', 'Sushi', 'Salad', 'Chicken', 'Please', 'Rice', 'Spicy']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         Please           | Pizza            | Spicy            | Sushi           
+         Chicken          | Rice             | Cheese           | Curry           
+         Sandwich         | Salad            | Bread            | Peas            
+      truth next: ['Chicken'] -> on grid: ['Chicken']   (model rank of best: 16, reranked: 5)
+==============================================================================
+#2 [turk] PARTNER: Where are you heading?
+   TRUE REPLY: I'm Go To
+
+   STEP 0: prefix = (empty)
+      model top-8    : ['To', 'A', 'I', 'I am', 'Zoo', 'Movie', 'Back', 'New']
+      reranked top-8 : ['I', 'I am', 'To', "I'm", 'A', 'The', 'What', 'Home']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         I                | I am             | To               | I'm             
+         A                | The              | What             | Home            
+         Maybe            | My               | How              | Go              
+      truth next: ["I'm"] -> on grid: ["I'm"]   (model rank of best: 13, reranked: 4)
+
+   STEP 1: prefix = ["I'm"]
+      model top-8    : ['A', 'To', 'end of message', 'New', 'Movie', 'The', 'Tonight', 'My']
+      reranked top-8 : ['end of message', 'Tonight', 'The', 'Go', 'To', 'Not', 'Head', 'A']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         I                | Tonight          | To               | Not             
+         A                | The              | What             | Home            
+         Head             | Do               | So               | Go              
+      truth next: ['Go'] -> on grid: ['Go']   (model rank of best: 13, reranked: 4)
+==============================================================================
+#3 [turk] PARTNER: Can you please get me my phone?
+   TRUE REPLY: Sure Here It Is
+
+   STEP 0: prefix = (empty)
+      model top-8    : ['No', 'Sure', 'Yes', 'I', "I'm", 'Get', 'What', 'Not']
+      reranked top-8 : ['Yes', 'I', 'No', 'Sure', "I'm", 'Get', 'What', 'Please']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         I                | Sure             | I'm              | Get             
+         What             | Please           | Not              | I am            
+         Can              | I'll             | Can I            | It is           
+      truth next: ['Sure'] -> on grid: ['Sure']   (model rank of best: 2, reranked: 4)
+
+   STEP 1: prefix = ['Sure']
+      model top-8    : ['I', 'To', 'Your', 'What', 'You', 'Please', 'Not', 'Do']
+      reranked top-8 : ['I', 'What', 'You', 'To', 'end of message', "I'll", 'Please', 'Call']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         I                | You              | To               | Get             
+         What             | Please           | Call             | Let             
+         Do               | I'll             | Thank you        | Phone           
+      truth next: ['Here', 'It is'] -> on grid: NO   (model rank of best: 28, reranked: 35)
+==============================================================================
+#4 [turk] PARTNER: I haven't see you in ages, is everything ok?
+   TRUE REPLY: Everything Is Great
+
+   STEP 0: prefix = (empty)
+      model top-8    : ['Just', 'No', "I'm", 'Oh', 'Great', 'Tired', 'Good', 'Feel']
+      reranked top-8 : ['Oh', "I'm", 'I', 'No', 'Yeah', 'Harp', 'Good', 'Great']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         Oh               | I'm              | I                | Yeah            
+         Harp             | Good             | Great            | Just            
+         Feel             | Not              | Morning          | Tired           
+      truth next: ['Everything', 'Great'] -> on grid: ['Great']   (model rank of best: 5, reranked: 8)
+
+   STEP 1: prefix = ['Everything']
+      model top-8    : ['Is', 'A', 'Great', 'Just', 'Long', 'Good', 'Am', 'Feel']
+      reranked top-8 : ['Is', 'end of message', 'Good', 'You', 'Great', 'Fine', 'Okay', 'I']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         Is               | You              | I                | Fine            
+         Okay             | Good             | Great            | Just            
+         Feel             | That's           | Am               | A               
+      truth next: ['Is'] -> on grid: ['Is']   (model rank of best: 1, reranked: 1)
+==============================================================================
+#5 [aacconv] PARTNER: Is he okay?
+   TRUE REPLY: I Hope So
+
+   STEP 0: prefix = (empty)
+      model top-8    : ['He', 'Not', 'Not really', 'Fine', 'Just', 'Yes', 'Upset', 'Yeah']
+      reranked top-8 : ['No', 'Yes', 'Yeah', 'Sure', 'Not', 'Need', 'Just', 'Fine']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         Yeah             | Sure             | Not              | Need            
+         Just             | Fine             | Feel             | I               
+         He               | Definitely       | Maybe            | Okay            
+      truth next: ['I', 'Hope'] -> on grid: ['I']   (model rank of best: 31, reranked: 10)
+
+   STEP 1: prefix = ['I']
+      model top-8    : ['Am', 'Feel', 'Really', 'Will', 'Just', 'Not', 'Know', 'Need']
+      reranked top-8 : ['Am', 'Feel', 'Need', 'Will', 'Really', 'Want', 'Not', 'Know']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         Am               | Sure             | Not              | Need            
+         Will             | Really           | Feel             | Want            
+         Know             | Hope             | Like             | Dislike         
+      truth next: ['Hope'] -> on grid: ['Hope']   (model rank of best: 25, reranked: 9)
+==============================================================================
+#6 [aacconv] PARTNER: Yeah, I heard that. What do you think they need?
+   TRUE REPLY: Maybe Help With Dinner
+
+   STEP 0: prefix = (empty)
+      model top-8    : ['Fix', 'Need', 'Water', 'Harp', 'Food', 'Mention', 'Help', 'Fight']
+      reranked top-8 : ['Need', 'Food', 'I', 'Harp', 'No', 'Good', 'Not', 'Help']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         Need             | Food             | I                | Harp            
+         Good             | Not              | Water            | I want          
+         Maybe            | They             | Definitely       | Fix             
+      truth next: ['Maybe', 'Help'] -> on grid: ['Maybe', 'Help']   (model rank of best: 7, reranked: 8)
+
+   STEP 1: prefix = ['Maybe']
+      model top-8    : ['Fix', 'Need', 'Help', 'A', 'Plan', 'Food', 'Nice', 'Water']
+      reranked top-8 : ['Need', 'A', 'Some', 'Food', 'I', 'More', 'Plan', 'Help']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         Need             | Food             | I                | A               
+         Some             | More             | Plan             | To              
+         Mention          | Just             | Friend           | New             
+      truth next: ['Help'] -> on grid: ['Help']   (model rank of best: 3, reranked: 8)
+==============================================================================
+#7 [aacconv] PARTNER: Hey! How are you doing?
+   TRUE REPLY: Feel Okay Just Tired
+
+   STEP 0: prefix = (empty)
+      model top-8    : ['Good', 'Okay', "I'm", 'Feel', 'Not', 'I am', 'Do', 'I']
+      reranked top-8 : ["I'm", 'I', 'Good', 'Oh', 'Yeah', 'Harp', 'Great', 'Feel']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         I'm              | I                | Good             | Oh              
+         Yeah             | Harp             | Great            | Feel            
+         Not              | I am             | Need             | Okay            
+      truth next: ['Feel'] -> on grid: ['Feel']   (model rank of best: 4, reranked: 8)
+
+   STEP 1: prefix = ['Feel']
+      model top-8    : ['Okay', 'Feel', 'Good', 'end of message', 'Thanks', 'Happy', 'Need', 'Well']
+      reranked top-8 : ['Good', 'Well', 'Great', 'Okay', 'Happy', 'end of message', 'Today', 'Tired']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         Well             | Happy            | Good             | Today           
+         Tired            | Like             | Great            | Bite            
+         Quite            | A                | Scared           | Okay            
+      truth next: ['Okay'] -> on grid: ['Okay']   (model rank of best: 1, reranked: 4)
+==============================================================================
+#8 [aacconv] PARTNER: Did you ask him about it?
+   TRUE REPLY: No Point He Just Lie
+
+   STEP 0: prefix = (empty)
+      model top-8    : ['No', 'I', 'Yes', 'Not yet', 'He', 'Not', 'Ask', 'Just']
+      reranked top-8 : ['I', 'Yes', 'No', 'Ask', 'What', 'Not', 'He', 'Yeah']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         I                | Ask              | What             | Not             
+         He               | Yeah             | Good             | Maybe           
+         Just             | I am             | Need             | I want          
+      truth next: ['No'] -> on grid: ['No']   (model rank of best: 1, reranked: 3)
+
+   STEP 1: prefix = ['No']
+      model top-8    : ['Ask', 'I', 'What', 'He', 'Need', 'But', 'Just', 'I want']
+      reranked top-8 : ['I', 'Just', 'What', 'Ask', 'Need', 'Not', 'What happened', 'end of message']
+      GRID  (row 1 fixed; rows 2-4 contrast + contextual, cells kept between steps):
+         Yes              | No               | Help             | I don't know    
+         I                | Ask              | What             | Not             
+         He               | What happened    | More             | But             
+         Just             | You              | Need             | I want          
+      truth next: ['Point'] -> on grid: NO   (model rank of best: >100, reranked: >100)

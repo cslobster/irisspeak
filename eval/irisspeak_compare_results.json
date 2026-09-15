@@ -1,0 +1,451 @@
+{
+ "results": {
+  "iris": {
+   "grid_s0": 2.0,
+   "dyn_s0": 1.0,
+   "pool24_s0": 3.0,
+   "grid_s1": 1.0,
+   "dyn_s1": 1.0,
+   "pool24_s1": 2.0
+  },
+  "ours": {
+   "grid_s0": 5.0,
+   "dyn_s0": 4.0,
+   "top100_s0": 6.0,
+   "grid_s1": 3.0,
+   "dyn_s1": 3.0,
+   "top100_s1": 4.0
+  }
+ },
+ "n": {
+  "0": 6,
+  "1": 6
+ },
+ "latency": {
+  "iris": 1.9001635313034058,
+  "ours": 0.1132580041885376
+ },
+ "tokens": 5380.166666666667,
+ "examples": [
+  {
+   "partner": "Oh, really? Did you pick the best option?",
+   "truth": [
+    "Not",
+    "Sure",
+    "Best"
+   ],
+   "steps": [
+    {
+     "prefix": [],
+     "truth_next": [
+      "Sure",
+      "Not"
+     ],
+     "iris_dyn": [
+      "Choice",
+      "Best",
+      "Decision",
+      "Answer",
+      "Choose",
+      "Pick",
+      "Decide",
+      "Find"
+     ],
+     "ours_dyn": [
+      "I",
+      "Good",
+      "Yeah",
+      "What",
+      "You",
+      "I want",
+      "Not",
+      "Sound"
+     ],
+     "iris_hit": false,
+     "ours_hit": true
+    },
+    {
+     "prefix": [
+      "Not"
+     ],
+     "truth_next": [
+      "Sure"
+     ],
+     "iris_dyn": [
+      "Choice",
+      "Best",
+      "Decision",
+      "Answer",
+      "Choose",
+      "Pick",
+      "Decide",
+      "Find"
+     ],
+     "ours_dyn": [
+      "I",
+      "Good",
+      "A",
+      "What",
+      "Great",
+      "Yet",
+      "Really",
+      "Too"
+     ],
+     "iris_hit": false,
+     "ours_hit": true
+    }
+   ]
+  },
+  {
+   "partner": "Sure. Would you like one slice or two?",
+   "truth": [
+    "Only",
+    "One",
+    "Slice",
+    "Please"
+   ],
+   "steps": [
+    {
+     "prefix": [],
+     "truth_next": [
+      "Only",
+      "One"
+     ],
+     "iris_dyn": [
+      "Slice",
+      "Two",
+      "One",
+      "Pizza",
+      "Take",
+      "Want",
+      "Choose",
+      "Eat"
+     ],
+     "ours_dyn": [
+      "I",
+      "Please",
+      "Two",
+      "You",
+      "One",
+      "I want",
+      "Sure",
+      "Can you"
+     ],
+     "iris_hit": true,
+     "ours_hit": true
+    },
+    {
+     "prefix": [
+      "Only"
+     ],
+     "truth_next": [
+      "One"
+     ],
+     "iris_dyn": [
+      "Slice",
+      "One",
+      "Two",
+      "Pizza",
+      "Choose",
+      "Take",
+      "Eat",
+      "Want"
+     ],
+     "ours_dyn": [
+      "I",
+      "Please",
+      "Two",
+      "You",
+      "One",
+      "If",
+      "A",
+      "Eat"
+     ],
+     "iris_hit": true,
+     "ours_hit": true
+    }
+   ]
+  },
+  {
+   "partner": "Okay, does he have a phone?",
+   "truth": [
+    "No",
+    "He",
+    "Doesn't",
+    "Have",
+    "One"
+   ],
+   "steps": [
+    {
+     "prefix": [],
+     "truth_next": [
+      "No"
+     ],
+     "iris_dyn": [
+      "Phone",
+      "Iphone",
+      "Ipad",
+      "Ipod",
+      "Use",
+      "Texting",
+      "Call",
+      "Say"
+     ],
+     "ours_dyn": [
+      "I",
+      "Yeah",
+      "Oh",
+      "Please",
+      "Maybe",
+      "Not",
+      "What",
+      "Phone"
+     ],
+     "iris_hit": true,
+     "ours_hit": true
+    },
+    {
+     "prefix": [
+      "No"
+     ],
+     "truth_next": [
+      "He",
+      "One"
+     ],
+     "iris_dyn": [
+      "Phone",
+      "Device",
+      "Iphone",
+      "Ipad",
+      "Get",
+      "Use",
+      "Call",
+      "Texting"
+     ],
+     "ours_dyn": [
+      "I",
+      "Just",
+      "It",
+      "Please",
+      "It's",
+      "Not",
+      "What",
+      "Phone"
+     ],
+     "iris_hit": false,
+     "ours_hit": false
+    }
+   ]
+  },
+  {
+   "partner": "Sure, when do you want me to mail?",
+   "truth": [
+    "As",
+    "Soon",
+    "As",
+    "Possible"
+   ],
+   "steps": [
+    {
+     "prefix": [],
+     "truth_next": [
+      "Soon",
+      "As"
+     ],
+     "iris_dyn": [
+      "Mail",
+      "Package",
+      "Letter",
+      "Stamp",
+      "Send",
+      "Give",
+      "Take",
+      "Get"
+     ],
+     "ours_dyn": [
+      "I",
+      "Please",
+      "Need",
+      "Sure",
+      "You",
+      "I am",
+      "I want",
+      "Next"
+     ],
+     "iris_hit": false,
+     "ours_hit": false
+    },
+    {
+     "prefix": [
+      "As"
+     ],
+     "truth_next": [
+      "Soon"
+     ],
+     "iris_dyn": [
+      "Mail",
+      "Letter",
+      "Package",
+      "Address",
+      "Send",
+      "Give",
+      "Get",
+      "Take"
+     ],
+     "ours_dyn": [
+      "I",
+      "Soon",
+      "Need",
+      "A",
+      "You",
+      "Weekend",
+      "To",
+      "Morning"
+     ],
+     "iris_hit": false,
+     "ours_hit": true
+    }
+   ]
+  },
+  {
+   "partner": "Yeah, it really is. Do you think we need more colors?",
+   "truth": [
+    "Maybe",
+    "Green",
+    "Add",
+    "Nature",
+    "Feel"
+   ],
+   "steps": [
+    {
+     "prefix": [],
+     "truth_next": [
+      "Green",
+      "Maybe"
+     ],
+     "iris_dyn": [
+      "Color",
+      "Crayon",
+      "Paint",
+      "Marker",
+      "Choose",
+      "Make",
+      "Draw",
+      "Paint"
+     ],
+     "ours_dyn": [
+      "I",
+      "Maybe",
+      "Need",
+      "Yeah",
+      "What",
+      "Not",
+      "It's",
+      "Exactly"
+     ],
+     "iris_hit": false,
+     "ours_hit": true
+    },
+    {
+     "prefix": [
+      "Maybe"
+     ],
+     "truth_next": [
+      "Green"
+     ],
+     "iris_dyn": [
+      "Color",
+      "Paint",
+      "Crayon",
+      "Marker",
+      "Add",
+      "Choose",
+      "Make",
+      "Use"
+     ],
+     "ours_dyn": [
+      "I",
+      "Some",
+      "Need",
+      "More",
+      "A",
+      "Later",
+      "It's",
+      "Just"
+     ],
+     "iris_hit": false,
+     "ours_hit": false
+    }
+   ]
+  },
+  {
+   "partner": "Can you leave me one for my burger tonight?",
+   "truth": [
+    "Sure",
+    "Thing",
+    "No",
+    "Problem"
+   ],
+   "steps": [
+    {
+     "prefix": [],
+     "truth_next": [
+      "Sure"
+     ],
+     "iris_dyn": [
+      "Burger",
+      "Dinner",
+      "Food",
+      "Cheese",
+      "Take",
+      "Give",
+      "Make",
+      "Buy"
+     ],
+     "ours_dyn": [
+      "I",
+      "Yeah",
+      "You",
+      "What",
+      "Please",
+      "Sure",
+      "Can",
+      "Good"
+     ],
+     "iris_hit": false,
+     "ours_hit": true
+    },
+    {
+     "prefix": [
+      "Sure"
+     ],
+     "truth_next": [
+      "Thing"
+     ],
+     "iris_dyn": [
+      "Burger",
+      "Dinner",
+      "Food",
+      "Cheese",
+      "Leave",
+      "Make",
+      "Give",
+      "Put"
+     ],
+     "ours_dyn": [
+      "I",
+      "Let",
+      "You",
+      "What",
+      "Thank you",
+      "How",
+      "Can",
+      "Let's"
+     ],
+     "iris_hit": false,
+     "ours_hit": false
+    }
+   ]
+  }
+ ]
+}

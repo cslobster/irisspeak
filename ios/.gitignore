@@ -1,0 +1,8 @@
+# Xcode
+irisspeak/build/
+**/xcuserdata/
+**/*.xcuserstate
+**/.DS_Store
+# Large model binaries are copied in by scripts/fetch_models.sh (see README)
+irisspeak/irisspeak/Resources/Model/card_model_fp16.onnx
+irisspeak/irisspeak/Resources/Model/minilm_l6_v2.onnx

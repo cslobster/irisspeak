@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GB4F42F02M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GB4F42F02M');
+</script>
+<title>Data · IrisSpeak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/paper/style.css"><meta name="robots" content="noindex,nofollow">
+<style>.doc h1{font-size:1.5rem;margin-top:8px}.doc h2{font-size:1.15rem;margin-top:32px;border-top:1px solid var(--line);padding-top:12px}.doc h3{font-size:1rem}.doc table{margin:12px 0}.doc img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:#fff}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0;font-family:var(--sans)}.tabs button{background:var(--surface);color:var(--accent-ink)}.tabs button.on{background:var(--accent);color:#fff}</style></head>
+<body>
+<header class="top"><div class="in"><a class="brand" href="/paper/">IrisSpeak</a><a class="brand" href="/paper/" style="margin-left:-12px"><span>Live demo</span></a>
+<nav><a href="/paper/overview.html">Overview</a><a href="/paper/architecture.html">Architecture</a><a class="on" href="/paper/data.html">Data</a><a href="/paper/training.html">Training</a><a href="/paper/benchmark.html">Benchmarks</a><a href="/paper/model.html">Model</a><a href="/paper/howitworks.html">How it works</a><a href="/paper/competition.html">Competition</a></nav></div></header>
+<main class="narrow">
+<span class="eyebrow">Data</span>
+<h1>Vocabulary, corpora, and training states</h1>
+<p class="lede">Everything the model learns from is derived from three public AAC corpora and a curated vocabulary. Each utterance is mapped to card ids and expanded into one training state per tapped-card position, with a soft target over the acceptable next cards.</p>
+<h2>Vocabulary</h2>
+<p>3,094 cards with stable ids, built from CBoard Classic, Project Core, a curated safety and repair set, and consensus across 25 AAC vocabularies, with per-category quotas. Multiword cards carry their component ids so the phrase and its expansion are both acceptable targets.</p>
+<ul class="files">
+<li><a href="/paper/data/vocab.csv">vocab.csv</a> — one row per card: id, label, spoken form, aliases, category, intent, core and safety flags, composable, components</li>
+<li><a href="/paper/data/registry.json">registry.json</a> — append-only id registry with the version hash embedded in every model export</li>
+<li><a href="/paper/data/README.md">README.md</a> and <a href="/paper/data/vocab_report.md">vocab_report.md</a> — how it was built and the counts</li>
+</ul>
+<h2>Corpora and licences</h2>
+<div class="tablewrap"><table>
+<tr><th>corpus</th><th>content</th><th class="num">utterances</th><th>licence</th><th>published here</th></tr>
+<tr><td>AAC Conversations (Hugging Face, willwade)</td><td>GPT-generated scenario dialogues with scene, context turns, typed and intended text; English locales</td><td class="num">10,218 train, 2,611 test</td><td>CC BY 4.0, gated</td><td>mapped rows and derived states, with attribution</td></tr>
+<tr><td>AACText "imagine" (aactext.org)</td><td>isolated AAC-style messages, official split</td><td class="num">6,142</td><td>CC BY 4.0</td><td>mapped rows and derived states</td></tr>
+<tr><td>Turk dialogues (aactext.org)</td><td>invented two-sided dialogues, filtered version</td><td class="num">1,154 dialogues</td><td>CC BY-ND 3.0</td><td>not published: NoDerivs forbids redistributing derived text; download from the source and rebuild with the scripts</td></tr>
+</table></div>
+<h2>Mapping and states</h2>
+<p>Longest-phrase-first matching over labels and aliases, lemma fallback, contraction handling, digits to number words, personal names to a name slot. Utterances are accepted at coverage of at least 0.85 and at most 6 cards. Acceptance: AACText 83.6 percent, Turk 61.1 percent, AAC Conversations 58.5 percent. Each accepted utterance expands into per-prefix states; the telegraphic variant and phrase expansions give a second acceptable next card where they diverge.</p>
+<pre><code>{"id": "aacconv_en-GB_124_2_s1", "source": "aacconv", "setting": "unknown", "tier": "t2a", "weight": 1.0,
+ "partner": "I understand, I will turn it down for you.", "history": ["Music too loud"],
+ "prefix": ["card_0777"],                       ← "Thank you"
+ "targets": {"card_0244": 0.6667, "card_0142": 0.3333}}   ← "Very" or, telegraphically, "Much"</code></pre>
+<div class="kpis">
+<div class="kpi"><div class="v">69,676</div><div class="l">train states (all sources)</div></div>
+<div class="kpi"><div class="v">56,120</div><div class="l">train states published (Turk excluded)</div></div>
+<div class="kpi"><div class="v">8,811</div><div class="l">dev states</div></div>
+<div class="kpi"><div class="v">15,597</div><div class="l">test states</div></div>
+<div class="kpi"><div class="v">2,199</div><div class="l">question-answer test states</div></div>
+</div>
+<ul class="files">
+<li><a href="/paper/data/states_train.jsonl.gz">states_train.jsonl.gz</a>, <a href="/paper/data/states_dev.jsonl.gz">states_dev.jsonl.gz</a>, <a href="/paper/data/states_test.jsonl.gz">states_test.jsonl.gz</a>, <a href="/paper/data/states_test_qa.jsonl.gz">states_test_qa.jsonl.gz</a> — training states, Turk-derived rows removed</li>
+<li><a href="/paper/data/mapped_aacconversations_en_train.jsonl.gz">mapped_aacconversations_en_train.jsonl.gz</a>, <a href="/paper/data/mapped_aactext_imagine.jsonl.gz">mapped_aactext_imagine.jsonl.gz</a> — mapped utterances with coverage and acceptable sequences</li>
+<li><a href="/paper/data/scripts.zip">scripts.zip</a> — ingestion, mapping, state builder, vocabulary builder, trainer, evaluation, export, planner client</li>
+</ul>
+<h2>Tiers and weights</h2>
+<div class="tablewrap"><table>
+<tr><th>tier</th><th>what</th><th class="num">train states</th><th class="num">share of an epoch</th></tr>
+<tr><td>t1a</td><td>AAC user answers a question (AAC Conversations)</td><td class="num">6,319</td><td class="num">25%</td></tr>
+<tr><td>t1b</td><td>reply to a question (Turk, adult)</td><td class="num">4,345</td><td class="num">12%</td></tr>
+<tr><td>t2a</td><td>AAC user reply, not after a question</td><td class="num">25,581</td><td class="num">34%</td></tr>
+<tr><td>t2b</td><td>adult chat, not after a question</td><td class="num">9,211</td><td class="num">10%</td></tr>
+<tr><td>t3</td><td>isolated AAC messages, no partner</td><td class="num">24,220</td><td class="num">19%</td></tr>
+</table></div>
+<div class="callout warn">What the real data lacks: only about 1,800 real question-answer utterances have an AAC user answering, 1,113 of 3,094 cards never appear as a target, and the register is adult. The plan's quota-driven synthetic parent-and-child set addresses all three and has not been generated yet.</div>
+<h2>Plans</h2>
+<p>The three planning documents behind the data and the experiments.</p>
+<div class="tabs"><button class="on" data-f="PLAN-DATA-TRAINING.md">Data and training plan</button><button data-f="PLAN-EXPERIMENTS.md">Experiment plan</button><button data-f="PLAN.md">Architecture review</button></div>
+<div class="doc" id="doc">Loading…</div>
+</main>
+<footer>IrisSpeak: Context-Aware AAC</footer>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script>
+async function show(f){document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.f===f));
+  const t=await (await fetch('/paper/data/'+f)).text(); document.getElementById('doc').innerHTML=marked.parse(t);}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>show(b.dataset.f)); show('PLAN-DATA-TRAINING.md');
+</script>
+</body></html>
