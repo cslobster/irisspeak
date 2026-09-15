@@ -375,7 +375,11 @@ struct MicRipple: View {
 struct SelectionDeck: View {
     var interim: [CardInfo]
     var onRemove: (String) -> Void
+    /// "Speak" lives here, right after the words the child tapped, rather than down in the action row.
+    var onConfirm: () -> Void = {}
+    var busy: Bool = false
     var body: some View {
+        HStack(spacing: 12) {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 4) {
                 Text("YOUR SELECTION").font(.od(10, bold: true)).kerning(1)
@@ -406,6 +410,10 @@ struct SelectionDeck: View {
         }
         .padding(.horizontal, 12).padding(.vertical, 8)
         .frame(maxWidth: .infinity, alignment: .leading)
+        PillButton(title: "Speak", color: Theme.teal, fontSize: FS.base, hPad: 28, enabled: !interim.isEmpty && !busy) { onConfirm() }
+            .gazeTarget("generate") { if !interim.isEmpty && !busy { onConfirm() } }
+            .padding(.trailing, 12)
+        }
         .frame(height: 84)
         .sticker(Theme.amber50.opacity(0.8), radius: 16)
         .shadow(color: .black.opacity(0.05), radius: 2, y: 1)

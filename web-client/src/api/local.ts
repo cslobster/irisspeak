@@ -292,8 +292,7 @@ class LocalApi {
     const rule = engine.realise(labels);
     if (!again || !cur.candidates) cur.candidates = [];
     let sentence: string | null = null;
-    const setting = getProfile().setting || 'unknown';
-    try { sentence = await realiser.realise(labels, cur.question, again ? { avoid: cur.candidates, sample: true, setting } : { setting }); } catch (e) { console.info('realiser failed, using the rule', e); }
+    try { sentence = await realiser.realise(labels, cur.question, again ? { avoid: cur.candidates, sample: true } : {}); } catch (e) { console.info('realiser failed, using the rule', e); }
     // "Another": a fresh wording; when the model has none left, the plain card order, then cycle through earlier ones.
     if (!sentence) {
       if (again && !cur.candidates.includes(rule)) sentence = rule;

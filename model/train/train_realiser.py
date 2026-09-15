@@ -8,7 +8,10 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def prompt(ex):
-    p = f"Partner: {ex['partner']}\n" if ex.get("partner") else "Partner: (nobody has spoken)\n"
+    """Place, then what the partner asked, then the cards the child tapped. The place and the question are what
+    turn a pile of words into an answer ("Setting: doctor." + "Where does it hurt?" + "arm" -> "My arm hurts")."""
+    p = f"Setting: {ex.get('setting') or 'unknown'}.\n"
+    p += f"Partner: {ex['partner']}\n" if ex.get("partner") else "Partner: (nobody has spoken)\n"
     return p + "Cards: " + " | ".join(ex["cards"]) + "\nSentence:"
 
 def main():

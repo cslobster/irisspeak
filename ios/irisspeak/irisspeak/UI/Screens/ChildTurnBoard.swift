@@ -9,7 +9,7 @@ struct ChildTurn: View {
     var body: some View {
         let groups = Dictionary(grouping: rec.cards, by: { $0.category })
         VStack(spacing: 10) {
-            SelectionDeck(interim: vm.interimCards, onRemove: { vm.onRemoveCard($0) })
+            SelectionDeck(interim: vm.interimCards, onRemove: { vm.onRemoveCard($0) }, onConfirm: { Task { await vm.onConfirm() } }, busy: vm.refreshingCards)
 
             GeometryReader { g in
                 let gap: CGFloat = 12
@@ -76,8 +76,6 @@ struct ChildTurn: View {
                     .gazeTarget("refresh") { if !vm.refreshingCards { vm.onRefreshCards() } }
                 PillButton(title: "✕ Clear", color: Theme.slate400, fontSize: FS.base, hPad: 20, enabled: !vm.refreshingCards && !vm.interimCards.isEmpty) { Task { await vm.onClearCards() } }
                     .gazeTarget("clear") { if !vm.refreshingCards && !vm.interimCards.isEmpty { Task { await vm.onClearCards() } } }
-                PillButton(title: "Generate sentence", color: Theme.teal, fontSize: FS.base, hPad: 32, enabled: !vm.interimCards.isEmpty && !vm.refreshingCards) { Task { await vm.onConfirm() } }
-                    .gazeTarget("generate") { if !vm.interimCards.isEmpty && !vm.refreshingCards { Task { await vm.onConfirm() } } }
                 PillButton(title: "Done", color: Theme.coral, fontSize: FS.base, hPad: 32, enabled: !vm.refreshingCards) { vm.onFinishTurn() }
                     .gazeTarget("done") { if !vm.refreshingCards { vm.onFinishTurn() } }
                 Spacer(minLength: 8)

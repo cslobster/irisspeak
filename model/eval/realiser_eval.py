@@ -16,7 +16,7 @@ def forms(w):
     if lw in IRR_PAST: out.add(IRR_PAST[lw])
     return out
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--onnx", required=True); ap.add_argument("--tok", default=None); ap.add_argument("--n", type=int, default=400); ap.add_argument("--show", type=int, default=15); ap.add_argument("--split", default="test"); a = ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument("--onnx", required=True); ap.add_argument("--tok", default=None); ap.add_argument("--n", type=int, default=400); ap.add_argument("--show", type=int, default=15); ap.add_argument("--split", default="test"); ap.add_argument("--probe", default=None, help="JSON list of {cards, partner, setting} to realise instead of scoring"); a = ap.parse_args()
     tok = AutoTokenizer.from_pretrained(a.tok or os.path.dirname(a.onnx)); s = ort.InferenceSession(a.onnx, providers=["CPUExecutionProvider"])
     names = [i.name for i in s.get_inputs()]; layers = sum(1 for n in names if n.endswith(".key")); kvs = [i.shape for i in s.get_inputs() if i.name == "past_key_values.0.key"][0]
     kv_heads, head_dim = kvs[1], kvs[3]; outs = [o.name for o in s.get_outputs()]
@@ -28,11 +28,11 @@ def main():
         for f in fs:
             for v in (f, " " + f): out.update(enc(v))
     func_ids = set(); [word_ids(f, func_ids, False) for f in FUNC]
-    def realise(cards, partner):
+    def realise(cards, partner, setting='unknown'):
         allowed = set(punct) | eos | func_ids
         for c in cards: word_ids(c, allowed, True)
         allowed = np.array(sorted(allowed))
-        ids = enc(f"Partner: {partner.strip() if partner else '(nobody has spoken)'}\nCards: {' | '.join(cards)}\nSentence:")
+        ids = enc(f"Setting: {setting or 'unknown'}.\nPartner: {partner.strip() if partner else '(nobody has spoken)'}\nCards: {' | '.join(cards)}\nSentence:")
         past = {f"past_key_values.{l}.{kv}": np.zeros((1, kv_heads, 0, head_dim), dtype=np.float32) for l in range(layers) for kv in ("key", "value")}
         def feed(toks, pos0, total, past):
             f = dict(past); f["input_ids"] = np.array([toks], dtype=np.int64); f["attention_mask"] = np.ones((1, total), dtype=np.int64); f["position_ids"] = np.array([[pos0 + i for i in range(len(toks))]], dtype=np.int64); return f
@@ -49,10 +49,14 @@ def main():
         if not t: return ""
         t = re.sub(r"\s+([,.!?])", r"\1", t); t = t[0].upper() + t[1:]
         return t if re.search(r"[.!?]$", t) else t + "."
+    if a.probe:   # hand-written cases: same cards, different setting/partner, to see the context actually used
+        for e in json.load(open(a.probe)):
+            print(f"  [{e.get('setting','unknown'):<8}] {e.get('partner') or '(nobody)':<34} {' | '.join(e['cards']):<34} -> {realise(e['cards'], e.get('partner'), e.get('setting'))}")
+        return
     exs = [json.loads(l) for l in open(os.path.join(ROOT, "data", "realiser", f"{a.split}.jsonl"))]; random.seed(5); random.shuffle(exs); exs = exs[: a.n]
     em = cov = clean = 0; lat = []; samples = []
     for e in exs:
-        t0 = time.time(); out = realise(e["cards"], e.get("partner")); lat.append(time.time() - t0)
+        t0 = time.time(); out = realise(e["cards"], e.get("partner"), e.get("setting")); lat.append(time.time() - t0)
         words = re.findall(r"[a-z']+", out.lower()); wset = set(words)
         allowed_words = set(FUNC) | {f for c in e["cards"] for w in re.findall(r"[a-z']+", c.lower()) for f in forms(w)}
         em += int(out.lower() == e["sentence"].lower())

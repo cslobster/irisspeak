@@ -1,11 +1,11 @@
-"""Training pairs for the on-device sentence realiser: (partner question, tapped cards in order) -> the sentence.
+"""Training pairs for the on-device sentence realiser: (place, partner question, tapped cards) -> the sentence.
 
 Sources: the mapped utterances (data/mapped/*.jsonl): every acceptable card sequence of an utterance is one example,
 plus "telegraphic" copies where function-word (core) cards are dropped, so the model learns to put them back —
 what a child's real tap sequence looks like. Output: data/realiser/{train,dev,test}.jsonl with
-  {"partner": str|null, "cards": [labels...], "sentence": str, "source": str}
+  {"setting": str, "partner": str|null, "cards": [labels...], "sentence": str, "source": str}
 """
-import os, json, csv, random, re
+import os, sys, json, csv, random, re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 rng = random.Random(11)
 rows = list(csv.DictReader(open(os.path.join(ROOT, "vocab", "vocab.csv"))))
@@ -34,7 +34,11 @@ def covered(sentence, labels):
         if stem not in lab: return False
     return True
 
-def examples(partner, seqs, sentence, source, split):
+# the scene -> place mapping the state builder already uses, imported so the two stay in step
+sys.path.insert(0, os.path.join(ROOT, "data"))
+from build_states import setting_of   # noqa: E402
+
+def examples(setting, partner, seqs, sentence, source, split):
     out = []; seen = set()
     for seq in seqs[:4]:
         labels = [speak[c] for c in seq if c in speak]
@@ -43,25 +47,25 @@ def examples(partner, seqs, sentence, source, split):
         key = tuple(labels)
         if key in seen: continue
         seen.add(key)
-        out.append({"partner": partner, "cards": labels, "sentence": sentence, "source": source, "split": split})
+        out.append({"setting": setting, "partner": partner, "cards": labels, "sentence": sentence, "source": source, "split": split})
         # telegraphic copy: drop each function-word card with p=0.6, keep at least one card
         if len(seq) > 1:
             kept = [c for c in seq if c not in core or rng.random() > 0.6]
             if kept and kept != seq:
-                out.append({"partner": partner, "cards": [speak[c] for c in kept if c in speak], "sentence": sentence, "source": source + "+tele", "split": split})
+                out.append({"setting": setting, "partner": partner, "cards": [speak[c] for c in kept if c in speak], "sentence": sentence, "source": source + "+tele", "split": split})
     return out
 
 data = []
 for l in open(os.path.join(ROOT, "data", "mapped", "aactext_imagine.jsonl")):
     e = json.loads(l); s = clean(e.get("text"))
-    if s: data += examples(None, e["acceptable_sequences"], s, "aactext", e.get("split") or "train")
+    if s: data += examples("unknown", None, e["acceptable_sequences"], s, "aactext", e.get("split") or "train")
 for l in open(os.path.join(ROOT, "data", "mapped", "turk_dialogues_turns.jsonl")):
     e = json.loads(l); s = clean(e.get("utterance"))
-    if s: data += examples(e.get("prev_utterance"), e["acceptable_sequences"], s, "turk", e.get("split") or "train")
+    if s: data += examples("unknown", e.get("prev_utterance"), e["acceptable_sequences"], s, "turk", e.get("split") or "train")
 for fn, default in (("aacconversations_en_train.jsonl", "train"), ("aacconversations_en_test.jsonl", "test")):
     for l in open(os.path.join(ROOT, "data", "mapped", fn)):
         e = json.loads(l); s = clean(e.get("target_text") or e.get("utterance_intended") or e.get("utterance"))
-        if s: data += examples(e.get("partner_utterance"), e["acceptable_sequences"], s, "aacconv", e.get("split") or default)
+        if s: data += examples(setting_of(e.get("scene")), e.get("partner_utterance"), e["acceptable_sequences"], s, "aacconv", e.get("split") or default)
 # dev: a slice of train utterances (by sentence) so the three splits never share a sentence
 sents = sorted({d["sentence"] for d in data if d["split"] == "train"}); rng.shuffle(sents); dev = set(sents[: max(300, len(sents) // 25)])
 for d in data:

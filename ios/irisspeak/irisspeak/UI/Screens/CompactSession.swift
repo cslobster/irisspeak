@@ -140,7 +140,7 @@ struct ChildCompact: View {
                                 }.buttonStyle(ScaleButtonStyle()).gazeTarget("more") { vm.openMoreIdeas() }
                             case .refresh: actionTile("Refresh", "↻", Color(hex: 0x64748b), enabled: !vm.refreshingCards) { vm.onRefreshCards() }
                             case .clear: actionTile("Clear", "✕", Color.white, fg: Theme.slate600, enabled: !vm.refreshingCards && !vm.interimCards.isEmpty) { Task { await vm.onClearCards() } }
-                            case .confirm: actionTile("Generate sentence", "💬", Theme.teal, enabled: !vm.interimCards.isEmpty && !vm.refreshingCards) { Task { await vm.onConfirm() } }
+                            case .confirm: actionTile("Speak", "💬", Theme.teal, enabled: !vm.interimCards.isEmpty && !vm.refreshingCards) { Task { await vm.onConfirm() } }
                             case .done: actionTile("Done", "✓", Theme.coral, enabled: !vm.refreshingCards) { vm.onFinishTurn() }
                             case .empty: Color.clear
                             }
