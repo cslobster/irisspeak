@@ -11,9 +11,9 @@ data/.cache
 tsconfig.tsbuildinfo
 
 # ---- model training and export (see PLAN-RETRAIN.md; regenerate, never commit) ----
-train/out/
-export/out*/
-export/stage*/
+model/train/out/
+model/export/out*/
+model/export/stage*/
 site/public/model/
 site/public/ort/
 site/public/assets/
@@ -23,11 +23,11 @@ site/model_final/
 site/*.key
 site/r2_cors.json
 # corpora: derived from licence-restricted sources (Turk CC BY-ND); rebuild with data/*.py
-data/raw/
-data/mapped*/
-data/processed/
-data/states*/
-data/.cache/
+model/data/raw/
+model/data/mapped*/
+model/data/processed/
+model/data/states*/
+model/data/.cache/
 # ---- iOS ----
 ios/irisspeak/build/
 ios/irisspeak/irisspeak/Resources/Model/

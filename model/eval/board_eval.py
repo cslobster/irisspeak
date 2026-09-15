@@ -24,7 +24,7 @@ for i, c in enumerate(cards): c['index'] = i
 byLabel = {c['speak'].lower(): c for c in cards if not c.get('is_folder')}
 byId = {c['id']: c for c in cards}
 folder_rows = [c for c in cards if c.get('is_folder')]
-fd = json.load(open(os.path.join(ROOT, 'web-client', 'public', 'folders.json'))); folders = fd['folders']; cat2path = fd['category_to_folder']; card_folder = fd.get('card_folder', {})
+fd = json.load(open(os.path.join(ROOT, '..', 'web-client', 'public', 'folders.json'))); folders = fd['folders']; cat2path = fd['category_to_folder']; card_folder = fd.get('card_folder', {})
 def folder_path_of(c): return card_folder.get(c['id']) or cat2path.get(c['category'])
 rr = json.load(open(os.path.join(M, 'reranker.json'))); freq = json.load(open(os.path.join(M, 'freq.json')))
 cv = np.fromfile(os.path.join(M, 'card_vecs.bin'), dtype=np.float16).astype(np.float32).reshape(-1, 384)

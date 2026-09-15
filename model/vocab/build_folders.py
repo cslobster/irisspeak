@@ -117,7 +117,7 @@ def main():
         cat = byfile.get(os.path.basename(m['mulberry_file'])[:-4].lower()); f = MULB2F.get(cat)
         if f and m['card_id'] not in assign: assign[m['card_id']] = f; source[m['card_id']] = 'mulberry'
     # 2. Cboard word lists (parent folder of the path -> folder id via browse path)
-    fd = json.load(open(os.path.join(ROOT, 'web-client', 'public', 'folders.json')))
+    fd = json.load(open(os.path.join(ROOT, '..', 'web-client', 'public', 'folders.json')))
     path2f = {v[1]: k for k, v in FOLDERS.items() if v[1]}
     sub2f = {'people > characters': 'people', 'places > countries': 'places', 'animals > birds': 'animals', 'animals > insects': 'animals', 'animals > marine animals': 'animals',
              'animals > wild animals': 'animals', 'food > fruit': 'food', 'food > vegetables': 'food', 'food > soup': 'food', 'clothing > clothing accessories': 'clothing',

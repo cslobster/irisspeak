@@ -10,7 +10,6 @@ export function SignupWizardScreen() {
   const [childGender, setChildGender] = useState<'boy' | 'girl'>('girl');
   const [loginCode, setLoginCode] = useState('');
   const [parentEmail, setParentEmail] = useState('');
-  const [interests, setInterests] = useState('');
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submittedAlias, setSubmittedAlias] = useState<string | null>(null);
@@ -24,7 +23,9 @@ export function SignupWizardScreen() {
       const r = await signUp({
         child_name: childName.trim(), child_gender: childGender, login_code: loginCode.trim(),
         age: age ? Number(age) : undefined, notes: notes.trim() || undefined, parent_email: parentEmail.trim() || undefined,
-        interests: interests.split(',').map(s => s.trim()).filter(Boolean),
+        // the single "more adaptive" box is the profile notes; its short comma-separated fragments also become
+        // custom word cards, which is what the old Interests field did
+        interests: notes.split(/[,\n]/).map(s => s.trim()).filter(w => w && w.split(/\s+/).length <= 3 && w.length <= 24).slice(0, 12),
       });
       setSubmittedAlias(r.alias);
     } catch { setError('Something went wrong submitting your signup. Please try again.'); }
@@ -40,7 +41,7 @@ export function SignupWizardScreen() {
           <div className="bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 mb-6 text-left">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Username</p>
             <p className="font-mono font-bold text-slate-800 mb-2">{submittedAlias}</p>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Login code</p>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Password</p>
             <p className="font-mono font-bold text-slate-800">{loginCode}</p>
           </div>
           <Link to="/" className="pill-btn bg-[#94c1c2] inline-block">Back to sign in</Link>
@@ -67,14 +68,11 @@ export function SignupWizardScreen() {
               </Field>
             </div>
             <Field label="Your email"><input type="email" className={inputClass} value={parentEmail} onChange={e => setParentEmail(e.target.value)} /></Field>
-            <Field label="Choose a login code (you'll use this to sign in once approved)">
-              <input className={inputClass} placeholder="e.g. 12345" value={loginCode} onChange={e => setLoginCode(e.target.value)} />
+            <Field label="Password">
+              <input className={inputClass} type="password" autoComplete="new-password" placeholder="Choose a password" value={loginCode} onChange={e => setLoginCode(e.target.value)} />
             </Field>
-            <Field label="Interests (comma separated)">
-              <input className={inputClass} placeholder="e.g. dinosaurs, Bluey, Legos" value={interests} onChange={e => setInterests(e.target.value)} />
-            </Field>
-            <Field label="Anything else we should know?">
-              <textarea className={inputClass} rows={4} placeholder="Sensory preferences, what helps them stay calm…" value={notes} onChange={e => setNotes(e.target.value)} />
+            <Field label="Make the app more adaptive for your needs">
+              <textarea className={inputClass} rows={4} placeholder="Interests (dinosaurs, Bluey, Legos), friends, pets, routine, what helps them stay calm…" value={notes} onChange={e => setNotes(e.target.value)} />
             </Field>
             <button onClick={submit} disabled={!childName.trim() || !loginCode.trim() || submitting} className="pill-btn bg-[#94c1c2] w-full mt-1 disabled:opacity-40 text-base">
               {submitting ? 'Submitting…' : 'Submit for approval →'}

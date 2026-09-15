@@ -61,7 +61,7 @@ def load_folders(vocab_rows):
             if len(mem) < 5: continue
             members[f["id"]] = mem; FOLDER_PATHS[f["id"]] = f.get("path") or f["id"]; FOLDER_LABELS[f["id"]] = f["label"]
         return members
-    fd = json.load(open(os.path.join(ROOT, "web-client", "public", "folders.json")))
+    fd = json.load(open(os.path.join(ROOT, "..", "web-client", "public", "folders.json")))
     words_by_path = {f["path"]: [w.lower() for w in f["words"]] for f in fd["folders"]}
     cat2path = fd["category_to_folder"]
     by_label = {r["label"].lower(): r["id"] for r in vocab_rows}

@@ -8,7 +8,7 @@ Existing Cboard folders and sub-folders keep their browse pages; a v2 folder tha
 """
 import csv, json, os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PUB = os.path.join(ROOT, 'web-client', 'public')
+PUB = os.path.join(ROOT, '..', 'web-client', 'public')
 rows = list(csv.DictReader(open(os.path.join(ROOT, 'vocab', 'vocab.csv'))))
 byid = {r['id']: r for r in rows}
 img = json.load(open(os.path.join(PUB, 'card_images.json')))
