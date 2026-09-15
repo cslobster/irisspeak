@@ -12,6 +12,7 @@ target in train (default 2 percent), which stops "i", "you", "the" dominating.
 
 Usage: python3 data/build_states.py --out data/states
 """
+import glob
 import argparse, json, os, random, collections, re, csv, sys
 QRE = re.compile(r"^(what|who|where|when|why|how|which|do|does|did|are|is|can|could|would|will|should|have|has|want|need|shall|may)\b", re.I)
 def is_question(t): return bool(t) and (t.strip().endswith("?") or bool(QRE.match(t.strip())))
@@ -147,7 +148,9 @@ def synth_choice_states(vocab_rows, ref_count, n_questions, rng, i_want_id):
         if r["category"] in CHOICE_CATS and ref_count.get(r["id"], 0) >= 2 and int(r["words"]) <= 2 and r["core"] != "1":
             by_cat[r["category"]].append(r)
     cats = [c for c in CHOICE_CATS if len(by_cat[c]) >= 4]
-    settings = ["home", "school", "restaurant", "play", "unknown", "home", "home"]
+    # These prompts ("apple or banana?") are not tied to a place. They used to be stamped with a random
+    # setting, which is worse than no label: it taught the model that the setting token is noise, and at play
+    # the model went on to rank coffee 10th and a ball 2396th. Unlabelled is the honest answer.
     out = []
     for i in range(n_questions):
         cat = rng.choice(cats); k = 3 if rng.random() < 0.25 else 2
@@ -157,7 +160,7 @@ def synth_choice_states(vocab_rows, ref_count, n_questions, rng, i_want_id):
         q = tpl.format(A=names[0], B=names[1], C=names[2] if k == 3 else "")
         q = q[0].upper() + q[1:]
         tg = {p["id"]: round(1.0 / k, 4) for p in picks}
-        base = {"split": "train", "source": "synthetic", "setting": rng.choice(settings), "tier": "syn", "weight": 2.0, "partner": q, "history": []}
+        base = {"split": "train", "source": "synthetic", "setting": "unknown", "tier": "syn", "weight": 2.0, "partner": q, "history": []}
         out.append(dict(base, id=f"syn_choice_{i}_s0", prefix=[], targets=tg))
         if i_want_id and cat in ("food", "drink", "things", "clothes", "play", "animals"):
             out.append(dict(base, id=f"syn_choice_{i}_s1", prefix=[i_want_id], targets=tg))
@@ -171,9 +174,97 @@ def synth_folder_states(members, vocab_rows, ref_count, per_folder, rng):
         for i in range(per_folder):
             q = rng.choice(qs); sub = rng.sample(mem, min(4, len(mem)))
             tg = {c: round(0.6 / len(sub), 4) for c in sub}; tg[f"<folder:{f}>"] = 0.4
-            out.append({"id": f"syn_folder_{f}_{i}", "split": "train", "source": "synthetic", "setting": rng.choice(["home", "school", "doctor", "play", "unknown"]),
+            out.append({"id": f"syn_folder_{f}_{i}", "split": "train", "source": "synthetic", "setting": "unknown",   # a folder trigger is not tied to a place; see synth_choice_states
                         "tier": "syn", "weight": 1.5, "partner": q, "history": [], "prefix": [], "targets": tg}); n += 1
     return out
+
+
+def distilled_states(path, surf, lem, temperature=1.0, min_kept=3):
+    """Training states whose targets are the teacher's distribution over next cards, not one sampled answer.
+
+    data/distill/targets.jsonl holds, per (setting, question, prefix), the cards a large model thinks a child is
+    most likely to tap next with a weight each. Mapping those onto card ids and renormalising gives exactly the
+    soft target train_smollm.py already optimises against, so training on these rows is distillation.
+
+    A state is kept only if at least `min_kept` of the teacher's cards map onto the board vocabulary, so a state
+    the teacher answered mostly in words this board does not have never becomes a target."""
+    if not os.path.exists(path):
+        print(f"distill: {path} not found, skipping", flush=True); return []
+    def to_card(w):
+        w = w.strip().lower()
+        for cand in (w, w.rstrip("s"), w + "s", w.replace("-", " ")):
+            if cand in surf: return surf[cand]
+        for lm in lem(w):
+            if lm in surf: return surf[lm]
+        return None
+    out = []; kept = thin = 0; mapped = total = 0
+    for i, line in enumerate(open(path)):
+        line = line.strip()
+        if not line: continue
+        try: d = json.loads(line)
+        except Exception: continue
+        prefix = [c for c in (to_card(w) for w in d.get("prefix", [])) if c]
+        if len(prefix) != len(d.get("prefix", [])): continue      # a prefix we cannot reproduce is not a real state
+        tg = {}
+        for lbl, w in d.get("teacher", []):
+            total += 1
+            cid = "<aac_end>" if lbl.strip().lower() in ("end", "<end>", "stop") else to_card(lbl)
+            if not cid: continue
+            mapped += 1
+            tg[cid] = tg.get(cid, 0.0) + float(w) ** (1.0 / max(1e-6, temperature))
+        tg.pop(None, None)
+        for c in prefix: tg.pop(c, None)                          # a card already tapped is not the next card
+        if len(tg) < min_kept: thin += 1; continue
+        z = sum(tg.values())
+        out.append({"id": f"distill_{i}", "split": "train", "source": "distill",
+                    "setting": d.get("setting", "unknown"), "tier": "distill", "weight": 2.0,
+                    "partner": d.get("question"), "history": [], "prefix": prefix,
+                    "targets": {c: round(v / z, 5) for c, v in sorted(tg.items(), key=lambda kv: -kv[1])},
+                    "origin": "distilled"})
+        kept += 1
+    print(f"distill: {kept} states kept, {thin} dropped as too thin; "
+          f"{mapped}/{total} teacher cards mapped ({mapped/max(1,total):.0%})", flush=True)
+    return out
+
+def setting_turn_states(dataset_dir, surf, lem, rng, max_rows=0):
+    """States from datasets/aac-setting-turns: generated parent/child turns labelled by where they happen.
+
+    The real corpus is 88% home-or-unlabelled, so the model could not learn to use the setting at all. These
+    rows exist to supply that signal; answer words that do not map onto a card are dropped, and a turn is kept
+    only if at least half of it survived, so a half-understood answer does not become a training target."""
+    files = sorted(glob.glob(os.path.join(dataset_dir, "data", "*.jsonl")))
+    turns = []
+    for fp in files:
+        for line in open(fp):
+            line = line.strip()
+            if not line: continue
+            try: turns.append(json.loads(line))
+            except Exception: pass
+    rng.shuffle(turns)
+    if max_rows: turns = turns[:max_rows]
+    def to_card(w):
+        w = w.strip().lower()
+        for cand in (w, w.rstrip("s"), w + "s", w.replace("-", " ")):
+            if cand in surf: return surf[cand]
+        for lm in lem(w):
+            if lm in surf: return surf[lm]
+        return None
+    out = []; kept = dropped = 0
+    for i, t in enumerate(turns):
+        words = t.get("cards") or []
+        seq = []
+        for w in words:
+            cid = to_card(w)
+            if cid and cid not in seq: seq.append(cid)
+        if not seq or len(seq) * 2 < len(words): dropped += 1; continue
+        kept += 1
+        base = {"split": "train", "source": "setting_turns", "setting": t.get("setting", "unknown"),
+                "tier": "gen", "weight": 1.5, "partner": t.get("question"), "history": [], "origin": "generated"}
+        for k, (prefix, targets) in enumerate(states_for([seq])):
+            out.append(dict(base, id=f"genset_{i}_s{k}", prefix=prefix, targets=targets))
+    print(f"setting turns: {kept} usable of {kept + dropped} -> {len(out)} states", flush=True)
+    return out
+
 SETTING_KW = {
     "school": ["school", "class", "teacher", "lesson", "playground", "homework", "library", "college", "university"],
     "doctor": ["doctor", "hospital", "clinic", "nurse", "appointment", "medical", "therapy", "dentist", "pharmacy"],
@@ -215,6 +306,10 @@ def main():
     ap.add_argument("--choice", action="store_true", help="v3: options named in 'A or B?' questions become acceptable first cards")
     ap.add_argument("--synth-choice", type=int, default=0, help="v3: number of synthetic 'A or B?' questions to add to train")
     ap.add_argument("--synth-folder", type=int, default=0, help="v3: synthetic trigger questions per thin folder")
+    ap.add_argument("--setting-turns", default="", help="datasets/aac-setting-turns: generated setting-labelled turns")
+    ap.add_argument("--setting-turns-max", type=int, default=0, help="cap the generated turns used (0 = all)")
+    ap.add_argument("--distill", default="", help="data/distill/targets.jsonl: teacher next-card distributions")
+    ap.add_argument("--distill-temperature", type=float, default=1.0, help=">1 softens the teacher, <1 sharpens it")
     a = ap.parse_args()
     random.seed(a.seed); os.makedirs(a.out, exist_ok=True)
     rng = random.Random(a.seed + 1)
@@ -298,13 +393,19 @@ def main():
             if a.folders: targets = add_folder_targets(prefix, targets, card2folder)
             rec = {"id": f"{uid}_s{k}", "split": split, "source": source, "setting": setting, "tier": tier,
                    "weight": round(TIER_W[tier] * (0.5 if end_only else 1.0), 3),
-                   "partner": partner, "history": hist, "prefix": prefix, "targets": targets}
+                   "partner": partner, "history": hist, "prefix": prefix, "targets": targets,
+                   "origin": "corpus"}
             writers[split].write(json.dumps(rec, ensure_ascii=False) + "\n"); n_states[split] += 1
         stats[f"utts_{split}"] += 1
     # synthetic states (train only): choice questions and thin-folder trigger questions
     synth = []
     if a.synth_choice: synth += synth_choice_states(vocab_rows, ref_count, a.synth_choice, rng, i_want_id)
     if a.folders and a.synth_folder: synth += synth_folder_states(members, vocab_rows, ref_count, a.synth_folder, rng)
+    for rec in synth: rec.setdefault("origin", "synthetic")
+    if a.setting_turns:
+        synth += setting_turn_states(a.setting_turns, surf, lem, rng, a.setting_turns_max)
+    if a.distill:
+        synth += distilled_states(a.distill, surf, lem, a.distill_temperature)
     for rec in synth:
         if a.folders: rec["targets"] = add_folder_targets(rec["prefix"], rec["targets"], card2folder)
         writers["train"].write(json.dumps(rec, ensure_ascii=False) + "\n"); n_states["train"] += 1; n_states["synthetic"] += 1
