@@ -15,11 +15,12 @@ export interface ChildProfile {
   age?: number | null;
   communication_style?: string | null;
   notes?: string | null;    // free text: interests, friends, routine -> personal cards for the reranker
-  use_reranker: boolean;
+  /** A/B only: the reranker is off since the distilled model. New key so the old persisted default (true) is not honoured. */
+  reranker_ab?: boolean;
 }
 export const DEFAULT_NOTES = 'likes football, dinosaurs and drawing; friends Sam and Mia; goes to school by bus';
 export function getProfile(): ChildProfile {
-  return store.get<ChildProfile>('profile', { name: '', setting: 'home', age: null, communication_style: '', notes: DEFAULT_NOTES, use_reranker: true });
+  return store.get<ChildProfile>('profile', { name: '', setting: 'home', age: null, communication_style: '', notes: DEFAULT_NOTES });
 }
 export function setProfile(p: ChildProfile) { store.set('profile', p); }
 

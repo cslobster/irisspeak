@@ -41,19 +41,16 @@ const ROUTES: { rx: RegExp; folder: string | null; allow: string[]; first?: stri
   { rx: /\b(weather|rain|sunny|snow)\b/, folder: 'weather', allow: [] },
   { rx: /\b(feel|feeling|mood|okay|ok)\b/, folder: null, allow: ['tired', 'sick', 'sad', 'happy', 'scared', 'hurt', 'fine', 'good', 'bad'] },
   { rx: /\b(how was|how is|how's|how did it go|how did .* go|how are you|how're you)\b/, folder: 'Good & nice', allow: ['good', 'bad', 'okay', 'fine', 'great', 'fun', 'boring', 'tired', 'busy', 'long'] },
-  // "What did you learn?" is a concrete question with concrete answers, but school subjects are rare in the training
-  // corpus (half the School Subjects folder is never a training target at all), so the model ranks them below
-  // everyday words. Pinning the subjects by name sidesteps the model entirely, which is the only way the masked
-  // rows such as "english" and "geography" can ever reach a board.
-  { rx: /\b(learn|learned|learnt|study|studied|studying|subject|subjects|lesson|lessons|class|classes|homework|teach|taught)\b/, folder: 'school > School Subjects', allow: [],
-    first: ['math', 'book', 'science', 'art', 'english', 'history', 'music', 'sport'] },
 ];
 // Where the conversation happens changes what a question means: at the doctor's, "How are you feeling?" is about
 // being sick or in pain, not about mood. These answer words go first, in this order (not by model probability),
 // and their folder leads.
+// No pinned answer words any more. The school-subject and doctor pins existed because the old model could not
+// produce those cards; the distilled model can, and with the pins off the audience gates did not move
+// (youth 204 -> 204, gen 378 -> 377). Routes still steer the folder and un-hide core words; they no longer answer.
 const SETTING_ROUTES: Record<string, { rx: RegExp; folder: string | null; first: string[] }[]> = {
   doctor: [
-    { rx: /\b(feel|feeling|mood|okay|ok|how are you|how're you|how's it going|what's wrong|what is wrong|hurt|hurts|pain|sore|sick|better|worse)\b/, folder: 'Health & sick', first: ['sick', 'hurt', 'pain', 'bad', 'tired', 'fine', 'good', 'better'] },
+    { rx: /\b(feel|feeling|mood|okay|ok|how are you|how're you|how's it going|what's wrong|what is wrong|hurt|hurts|pain|sore|sick|better|worse)\b/, folder: 'Health & sick', first: [] },
   ],
 };
 function routeQuestion(q: string, setting = ''): { folders: string[]; allow: string[]; first: string[] } {

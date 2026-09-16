@@ -167,6 +167,9 @@ final class Engine: @unchecked Sendable {
     private func loadReranker() {
         queue.async { [self] in
             do {
+                // reranker off by default since the distilled card model (Sep 2026): one question of 245 on the audience
+                // gates, none of 400, at the cost of the MiniLM model and its tables. Kept for A/B behind the profile.
+                if !(Store.getProfile().rerankerAB ?? false) { rerankerReady = false; return }
                 let r = try JSONDecoder().decode(RerankerJson.self, from: Data(contentsOf: Resources.url("reranker", "json")))
                 let f = try JSONDecoder().decode(FreqJson.self, from: Data(contentsOf: Resources.url("freq", "json")))
                 let cv = try Data(contentsOf: Resources.url("card_vecs", "bin"))
