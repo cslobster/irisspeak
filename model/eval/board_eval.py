@@ -268,11 +268,12 @@ def main():
     ap.add_argument('--no-md', action='store_true'); ap.add_argument('--all-folders', action='store_true'); ap.add_argument('--mass', type=float, default=0.0, help='pick folders by member probability mass above this')
     ap.add_argument('--max-folders', type=int, default=1); ap.add_argument('--mass-mode', default='rank', choices=['p', 'rank']); ap.add_argument('--more', type=int, default=60, help='size of the More ideas page (next ranked cards) counted as reachable; 0 = off'); ap.add_argument('--row-thresh', type=float, default=0.08); ap.add_argument('--row-mass', type=float, default=0.0, help='fold the model folder row probability into the mass rule with this weight (disables the separate row step)')
     ap.add_argument('--qa', type=int, default=0, help='held-out check: use N first-card states from data/states/test_qa.jsonl instead of the bank')
+    ap.add_argument('--qa-file', default='', help='alternative held-out file (test_qa_youth.jsonl, test_gen.jsonl)')
     a = ap.parse_args(); bank = json.load(open(a.bank))
     if a.qa:   # held-out corpus questions: expected = the acceptable first cards of the real reply
         import random; random.seed(11)
         idl = {c['id']: c for c in cards}
-        sts = [json.loads(l) for l in open(os.path.join(ROOT, 'data', 'states', 'test_qa.jsonl'))]
+        sts = [json.loads(l) for l in open(a.qa_file or os.path.join(ROOT, 'data', 'states', 'test_qa.jsonl'))]
         sts = [e for e in sts if not e['prefix'] and e.get('partner') and any(not k.startswith('<') for k in e['targets'])]
         random.shuffle(sts); bank = collections.defaultdict(list)
         for e in sts[: a.qa]:

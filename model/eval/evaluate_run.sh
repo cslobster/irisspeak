@@ -37,8 +37,10 @@ export BOARD_MODEL_DIR="$MDIR" BOARD_ONNX="$OUT/card_model_fp16.onnx"
 echo "== 5/6 board evaluation =="
 echo "--- question bank (baseline 80/80, content-only 74/80) ---"
 python3 "$M/eval/board_eval.py" --no-md 2>&1 | tail -1
-echo "--- held-out corpus questions (baseline 332/371) ---"
+echo "--- held-out corpus questions, all (baseline 332/371; adult-heavy, kept for comparison) ---"
 python3 "$M/eval/board_eval.py" --no-md --qa 400 2>&1 | tail -1
+QY="$M/data/states/test_qa_youth.jsonl"; [ -f "$QY" ] && { echo "--- held-out corpus questions, audience-filtered (test_qa_youth) ---"; python3 "$M/eval/board_eval.py" --no-md --qa 400 --qa-file "$QY" 2>&1 | tail -1; }
+QG="$M/data/states/test_gen.jsonl";     [ -f "$QG" ] && { echo "--- held-out generated questions, never trained on (test_gen) ---"; python3 "$M/eval/board_eval.py" --no-md --qa 400 --qa-file "$QG" 2>&1 | tail -1; }
 
 echo "== 6/6 setting conditioning (baseline sensitivity 0.519, precision 0.185) =="
 python3 "$M/eval/setting_eval.py" --model-dir "$MDIR" --onnx "$OUT/card_model_fp16.onnx" \

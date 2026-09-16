@@ -13,6 +13,7 @@ target in train (default 2 percent), which stops "i", "you", "the" dominating.
 Usage: python3 data/build_states.py --out data/states
 """
 import glob
+import hashlib
 import argparse, json, os, random, collections, re, csv, sys
 QRE = re.compile(r"^(what|who|where|when|why|how|which|do|does|did|are|is|can|could|would|will|should|have|has|want|need|shall|may)\b", re.I)
 def is_question(t): return bool(t) and (t.strip().endswith("?") or bool(QRE.match(t.strip())))
@@ -268,6 +269,37 @@ def setting_turn_states(dataset_dir, surf, lem, rng, max_rows=0):
     print(f"setting turns: {kept} usable of {kept + dropped} -> {len(out)} states", flush=True)
     return out
 
+
+# ---- audience: kids and young adults with AAC needs -------------------------------------------------------
+# The corpus is adult-facing in two ways. The Turk dialogues are adult crowd-sourced small talk ("Because I lost my
+# arms in a car accident. Why are you yelling at me?") whose targets are mostly filler (Well, Oh, Okay); and the
+# vocabulary carries cards nobody in the audience needs on a board (Beer, Cocktail, Divorce, Jail). Young-adult
+# life stays in: job, work, college, friends, dating.
+ADULT_WORDS = {"beer", "wine", "cocktail", "whiskey", "whisky", "vodka", "champagne", "alcohol", "drunk", "bar", "pub",
+               "cigarette", "cigarettes", "smoke", "smoking", "sex", "pregnant", "pregnancy", "divorce", "divorced",
+               "lawyer", "jail", "prison", "police", "officer", "arrest", "vote", "election", "husband", "wife",
+               "marry", "married", "wedding", "casino", "gamble", "gambling", "mortgage", "taxes", "tax",
+               "credit card", "loan", "insurance", "salary", "boss", "retire", "retirement", "widow", "funeral"}
+ADULT_RX = re.compile(r"\b(" + "|".join(sorted(map(re.escape, ADULT_WORDS), key=len, reverse=True)) + r")\b", re.I)
+YOUTH_DROP_SOURCES = {"turk"}
+
+def adult_card_ids(vocab_rows):
+    return {r["id"] for r in vocab_rows if r["speak"].strip().lower() in ADULT_WORDS or r["label"].strip().lower() in ADULT_WORDS}
+
+def youth_ok(partner, cards, source, adult_ids, why):
+    """False if this row is outside the audience: adult source, adult question, or an adult card anywhere in it."""
+    if source in YOUTH_DROP_SOURCES: why["adult_source"] += 1; return False
+    if partner and ADULT_RX.search(partner): why["adult_question"] += 1; return False
+    if any(c in adult_ids for c in cards): why["adult_card"] += 1; return False
+    return True
+
+def gen_holdout(setting, question, frac):
+    """Stable per-question split for the generated data: every state of a held-out question goes to test_gen,
+    so a held-out question is never seen in training under any prefix."""
+    if frac <= 0: return False
+    h = int(hashlib.md5(f"{setting}|{(question or '').strip().lower()}".encode()).hexdigest()[:8], 16)
+    return (h % 10000) < frac * 10000
+
 SETTING_KW = {
     "school": ["school", "class", "teacher", "lesson", "playground", "homework", "library", "college", "university"],
     "doctor": ["doctor", "hospital", "clinic", "nurse", "appointment", "medical", "therapy", "dentist", "pharmacy"],
@@ -313,6 +345,17 @@ def main():
     ap.add_argument("--setting-turns-max", type=int, default=0, help="cap the generated turns used (0 = all)")
     ap.add_argument("--distill", default="", help="data/distill/targets.jsonl: teacher next-card distributions")
     ap.add_argument("--distill-temperature", type=float, default=1.0, help=">1 softens the teacher, <1 sharpens it")
+    ap.add_argument("--audience", default="", choices=["", "youth"],
+                    help="youth: drop the Turk source and any row with an adult-only card or question; also writes "
+                         "test_qa_youth.jsonl, the held-out corpus check restricted to the audience")
+    ap.add_argument("--gen-holdout", type=float, default=0.0,
+                    help="fraction of generated/distilled (setting, question) pairs held out into test_gen.jsonl, "
+                         "a target-audience check the model never trains on")
+    ap.add_argument("--gen-settings", default="play,school,doctor,selfcare,restaurant:0.5,transport:0.5",
+                    help="settings that receive generated and distilled rows, optional :weight-scale. home and unknown are "
+                         "excluded by default: the corpus already has 28k and 40k rows there, and generated child-concrete "
+                         "answers under the same label collided with the corpus's adult conversational ones (22 of 30 "
+                         "held-out losses in distill_v2 were home)")
     a = ap.parse_args()
     random.seed(a.seed); os.makedirs(a.out, exist_ok=True)
     rng = random.Random(a.seed + 1)
@@ -381,7 +424,10 @@ def main():
     TIER_W = {"t1a": 3.0, "t1b": 2.0, "t2a": 1.0, "t2b": 0.8, "t3": 0.6}
     TIER_W["syn"] = 2.0
     choice_hits = collections.Counter()
+    adult_ids = adult_card_ids(vocab_rows) if a.audience == "youth" else set()
+    youth_why = collections.Counter()
     for split, source, setting, partner, hist, seqs, uid in kept:
+        if a.audience == "youth" and not youth_ok(partner, [c for sq in seqs for c in sq], source, adult_ids, youth_why): continue
         if len(seqs[0]) > a.max_cards: stats["too_long"] += 1; continue
         tier = tier_of(source, partner, uid)
         if split == "train":
@@ -405,14 +451,45 @@ def main():
     if a.synth_choice: synth += synth_choice_states(vocab_rows, ref_count, a.synth_choice, rng, i_want_id)
     if a.folders and a.synth_folder: synth += synth_folder_states(members, vocab_rows, ref_count, a.synth_folder, rng)
     for rec in synth: rec.setdefault("origin", "synthetic")
+    gen_scale = {}
+    for tok_ in a.gen_settings.split(","):
+        tok_ = tok_.strip()
+        if not tok_: continue
+        name, _, sc = tok_.partition(":"); gen_scale[name] = float(sc) if sc else 1.0
+    test_gen = []
+    def gated(rows):
+        kept = []
+        for r in rows:
+            sc = gen_scale.get(r.get("setting", "unknown"))
+            if sc is None: continue
+            if a.audience == "youth" and not youth_ok(r.get("partner"), list(r["prefix"]) + list(r["targets"]), r["source"], adult_ids, youth_why): continue
+            if gen_holdout(r.get("setting"), r.get("partner"), a.gen_holdout):
+                r["split"] = "test_gen"; test_gen.append(r); continue
+            r["weight"] = round(r["weight"] * sc, 3); kept.append(r)
+        print(f"  gen-settings gate: {len(kept)} of {len(rows)} rows kept ({', '.join(f'{k}x{v}' for k, v in gen_scale.items())})", flush=True)
+        return kept
     if a.setting_turns:
-        synth += setting_turn_states(a.setting_turns, surf, lem, rng, a.setting_turns_max)
+        synth += gated(setting_turn_states(a.setting_turns, surf, lem, rng, a.setting_turns_max))
     if a.distill:
-        synth += distilled_states(a.distill, surf, lem, a.distill_temperature)
+        synth += gated(distilled_states(a.distill, surf, lem, a.distill_temperature))
     for rec in synth:
         if a.folders: rec["targets"] = add_folder_targets(rec["prefix"], rec["targets"], card2folder)
         writers["train"].write(json.dumps(rec, ensure_ascii=False) + "\n"); n_states["train"] += 1; n_states["synthetic"] += 1
     for w in writers.values(): w.close()
+    if test_gen:
+        with open(os.path.join(a.out, "test_gen.jsonl"), "w") as fh:
+            for r in test_gen: fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+        print(f"test_gen: {len(test_gen)} held-out generated states ({sum(1 for r in test_gen if not r['prefix'])} first-turn) from {a.gen_holdout:.0%} of questions", flush=True)
+    if a.audience == "youth":
+        print("audience=youth dropped:", dict(youth_why), flush=True)
+        src = os.path.join(a.out, "test_qa.jsonl")
+        if os.path.exists(src):
+            n_in = n_out = 0; why = collections.Counter()
+            with open(os.path.join(a.out, "test_qa_youth.jsonl"), "w") as fh:
+                for line in open(src):
+                    e = json.loads(line); n_in += 1
+                    if youth_ok(e.get("partner"), list(e["prefix"]) + list(e["targets"]), e.get("source"), adult_ids, why): fh.write(line); n_out += 1
+            print(f"test_qa_youth: {n_out} of {n_in} held-out corpus states kept for the audience; dropped {dict(why)}", flush=True)
     if a.folders:
         json.dump({"folders": [{"id": f"<folder:{f}>", "path": FOLDER_PATHS.get(f, f), "label": FOLDER_LABELS.get(f, f.capitalize()), "members": ids} for f, ids in members.items()],
                    "folder_weight": FOLDER_W}, open(os.path.join(a.out, "folders.json"), "w"), indent=1)
