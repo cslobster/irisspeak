@@ -170,6 +170,18 @@ Model-only with prior debiasing (alpha 0.5) and no pinned answers, on R2 as `v5/
 
 **Found at deploy: history.** Every evaluation above used an empty Earlier: block. The live prompt carries the account's last two turns, and every generated/distilled training state had none, so off-topic history dominates the setting: the play board for "What do you want to do?" echoed the previous turns (Fix, Talk, Just). Reproduced offline exactly; with play-relevant history the board is right (Park, Slide, Swim, Swing). v7 trains with an Earlier: block on half the generated states, 40% of them off-topic, and `judge_boards.py --history off|same|live` now measures boards the way users see them.
 
+**Judged with history (the deploy stands).** Boards built with an Earlier: block, the way the app sends them,
+shipped v31 against live v5, blind, 50 corpus-youth and 50 generated questions each:
+
+| History | Model | Corpus: fully answerable | Generated: fully answerable | Filler /9 (corpus) |
+|---|---|---|---|---|
+| off-topic | shipped | 68% | 56% | 2.7 |
+| off-topic | **v5** | **78%** | **92%** | **1.7** |
+| same-setting | shipped | 57% | 43% | 2.7 |
+| same-setting | **v5** | **79%** | **90%** | **1.9** |
+
+So the history echo is a weakness relative to v5's own no-history boards, not relative to what was live before.
+
 ### Candidate before that finding
 
 **v5**, model-only, with the board simplification. Deploy is `sh site/deploy_model.sh distill_v5 v5` (asks
