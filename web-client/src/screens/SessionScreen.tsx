@@ -721,7 +721,7 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
       <div className="flex-shrink-0 flex justify-start sm:justify-center gap-2 sm:gap-3 flex-nowrap overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
         {byCat.core.map(c => (
           <div key={c.id} className="shrink-0">
-            <CardChip card={c} size={byCat.core.length > 6 ? 'sm' : 'md'} onClick={() => !busy && onCardClick(c)} />   // 3 fixed + 5 personal (+ name) must fit one row
+            <CardChip card={c} size={byCat.core.length > 6 ? 'sm' : 'md'} onClick={() => !busy && onCardClick(c)} />
           </div>
         ))}
         <div className="shrink-0">
