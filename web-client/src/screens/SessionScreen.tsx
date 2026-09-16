@@ -579,24 +579,22 @@ export function SessionScreen() {
           )}
         </div>
 
-        {/* Top controls sit on a fixed strip exactly as wide as the board content (scaled), so the place picker's
-            left edge and the menu's right edge line up with the fixed row below. */}
-        <div className="fixed z-20 pointer-events-none"
-             style={{ top: 'max(0.75rem, env(safe-area-inset-top))', left: contentBox ? contentBox.left : 16, width: contentBox ? contentBox.width : 'calc(100vw - 2rem)' }}>
-          {role === 'child' && phase === 'idle' && (
-            <div className="absolute left-0 top-0 pointer-events-auto">
-              <SettingPicker value={setting} onChange={changeSetting} />
-            </div>
-          )}
-          <button
-            onClick={() => setShowMenu(true)}
-            className="icon-btn absolute right-0 top-0 p-3 pointer-events-auto"
-            title="Menu (Esc)"
-            aria-label="Open session menu"
-          >
-            <MenuIcon size={28} />
-          </button>
-        </div>
+        {/* The place picker (child's turn) lines up with the board's left edge; the menu button stays in the page's
+            top-right corner on every screen, clear of the parent's setting tiles. */}
+        {role === 'child' && phase === 'idle' && (
+          <div className="fixed z-20" style={{ top: 'max(0.75rem, env(safe-area-inset-top))', left: contentBox ? contentBox.left : 16 }}>
+            <SettingPicker value={setting} onChange={changeSetting} />
+          </div>
+        )}
+        <button
+          onClick={() => setShowMenu(true)}
+          className="icon-btn fixed right-4 z-20 p-3"
+          style={{ top: 'max(0.75rem, env(safe-area-inset-top))' }}
+          title="Menu (Esc)"
+          aria-label="Open session menu"
+        >
+          <MenuIcon size={28} />
+        </button>
 
         {overlays}
       </div>
