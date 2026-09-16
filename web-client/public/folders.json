@@ -954,7 +954,7 @@
    "id": "people",
    "path": "people",
    "label": "People",
-   "icon": "/symbols/cboard/people.svg",
+   "icon": "/symbols/openmoji/people.svg",
    "words": [
     "doctor",
     "kid",
@@ -1084,7 +1084,7 @@
   {
    "path": "people > Boys & Friends",
    "label": "Boys & Friends",
-   "icon": "/symbols/cboard/people.svg",
+   "icon": "/symbols/openmoji/people.svg",
    "words": [
     "kid",
     "friend",
@@ -1234,7 +1234,7 @@
    "id": "family",
    "path": "people > family",
    "label": "Family",
-   "icon": "/symbols/cboard/people.svg",
+   "icon": "/symbols/mulberry/family.svg",
    "words": [
     "my",
     "your",
@@ -2075,7 +2075,7 @@
    "id": "animals",
    "path": "animals",
    "label": "Animals",
-   "icon": "/symbols/cboard/animals.svg",
+   "icon": "/symbols/openmoji/animals.svg",
    "words": [
     "dog",
     "cat",
@@ -2538,7 +2538,7 @@
    "id": "weather",
    "path": "weather",
    "label": "Weather",
-   "icon": "/symbols/cboard/weather.svg",
+   "icon": "/symbols/openmoji/weather.svg",
    "words": [
     "weather",
     "rain",
@@ -2797,7 +2797,7 @@
    "id": "plants",
    "path": "plants",
    "label": "Plants & garden",
-   "icon": "/symbols/cboard/plants.svg",
+   "icon": "/symbols/mulberry/plant.svg",
    "words": [
     "plant",
     "stick",
@@ -3080,7 +3080,7 @@
    "id": "hygiene",
    "path": "hygiene",
    "label": "Bathroom & hygiene",
-   "icon": "/symbols/cboard/personal_hygiene.svg",
+   "icon": "/symbols/openmoji/hygiene.svg",
    "words": [
     "bathroom",
     "shower",
@@ -3217,7 +3217,7 @@
    "id": "sports",
    "path": "sports",
    "label": "Sports",
-   "icon": "/symbols/cboard/sports.svg",
+   "icon": "/symbols/mulberry/ball.svg",
    "words": [
     "run",
     "win",
@@ -3591,7 +3591,7 @@
    "id": "kitchen",
    "path": "kitchen",
    "label": "Kitchen",
-   "icon": "/symbols/cboard/kitchen_items.svg",
+   "icon": "/symbols/openmoji/kitchen.svg",
    "words": [
     "cook",
     "kitchen",
@@ -5718,7 +5718,7 @@
    "id": "phr_repair",
    "path": "Say it again",
    "label": "Say it again",
-   "icon": "/symbols/mulberry/folder.svg",
+   "icon": "/symbols/mulberry/talk_1_,_to.svg",
    "words": [
     "i don't know",
     "i mean",
@@ -5753,7 +5753,7 @@
    "id": "phr_say",
    "path": "Ready phrases",
    "label": "Ready phrases",
-   "icon": "/symbols/arasaac/i_am.png",
+   "icon": "/symbols/mulberry/talk_2_,_to.svg",
    "words": [
     "i'm",
     "i am",
@@ -5867,7 +5867,7 @@
   {
    "path": "Ready phrases > About Me",
    "label": "About Me",
-   "icon": "/symbols/arasaac/i_am.png",
+   "icon": "/symbols/mulberry/talk_2_,_to.svg",
    "words": [
     "i'm",
     "i am",
@@ -5918,7 +5918,7 @@
    "id": "little_words",
    "path": "Little words",
    "label": "Little words",
-   "icon": "/symbols/arasaac/i_am.png",
+   "icon": "/symbols/openmoji/question.svg",
    "words": [
     "you",
     "i",
@@ -6056,7 +6056,7 @@
   {
    "path": "Little words > Can & Will",
    "label": "Can & Will",
-   "icon": "/symbols/arasaac/ampersand.png",
+   "icon": "/symbols/openmoji/question.svg",
    "words": [
     "did",
     "do",
@@ -6121,7 +6121,7 @@
   {
    "path": "Little words > And & But",
    "label": "And & But",
-   "icon": "/symbols/arasaac/ampersand.png",
+   "icon": "/symbols/openmoji/question.svg",
    "words": [
     "i",
     "that",
@@ -6163,7 +6163,7 @@
   {
    "path": "Little words > Pronouns",
    "label": "Pronouns",
-   "icon": "/symbols/arasaac/ampersand.png",
+   "icon": "/symbols/openmoji/people.svg",
    "words": [
     "you",
     "the",

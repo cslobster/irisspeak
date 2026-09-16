@@ -231,7 +231,8 @@ final class LocalApi {
         let glue: Set<String> = ["am", "is", "are", "be", "the", "a", "an", "to", "of"]   // never makes a card distinct: "I am" = "I"
         func stem(_ w: String) -> String { var x = w.lowercased().filter { $0.isLetter || $0 == "'" }; if x == "i" { return x }; for suf in ["ies", "ing", "es", "ed", "s"] where x.hasSuffix(suf) && x.count > suf.count + 1 { x = String(x.dropLast(suf.count)); break }; return x }
         func stemsOf(_ speak: String) -> [String] {
-            speak.lowercased().replacingOccurrences(of: "'m", with: " am").replacingOccurrences(of: "'s", with: "").replacingOccurrences(of: "n't", with: " not")
+            speak.lowercased().replacingOccurrences(of: #"^(i'm|i am|i feel|i want to|i want|i need to|i need|i like to|i like)\s+"#, with: "", options: .regularExpression)   // "I'm tired" = "Tired"
+                .replacingOccurrences(of: "'m", with: " am").replacingOccurrences(of: "'s", with: "").replacingOccurrences(of: "n't", with: " not")
                 .split(separator: " ").map { stem(String($0)) }.filter { !$0.isEmpty && !glue.contains($0) }
         }
         var onBoard = Set<String>(); let pinned = Set((cur.routed ?? []) + Array(chosen))

@@ -235,6 +235,7 @@ def board(question, setting):
             if w.endswith(suf) and len(w) > len(suf) + 1: return w[: -len(suf)]
         return w
     def stems_of(speak):
+        speak = re.sub(r"^(i'm|i am|i feel|i want to|i want|i need to|i need|i like to|i like)\s+", '', speak.lower())   # "I'm tired" = "Tired"
         t = re.sub(r"n't\b", " not", re.sub(r"'s\b", "", re.sub(r"'m\b", " am", speak.lower())))
         return [x for x in (stem(w) for w in t.split()) if x and x not in GLUE]
     pinned = {cid for lst in lists.values() for cid in lst}
