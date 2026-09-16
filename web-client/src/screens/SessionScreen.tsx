@@ -27,12 +27,15 @@ type Phase = 'init' | 'idle' | 'thinking' | 'closing';
 // One width for the whole board, set by the fixed row: Yes / No / Please, five personal cards, More ideas and
 // View all -- ten medium chips (96px) at the row gap (12px). Everything above and below the row takes this width.
 const CONTENT_W = 10 * 96 + 9 * 12;   // 1068
-// iPad Safari with its tab bar showing is wide but short. There the action buttons (Refresh / Clear / Done /
-// Feedback) stand in a column on the right of the board instead of a row under it, and the canvas is shorter.
+// iPad Safari in landscape with its tab bar showing is wide but short. Logical viewports (CSS px) with the address
+// bar and tab bar visible: 11-inch iPad Air/Pro about 1180x720 (M4 11-inch 1210x734), 10th-gen 10.9-inch about
+// 1080x700, iPad mini about 1133x640; the 13-inch is about 1366x920 and keeps the normal layout. In the short
+// ones the action buttons (Refresh / Clear / Done / Feedback) stand in a column on the right of the board instead
+// of a row under it, and the canvas is shorter, so the cards get the height back.
 const ACTION_COL_W = 150;
 const SIDE_DESIGN_H = 800;
 function useShortLandscape() {
-  const calc = () => window.innerWidth >= 900 && window.innerHeight <= 840 && window.innerWidth > window.innerHeight;
+  const calc = () => window.innerWidth >= 1000 && window.innerHeight <= 760 && window.innerWidth > window.innerHeight;
   const [v, setV] = useState(calc);
   useEffect(() => { const f = () => setV(calc()); window.addEventListener('resize', f); window.addEventListener('orientationchange', f); return () => { window.removeEventListener('resize', f); window.removeEventListener('orientationchange', f); }; }, []);
   return v;
