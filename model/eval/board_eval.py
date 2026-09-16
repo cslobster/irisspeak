@@ -48,7 +48,9 @@ def predict(question, setting):
     p = np.exp(logits - logits.max()); p /= p.sum(); return p
 
 def rerank(p, question):
-    order = np.argsort(-p); q = st.encode([question], normalize_embeddings=True)[0]
+    order = np.argsort(-p)
+    if NO_RERANK: return [int(j) for j in order]
+    q = st.encode([question], normalize_embeddings=True)[0]
     bi = dict((int(k), v) for k, v in freq['bi'].get('-1', []))   # empty prefix: successors of the start token
     biSum = sum(bi.values()) + freq['smoothing'] * len(uni)
     def fl(j): return math.log(freq['lambda_bi'] * (bi.get(j, freq['smoothing']) / biSum) + (1 - freq['lambda_bi']) * (uni[j] / uni.sum()))
@@ -162,8 +164,15 @@ ROUTES = [  # (regex, folder path, extra allowed labels normally hidden as core 
 SETTING_ROUTES = {  # setting -> (regex, folder, answer words first, in this order): the place changes what a question means
     'doctor': [(r"\b(feel|feeling|mood|okay|ok|how are you|how're you|how's it going|what's wrong|what is wrong|hurt|hurts|pain|sore|sick|better|worse)\b", 'Health & sick', ['sick', 'hurt', 'pain', 'bad', 'tired', 'fine', 'good', 'better'])],
 }
+NO_PINS = False; NO_RERANK = False
 def route(question, setting=''):
     q = question.lower(); paths, allow, first = [], [], []
+    if NO_PINS:
+        for rx, path, extra, _pin in ROUTES:
+            if re.search(rx, q):
+                if path and path not in paths: paths.append(path)
+                allow += extra
+        return paths, allow, first
     for rx, path, words in SETTING_ROUTES.get(setting, []):
         if re.search(rx, q):
             if path: paths.append(path)
@@ -268,8 +277,11 @@ def main():
     ap.add_argument('--no-md', action='store_true'); ap.add_argument('--all-folders', action='store_true'); ap.add_argument('--mass', type=float, default=0.0, help='pick folders by member probability mass above this')
     ap.add_argument('--max-folders', type=int, default=1); ap.add_argument('--mass-mode', default='rank', choices=['p', 'rank']); ap.add_argument('--more', type=int, default=60, help='size of the More ideas page (next ranked cards) counted as reachable; 0 = off'); ap.add_argument('--row-thresh', type=float, default=0.08); ap.add_argument('--row-mass', type=float, default=0.0, help='fold the model folder row probability into the mass rule with this weight (disables the separate row step)')
     ap.add_argument('--qa', type=int, default=0, help='held-out check: use N first-card states from data/states/test_qa.jsonl instead of the bank')
+    ap.add_argument('--no-pins', action='store_true', help='drop the pinned answer words from routes (school subjects, doctor words): judge the model alone there')
+    ap.add_argument('--no-rerank', action='store_true', help='model order only, no reranker')
     ap.add_argument('--qa-file', default='', help='alternative held-out file (test_qa_youth.jsonl, test_gen.jsonl)')
     a = ap.parse_args(); bank = json.load(open(a.bank))
+    global NO_PINS, NO_RERANK; NO_PINS = a.no_pins; NO_RERANK = a.no_rerank
     if a.qa:   # held-out corpus questions: expected = the acceptable first cards of the real reply
         import random; random.seed(11)
         idl = {c['id']: c for c in cards}

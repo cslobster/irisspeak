@@ -15,14 +15,14 @@ from reranker_e2e import build_model, topk_states, Feats, labels_for, Reranker, 
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--ckpt", required=True); ap.add_argument("--n-train", type=int, default=6000)
-    ap.add_argument("--out", default=os.path.join(ROOT, "site", "public", "model")); ap.add_argument("--seed", type=int, default=7); a = ap.parse_args()
+    ap.add_argument("--out", default=os.path.join(ROOT, "site", "public", "model")); ap.add_argument("--seed", type=int, default=7); ap.add_argument("--no-meta", action="store_true", help="drop the category/intent one-hots: 13 features instead of 54"); a = ap.parse_args()
     random.seed(a.seed); torch.manual_seed(a.seed); np.random.seed(a.seed)
     device = os.environ.get("AAC_DEVICE") or ("mps" if torch.backends.mps.is_available() else "cpu")
     model, tok, ids, speak = build_model(a.ckpt, device); n = len(ids); id2idx = {c: i for i, c in enumerate(ids)}; start_idx = n
     rows = list(csv.DictReader(open(os.path.join(ROOT, "vocab", "vocab.csv"))))
     load = lambda s: [json.loads(l) for l in open(os.path.join(ROOT, "data", "states", f"{s}.jsonl"))]
     train_states = load("train"); dev = load("dev"); random.shuffle(dev); dev_e = dev[: a.n_train]
-    feats = Feats(rows, ids, train_states, id2idx)
+    feats = Feats(rows, ids, train_states, id2idx, no_meta=a.no_meta)
     top = topk_states(model, tok, dev_e, id2idx, start_idx, device); pv = feats.partner_vecs(dev_e)
     X = torch.tensor(np.stack([feats.featurize(e, t, pv[i], ids) for i, (e, t) in enumerate(zip(dev_e, top))]))
     Y = torch.tensor(np.stack([labels_for(e, t, id2idx) for e, t in zip(dev_e, top)]))

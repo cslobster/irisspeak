@@ -171,7 +171,6 @@ class Engine {
     }
     const fl = this.freqLogp(prefix.map(c => this.byId[c].index)); const counts = this.personalCounts(); const profile = this.profileCards();
     const bigr = this.personalBigrams(prefix.length ? prefix[prefix.length - 1] : '<start>');
-    const now = new Date(); const tp = timePrior(now.getHours(), now.getDay() >= 1 && now.getDay() <= 5);
     const top = order.slice(0, rr.K); const scores: [number, number][] = [];
     for (let r = 0; r < top.length; r++) {
       const j = top[r], c = this.cards[j]; const x = new Float32Array(rr.dim); let o = 0;
@@ -191,7 +190,9 @@ class Engine {
       // quick row already covers.
       const w = Math.max(0, 1 - r / 60);
       const personal = c.core ? 0 : w * (0.3 * Math.log(1 + pc) + 0.25 * Math.log(1 + pb));
-      scores.push([j, h[0] + personal + (profile.has(c.id) ? 0.8 : 0) + (tp[c.category] || 0)]);
+      // Profile words ride the same faded personal lane, not a flat +0.8 that outweighed the reranker itself.
+      // The time-of-day prior is gone: the setting field says where the child is, and the model now uses it.
+      scores.push([j, h[0] + personal + (profile.has(c.id) ? w * 0.3 : 0)]);
     }
     scores.sort((a, b) => b[1] - a[1]); return scores.map(s => s[0]).concat(order.slice(rr.K));   // reranked top K, then the model's order
   }

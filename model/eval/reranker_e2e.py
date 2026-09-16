@@ -46,8 +46,11 @@ def topk_states(model, tok, exs, id2idx, start_idx, device, bs=64):
     return out
 
 class Feats:
-    def __init__(self, rows, ids, train_states, id2idx):
-        self.cats = sorted({r["category"] for r in rows}); self.ints = sorted({r["intent"] for r in rows})
+    def __init__(self, rows, ids, train_states, id2idx, no_meta=False):
+        # 29 category + 12 intent one-hots make the reranker partly a lookup table over card metadata.
+        # no_meta drops them, leaving the four real signals plus state flags; the gates decide which ships.
+        self.cats = [] if no_meta else sorted({r["category"] for r in rows})
+        self.ints = [] if no_meta else sorted({r["intent"] for r in rows})
         self.meta = {}
         for r in rows:
             self.meta[r["id"]] = (r["category"], r["intent"], int(r["core"]), int(r["safety"]), int(r["composable"]), int(r["words"]) > 1)

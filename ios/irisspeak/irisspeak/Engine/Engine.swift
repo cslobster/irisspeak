@@ -294,7 +294,6 @@ final class Engine: @unchecked Sendable {
         let counts = personalCounts(); let profile = profileCards()
         let bigr = personalBigrams(prefix.last ?? "<start>")
         let now = Date(); let cal = Calendar.current
-        let wd = cal.component(.weekday, from: now); let tp = timePrior(hour: cal.component(.hour, from: now), weekday: wd >= 2 && wd <= 6)
         let top = Array(order.prefix(rr.K))
         var scores: [(Int, Float)] = []; scores.reserveCapacity(top.count)
         for (r, j) in top.enumerated() {
@@ -325,7 +324,8 @@ final class Engine: @unchecked Sendable {
             // learn?". So the bonus fades with the model's own ranking and never applies to function words.
             let pw = max(0, 1 - Float(r) / 60)
             let personal = (c.core ?? 0) != 0 ? 0 : pw * (0.3 * log(1 + Float(pc)) + 0.25 * log(1 + Float(pb)))
-            scores.append((j, h[0] + personal + (profile.contains(c.id) ? 0.8 : 0) + (tp[c.category] ?? 0)))
+            // Profile words ride the same faded personal lane; the time-of-day prior is gone (the setting says where).
+            scores.append((j, h[0] + personal + (profile.contains(c.id) ? pw * 0.3 : 0)))
         }
         scores.sort { $0.1 > $1.1 }
         return scores.map { $0.0 } + Array(order.dropFirst(rr.K))   // reranked top K, then the model's order
