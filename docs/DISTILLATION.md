@@ -220,3 +220,12 @@ python3 eval/inspect_question.py "What do you want to do?" --setting play --watc
 Success is *ball*, *park* and *swing* arriving in the model's own top ranks, with no route pinning them. That is
 also the condition for deleting the hard-coded school-subject route from `web-client/src/api/local.ts`,
 `ios/.../LocalApi.swift` and `model/eval/board_eval.py`.
+
+## Board changes shipped alongside (16 Sep 2026)
+
+- Topic 15 / Action 3 / Feeling 3, panels hugging their cards, on a 1200-wide canvas.
+- Quick row: Yes / No / Please plus five personal cards, ranked by the model's probability for the current state
+  over the child's own history, profile notes and custom words (`engine.personalRow`), with a model fallback.
+- Feedback button and dialog; verdicts stored in `board_feedback` and exportable as JSONL from
+  `/admin/feedback?format=jsonl` -- the next training material, since it names the setting, the question, the
+  board that was shown, the cards a partner crossed out, and the answer they wanted.
