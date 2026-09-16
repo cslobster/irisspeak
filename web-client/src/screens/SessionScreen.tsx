@@ -717,11 +717,11 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
         </div>
       </div>
 
-      {/* Bottom: the quick-fire row (nine fixed answers, plus the child's name card) and "View all words", one row */}
+      {/* Bottom: the quick row -- Yes / No / Please, five personal cards, the child's name card -- then More ideas and View all, one row */}
       <div className="flex-shrink-0 flex justify-start sm:justify-center gap-2 sm:gap-3 flex-nowrap overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
         {byCat.core.map(c => (
           <div key={c.id} className="shrink-0">
-            <CardChip card={c} size={byCat.core.length > 8 ? 'sm' : 'md'} onClick={() => !busy && onCardClick(c)} />
+            <CardChip card={c} size={byCat.core.length > 6 ? 'sm' : 'md'} onClick={() => !busy && onCardClick(c)} />   // 3 fixed + 5 personal (+ name) must fit one row
           </div>
         ))}
         <div className="shrink-0">
