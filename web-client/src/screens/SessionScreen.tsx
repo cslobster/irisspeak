@@ -718,7 +718,7 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
               <p className="text-center text-sm sm:text-base font-extrabold text-slate-700 mb-2 flex-shrink-0">{label}</p>
               <div className={`grid ${cols} gap-2 sm:gap-3 content-start justify-items-center`}>
                 {byCat[key].map(c => (
-                  <CardChip key={c.id} card={c} size="lg" onClick={() => !busy && onCardClick(c)} onLongPress={() => !busy && onCardHold(c)} />
+                  <CardChip key={c.id} card={c} size="md" onClick={() => !busy && onCardClick(c)} onLongPress={() => !busy && onCardHold(c)} />
                 ))}
               </div>
             </div>
