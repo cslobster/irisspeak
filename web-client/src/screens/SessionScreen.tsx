@@ -1,5 +1,5 @@
 import { remoteFeedback } from '../api/remote';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api/local';
 import { engine } from '../engine/model';
@@ -112,6 +112,15 @@ export function SessionScreen() {
   const startedRef = useRef(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const fit = useFitScale(rootRef);
+  // the content wrapper's on-screen box (after scaling); the top controls are pinned to it so every row shares one width
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [contentBox, setContentBox] = useState<{ left: number; width: number } | null>(null);
+  useLayoutEffect(() => {
+    const el = contentRef.current; if (!el) return;
+    const measure = () => { const r = el.getBoundingClientRect(); setContentBox(b => (b && Math.abs(b.left - r.left) < 0.5 && Math.abs(b.width - r.width) < 0.5) ? b : { left: r.left, width: r.width }); };
+    measure(); const ro = new ResizeObserver(measure); ro.observe(el); window.addEventListener('resize', measure);
+    return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
+  }, [fit.s, fit.cw]);
   // Phones (either orientation) and small tablets get the compact layout; larger screens keep the board.
   const compact = fit.vw < 900 || fit.vh < 600;
   const landscape = fit.vw > fit.vh;
@@ -517,7 +526,7 @@ export function SessionScreen() {
         </div>
 
         {/* Center content */}
-        <div className="flex-1 min-h-0 self-stretch flex flex-col items-stretch w-full mx-auto mt-2 overflow-hidden" style={{ maxWidth: CONTENT_W }}>
+        <div ref={contentRef} className="flex-1 min-h-0 self-stretch flex flex-col items-stretch w-full mx-auto mt-2 overflow-hidden" style={{ maxWidth: CONTENT_W }}>
           {(phase === 'init' || phase === 'thinking' || phase === 'closing') && (
             <div className="flex-1 flex items-center justify-center">
               <Loader label={phaseLabel} />
@@ -558,8 +567,8 @@ export function SessionScreen() {
 
         {/* Top controls sit on a fixed strip exactly as wide as the board content (scaled), so the place picker's
             left edge and the menu's right edge line up with the fixed row below. */}
-        <div className="fixed left-1/2 -translate-x-1/2 z-20 pointer-events-none"
-             style={{ top: 'max(0.75rem, env(safe-area-inset-top))', width: `min(${Math.round(CONTENT_W * fit.s)}px, calc(100vw - 2rem))` }}>
+        <div className="fixed z-20 pointer-events-none"
+             style={{ top: 'max(0.75rem, env(safe-area-inset-top))', left: contentBox ? contentBox.left : 16, width: contentBox ? contentBox.width : 'calc(100vw - 2rem)' }}>
           {role === 'child' && phase === 'idle' && (
             <div className="absolute left-0 top-0 pointer-events-auto">
               <SettingPicker value={setting} onChange={changeSetting} />
