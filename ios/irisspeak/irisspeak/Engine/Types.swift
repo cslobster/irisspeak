@@ -89,7 +89,8 @@ struct ChildProfile: Codable, Equatable {
     var age: Int? = nil
     var communicationStyle: String? = ""
     var notes: String? = ChildProfile.defaultNotes
-    var useReranker: Bool = true
+    /// A/B only: the reranker is off since the distilled model. Optional so profiles saved before this key decode.
+    var rerankerAB: Bool? = nil
 
     static let defaultNotes = "likes football, dinosaurs and drawing; friends Sam and Mia; goes to school by bus"
 }

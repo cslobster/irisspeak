@@ -162,16 +162,11 @@ ROUTES = [  # (regex, folder path, extra allowed labels normally hidden as core 
     (r"\b(weather|rain|sunny|cold outside)\b", 'weather', [], []),
     (r"\b(feel|feeling|mood|okay|ok)\b", None, ['tired', 'sick', 'sad', 'happy', 'scared', 'hurt', 'fine', 'good', 'bad'], []),
     (r"\b(how was|how is|how's|how did it go|how did .* go|how are you|how're you)\b", 'Good & nice', ['good', 'bad', 'okay', 'fine', 'great', 'fun', 'boring', 'tired', 'busy', 'long'], []),
-    # "What did you learn?" is concrete, but school subjects are rare in the training corpus (17 of the 40 School
-    # Subjects words are never a training target, so they are masked out of the softmax entirely). Pinning the
-    # subjects by name is the only way those rows reach a board.
-    (r"\b(learn|learned|learnt|study|studied|studying|subject|subjects|lesson|lessons|class|classes|homework|teach|taught)\b",
-     'school > School Subjects', [], ['math', 'book', 'science', 'art', 'english', 'history', 'music', 'sport']),
 ]
 SETTING_ROUTES = {  # setting -> (regex, folder, answer words first, in this order): the place changes what a question means
-    'doctor': [(r"\b(feel|feeling|mood|okay|ok|how are you|how're you|how's it going|what's wrong|what is wrong|hurt|hurts|pain|sore|sick|better|worse)\b", 'Health & sick', ['sick', 'hurt', 'pain', 'bad', 'tired', 'fine', 'good', 'better'])],
+    'doctor': [(r"\b(feel|feeling|mood|okay|ok|how are you|how're you|how's it going|what's wrong|what is wrong|hurt|hurts|pain|sore|sick|better|worse)\b", 'Health & sick', [])],   # folder steering only, as in the apps
 }
-NO_PINS = False; NO_RERANK = False
+NO_PINS = False; NO_RERANK = True   # the apps' defaults since the distilled model: no reranker, no pinned answers
 def route(question, setting=''):
     q = question.lower(); paths, allow, first = [], [], []
     if NO_PINS:
@@ -285,11 +280,12 @@ def main():
     ap.add_argument('--max-folders', type=int, default=1); ap.add_argument('--mass-mode', default='rank', choices=['p', 'rank']); ap.add_argument('--more', type=int, default=60, help='size of the More ideas page (next ranked cards) counted as reachable; 0 = off'); ap.add_argument('--row-thresh', type=float, default=0.08); ap.add_argument('--row-mass', type=float, default=0.0, help='fold the model folder row probability into the mass rule with this weight (disables the separate row step)')
     ap.add_argument('--qa', type=int, default=0, help='held-out check: use N first-card states from data/states/test_qa.jsonl instead of the bank')
     ap.add_argument('--no-pins', action='store_true', help='drop the pinned answer words from routes (school subjects, doctor words): judge the model alone there')
-    ap.add_argument('--no-rerank', action='store_true', help='model order only, no reranker')
+    ap.add_argument('--no-rerank', action='store_true', help='model order only (now the default); --rerank turns the reranker on')
+    ap.add_argument('--rerank', action='store_true', help='score with the reranker (off by default, as in the apps)')
     ap.add_argument('--qa-file', default='', help='alternative held-out file (test_qa_youth.jsonl, test_gen.jsonl)')
-    ap.add_argument('--prior-alpha', type=float, default=0.0, help='debias the model-only order by the training-target prior: score = log p - alpha*log prior (0 = off)')
+    ap.add_argument('--prior-alpha', type=float, default=0.5, help='debias the model-only order by the training-target prior: score = log p - alpha*log prior (0 = off)')
     a = ap.parse_args(); bank = json.load(open(a.bank))
-    global NO_PINS, NO_RERANK; NO_PINS = a.no_pins; NO_RERANK = a.no_rerank
+    global NO_PINS, NO_RERANK; NO_PINS = a.no_pins; NO_RERANK = not a.rerank
     global PRIOR_ALPHA; PRIOR_ALPHA = a.prior_alpha
     if a.qa:   # held-out corpus questions: expected = the acceptable first cards of the real reply
         import random; random.seed(11)

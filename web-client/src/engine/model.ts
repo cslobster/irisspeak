@@ -38,6 +38,8 @@ export function timePrior(hour: number, weekday: boolean): Record<string, number
 class Engine {
   cards: VocabCard[] = []; byId: Record<string, VocabCard> = {}; byLabel: Record<string, VocabCard> = {}; images: ImageMap = {};
   private tok: any = null; private session: OrtTypes.InferenceSession | null = null; private startIdx = 0; private nOut = 0; private V = 49152;
+  /** per-card log prior from cards.json; the model-only order is log p - PRIOR_ALPHA * prior (see rank()) */
+  private prior: number[] | null = null;
   private dead: number[] = [];      // v3: rows masked out of the softmax at training time (reachable via search/folders only)
   folderRows: VocabCard[] = [];     // v3: the <folder:*> output rows
   private rr: RerankerJson | null = null; private freq: FreqJson | null = null; private cardVecs: Float32Array | null = null; private embed: any = null;
@@ -87,7 +89,7 @@ class Engine {
     await this.pickBase();
     const [meta, img] = await Promise.all([this.fetchJson('cards.json'), fetch('/card_images.json', { cache: 'no-cache' }).then(r => r.json())]);
     this.cards = meta.cards; this.startIdx = meta.start_index; this.nOut = meta.n_outputs; if (meta.V) this.V = meta.V; this.images = img;
-    this.dead = meta.dead || [];
+    this.dead = meta.dead || []; this.prior = meta.prior || null;
     this.cards.forEach((c, i) => { c.index = i; this.byId[c.id] = c; if (!c.is_folder) this.byLabel[c.speak.toLowerCase()] = c; });
     this.folderRows = this.cards.filter(c => c.is_folder);
     this.setLoad('Loading tokenizer…', 0.05);
@@ -115,6 +117,10 @@ class Engine {
   }
   private async loadReranker() {
     try {
+      // The reranker is off by default since the distilled card model (Sep 2026): on the audience gates it was worth
+      // one question of 245 and none of 400, and it costs a 22 MB MiniLM download, a per-question embedding, and
+      // 3 MB of tables. The path stays for A/B behind profile.reranker_ab.
+      if (!getProfile().reranker_ab) { this.rr = null; return; }
       const [r, f, cv] = await Promise.all([this.fetchJson('reranker.json'), this.fetchJson('freq.json'), this.fetchBytes('card_vecs.bin')]);
       const h = new Uint16Array(cv.buffer, cv.byteOffset, cv.byteLength / 2); const vecs = new Float32Array(h.length); for (let i = 0; i < h.length; i++) vecs[i] = f16(h[i]);
       env.allowLocalModels = false;
@@ -163,7 +169,7 @@ class Engine {
     return (j: number) => Math.log(f.lambda_bi * ((biMap.get(j) || f.smoothing) / biSum) + (1 - f.lambda_bi) * (f.uni[j] / uniSum));
   }
   private async rerank(order: number[], p: Float32Array, question: string, prefix: string[]): Promise<number[] | null> {
-    if (!this.rr || !this.embed || !getProfile().use_reranker) return null;
+    if (!this.rr || !this.embed || !getProfile().reranker_ab) return null;
     const rr = this.rr; let sim = (_j: number) => 0;
     if (question) {
       if (this.partnerVecFor !== question) { const out = await this.embed(question, { pooling: 'mean', normalize: true }); this.partnerVec = Float32Array.from(out.data); this.partnerVecFor = question; }
@@ -213,7 +219,13 @@ class Engine {
     let m = -Infinity; for (let i = 0; i < logits.length; i++) if (logits[i] > m) m = logits[i];
     let z = 0; const p = new Float32Array(logits.length);
     for (let i = 0; i < logits.length; i++) { p[i] = Math.exp(logits[i] - m); z += p[i]; } for (let i = 0; i < p.length; i++) p[i] /= z;
-    const order = Array.from(p.keys()).sort((a, b) => p[b] - p[a]);
+    // Model-only ranking divides out each card's training prior: cards the data names everywhere (Tired, Wait,
+    // Need) otherwise crowd every panel. Blind-judged, 0.5 lifted fully-answerable boards on corpus questions
+    // from 75% to 82% with no loss on child-register ones. The reranker path (A/B) keeps the raw order.
+    const PRIOR_ALPHA = 0.5; const pr = this.prior;
+    const order = pr && !getProfile().reranker_ab
+      ? Array.from(p.keys()).sort((a, b) => (Math.log(p[b] + 1e-12) - PRIOR_ALPHA * pr[b]) - (Math.log(p[a] + 1e-12) - PRIOR_ALPHA * pr[a]))
+      : Array.from(p.keys()).sort((a, b) => p[b] - p[a]);
     const ranked = (await this.rerank(order, p, question, prefix)) || order;
     return { ranked, p, endP: p[this.byId['<aac_end>'].index] };
   }

@@ -38,11 +38,6 @@ final class LocalApi {
         (#"\b(weather|rain|sunny|snow)\b"#, "weather", [], []),
         (#"\b(feel|feeling|mood|okay|ok)\b"#, nil, ["tired", "sick", "sad", "happy", "scared", "hurt", "fine", "good", "bad"], []),
         (#"\b(how was|how is|how's|how did it go|how did .* go|how are you|how're you)\b"#, "Good & nice", ["good", "bad", "okay", "fine", "great", "fun", "boring", "tired", "busy", "long"], []),
-        // "What did you learn?" is a concrete question with concrete answers, but school subjects are rare in the
-        // training corpus (half the School Subjects folder is never a training target at all), so the model ranks
-        // them below everyday words. Pinning the subjects by name sidesteps the model, which is the only way the
-        // masked rows such as "english" and "geography" can ever reach a board.
-        (#"\b(learn|learned|learnt|study|studied|studying|subject|subjects|lesson|lessons|class|classes|homework|teach|taught)\b"#, "school > School Subjects", [], ["math", "book", "science", "art", "english", "history", "music", "sport"]),
     ]
     private static let routes: [Route] = routeTable.map { (pat: String, folder: String?, allow: [String], first: [String]) -> Route in
         Route(rx: try! NSRegularExpression(pattern: pat, options: [.caseInsensitive]), folder: folder, allow: allow, first: first)
@@ -50,7 +45,7 @@ final class LocalApi {
     /// Where the conversation happens changes what a question means: at the doctor's, "How are you feeling?" is about
     /// being sick or in pain, not about mood. These answer words go first, in this order, and their folder leads.
     private static let settingRoutes: [String: [(NSRegularExpression, String?, [String])]] = [
-        "doctor": [(try! NSRegularExpression(pattern: #"\b(feel|feeling|mood|okay|ok|how are you|how're you|how's it going|what's wrong|what is wrong|hurt|hurts|pain|sore|sick|better|worse)\b"#, options: [.caseInsensitive]), "Health & sick", ["sick", "hurt", "pain", "bad", "tired", "fine", "good", "better"])],
+        "doctor": [(try! NSRegularExpression(pattern: #"\b(feel|feeling|mood|okay|ok|how are you|how're you|how's it going|what's wrong|what is wrong|hurt|hurts|pain|sore|sick|better|worse)\b"#, options: [.caseInsensitive]), "Health & sick", [])],   // folder steering only; the pinned answer words came out with the distilled model
     ]
     private func routeQuestion(_ q: String) -> (folders: [String], allow: [String], first: [String]) {
         let s = q.lowercased(); let ns = s as NSString; var folders: [String] = []; var allow: [String] = []; var first: [String] = []
