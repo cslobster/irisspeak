@@ -115,10 +115,6 @@ class Engine {
   }
   private async loadReranker() {
     try {
-      // The reranker is off by default since the distilled card model (Sep 2026): on the audience gates it was worth
-      // one question of 245 and none of 400, and it costs a 22 MB MiniLM download, a per-question embedding, and
-      // 3 MB of tables. The path stays for A/B behind profile.reranker_ab.
-      if (!getProfile().reranker_ab) { this.rr = null; return; }
       const [r, f, cv] = await Promise.all([this.fetchJson('reranker.json'), this.fetchJson('freq.json'), this.fetchBytes('card_vecs.bin')]);
       const h = new Uint16Array(cv.buffer, cv.byteOffset, cv.byteLength / 2); const vecs = new Float32Array(h.length); for (let i = 0; i < h.length; i++) vecs[i] = f16(h[i]);
       env.allowLocalModels = false;
@@ -167,7 +163,7 @@ class Engine {
     return (j: number) => Math.log(f.lambda_bi * ((biMap.get(j) || f.smoothing) / biSum) + (1 - f.lambda_bi) * (f.uni[j] / uniSum));
   }
   private async rerank(order: number[], p: Float32Array, question: string, prefix: string[]): Promise<number[] | null> {
-    if (!this.rr || !this.embed || !getProfile().reranker_ab) return null;
+    if (!this.rr || !this.embed || !getProfile().use_reranker) return null;
     const rr = this.rr; let sim = (_j: number) => 0;
     if (question) {
       if (this.partnerVecFor !== question) { const out = await this.embed(question, { pooling: 'mean', normalize: true }); this.partnerVec = Float32Array.from(out.data); this.partnerVecFor = question; }
