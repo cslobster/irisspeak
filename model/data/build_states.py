@@ -343,7 +343,7 @@ def main():
     ap.add_argument("--synth-folder", type=int, default=0, help="v3: synthetic trigger questions per thin folder")
     ap.add_argument("--setting-turns", default="", help="datasets/aac-setting-turns: generated setting-labelled turns")
     ap.add_argument("--setting-turns-max", type=int, default=0, help="cap the generated turns used (0 = all)")
-    ap.add_argument("--distill", default="", help="teacher next-card distributions; comma-separated files add up (targets.jsonl,targets_abstract.jsonl)")
+    ap.add_argument("--distill", default="", help="teacher next-card distributions; comma-separated, a file may add :ungated to skip the setting gate (targets.jsonl,targets_abstract.jsonl:ungated)")
     ap.add_argument("--distill-temperature", type=float, default=1.0, help=">1 softens the teacher, <1 sharpens it")
     ap.add_argument("--audience", default="", choices=["", "youth"],
                     help="youth: drop the Turk source and any row with an adult-only card or question; also writes "
@@ -470,8 +470,22 @@ def main():
         return kept
     if a.setting_turns:
         synth += gated(setting_turn_states(a.setting_turns, surf, lem, rng, a.setting_turns_max))
-    for dpath in [x.strip() for x in a.distill.split(",") if x.strip()]:   # several teacher passes (concrete, abstract) add up
-        synth += gated(distilled_states(dpath, surf, lem, a.distill_temperature))
+    for spec in [x.strip() for x in a.distill.split(",") if x.strip()]:   # several teacher passes (concrete, abstract) add up
+        dpath, _, flag = spec.partition(":")
+        rows = distilled_states(dpath, surf, lem, a.distill_temperature)
+        if flag == "ungated":
+            # conversational replies (the abstract pass) are register, not setting content: they do not collide with
+            # the corpus's home rows the way concrete answers did, and most of them ARE home questions. Keep them all,
+            # but still hold out the same questions and apply the audience filter.
+            kept = []
+            for r in rows:
+                if a.audience == "youth" and not youth_ok(r.get("partner"), list(r["prefix"]) + list(r["targets"]), r["source"], adult_ids, youth_why): continue
+                if gen_holdout(r.get("setting"), r.get("partner"), a.gen_holdout): r["split"] = "test_gen"; test_gen.append(r); continue
+                kept.append(r)
+            print(f"  ungated: {len(kept)} of {len(rows)} rows kept from {os.path.basename(dpath)}", flush=True)
+            synth += kept
+        else:
+            synth += gated(rows)
     for rec in synth:
         if a.folders: rec["targets"] = add_folder_targets(rec["prefix"], rec["targets"], card2folder)
         writers["train"].write(json.dumps(rec, ensure_ascii=False) + "\n"); n_states["train"] += 1; n_states["synthetic"] += 1
