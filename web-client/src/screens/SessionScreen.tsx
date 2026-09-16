@@ -716,13 +716,10 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
               style={{ border: '2px solid #000', borderBottomWidth: 4, boxSizing: 'border-box' }}
             >
               <p className="text-center text-sm sm:text-base font-extrabold text-slate-700 mb-1 flex-shrink-0">{label}</p>
-              {/* equal columns across the panel at the quick row's gap; the chip fills its cell, so the cards are as
-                  large as the panel allows and their outer edges line up with the row below */}
-              <div className="grid gap-2 sm:gap-3 content-start" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
+              {/* yesterday's card size (the large chip), five to a row, packed at the quick row's gap and centred */}
+              <div className="grid gap-2 sm:gap-3 content-start justify-center" style={{ gridTemplateColumns: `repeat(${n}, max-content)` }}>
                 {byCat[key].map(c => (
-                  <div key={c.id} className="h-[124px] sm:h-[136px] min-w-0">
-                    <CardChip card={c} size="fill" onClick={() => !busy && onCardClick(c)} onLongPress={() => !busy && onCardHold(c)} />
-                  </div>
+                  <CardChip key={c.id} card={c} size="lg" onClick={() => !busy && onCardClick(c)} onLongPress={() => !busy && onCardHold(c)} />
                 ))}
               </div>
             </div>
