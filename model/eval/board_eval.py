@@ -283,7 +283,7 @@ def main():
     ap.add_argument('--no-rerank', action='store_true', help='model order only (now the default); --rerank turns the reranker on')
     ap.add_argument('--rerank', action='store_true', help='score with the reranker (off by default, as in the apps)')
     ap.add_argument('--qa-file', default='', help='alternative held-out file (test_qa_youth.jsonl, test_gen.jsonl)')
-    ap.add_argument('--prior-alpha', type=float, default=0.0, help='debias the model-only order by the training-target prior: score = log p - alpha*log prior (0 = off)')
+    ap.add_argument('--prior-alpha', type=float, default=0.5, help='debias the model-only order by the training-target prior: score = log p - alpha*log prior (0 = off)')
     a = ap.parse_args(); bank = json.load(open(a.bank))
     global NO_PINS, NO_RERANK; NO_PINS = a.no_pins; NO_RERANK = not a.rerank
     global PRIOR_ALPHA; PRIOR_ALPHA = a.prior_alpha

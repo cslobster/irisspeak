@@ -14,7 +14,7 @@ struct VocabCard: Decodable {
 
 struct ImageEntry: Decodable { var img: String?; var emoji: String? }
 
-private struct CardsJson: Decodable { var cards: [VocabCard]; var start_index: Int; var n_outputs: Int; var V: Int?; var dead: [Int]? }
+private struct CardsJson: Decodable { var cards: [VocabCard]; var start_index: Int; var n_outputs: Int; var V: Int?; var dead: [Int]?; var prior: [Float]? }
 private struct RerankerJson: Decodable {
     struct Layer: Decodable { var W: [[Float]]; var b: [Float] }
     var K: Int; var dim: Int; var mu: [Float]; var sd: [Float]; var cats: [String]; var ints: [String]; var layers: [Layer]
@@ -73,6 +73,8 @@ final class Engine: @unchecked Sendable {
     private(set) var images: [String: ImageEntry] = [:]
     /// v3: rows masked out of the softmax at training time (reachable through search and folders only).
     private var dead: [Int] = []
+    /// per-card log prior from cards.json; model-only order is log p - 0.5 * prior (crowding fix, see web model.ts)
+    private var prior: [Float]? = nil
     /// v3: the <folder:*> output rows.
     private(set) var folderRows: [VocabCard] = []
     private var tok: BPETokenizer?
@@ -132,7 +134,8 @@ final class Engine: @unchecked Sendable {
         var cs = meta.cards
         for i in cs.indices { cs[i].index = i }
         cards = cs; startIdx = meta.start_index; nOut = meta.n_outputs; if let v = meta.V { V = v }
-        dead = meta.dead ?? []; folderRows = cs.filter { $0.isFolder }
+        dead = meta.dead ?? []
+        prior = meta.prior; folderRows = cs.filter { $0.isFolder }
         var bi: [String: VocabCard] = [:]; var bl: [String: VocabCard] = [:]
         for c in cs { bi[c.id] = c; if !c.isFolder { bl[c.speak.lowercased()] = c } }
         byId = bi; byLabel = bl
@@ -380,7 +383,14 @@ final class Engine: @unchecked Sendable {
         var p = [Float](repeating: 0, count: nOut); var z: Float = 0
         for i in 0..<nOut { p[i] = exp(logits[i] - m); z += p[i] }
         for i in 0..<nOut { p[i] /= z }
-        let order = (0..<nOut).sorted { p[$0] > p[$1] }
+        let order: [Int]
+        if let pr = prior, pr.count >= nOut, !(Store.getProfile().rerankerAB ?? false) {
+            // divide out the training prior so safe-everywhere cards do not crowd every panel (see web model.ts)
+            let score = (0..<nOut).map { log(p[$0] + 1e-12) - 0.5 * pr[$0] }
+            order = (0..<nOut).sorted { score[$0] > score[$1] }
+        } else {
+            order = (0..<nOut).sorted { p[$0] > p[$1] }
+        }
         let ranked = rerankEnabled ? (try rerank(order: order, p: p, question: question, prefix: prefix) ?? order) : order
         let endIdx = byId["<aac_end>"]?.index ?? 0
         return Prediction(ranked: ranked, p: p, endP: p[endIdx])

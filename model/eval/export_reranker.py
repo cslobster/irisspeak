@@ -58,6 +58,10 @@ def main():
     feats.card_vec.astype(np.float16).tofile(os.path.join(a.out, "card_vecs.bin"))
     # cards.json with metadata for the browser features
     cj = json.load(open(os.path.join(a.out, "cards.json"))); meta = {r["id"]: r for r in rows}
+    # per-card log prior (training-target unigram frequency, add-one smoothed). The model-only app ranks by
+    # log p(card | state) - 0.5 * prior, which stops safe-everywhere cards (Tired, Wait, Need) crowding every
+    # panel; judged blind it lifted fully-answerable boards on corpus questions from 75% to 82%.
+    _u = np.array(feats.uni, dtype=np.float64); cj["prior"] = [round(float(x), 4) for x in np.log((_u + 1.0) / (_u.sum() + len(_u)))]
     for c in cj["cards"]:
         m = meta.get(c["id"])
         if m: c.update({"category": m["category"], "intent": m["intent"], "core": int(m["core"]), "safety": int(m["safety"]), "composable": int(m["composable"]), "multiword": int(int(m["words"]) > 1)})
