@@ -140,6 +140,26 @@ export async function remoteRate(sessionId: string, rating: number) {
   if (!isSignedIn()) return;
   try { await call('PUT', `/dyad/session/${encodeURIComponent(sessionId)}/rating`, { rating }); } catch {}
 }
+export interface BoardFeedback {
+  session_id?: string; setting: string; question: string;
+  candidates: { id: string; label: string; category: string; personal?: boolean }[];
+  prefix: string[]; choice: 'no_cards' | 'own_answer'; answer?: string; model_version?: string; timestamp: number;
+}
+const FEEDBACK_QUEUE = 'feedback_queue';
+function queueFeedback(fb: BoardFeedback) { const q = store.get<BoardFeedback[]>(FEEDBACK_QUEUE, []); q.push(fb); store.set(FEEDBACK_QUEUE, q.slice(-100)); }
+/** The partner's verdict on a board. Sent at once when signed in; otherwise kept locally and flushed at the next session start. */
+export async function remoteFeedback(fb: BoardFeedback): Promise<'sent' | 'queued'> {
+  if (!isSignedIn()) { queueFeedback(fb); return 'queued'; }
+  try { await call('POST', '/dyad/feedback', { ...fb, client: 'web' }); return 'sent'; } catch { queueFeedback(fb); return 'queued'; }
+}
+export async function flushFeedback() {
+  if (!isSignedIn()) return;
+  const q = store.get<BoardFeedback[]>(FEEDBACK_QUEUE, []); if (!q.length) return;
+  const left: BoardFeedback[] = [];
+  for (const fb of q) { try { await call('POST', '/dyad/feedback', { ...fb, client: 'web' }); } catch { left.push(fb); } }
+  store.set(FEEDBACK_QUEUE, left);
+}
+
 export async function remoteEvent(screen: string, element: string, session_id?: string, metadata?: unknown) {
   if (!isSignedIn()) return;
   try { await call('POST', '/dyad/event', { screen, element, event_type: 'tap', session_id, metadata, ts: Date.now() }); } catch {}

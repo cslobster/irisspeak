@@ -245,11 +245,31 @@ export async function ensureSchema(): Promise<void> {
           created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
       `,
+      // A partner's verdict on one board: "no card here fits" or "here is the answer". Kept as training
+      // material for the card model (setting + question + the board shown + the wanted answer).
+      sql`
+        CREATE TABLE IF NOT EXISTS board_feedback (
+          id            TEXT PRIMARY KEY,
+          dyad_id       TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
+          session_id    TEXT,
+          setting       TEXT NOT NULL,
+          question      TEXT NOT NULL,
+          candidates    JSONB NOT NULL,       -- the board as shown: [{id,label,category,personal?}]
+          prefix        JSONB NOT NULL,       -- card ids already tapped when feedback was given
+          choice        TEXT NOT NULL,        -- 'no_cards' | 'own_answer'
+          answer        TEXT,                 -- the partner's own answer, for 'own_answer'
+          model_version TEXT,
+          client        TEXT,
+          timestamp     BIGINT NOT NULL,
+          created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
     ]);
 
     // ---------- Phase 5: depend on `dialogue_message` / `interim_card_selection` (phase 4) ----------
     await Promise.all([
       sql`CREATE INDEX IF NOT EXISTS idx_message_session ON dialogue_message(session_id, timestamp)`,
+      sql`CREATE INDEX IF NOT EXISTS idx_board_feedback_dyad ON board_feedback(dyad_id, timestamp)`,
       // Ranked, corpus-resolved candidate pool for the turn (topics/actions/folder decision) —
       // lets refreshChildCards page through pre-ranked candidates instead of re-calling the LLM
       // every time (see moderator.ts's generateChildCards).

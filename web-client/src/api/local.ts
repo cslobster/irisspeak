@@ -1,7 +1,7 @@
 // Local replacement for v1's HTTP ApiClient: same method shapes, but every call is answered on the
 // device by the IrisSpeak-135M model + reranker, and sessions live in localStorage.
 import { engine, CORE_LABELS, PERSONAL_ROW } from '../engine/model';
-import { remoteNewSession, remoteStart, remoteParentTurn, remoteChildTurn, remoteEnd, remoteRate, remoteListSessions, remoteDialogue } from './remote';
+import { remoteNewSession, remoteStart, remoteParentTurn, remoteChildTurn, remoteEnd, remoteRate, remoteListSessions, remoteDialogue, flushFeedback } from './remote';
 import { getProfile, getHistory, pushHistory, store } from '../engine/store';
 import { realiser } from '../engine/realiser';
 import type {
@@ -100,7 +100,7 @@ class LocalApi {
     return id;
   }
   async startSession(id: string): Promise<SessionStartResult> {
-    await engine.load();
+    await engine.load(); flushFeedback().catch(() => {});   // feedback left over from an offline moment
     const s = loadSessions()[id]; if (s) { s.status = 'started'; saveSession(s); }
     this.current = { id, question: '', prefix: [], ranked: [], endP: 0, page: 0, role: 'parent' };
     return { turn_id: 't1', parent_guides: { id: 'g', timestamp: Date.now(), turn_id: 't1', guides: [] } };
@@ -244,6 +244,12 @@ class LocalApi {
     return { id: recId, timestamp: Date.now(), cards };
   }
   get endProbability() { return this.current?.endP ?? 0; }
+  /** What the Feedback dialog needs: the question, the board as last shown, and the cards tapped so far. */
+  get feedbackContext() {
+    const cur = this.current; if (!cur) return null;
+    return { session_id: cur.id, question: cur.question, prefix: cur.prefix.map(c => c.id),
+             candidates: (cur.lastShown ?? []).map(c => ({ id: c.id, label: c.label, category: c.category, personal: !!c.personal })) };
+  }
   /** "More ideas": the next N ranked cards that are not on the board, as rows for the folder browser (one tap, no Refresh). */
   moreSuggestions(n = 60): { folder: string; word: string; image_url: string | null; emoji?: string }[] {
     const cur = this.current; if (!cur) return [];

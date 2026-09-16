@@ -1,3 +1,4 @@
+import { remoteFeedback } from '../api/remote';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api/local';
@@ -23,7 +24,7 @@ type Phase = 'init' | 'idle' | 'thinking' | 'closing';
 // Zoom-to-fit: the session screen is laid out on a canvas of at least DESIGN_W x DESIGN_H CSS pixels
 // (an iPad-sized board) and scaled down as a whole on smaller viewports such as an iPhone in landscape,
 // so nothing overflows or needs scrolling. Larger viewports get scale 1 and the canvas simply grows.
-const DESIGN_W = 1024, DESIGN_H = 880;
+const DESIGN_W = 1200, DESIGN_H = 880;
 function fitFor(vw: number, vh: number) {
   const s = Math.min(1, vw / DESIGN_W, vh / DESIGN_H);
   return { s, vw, vh, cw: vw / s, ch: vh / s };
@@ -59,6 +60,7 @@ export function SessionScreen() {
   const nav = useNavigate();
 
   const [phase, setPhase] = useState<Phase>('init');
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [phaseLabel, setPhaseLabel] = useState('Starting your session…');
   const [role, setRole] = useState<DialogueRole>('parent');
   const [started, setStarted] = useState(false);
@@ -497,6 +499,12 @@ export function SessionScreen() {
 
   return (
     <div ref={rootRef} className="fixed inset-0 overflow-hidden" style={{ backgroundColor: '#f0ebe1' }}>
+      {feedbackOpen && (() => { const ctx = api.feedbackContext; return (
+        <FeedbackDialog setting={getProfile().setting || 'unknown'} question={ctx?.question || ''} candidates={ctx?.candidates || []}
+          onClose={() => setFeedbackOpen(false)}
+          onSend={(choice, answer) => remoteFeedback({ session_id: ctx?.session_id, setting: getProfile().setting || 'unknown', question: ctx?.question || '',
+            candidates: ctx?.candidates || [], prefix: ctx?.prefix || [], choice, answer: choice === 'own_answer' ? answer : undefined,
+            model_version: engine.modelVersion, timestamp: Date.now() })} />); })()}
       <div style={{ width: fit.cw, height: fit.ch, transform: `scale(${fit.s})`, transformOrigin: '0 0' }}>
       <div className="h-full overflow-hidden px-3 sm:px-4 pt-3 flex flex-col items-center relative safe-top">
         {/* Turn banner */}
@@ -530,7 +538,7 @@ export function SessionScreen() {
           )}
 
           {phase === 'idle' && role === 'child' && childRec && (
-            <ChildTurn
+            <ChildTurn onFeedback={() => setFeedbackOpen(true)}
               rec={childRec}
               interim={interimCards}
               onCardClick={onCardClick} onCardHold={onCardHold}
@@ -633,10 +641,11 @@ interface ChildTurnProps {
   onSearchOpen: () => void;
   onMoreOpen: () => void;
   onDone: () => void;
+  onFeedback: () => void;
   doneEnabled: boolean;
 }
 
-function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefresh, onClear, onConfirm, busy, onSearchOpen, onMoreOpen, onDone, doneEnabled }: ChildTurnProps) {
+function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefresh, onClear, onConfirm, busy, onSearchOpen, onMoreOpen, onDone, doneEnabled, onFeedback }: ChildTurnProps) {
   const byCat = useMemo(() => {
     const groups: Record<CardInfo['category'], CardInfo[]> = { topic: [], action: [], emotion: [], core: [] };
     for (const c of rec.cards) (groups[c.category] ||= []).push(c);
@@ -718,10 +727,10 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
       </div>
 
       {/* Bottom: the quick row -- Yes / No / Please, five personal cards, the child's name card -- then More ideas and View all, one row */}
-      <div className="flex-shrink-0 flex justify-start sm:justify-center gap-2 sm:gap-3 flex-nowrap overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
+      <div className="flex-shrink-0 flex justify-center gap-2 sm:gap-3 flex-nowrap">
         {byCat.core.map(c => (
           <div key={c.id} className="shrink-0">
-            <CardChip card={c} size={byCat.core.length > 6 ? 'sm' : 'md'} onClick={() => !busy && onCardClick(c)} />
+            <CardChip card={c} size="md" onClick={() => !busy && onCardClick(c)} />
           </div>
         ))}
         <div className="shrink-0">
@@ -754,8 +763,9 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
         </div>
       </div>
 
-      {/* Action bar */}
-      <div className="flex-shrink-0 flex flex-wrap justify-center gap-2 sm:gap-3 pb-2">
+      {/* Action bar: Refresh / Clear / Done centred, Feedback on the right edge */}
+      <div className="flex-shrink-0 flex items-center gap-2 sm:gap-3 pb-2">
+        <div className="flex-1" />
         <button
           onClick={onRefresh}
           disabled={busy}
@@ -771,6 +781,58 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
           disabled={busy}
           className="pill-btn bg-[#f09281] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg"
         >Done</button>
+        <div className="flex-1 flex justify-end">
+          <button
+            onClick={onFeedback}
+            disabled={busy}
+            className="pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3"
+            title="Tell us when the board misses"
+          >💬 Feedback</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** The partner's verdict on this board: no card fits, or the answer the child wanted. Stored as training material. */
+function FeedbackDialog({ setting, question, candidates, onClose, onSend }: {
+  setting: string; question: string; candidates: { id: string; label: string; category: string; personal?: boolean }[];
+  onClose: () => void; onSend: (choice: 'no_cards' | 'own_answer', answer: string) => Promise<'sent' | 'queued'>;
+}) {
+  const [choice, setChoice] = useState<'no_cards' | 'own_answer'>('own_answer');
+  const [answer, setAnswer] = useState('');
+  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'queued'>('idle');
+  const canSend = state === 'idle' && (choice === 'no_cards' || answer.trim().length > 0);
+  const send = async () => { setState('sending'); const r = await onSend(choice, answer.trim()); setState(r); setTimeout(onClose, 1200); };
+  const shown = candidates.filter(c => c.category !== 'core' || c.personal);
+  return (
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-6" onClick={onClose}>
+      <div className="bg-[#f7f3ea] rounded-3xl p-6 sm:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl" style={{ border: '3px solid #000', borderBottomWidth: 6 }} onClick={e => e.stopPropagation()}>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-700 mb-3">Feedback</h2>
+        <p className="text-sm sm:text-base text-slate-600 mb-1"><span className="font-bold">Setting:</span> {setting}</p>
+        <p className="text-sm sm:text-base text-slate-600 mb-3"><span className="font-bold">Question:</span> “{question || '(nothing asked yet)'}”</p>
+        <p className="text-sm font-bold text-slate-600 mb-1">Cards shown:</p>
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {shown.map(c => <span key={c.id} className={`px-2 py-0.5 rounded-full text-xs font-bold border ${c.personal ? 'bg-pink-100 border-pink-300' : 'bg-white border-slate-300'} text-slate-700`}>{c.label}</span>)}
+        </div>
+        <label className="flex items-start gap-3 mb-2 cursor-pointer">
+          <input type="radio" name="fb" checked={choice === 'no_cards'} onChange={() => setChoice('no_cards')} className="mt-1" />
+          <span className="font-bold text-slate-700">1. No cards fit this question</span>
+        </label>
+        <label className="flex items-start gap-3 mb-2 cursor-pointer">
+          <input type="radio" name="fb" checked={choice === 'own_answer'} onChange={() => setChoice('own_answer')} className="mt-1" />
+          <span className="font-bold text-slate-700">2. I want to give the answer</span>
+        </label>
+        {choice === 'own_answer' && (
+          <textarea value={answer} onChange={e => setAnswer(e.target.value)} rows={2} placeholder="What should the child have been able to say?"
+                    className="w-full rounded-xl border-2 border-slate-300 p-3 text-base mb-3 bg-white" autoFocus />
+        )}
+        <div className="flex justify-end gap-3 mt-2">
+          <button onClick={onClose} className="pill-btn bg-white text-slate-600 border-2 border-slate-400 text-sm sm:text-base px-5 py-2">Cancel</button>
+          <button onClick={send} disabled={!canSend} className="pill-btn bg-[#9cc3bf] disabled:opacity-40 text-sm sm:text-base px-6 py-2">
+            {state === 'sent' ? 'Thank you!' : state === 'queued' ? 'Saved, will send later' : state === 'sending' ? 'Sending…' : 'Send'}
+          </button>
+        </div>
       </div>
     </div>
   );

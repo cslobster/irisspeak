@@ -41,6 +41,8 @@ class Engine {
   private tok: any = null; private session: OrtTypes.InferenceSession | null = null; private startIdx = 0; private nOut = 0; private V = 49152;
   /** per-card log prior from cards.json; the model-only order is log p - PRIOR_ALPHA * prior (see rank()) */
   private prior: number[] | null = null;
+  /** the model version directory on the CDN (v7, ...), from manifest.json; recorded with feedback */
+  modelVersion = 'unknown';
   private dead: number[] = [];      // v3: rows masked out of the softmax at training time (reachable via search/folders only)
   folderRows: VocabCard[] = [];     // v3: the <folder:*> output rows
   private rr: RerankerJson | null = null; private freq: FreqJson | null = null; private cardVecs: Float32Array | null = null; private embed: any = null;
@@ -96,6 +98,7 @@ class Engine {
     this.setLoad('Loading tokenizer…', 0.05);
     this.tok = await AutoTokenizer.from_pretrained('HuggingFaceTB/SmolLM2-135M-Instruct');
     const man = await this.fetchJson('manifest.json'); let got = 0;
+    this.modelVersion = String((man.chunks && man.chunks[0]) || '').split('/')[0] || 'unknown';
     const report = (n: number) => { got += n; this.setLoad(`Downloading the model… ${(got / 1e6).toFixed(0)} / ${(man.total_bytes / 1e6).toFixed(0)} MB`, 0.05 + 0.9 * got / man.total_bytes); };
     // All chunks in parallel: much faster than one after another on a high-latency link.
     const parts: Uint8Array[] = await Promise.all((man.chunks as string[]).map(f => this.fetchBytes(f, report)));
