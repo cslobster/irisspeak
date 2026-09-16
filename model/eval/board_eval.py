@@ -14,7 +14,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 M = os.environ.get('BOARD_MODEL_DIR') or os.path.join(ROOT, 'site', 'public', 'model')      # cards.json, reranker.json, freq.json, card_vecs.bin
 ONNX = os.environ.get('BOARD_ONNX') or os.path.join(ROOT, 'export', 'out_v31', 'card_model_fp16.onnx')
 PANEL = {'topic': 12, 'action': 3, 'emotion': 3}; MAX_FOLDERS = 1
-CORE_LABELS = ['yes', 'no', "i don't know", 'How about you?', 'i want']
+CORE_LABELS = ['yes', 'no', 'please']   # fixed part of the quick row; the app adds five personal cards (history-based), which a fresh profile fills from the model
 FEELING_FALLBACK = ['happy', 'sad', 'tired', 'excited', 'angry', 'scared', 'bored', 'hungry', 'okay', 'good']
 STOP = {'do', 'you', 'want', 'to', 'the', 'a', 'an', 'some', 'is', 'it', 'one', 'which', 'what', 'or', 'and', 'with', 'for', 'first', 'should', 'we', 'i', 'your', 'my', 'did', 'too', 'here', 'as', 'last'}
 
@@ -146,7 +146,7 @@ def install_all_folders():
         path = 'cat:' + cat
         folders.append({'path': path, 'label': cat.capitalize(), 'icon': '', 'words': [c['speak'] for c in cards if c['category'] == cat and not c.get('is_folder')], 'triggers': []})
         cat2path[cat] = path
-QUICK_ROW = ['yes', 'no', "i don't know", 'help', 'more', 'stop', 'please']
+QUICK_ROW = ['yes', 'no', 'please']   # fixed part; five personal cards follow (a fresh profile fills them from the model, see below)
 ROUTES = [  # (regex, folder path, extra allowed labels normally hidden as core words, ordered answer words pinned first)
     (r"\b(who|whose|who's|with whom)\b", 'people', ['me', 'you', 'mine', 'my turn', 'your turn', 'friend', 'mum', 'mom', 'dad', 'teacher', 'nobody'], []),
     (r"\b(where)\b", 'places', ['here', 'there', 'home', 'school', 'outside', 'inside'], []),
@@ -262,6 +262,17 @@ def board(question, setting):
         lim = n - len(fl) if cat == 'topic' else n
         shown[cat] = [byId[i]['speak'] for i in lists[cat][:lim]]
     shown['core'] = list(QUICK_ROW) if OPT['quick'] else [l for l in CORE_LABELS]
+    # the app's five personal cards: with no history (the evaluator's fresh profile) they are the model's next-best
+    # content cards not already on the board and not function words -- exactly the app's fallback
+    if OPT['quick']:
+        on = {w.lower() for k in ('topic', 'action', 'emotion', 'core') for w in shown[k]} | {l.lower() for l in QUICK_ROW}
+        extra = []
+        for j in ranked:
+            c = cards[j]
+            if c.get('is_folder') or c['id'] in ('<aac_end>', '<name>') or c['category'] == 'core' or c.get('core') or c['speak'].lower() in on: continue
+            extra.append(c['speak']); on.add(c['speak'].lower())
+            if len(extra) >= 5: break
+        shown['core'] += extra
     # "More ideas" tile: one tap opens the next N ranked cards that are not on the board (a page like Refresh, but as a folder)
     if OPT.get('more'):
         on = {w.lower() for k in ('topic', 'action', 'emotion', 'core') for w in shown[k]}

@@ -25,7 +25,7 @@ export function getProfile(): ChildProfile {
 export function setProfile(p: ChildProfile) { store.set('profile', p); }
 
 // Card-use history shared across sessions: feeds the reranker's personal bonus and the model prompt.
-export interface HistoryTurn { partner: string; answer: string; cards: string[]; t: number; labels?: string[] }   // labels: words, for turns made on irisspeak.com whose ids are not ours
+export interface HistoryTurn { partner: string; answer: string; cards: string[]; t: number; labels?: string[]; setting?: string }   // setting: where the turn happened, for the personal row   // labels: words, for turns made on irisspeak.com whose ids are not ours
 export function getHistory(): HistoryTurn[] { return store.get<HistoryTurn[]>('history', []); }
 export function pushHistory(t: HistoryTurn) { const h = getHistory(); h.push(t); store.set('history', h.slice(-50)); }
 export function clearHistory() { store.set('history', []); }

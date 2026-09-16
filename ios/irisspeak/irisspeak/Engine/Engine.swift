@@ -56,7 +56,7 @@ struct Prediction {
 final class Engine: @unchecked Sendable {
     static let shared = Engine()
     /// Quick-fire row: fixed answers that are always in the same cells (same list as the web app).
-    static let coreLabels = ["yes", "no", "i don't know", "help", "more", "stop", "please"]
+    static let coreLabels = ["yes", "no", "please"]   // TODO: personal row (five history/profile cards) as on web, LocalApi/personalRow
 
     @MainActor final class Status: ObservableObject {
         @Published var message = "Loading…"

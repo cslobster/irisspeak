@@ -1,6 +1,6 @@
 // Local replacement for v1's HTTP ApiClient: same method shapes, but every call is answered on the
 // device by the IrisSpeak-135M model + reranker, and sessions live in localStorage.
-import { engine, CORE_LABELS } from '../engine/model';
+import { engine, CORE_LABELS, PERSONAL_ROW } from '../engine/model';
 import { remoteNewSession, remoteStart, remoteParentTurn, remoteChildTurn, remoteEnd, remoteRate, remoteListSessions, remoteDialogue } from './remote';
 import { getProfile, getHistory, pushHistory, store } from '../engine/store';
 import { realiser } from '../engine/realiser';
@@ -86,7 +86,7 @@ function cardFromVocab(id: string, recId: string, forceCat?: CardCategory): Card
 }
 
 class LocalApi {
-  private current: { id: string; question: string; prefix: CardInfo[]; ranked: number[]; endP: number; page: number; role: 'parent' | 'child'; sentence?: string; folders?: FolderDef[]; p?: Float32Array; routed?: string[]; lastShown?: CardInfo[]; candidates?: string[] } | null = null;
+  private current: { id: string; question: string; prefix: CardInfo[]; ranked: number[]; endP: number; page: number; role: 'parent' | 'child'; sentence?: string; folders?: FolderDef[]; p?: Float32Array; routed?: string[]; personal?: string[]; lastShown?: CardInfo[]; candidates?: string[] } | null = null;
   private panel = { ...PANEL };
   /** Panel sizes for the current screen (9/6/3 on phones, 12/8/4 on iPad landscape and desktops). */
   setPanel(p: { topic: number; action: number; emotion: number }) { this.panel = { ...p }; }
@@ -237,6 +237,9 @@ class LocalApi {
       if (c) cards.push(cardFromVocab(c.id, recId, 'core'));
       else cards.push({ id: 'core:' + l, recommendation_id: recId, label: l, label_localized: l, category: 'core', corpus_name: l, corpus_image_url: null, emoji: null });
     }
+    // the five personal cards: chosen once per question so the row holds still while the child taps
+    if (!cur.personal && cur.p) cur.personal = engine.personalRow(cur.p, new Set([...cards.map(c => c.id), ...chosen]), getProfile().setting, PERSONAL_ROW);
+    for (const id of cur.personal ?? []) if (engine.byId[id]) cards.push({ ...cardFromVocab(id, recId, 'core'), personal: true });
     cur.lastShown = cards;
     return { id: recId, timestamp: Date.now(), cards };
   }
@@ -256,7 +259,7 @@ class LocalApi {
   }
 
   async sendParentText(id: string, message: string): Promise<ResponseWithTurnId<ChildCardRecommendationResult>> {
-    const cur = this.current!; cur.question = message; cur.prefix = []; cur.role = 'child'; cur.folders = undefined; cur.routed = undefined;
+    const cur = this.current!; cur.question = message; cur.prefix = []; cur.role = 'child'; cur.folders = undefined; cur.routed = undefined; cur.personal = undefined;
     remoteParentTurn(id, message);
     const s = loadSessions()[id]; if (s) { s.dialogue.push({ role: 'parent', content: message }); s.status = 'conversation'; s.num_turns += 1; if (!s.title) s.title = message.slice(0, 60); saveSession(s); }
     return { payload: await this.recompute(), next_turn_id: 't' + Date.now() };
@@ -304,9 +307,9 @@ class LocalApi {
   async confirmCards(id: string): Promise<ResponseWithTurnId<ChildCardRecommendationResult>> {
     const cur = this.current!; const sentence = cur.sentence || engine.realise(cur.prefix.map(c => c.corpus_name || c.label)); cur.sentence = undefined;
     const s = loadSessions()[id]; if (s) { s.dialogue.push({ role: 'child', content: cur.prefix, content_localized: sentence }); saveSession(s); }
-    pushHistory({ partner: cur.question, answer: sentence, cards: cur.prefix.map(c => c.id).filter(x => !!engine.byId[x]), t: Date.now() });
+    pushHistory({ partner: cur.question, answer: sentence, cards: cur.prefix.map(c => c.id).filter(x => !!engine.byId[x]), t: Date.now(), setting: getProfile().setting });
     remoteChildTurn(id, cur.prefix, sentence, cur.lastShown ?? []);
-    cur.prefix = []; cur.folders = undefined; cur.routed = undefined;
+    cur.prefix = []; cur.folders = undefined; cur.routed = undefined; cur.personal = undefined;
     return { payload: await this.recompute(), next_turn_id: 't' + Date.now() };
   }
   async finishChildTurn(id: string): Promise<ResponseWithTurnId<ParentGuideRecommendationResult>> {

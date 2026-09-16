@@ -16,6 +16,7 @@ export interface CardInfo {
   label: string;
   label_localized: string;
   category: CardCategory;
+  personal?: boolean;   // one of the child's own cards in the quick row (history / profile), not a fixed button
   // Corpus enrichment — populated by backend's CorpusRetriever
   corpus_name?: string | null;
   corpus_category?: string | null;

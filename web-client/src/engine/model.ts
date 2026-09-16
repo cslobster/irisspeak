@@ -20,7 +20,8 @@ type ImageMap = Record<string, { img?: string; emoji?: string }>;
 const CDN_BASE = 'https://model.irisspeak.org/';
 // Quick-fire row: seven answers that are always in the same cells (yes/no plus the words a child needs most
 // often mid-conversation), as in TD Snap's Quick Fires. Fixed positions, never re-ranked.
-export const CORE_LABELS = ['yes', 'no', "i don't know", 'help', 'more', 'stop', 'please'];
+export const CORE_LABELS = ['yes', 'no', 'please'];   // the fixed part of the quick row; five personal cards follow (personalRow)
+export const PERSONAL_ROW = 5;
 // Time-of-day prior (reranker bonus per vocabulary category). Meal times raise food and drink, after-school
 // hours raise play, evenings raise home and body words. Small and additive, like the personal bonus.
 export function timePrior(hour: number, weekday: boolean): Record<string, number> {
@@ -141,6 +142,32 @@ class Engine {
     const stop = new Set(['an', 'a', 'the', 'who', 'and', 'his', 'her', 'he', 'she', 'to', 'by', 'of', 'is', 'old', 'year', 'likes', 'like', 'goes', 'friends', 'friend', 'with', 'in', 'on', 'at']);
     for (let i = 0; i < words.length; i++) for (const cand of [words[i] + ' ' + (words[i + 1] || ''), words[i]]) {
       const w = cand.trim(); if (!w || stop.has(w)) continue; const c = this.byLabel[w] || this.byLabel[w.replace(/s$/, '')]; if (c && !c.core) out.add(c.id);
+    }
+    return out;
+  }
+  /** The five personal cards of the quick row: the child's own cards (earlier turns, profile notes, custom words)
+   *  that fit what is being asked right now. Relevance is the model's own probability for this state, so no
+   *  word list is involved; on top of it, cards used in the same setting, used recently, or named in the profile
+   *  get a bonus. A child with no history gets the model's next-best cards instead. Function words (core) and
+   *  anything already on the board are excluded. */
+  personalRow(p: Float32Array, exclude: Set<string>, setting: string, n = PERSONAL_ROW): string[] {
+    const now = Date.now(); const stats: Record<string, { n: number; same: number; recent: number }> = {};
+    for (const t of getHistory()) {
+      const ageDays = Math.max(0, now - (t.t || now)) / 86400000; const recent = Math.exp(-ageDays / 14);
+      const same = t.setting ? (t.setting === setting ? 1 : 0) : 0.5;   // older turns did not record a setting
+      for (const id of new Set(this.historyIds(t))) { const st = (stats[id] ||= { n: 0, same: 0, recent: 0 }); st.n++; st.same += same; st.recent += recent; }
+    }
+    const profile = this.profileCards(); const fixed = new Set(CORE_LABELS.map(l => this.byLabel[l]?.id).filter(Boolean));
+    const ok = (id: string) => { const c = this.byId[id]; return !!c && !c.core && !c.is_folder && id !== '<aac_end>' && id !== '<name>' && !exclude.has(id) && !fixed.has(id); };
+    const scored: [string, number][] = [];
+    for (const id of new Set([...Object.keys(stats), ...profile])) {
+      if (!ok(id)) continue; const st = stats[id] || { n: 0, same: 0, recent: 0 }; const c = this.byId[id];
+      scored.push([id, Math.log(p[c.index] + 1e-9) + 1.0 * Math.log(1 + st.same) + 0.5 * Math.log(1 + st.n) + 0.5 * Math.log(1 + st.recent) + (profile.has(id) ? 0.8 : 0)]);
+    }
+    scored.sort((a, b) => b[1] - a[1]); const out = scored.slice(0, n).map(s => s[0]);
+    if (out.length < n) {   // a new child: the model's next-best content cards
+      const order = Array.from(p.keys()).sort((a, b) => p[b] - p[a]);
+      for (const j of order) { const id = this.cards[j].id; if (ok(id) && !out.includes(id)) { out.push(id); if (out.length >= n) break; } }
     }
     return out;
   }
