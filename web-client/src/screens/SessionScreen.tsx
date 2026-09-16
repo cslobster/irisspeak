@@ -643,10 +643,10 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
     return groups;
   }, [rec]);
 
-  // Topic 3 columns, Action 2, Feeling 1 -- three rows each (see PANEL in api/local.ts).
+  // Topic 4 columns, Action 1, Feeling 1 -- three rows each: 12 / 3 / 3 (see PANEL in api/local.ts).
   const mainCats: Array<{ key: 'topic' | 'action' | 'emotion'; label: string; tint: string; cols: string; span: string }> = [
-    { key: 'topic',   label: 'Topic',   tint: 'bg-card-topic/40',   cols: 'grid-cols-3', span: 'col-span-3' },
-    { key: 'action',  label: 'Action',  tint: 'bg-card-action/40',  cols: 'grid-cols-2', span: 'col-span-2' },
+    { key: 'topic',   label: 'Topic',   tint: 'bg-card-topic/40',   cols: 'grid-cols-4', span: 'col-span-4' },
+    { key: 'action',  label: 'Action',  tint: 'bg-card-action/40',  cols: 'grid-cols-1', span: 'col-span-1' },
     { key: 'emotion', label: 'Feeling', tint: 'bg-card-emotion/40', cols: 'grid-cols-1', span: 'col-span-1' },
   ];
 

@@ -61,7 +61,7 @@ print('\nmodel order (top %d):' % a.top)
 for r, j in enumerate(order[:a.top]): print(f"  {r+1:3d} {p[j]:.4f} {cards[j]['speak']:<16} {cards[j]['category']}")
 print('\nreranked (top %d):' % a.top)
 for r, (s, j, raw) in enumerate(scores[:a.top]): print(f"  {r+1:3d} score {s:+.2f} p {p[j]:.4f} sim {raw[3]:+.2f} freq {raw[2]:+.1f} personal {raw[4]:+.2f} {cards[j]['speak']:<16} {cards[j]['category']}")
-print('\npanels shown (Topic 9 / Action 6 / Feeling 3):')
+print('\npanels shown (Topic 12 / Action 3 / Feeling 3):')
 pan = {'topic': [], 'action': [], 'feeling': []}
 # the app's question routing, for the routes that pin ordered answer words (src/api/local.ts ROUTES/SETTING_ROUTES)
 import re as _re
@@ -82,7 +82,7 @@ for j in ranked:
     c = cards[j]
     if c.get('is_folder'): continue
     if c['id'] in ('<aac_end>', '<name>') or c['category'] == 'core' or c['speak'].lower() in ("yes", "no", "i don't know", "i want"): continue
-    k = cat(c); lim = {'topic': 9, 'action': 6, 'feeling': 3}[k]
+    k = cat(c); lim = {'topic': 12, 'action': 3, 'feeling': 3}[k]
     if len(pan[k]) < lim and c['speak'] not in pan[k]: pan[k].append(c['speak'])
 for k, v in pan.items(): print(f'  {k}: {v}')
 fr = [(cards[j]['speak'], round(float(p[j]), 3), ranked.index(j) + 1 if j in ranked else None) for j in range(len(cards)) if cards[j].get('is_folder')]

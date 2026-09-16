@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// The child's turn on the iPad board: the selection deck, three category panels (Topic 3 columns, Action 2,
-/// Feeling 1, widths 3:2:1) that stretch to fill the available space, the core-card row and the action bar.
+/// The child's turn on the iPad board: the selection deck, three category panels (Topic 4 columns, Action 1,
+/// Feeling 1, widths 4:1:1) that stretch to fill the available space, the core-card row and the action bar.
 struct ChildTurn: View {
     @ObservedObject var vm: SessionViewModel
     var rec: ChildCardRecommendationResult
@@ -15,8 +15,8 @@ struct ChildTurn: View {
                 let gap: CGFloat = 12
                 let unit = (g.size.width - 2 * gap) / 6
                 HStack(alignment: .top, spacing: gap) {
-                    panel("Topic", Theme.cardTopic, groups[.topic] ?? [], cols: 3, width: unit * 3, height: g.size.height)
-                    panel("Action", Theme.cardAction, groups[.action] ?? [], cols: 2, width: unit * 2, height: g.size.height)
+                    panel("Topic", Theme.cardTopic, groups[.topic] ?? [], cols: 4, width: unit * 4, height: g.size.height)
+                    panel("Action", Theme.cardAction, groups[.action] ?? [], cols: 1, width: unit, height: g.size.height)
                     panel("Feeling", Theme.cardEmotion, groups[.emotion] ?? [], cols: 1, width: unit, height: g.size.height)
                 }
                 .overlay {

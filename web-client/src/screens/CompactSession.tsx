@@ -8,7 +8,7 @@ import { Spinner } from '../components/Spinner';
 
 // Phone layout for the session screen (see SessionScreen: used when the viewport is narrower than 900 px
 // or shorter than 600 px). Everything fits the screen without scrolling: portrait shows the cards as a
-// 3 x 8 grid (Topic rows 1-3, Action rows 4-5, Feeling row 6, core cards rows 7-8), landscape as 9 x 3 with
+// 3 x 8 grid (Topic rows 1-4, Action row 5, Feeling row 6, core cards rows 7-8), landscape as 9 x 3 with
 // Refresh / Generate / Done as tiles after View all,
 // and Transcript / Sound / place / Settings / End are collapsed into one menu button at the bottom left.
 
@@ -108,16 +108,16 @@ function ParentCompact(p: CompactProps & { icon: string }) {
 function ChildCompact(p: CompactProps & { rec: ChildCardRecommendationResult }) {
   const by: Record<string, CardInfo[]> = { topic: [], action: [], emotion: [], core: [] };
   for (const c of p.rec.cards) (by[c.category] ||= []).push(c);
-  // Portrait: 3 columns x 10 rows -- Topic rows 1-3, Action rows 4-5, Feeling row 6, quick row 7-10.
+  // Portrait: 3 columns x 10 rows -- Topic rows 1-4, Action row 5, Feeling row 6, quick row 7-10.
   // Landscape: 8 columns x 4 rows filled in order (topic, action, feeling, quick row); colours mark the type.
   type Cell = CardInfo | 'search' | 'more' | 'refresh' | 'clear' | 'confirm' | 'done' | null;
   const cells: Cell[] = [];
   if (p.landscape) {
     // 8 x 4: topic, action, feeling, the quick row of nine (+ name), View all, then Refresh / Generate / Done as tiles
-    cells.push(...pad(by.topic.slice(0, 9), 9), ...pad(by.action.slice(0, 6), 6), ...pad(by.emotion.slice(0, 3), 3), ...pad(by.core.slice(0, 10), 10), 'more', 'search', 'refresh', 'clear', 'confirm', 'done');
+    cells.push(...pad(by.topic.slice(0, 12), 12), ...pad(by.action.slice(0, 3), 3), ...pad(by.emotion.slice(0, 3), 3), ...pad(by.core.slice(0, 10), 10), 'more', 'search', 'refresh', 'clear', 'confirm', 'done');
   } else {
-    // 3 x 10: topic rows 1-3, action 4-5, feeling 6, quick row 7-10 with View all in the last cell
-    cells.push(...pad(by.topic.slice(0, 9), 9), ...pad(by.action.slice(0, 6), 6), ...pad(by.emotion.slice(0, 3), 3), ...pad(by.core.slice(0, 10), 10), 'more', 'search');
+    // 3 x 10: topic rows 1-4, action 5, feeling 6, quick row 7-10 with View all in the last cell
+    cells.push(...pad(by.topic.slice(0, 12), 12), ...pad(by.action.slice(0, 3), 3), ...pad(by.emotion.slice(0, 3), 3), ...pad(by.core.slice(0, 10), 10), 'more', 'search');
   }
   return (
     <>

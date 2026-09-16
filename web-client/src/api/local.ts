@@ -21,8 +21,8 @@ let folderData: FolderData = { folders: [], category_to_folder: {} };
 function folderPathOf(c: { id: string; category: string }): string | undefined { return folderData.card_folder?.[c.id] ?? folderData.category_to_folder[c.category]; }
 export const foldersReady = fetch('/folders.json', { cache: 'no-cache' }).then(r => r.json()).then((d: FolderData) => { folderData = d; }).catch(() => {});
 const MAX_FOLDER_CARDS = 1;        // one folder card per board, in the last Topic cell (bottom right)
-export const PANEL = { topic: 9, action: 6, emotion: 3 };           // phones and small screens
-export const PANEL_BIG = { topic: 12, action: 8, emotion: 4 };      // iPad landscape and desktops
+export const PANEL = { topic: 12, action: 3, emotion: 3 };          // Topic 4 x 3, Action 1 x 3, Feeling 1 x 3
+export const PANEL_BIG = { topic: 12, action: 3, emotion: 3 };      // same split on iPad landscape and desktops
 // Question-type routing: the shape of the partner's question guarantees a folder and a few cards on the
 // first board, the way TD Snap's topic pages and Proloquo2Go's fringe folders do by hand. The model still
 // fills the rest. `allow` lists words that are normally hidden (core category) but answer this question type.
