@@ -514,7 +514,7 @@ export function SessionScreen() {
         </div>
 
         {/* Center content */}
-        <div className="flex-1 min-h-0 self-stretch flex flex-col items-stretch max-w-5xl w-full mx-auto mt-2 overflow-hidden">
+        <div className="flex-1 min-h-0 self-stretch flex flex-col items-stretch max-w-[1200px] w-full mx-auto mt-2 overflow-hidden">   {/* matches DESIGN_W: ten full-size quick-row buttons in one row */}
           {(phase === 'init' || phase === 'thinking' || phase === 'closing') && (
             <div className="flex-1 flex items-center justify-center">
               <Loader label={phaseLabel} />
