@@ -1,0 +1,7202 @@
+[
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "What else does he need?",
+  "model": "v5_a05",
+  "cards": [
+   "Bathroom",
+   "Water",
+   "Light",
+   "Clothes",
+   "Phone",
+   "Control",
+   "Coat",
+   "Tablet",
+   "Fix"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "restaurant",
+  "question": "Yeah, I get that. Want to watch a movie or something?",
+  "model": "v5_a05",
+  "cards": [
+   "Funny",
+   "Maybe",
+   "Not really",
+   "Comedy",
+   "Choice",
+   "Not that",
+   "Something",
+   "Movie",
+   "Not"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "What did you use to wash your face?",
+  "model": "v5",
+  "cards": [
+   "Soap",
+   "Towel",
+   "Shampoo",
+   "Toothbrush",
+   "Eyes",
+   "Water",
+   "Hand",
+   "Bubbles",
+   "Warm"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Totally! What else do you want to do today?",
+  "model": "shipped",
+  "cards": [
+   "Watch",
+   "Read",
+   "Movie",
+   "Maybe",
+   "Want",
+   "To",
+   "Talk",
+   "Coffee",
+   "Just"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "I'm confused. Do you want a straw or a spoon?",
+  "model": "v5",
+  "cards": [
+   "Straw",
+   "Spoon",
+   "Cup",
+   "Both",
+   "Water",
+   "Fork",
+   "Drink",
+   "Small",
+   "Little"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Does that really work?",
+  "model": "v5_a05",
+  "cards": [
+   "Work",
+   "Not",
+   "Really",
+   "Hard",
+   "True",
+   "Maybe",
+   "It's",
+   "Not now",
+   "Same"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Do tell! What happened?",
+  "model": "v5_a05",
+  "cards": [
+   "Doctor",
+   "Fall",
+   "Last",
+   "Move",
+   "Bad",
+   "Lose",
+   "Yell",
+   "My",
+   "She"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Hey there, how was your day?",
+  "model": "shipped",
+  "cards": [
+   "Good",
+   "Long",
+   "Day",
+   "Okay",
+   "Tired",
+   "Pretty",
+   "Bite",
+   "I",
+   "It"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Are you sleepy now?",
+  "model": "v5",
+  "cards": [
+   "Sleepy",
+   "Tired",
+   "Water",
+   "Not",
+   "Drink",
+   "Scared",
+   "Bath",
+   "Dark",
+   "Hug"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh really? When's he leaving?",
+  "model": "v5_a05",
+  "cards": [
+   "Later",
+   "Soon",
+   "Maybe",
+   "He",
+   "Not",
+   "Probably",
+   "Next week",
+   "Possible",
+   "Never"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "What if he relapses?",
+  "model": "v5_a05",
+  "cards": [
+   "Sorry",
+   "Bad",
+   "Lose",
+   "I think so",
+   "Forget",
+   "Angry",
+   "Hard",
+   "Sad",
+   "Chance"
+  ],
+  "answerable": 1,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh really? How was it?",
+  "model": "shipped",
+  "cards": [
+   "Really",
+   "Dinner",
+   "Good",
+   "Pretty",
+   "It",
+   "Jam",
+   "Day",
+   "Was",
+   "I"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Sounds good! Did he eat well?",
+  "model": "v5",
+  "cards": [
+   "He",
+   "Pasta",
+   "Not really",
+   "Not",
+   "A little",
+   "Full",
+   "Candy",
+   "Really",
+   "Very"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "We can arrange that, okay?",
+  "model": "v5",
+  "cards": [
+   "Okay",
+   "Thank you",
+   "Maybe",
+   "I want",
+   "Tired",
+   "Thanks",
+   "Can",
+   "Feel",
+   "Thank"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Yeah, he got a job there. Big change, huh?",
+  "model": "shipped",
+  "cards": [
+   "Yeah",
+   "That's",
+   "Wow",
+   "He",
+   "Change",
+   "Big",
+   "Very",
+   "It",
+   "Absolutely"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "How did you get to school today?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Get",
+   "My",
+   "Just",
+   "Ask",
+   "Had",
+   "With",
+   "Yesterday",
+   "I'm"
+  ],
+  "answerable": 0,
+  "plausible": 0,
+  "filler": 7
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Does that really work?",
+  "model": "shipped",
+  "cards": [
+   "It",
+   "I",
+   "It's",
+   "Yeah",
+   "Work",
+   "Not",
+   "Very",
+   "A little",
+   "Thanks"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 5
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Who helped you when you got stuck on your maths?",
+  "model": "v5",
+  "cards": [
+   "Teacher",
+   "Friend",
+   "Computer",
+   "Nobody",
+   "Dad",
+   "Mum",
+   "Me",
+   "Nurse",
+   "Lady"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Okay, does he have a phone?",
+  "model": "shipped",
+  "cards": [
+   "He",
+   "Not",
+   "Not yet",
+   "Definitely",
+   "I have",
+   "Yeah",
+   "I",
+   "Need",
+   "His"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds tough. Do you think they need support?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Definitely",
+   "Sometimes",
+   "Not really",
+   "I think so",
+   "Need",
+   "Hard",
+   "Sure",
+   "A little"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Got it! Noah first. You always look out for him, huh?",
+  "model": "shipped",
+  "cards": [
+   "Always",
+   "He",
+   "I",
+   "Definitely",
+   "I'm",
+   "Mean",
+   "Love",
+   "All",
+   "Yeah"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds serious. Do you know what\u2019s wrong?",
+  "model": "v5",
+  "cards": [
+   "Bad",
+   "Hurt",
+   "Just",
+   "Tired",
+   "Lose",
+   "Hard",
+   "Promise",
+   "Need",
+   "Sick"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Hey, how's it going today?",
+  "model": "shipped",
+  "cards": [
+   "Feel",
+   "Good",
+   "Pretty",
+   "I am",
+   "Thank you",
+   "Bite",
+   "I",
+   "Tired",
+   "Long"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Really?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Tired",
+   "Later",
+   "Funny",
+   "Scared",
+   "Not really",
+   "Bus",
+   "Because",
+   "Kind of"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Wow, that\u2019s fast! You ready for that?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Not",
+   "But",
+   "I think so",
+   "Not yet",
+   "Yup",
+   "Definitely",
+   "Not really",
+   "Need"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds intense! Was it scary?",
+  "model": "shipped",
+  "cards": [
+   "Yeah",
+   "Very",
+   "I",
+   "Oh",
+   "Not",
+   "Sound",
+   "Absolutely",
+   "Not really",
+   "A little"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds serious. Do you know what\u2019s wrong?",
+  "model": "v5_a05",
+  "cards": [
+   "Bad",
+   "Promise",
+   "Lose",
+   "Hurt",
+   "Just",
+   "Hard",
+   "Fight",
+   "Serious",
+   "Tired"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Do tell! What happened?",
+  "model": "v5",
+  "cards": [
+   "Doctor",
+   "Fall",
+   "My",
+   "Last",
+   "Move",
+   "Bad",
+   "She",
+   "Loud",
+   "Lose"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Tell me what you need.",
+  "model": "v5",
+  "cards": [
+   "Hug",
+   "Water",
+   "Home",
+   "Hurt",
+   "Toilet",
+   "Sticker",
+   "Mum",
+   "Medicine",
+   "Bathroom"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Are you ready to line up for the bus?",
+  "model": "shipped",
+  "cards": [
+   "I'm",
+   "Ready",
+   "I",
+   "I am",
+   "Not",
+   "Definitely",
+   "Oh",
+   "Busy",
+   "Not yet"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Does your tummy hurt?",
+  "model": "v5",
+  "cards": [
+   "Hurt",
+   "Sick",
+   "Little",
+   "Okay",
+   "Bad",
+   "Lot",
+   "Tired",
+   "Better",
+   "Sore"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Does she enjoy it?",
+  "model": "v5",
+  "cards": [
+   "Love",
+   "Very",
+   "She",
+   "Different",
+   "Happy",
+   "Good",
+   "A",
+   "Tired",
+   "Excited"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Good morning! How did you sleep?",
+  "model": "shipped",
+  "cards": [
+   "Sleep",
+   "I",
+   "Not",
+   "Okay",
+   "Bad",
+   "Oh",
+   "Thanks",
+   "Tired",
+   "I am"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Good morning! Ready for today?",
+  "model": "v5_a05",
+  "cards": [
+   "Excited",
+   "Morning",
+   "Good morning",
+   "I am",
+   "Need",
+   "Let's",
+   "Good",
+   "Am",
+   "Yup"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "And furniture can show that, right?",
+  "model": "v5",
+  "cards": [
+   "Different",
+   "Absolutely",
+   "True",
+   "Very",
+   "Yeah",
+   "I want",
+   "Living room",
+   "Definitely",
+   "Every"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "You really think she\u2019s that good?",
+  "model": "v5_a05",
+  "cards": [
+   "Seem",
+   "Totally",
+   "Maybe",
+   "Yeah",
+   "True",
+   "Definitely",
+   "Really",
+   "Exactly",
+   "Not really"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Okay I am frying them now. How much salt should I add?",
+  "model": "v5",
+  "cards": [
+   "A little",
+   "Little",
+   "Some",
+   "None",
+   "A",
+   "Full",
+   "Lot",
+   "Just",
+   "Half"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Sounds fun! Any favorite food?",
+  "model": "shipped",
+  "cards": [
+   "I love",
+   "Taco",
+   "Spicy",
+   "Local",
+   "I",
+   "Curry",
+   "Sushi",
+   "Love",
+   "Food"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Good morning! How are you?",
+  "model": "v5_a05",
+  "cards": [
+   "Morning",
+   "Feel",
+   "I am",
+   "Good",
+   "I feel",
+   "I",
+   "Tired",
+   "Am",
+   "Great"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Nice! What\u2019s for dinner later?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "Pasta",
+   "Pizza",
+   "Taco",
+   "Chicken",
+   "Salad",
+   "Soup",
+   "Sounds good",
+   "Popcorn"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "What did you do in the car?",
+  "model": "v5_a05",
+  "cards": [
+   "Tablet",
+   "Window",
+   "Music",
+   "Sing",
+   "Song",
+   "Video",
+   "Drive",
+   "Look",
+   "Sleep"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Good morning! How did you sleep?",
+  "model": "v5",
+  "cards": [
+   "Sleep",
+   "Bad",
+   "Okay",
+   "Not",
+   "I",
+   "Oh",
+   "Good",
+   "Well",
+   "Tired"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That's good to hear. What\u2019s on your mind today?",
+  "model": "v5",
+  "cards": [
+   "Want",
+   "Feel",
+   "Think",
+   "Talk",
+   "Just",
+   "I want",
+   "To",
+   "I",
+   "Later"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 5
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Would you like to wear the gown or keep your shirt on?",
+  "model": "v5",
+  "cards": [
+   "Shirt",
+   "Both",
+   "Scared",
+   "Mum",
+   "Me",
+   "Clothes",
+   "Stay",
+   "Hurt",
+   "You"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Nice! What\u2019s for dinner later?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Pizza",
+   "Pasta",
+   "Chicken",
+   "Taco",
+   "Salad",
+   "Soup",
+   "Sounds good",
+   "Noodles"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "What's hard for you right now?",
+  "model": "shipped",
+  "cards": [
+   "My",
+   "Tire",
+   "Hard",
+   "Really",
+   "Feel",
+   "Move",
+   "I",
+   "It's",
+   "A"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Did Sophia mention anything else?",
+  "model": "shipped",
+  "cards": [
+   "She",
+   "Just",
+   "Talk",
+   "Happy",
+   "Feel",
+   "Not",
+   "Pretty",
+   "I",
+   "Yeah"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Yeah, he got a job there. Big change, huh?",
+  "model": "v5_a05",
+  "cards": [
+   "Work",
+   "Different",
+   "Adventure",
+   "New",
+   "Yeah",
+   "Job",
+   "Excite",
+   "Change",
+   "Sometimes"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "What did you put on after your shower?",
+  "model": "v5",
+  "cards": [
+   "Pajamas",
+   "Clothes",
+   "Shirt",
+   "Cream",
+   "Lotion",
+   "Slipper",
+   "Socks",
+   "Towel",
+   "Pyjamas"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Do you want fries or rice with it?",
+  "model": "shipped",
+  "cards": [
+   "Chips",
+   "Rice",
+   "French fries",
+   "Pizza",
+   "With",
+   "Jam",
+   "Fast food",
+   "Soy sauce",
+   "Harp"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Yeah, he got a job there. Big change, huh?",
+  "model": "v5",
+  "cards": [
+   "Work",
+   "New",
+   "Different",
+   "Yeah",
+   "Job",
+   "Change",
+   "Good",
+   "Not",
+   "Excite"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Want to play with play dough now?",
+  "model": "v5_a05",
+  "cards": [
+   "Later",
+   "Playdough",
+   "Play",
+   "Roll",
+   "Draw",
+   "Dog",
+   "Bubbles",
+   "Brush",
+   "Snake"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "How are you getting home?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Not",
+   "My",
+   "I'm",
+   "How",
+   "At",
+   "Just",
+   "Yeah",
+   "Get"
+  ],
+  "answerable": 0,
+  "plausible": 0,
+  "filler": 8
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds scary! Was Noah there?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Not yet",
+   "Yeah",
+   "Oh",
+   "He",
+   "Yet",
+   "Not",
+   "I saw",
+   "Sure"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "What happened to your drink?",
+  "model": "v5_a05",
+  "cards": [
+   "Spill",
+   "Cup",
+   "Cold",
+   "Drop",
+   "Gone",
+   "Glass",
+   "Juice",
+   "Taste",
+   "Melt"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "When did you lose your tooth?",
+  "model": "v5_a05",
+  "cards": [
+   "Yesterday",
+   "Last",
+   "Today",
+   "Fall",
+   "Friday",
+   "Tooth",
+   "Next",
+   "Next week",
+   "Tomorrow"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "restaurant",
+  "question": "Yeah, I get that. Want to watch a movie or something?",
+  "model": "v5",
+  "cards": [
+   "Funny",
+   "Maybe",
+   "Not really",
+   "Comedy",
+   "Not",
+   "Good",
+   "Love",
+   "Something",
+   "Fun"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "What did you do on the train?",
+  "model": "v5",
+  "cards": [
+   "Sit",
+   "Music",
+   "Window",
+   "Sleep",
+   "Snack",
+   "Tablet",
+   "Train",
+   "Happy",
+   "Play"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Is she okay with that?",
+  "model": "v5_a05",
+  "cards": [
+   "Worried",
+   "Okay",
+   "Not really",
+   "I think so",
+   "Scared",
+   "Tired",
+   "Bored",
+   "Maybe",
+   "Later"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Should we try something new today?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "Pizza",
+   "Ipad",
+   "Adventure",
+   "Yup",
+   "Not really",
+   "Popcorn",
+   "Food",
+   "Explore"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Should I leave the light on?",
+  "model": "v5",
+  "cards": [
+   "On",
+   "Later",
+   "Dark",
+   "Light",
+   "Sleep",
+   "Off",
+   "Tired",
+   "Scared",
+   "Night"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Glad to hear that! I heard Jessica offered to help with some chores. What do you think about that?",
+  "model": "shipped",
+  "cards": [
+   "Good idea",
+   "I",
+   "Yeah",
+   "Accept",
+   "Sounds good",
+   "What",
+   "Very",
+   "She",
+   "Of"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "What did you use to wash your face?",
+  "model": "shipped",
+  "cards": [
+   "Shirt",
+   "I",
+   "Laundry",
+   "The",
+   "Diaper",
+   "Cold",
+   "Napkin",
+   "Shampoo",
+   "Use"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Would you like a drink?",
+  "model": "v5_a05",
+  "cards": [
+   "Lemonade",
+   "Water",
+   "Juice",
+   "Cold",
+   "Ice",
+   "Cup",
+   "Straw",
+   "Small",
+   "Hot chocolate"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Is it okay if your brother plays with the trains too?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Tired",
+   "Later",
+   "Bad",
+   "Fine",
+   "Okay",
+   "Fun",
+   "Train",
+   "Funny"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That\u2019s wonderful! Do you think you could do something like that?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "I want",
+   "Just",
+   "Later",
+   "Want",
+   "Yeah",
+   "Sure",
+   "Fun",
+   "Need"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "What time does he call?",
+  "model": "v5_a05",
+  "cards": [
+   "Around",
+   "Morning",
+   "Breakfast",
+   "Seven",
+   "Bedtime",
+   "After",
+   "Afternoon",
+   "Ten",
+   "Later"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "What did you do on the train?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Saw",
+   "Sit",
+   "She",
+   "Read",
+   "Sleep",
+   "Get",
+   "Vet",
+   "Went"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Hmm, 'turn' - whose turn? Show me.",
+  "model": "v5_a05",
+  "cards": [
+   "My turn",
+   "Me",
+   "Your turn",
+   "You",
+   "My",
+   "Turn",
+   "Friend",
+   "Mine",
+   "Sister"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "restaurant",
+  "question": "We have Masala Dosa, which is a spicy potato-filled crepe, and Chicken Vindaloo, a spicy curry. Which would you prefer?",
+  "model": "shipped",
+  "cards": [
+   "Chicken",
+   "I love",
+   "Spicy",
+   "Love",
+   "I want",
+   "Meat",
+   "I",
+   "Perfect",
+   "Sounds good"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Should we wake her up?",
+  "model": "v5_a05",
+  "cards": [
+   "Later",
+   "Not",
+   "Not yet",
+   "Maybe",
+   "Bath",
+   "Wake",
+   "Scared",
+   "Yeah",
+   "Definitely"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Shall we cut your nails today?",
+  "model": "v5_a05",
+  "cards": [
+   "Later",
+   "Fingernail",
+   "Toenail",
+   "Scared",
+   "Nail",
+   "Not now",
+   "Wait",
+   "Toe",
+   "Bath"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That\u2019s wonderful! Do you think you could do something like that?",
+  "model": "shipped",
+  "cards": [
+   "Maybe",
+   "I",
+   "I want",
+   "Just",
+   "Want",
+   "What",
+   "Need",
+   "A",
+   "Yeah"
+  ],
+  "answerable": 2,
+  "plausible": 2,
+  "filler": 6
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Classic Olivia, right?",
+  "model": "v5",
+  "cards": [
+   "Funny",
+   "Good",
+   "Fast",
+   "Red",
+   "Love",
+   "Happy",
+   "Very",
+   "Okay",
+   "Best"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "What did you do in the car?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "She",
+   "Yesterday",
+   "Just",
+   "Sit",
+   "Saw",
+   "Went",
+   "Watch",
+   "Busy"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh really? How was that?",
+  "model": "v5_a05",
+  "cards": [
+   "Fun",
+   "Good",
+   "Excited",
+   "Pretty",
+   "Boring",
+   "Really",
+   "Great",
+   "Jam",
+   "Busy"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Do you need the potty first?",
+  "model": "v5_a05",
+  "cards": [
+   "Toilet",
+   "Pee",
+   "Poop",
+   "Wipe",
+   "Wash hands",
+   "First",
+   "Later",
+   "Bathroom",
+   "Water"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Should we try something new today?",
+  "model": "shipped",
+  "cards": [
+   "Definitely",
+   "Maybe",
+   "Yeah",
+   "Sound",
+   "Not",
+   "Let",
+   "If",
+   "I",
+   "I want"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "What do you think about it?",
+  "model": "shipped",
+  "cards": [
+   "Feel",
+   "It's",
+   "I",
+   "Think",
+   "Not",
+   "Good",
+   "I feel",
+   "Quiet",
+   "Nice"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Where is the car parked?",
+  "model": "shipped",
+  "cards": [
+   "Park",
+   "In",
+   "The",
+   "Car",
+   "Next to",
+   "It",
+   "At",
+   "Sunglasses",
+   "Downtown"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "You pointed at 'more' - more of what?",
+  "model": "v5",
+  "cards": [
+   "Block",
+   "Ball",
+   "Bubbles",
+   "Swing",
+   "Car",
+   "Slide",
+   "Puzzle",
+   "Music",
+   "Build"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "You want me to tell him?",
+  "model": "v5",
+  "cards": [
+   "Scared",
+   "Me",
+   "Let",
+   "He",
+   "You",
+   "Tired",
+   "I want",
+   "I",
+   "Teacher"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 5
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Sure! You can mix the batter if you want.",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Later",
+   "Good",
+   "I",
+   "I want",
+   "Wait",
+   "Fun",
+   "Not",
+   "Want"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Got it! Noah first. You always look out for him, huh?",
+  "model": "v5_a05",
+  "cards": [
+   "I think so",
+   "Always",
+   "Funny",
+   "He",
+   "Yeah",
+   "Definitely",
+   "I",
+   "Agree",
+   "Happy"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Okay, does he have a phone?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Not",
+   "Phone",
+   "Need",
+   "Miss",
+   "Not yet",
+   "He",
+   "Definitely",
+   "Later"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Maybe some bright colours or new paintings would help?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Happy",
+   "Bright",
+   "Color",
+   "Messy",
+   "Like",
+   "Blue",
+   "Funny",
+   "Later"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Want to play with play dough now?",
+  "model": "shipped",
+  "cards": [
+   "Sure",
+   "Let's",
+   "Yeah",
+   "Let",
+   "Oh",
+   "Absolutely",
+   "I want",
+   "I",
+   "Do"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Does that really work?",
+  "model": "v5",
+  "cards": [
+   "Work",
+   "Not",
+   "Really",
+   "Maybe",
+   "Hard",
+   "A",
+   "It's",
+   "Good",
+   "Great"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Hey, how's it going today?",
+  "model": "v5",
+  "cards": [
+   "Good",
+   "I am",
+   "Feel",
+   "Am",
+   "I",
+   "Pretty",
+   "Day",
+   "Tired",
+   "It's"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Is she okay with that?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Sure",
+   "She",
+   "Not",
+   "Yeah",
+   "I think so",
+   "Upset",
+   "Think",
+   "Maybe"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Do you want to take the medicine?",
+  "model": "v5",
+  "cards": [
+   "Water",
+   "Medicine",
+   "Later",
+   "Scared",
+   "Juice",
+   "Little",
+   "Spoon",
+   "Mum",
+   "Drink"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Are you ready to line up for the bus?",
+  "model": "v5_a05",
+  "cards": [
+   "Not yet",
+   "Wait",
+   "Ready",
+   "Tired",
+   "Noisy",
+   "Teacher",
+   "Backpack",
+   "Shoe",
+   "Excited"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Whose coat is this on the chair?",
+  "model": "v5_a05",
+  "cards": [
+   "Me",
+   "Brother",
+   "Dad",
+   "Sister",
+   "Mum",
+   "Aunt",
+   "Cat",
+   "Lady",
+   "You"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Tell me what you need.",
+  "model": "shipped",
+  "cards": [
+   "Need",
+   "I need",
+   "I",
+   "Get",
+   "I am",
+   "I need help",
+   "Move",
+   "Fix",
+   "What"
+  ],
+  "answerable": 0,
+  "plausible": 2,
+  "filler": 6
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Where do we cross the road?",
+  "model": "v5_a05",
+  "cards": [
+   "Cross",
+   "Sign",
+   "Sidewalk",
+   "Bridge",
+   "Street",
+   "School",
+   "Line",
+   "Home",
+   "Road"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Are you joining them?",
+  "model": "v5_a05",
+  "cards": [
+   "Friend",
+   "Alone",
+   "Wait",
+   "Together",
+   "Dad",
+   "Boy",
+   "Grandmother",
+   "Me",
+   "Noisy"
+  ],
+  "answerable": 1,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Should we wake her up?",
+  "model": "v5",
+  "cards": [
+   "Later",
+   "Not",
+   "Maybe",
+   "Scared",
+   "Bath",
+   "Not yet",
+   "Up",
+   "Sit",
+   "Yeah"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "You tapped 'hot'. Is your food too hot, or do you want something hot?",
+  "model": "shipped",
+  "cards": [
+   "Too",
+   "Hot",
+   "Food",
+   "A little",
+   "Sound",
+   "Quiet",
+   "You",
+   "Taste",
+   "Hot chocolate"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Do you want fries or rice with it?",
+  "model": "v5_a05",
+  "cards": [
+   "Chips",
+   "Both",
+   "Rice",
+   "Fried rice",
+   "Pizza",
+   "Ketchup",
+   "Noodles",
+   "Sauce",
+   "Drink"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Can you have the cake? What's in it?",
+  "model": "v5_a05",
+  "cards": [
+   "Chocolate",
+   "Cake",
+   "Sprinkles",
+   "Cookie",
+   "Ice cream",
+   "Pie",
+   "Sweet",
+   "Strawberry",
+   "Sticker"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "You pointed at 'more' - more of what?",
+  "model": "shipped",
+  "cards": [
+   "It",
+   "You",
+   "The",
+   "I",
+   "Did",
+   "Was",
+   "He",
+   "Something",
+   "Much"
+  ],
+  "answerable": 0,
+  "plausible": 0,
+  "filler": 8
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Do you play music often?",
+  "model": "v5_a05",
+  "cards": [
+   "Every",
+   "Sometimes",
+   "Always",
+   "Usually",
+   "Once",
+   "Morning",
+   "Definitely",
+   "Absolutely",
+   "Very"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Do you play music often?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Sometimes",
+   "Often",
+   "I have",
+   "A little",
+   "Always",
+   "Never",
+   "Every",
+   "Music"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Maybe next week, takeout instead?",
+  "model": "shipped",
+  "cards": [
+   "Yeah",
+   "Maybe",
+   "Probably",
+   "Sounds good",
+   "How",
+   "Take",
+   "I",
+   "Yup",
+   "Ok"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That\u2019s wonderful! Do you think you could do something like that?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "I want",
+   "Just",
+   "Later",
+   "Yeah",
+   "Sure",
+   "Want",
+   "Vegetable",
+   "I need help"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "How many marbles fell on the floor?",
+  "model": "v5_a05",
+  "cards": [
+   "Four",
+   "None",
+   "Five",
+   "Three",
+   "Six",
+   "Two",
+   "Zero",
+   "One",
+   "Ten"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Maybe some bright colours or new paintings would help?",
+  "model": "shipped",
+  "cards": [
+   "Bright",
+   "Color",
+   "Yeah",
+   "Good idea",
+   "I have",
+   "They",
+   "Like",
+   "Maybe",
+   "Agree"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Where do you sit in the car?",
+  "model": "v5_a05",
+  "cards": [
+   "Window",
+   "Front",
+   "Back",
+   "Seat",
+   "Next to",
+   "Corner",
+   "Mum",
+   "Next",
+   "Here"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Is it okay if your brother plays with the trains too?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "Bad",
+   "Fine",
+   "Later",
+   "Tired",
+   "Not really",
+   "Train",
+   "Kind of",
+   "Funny"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Hmm, 'turn' - whose turn? Show me.",
+  "model": "shipped",
+  "cards": [
+   "I'm",
+   "It's",
+   "Right",
+   "Turn",
+   "See",
+   "I",
+   "Movie",
+   "Shut",
+   "First"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Should I bring your blanket to bed?",
+  "model": "v5",
+  "cards": [
+   "Blanket",
+   "Cold",
+   "Sleepy",
+   "Pillow",
+   "Later",
+   "Couch",
+   "Scared",
+   "Tired",
+   "Hug"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Where is Mum sitting?",
+  "model": "shipped",
+  "cards": [
+   "Table",
+   "In",
+   "Back",
+   "The",
+   "Dish",
+   "Under",
+   "At",
+   "Her",
+   "A"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "What do you think about it?",
+  "model": "v5",
+  "cards": [
+   "Good",
+   "Excited",
+   "Happy",
+   "It's",
+   "Different",
+   "Fun",
+   "Pretty",
+   "Not",
+   "Feel"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh really? How was that?",
+  "model": "shipped",
+  "cards": [
+   "Excited",
+   "Saw",
+   "Dinner",
+   "Went",
+   "Wow",
+   "Awesome",
+   "It",
+   "I",
+   "Very"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "That's nice to hear! Any plans?",
+  "model": "v5",
+  "cards": [
+   "Later",
+   "Tired",
+   "Excited",
+   "Wait",
+   "Relax",
+   "Maybe",
+   "Home",
+   "Snack",
+   "Just"
+  ],
+  "answerable": 1,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Are you joining them?",
+  "model": "shipped",
+  "cards": [
+   "Yeah",
+   "Here",
+   "I am",
+   "Excited",
+   "I'm",
+   "I",
+   "They",
+   "When",
+   "Am"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "How do you feel about seeing the nurse?",
+  "model": "v5",
+  "cards": [
+   "Scared",
+   "Nervous",
+   "Worried",
+   "Happy",
+   "Nice",
+   "Excited",
+   "Better",
+   "Brave",
+   "Doctor"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "How many spelling words did you get right?",
+  "model": "shipped",
+  "cards": [
+   "Two",
+   "One",
+   "I",
+   "Thirty",
+   "It",
+   "Number",
+   "Few",
+   "A",
+   "Really"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Have you talked to him?",
+  "model": "v5",
+  "cards": [
+   "Not yet",
+   "Try",
+   "Not",
+   "Yet",
+   "Scared",
+   "I want",
+   "I",
+   "Maybe",
+   "Need"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "What did you draw with chalk?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Bright",
+   "The",
+   "Two",
+   "With",
+   "A",
+   "Hear",
+   "Chicken",
+   "It"
+  ],
+  "answerable": 1,
+  "plausible": 2,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh really? When's he leaving?",
+  "model": "shipped",
+  "cards": [
+   "Next",
+   "Probably",
+   "Always",
+   "Later",
+   "He",
+   "About",
+   "After",
+   "Next week",
+   "Not"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "What did you draw with chalk?",
+  "model": "v5_a05",
+  "cards": [
+   "Rainbow",
+   "Cat",
+   "Heart",
+   "Dog",
+   "Flower",
+   "Sun",
+   "Draw",
+   "Star",
+   "House"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "For sure! Maybe we can all have a meal together sometime?",
+  "model": "v5",
+  "cards": [
+   "Yeah",
+   "Yay",
+   "Maybe",
+   "I want",
+   "Sound",
+   "Good idea",
+   "Love",
+   "Yum",
+   "Good"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Did Sophia mention anything else?",
+  "model": "v5_a05",
+  "cards": [
+   "Sleep",
+   "Tired",
+   "Had",
+   "Busy",
+   "Happy",
+   "Lunch",
+   "Just",
+   "She",
+   "Good"
+  ],
+  "answerable": 1,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "You tapped 'hot'. Is your food too hot, or do you want something hot?",
+  "model": "v5",
+  "cards": [
+   "Hot",
+   "Cold",
+   "Too",
+   "Water",
+   "Food",
+   "Hungry",
+   "Ice",
+   "Juice",
+   "Tired"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "You really think she\u2019s that good?",
+  "model": "shipped",
+  "cards": [
+   "Definitely",
+   "She",
+   "Yeah",
+   "Totally",
+   "Strong",
+   "Life",
+   "Sure",
+   "I",
+   "A little"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Totally! What else do you want to do today?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Nothing",
+   "Later",
+   "Fun",
+   "Not really",
+   "Ice cream",
+   "Tv",
+   "Drink",
+   "Dessert"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "For sure! Maybe we can all have a meal together sometime?",
+  "model": "v5_a05",
+  "cards": [
+   "Yay",
+   "Yeah",
+   "Good idea",
+   "Maybe",
+   "Yum",
+   "Absolutely",
+   "I think so",
+   "Sound",
+   "Yup"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Good morning! Ready for today?",
+  "model": "v5",
+  "cards": [
+   "Morning",
+   "Excited",
+   "Good morning",
+   "Need",
+   "Good",
+   "I am",
+   "Am",
+   "Let's",
+   "Okay"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "You want me to tell him?",
+  "model": "v5_a05",
+  "cards": [
+   "Let",
+   "He",
+   "Scared",
+   "Close",
+   "Me",
+   "Off",
+   "Then",
+   "Under",
+   "Bright"
+  ],
+  "answerable": 1,
+  "plausible": 1,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Are you hungry for snack yet?",
+  "model": "v5_a05",
+  "cards": [
+   "Hungry",
+   "Not yet",
+   "Not",
+   "Snack",
+   "Lunch",
+   "Yet",
+   "Wait",
+   "Full",
+   "Forget"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Whose coat is this on the chair?",
+  "model": "v5",
+  "cards": [
+   "Me",
+   "You",
+   "Dad",
+   "Mum",
+   "Brother",
+   "Sister",
+   "Cat",
+   "Friend",
+   "Lady"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds tough. Do you think they need support?",
+  "model": "v5_a05",
+  "cards": [
+   "Definitely",
+   "Maybe",
+   "Sometimes",
+   "I think so",
+   "Not really",
+   "Others",
+   "Hard",
+   "Sure",
+   "A little"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "How did the toothbrush get broken?",
+  "model": "v5_a05",
+  "cards": [
+   "Toothbrush",
+   "Oops",
+   "Sink",
+   "Drop",
+   "Spill",
+   "Slip",
+   "Lose",
+   "Fall",
+   "Nail"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Are you excited?",
+  "model": "shipped",
+  "cards": [
+   "Excited",
+   "Very",
+   "I am",
+   "Oh",
+   "I'm hungry",
+   "Am",
+   "I",
+   "I'm",
+   "Sure"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "How long until we're there?",
+  "model": "shipped",
+  "cards": [
+   "For",
+   "A",
+   "A little",
+   "Dinner",
+   "I",
+   "Not",
+   "Few",
+   "Couple",
+   "About"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "What time does he call?",
+  "model": "v5",
+  "cards": [
+   "Morning",
+   "Around",
+   "After",
+   "Breakfast",
+   "Today",
+   "Later",
+   "Bedtime",
+   "Seven",
+   "Afternoon"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Do you want to take the medicine?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Not",
+   "Sure",
+   "Take",
+   "I need",
+   "I want",
+   "Yeah",
+   "To take",
+   "Try"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "How does he help?",
+  "model": "v5",
+  "cards": [
+   "Sleep",
+   "Cook",
+   "Money",
+   "Listen",
+   "Food",
+   "Care",
+   "Teach",
+   "Talk",
+   "Story"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Yeah, he does! Have you noticed that too?",
+  "model": "shipped",
+  "cards": [
+   "He",
+   "I have",
+   "I",
+   "We",
+   "Oh",
+   "Have",
+   "Yeah",
+   "Always",
+   "It's"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Yeah, he does! Have you noticed that too?",
+  "model": "v5",
+  "cards": [
+   "Always",
+   "Every",
+   "A",
+   "He",
+   "Same",
+   "I",
+   "Tired",
+   "Morning",
+   "Sometimes"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "How many marbles fell on the floor?",
+  "model": "v5",
+  "cards": [
+   "Four",
+   "None",
+   "Three",
+   "Five",
+   "Two",
+   "One",
+   "Six",
+   "Lot",
+   "Ten"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Where do you sit in the car?",
+  "model": "shipped",
+  "cards": [
+   "Table",
+   "In",
+   "Sunglasses",
+   "The",
+   "Side",
+   "Sit",
+   "To sit",
+   "Car",
+   "Really"
+  ],
+  "answerable": 1,
+  "plausible": 2,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "How long until we're there?",
+  "model": "v5",
+  "cards": [
+   "Soon",
+   "After",
+   "Wait",
+   "Lunch",
+   "Minutes",
+   "Sleep",
+   "Long",
+   "Car",
+   "Five"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Which sandwich?",
+  "model": "v5",
+  "cards": [
+   "Cheese",
+   "Sandwich",
+   "Burger",
+   "Turkey",
+   "Strawberry",
+   "Ham",
+   "Classic",
+   "Chicken",
+   "And"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Classic Olivia, right?",
+  "model": "v5_a05",
+  "cards": [
+   "Funny",
+   "Fast",
+   "Not really",
+   "Bright",
+   "Red",
+   "True",
+   "Good",
+   "Favorite",
+   "Best"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "What if he relapses?",
+  "model": "v5",
+  "cards": [
+   "Bad",
+   "Sorry",
+   "Lose",
+   "Sad",
+   "Hard",
+   "Forget",
+   "Really",
+   "Angry",
+   "Later"
+  ],
+  "answerable": 1,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Whose coat is this on the chair?",
+  "model": "shipped",
+  "cards": [
+   "Coat",
+   "It's",
+   "The",
+   "That's",
+   "Car",
+   "Shoe",
+   "Clothes",
+   "To watch",
+   "I"
+  ],
+  "answerable": 0,
+  "plausible": 1,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Shall we cut your nails today?",
+  "model": "shipped",
+  "cards": [
+   "That",
+   "Let",
+   "Absolutely",
+   "Yeah",
+   "Do",
+   "Fine",
+   "I",
+   "Make",
+   "Sure"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "restaurant",
+  "question": "Yeah, I get that. Want to watch a movie or something?",
+  "model": "shipped",
+  "cards": [
+   "Comedy",
+   "What",
+   "Movie",
+   "Watch",
+   "Something",
+   "Need",
+   "A",
+   "Which",
+   "I"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 5
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Really?",
+  "model": "shipped",
+  "cards": [
+   "Support",
+   "I",
+   "Yeah",
+   "Close",
+   "Absolutely",
+   "Thank you",
+   "Feel",
+   "Thanks",
+   "Very"
+  ],
+  "answerable": 2,
+  "plausible": 2,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "How do you feel about seeing the nurse?",
+  "model": "shipped",
+  "cards": [
+   "Nervous",
+   "I feel",
+   "Feel",
+   "I",
+   "I have",
+   "Nice",
+   "Excited",
+   "I am",
+   "Am"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 6
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "When should we go to the bathroom, before or after we eat?",
+  "model": "shipped",
+  "cards": [
+   "Before",
+   "Evening",
+   "After",
+   "Breakfast",
+   "Am",
+   "Food",
+   "Water",
+   "About",
+   "Not"
+  ],
+  "answerable": 2,
+  "plausible": 2,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Did he seem uncomfortable?",
+  "model": "shipped",
+  "cards": [
+   "He",
+   "Very",
+   "I",
+   "Pretty",
+   "Not",
+   "Oh",
+   "Yeah",
+   "A",
+   "I am"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That's good to hear. What\u2019s on your mind today?",
+  "model": "shipped",
+  "cards": [
+   "Think",
+   "Need",
+   "Want",
+   "Just",
+   "About",
+   "I want",
+   "I",
+   "Dinner",
+   "To"
+  ],
+  "answerable": 1,
+  "plausible": 2,
+  "filler": 7
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "When did we last come here for waffles?",
+  "model": "shipped",
+  "cards": [
+   "Always",
+   "Morning",
+   "Last",
+   "Today",
+   "Week",
+   "Don't",
+   "I",
+   "Not",
+   "Probably"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds intense! Was it scary?",
+  "model": "v5",
+  "cards": [
+   "Very",
+   "Dark",
+   "A little",
+   "Scared",
+   "Yeah",
+   "Scary",
+   "Little",
+   "Not really",
+   "Sometimes"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "What else does he need?",
+  "model": "shipped",
+  "cards": [
+   "Fix",
+   "Need",
+   "Family",
+   "Bike",
+   "Just",
+   "He",
+   "Another",
+   "With",
+   "I have"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Okay I am frying them now. How much salt should I add?",
+  "model": "shipped",
+  "cards": [
+   "A little",
+   "I",
+   "Two",
+   "Just",
+   "Let",
+   "I need",
+   "One",
+   "Ketchup",
+   "Add"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh, right. He needs the numbers to reach them. Do you think he wants to plan something?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "If",
+   "Sure",
+   "Yeah",
+   "I want",
+   "Excited",
+   "Not",
+   "Bbq",
+   "Plan"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Maybe next week, takeout instead?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Not",
+   "Good",
+   "Yeah",
+   "Definitely",
+   "Fun",
+   "I",
+   "I want",
+   "That"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Sounds good! Did he eat well?",
+  "model": "v5_a05",
+  "cards": [
+   "He",
+   "Not really",
+   "Pasta",
+   "Full",
+   "Candy",
+   "A little",
+   "Not",
+   "Usual",
+   "Whole"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "What did you draw with chalk?",
+  "model": "v5",
+  "cards": [
+   "Dog",
+   "Cat",
+   "Heart",
+   "Rainbow",
+   "Flower",
+   "Draw",
+   "Sun",
+   "Star",
+   "House"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Hey there, how was your day?",
+  "model": "v5_a05",
+  "cards": [
+   "Good",
+   "Day",
+   "Busy",
+   "Okay",
+   "Tired",
+   "Was",
+   "Pretty",
+   "Thank",
+   "Had"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Should I leave the light on?",
+  "model": "shipped",
+  "cards": [
+   "Let",
+   "Should",
+   "If",
+   "I",
+   "You",
+   "Not",
+   "Light",
+   "Always",
+   "Definitely"
+  ],
+  "answerable": 1,
+  "plausible": 2,
+  "filler": 6
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh, right. He needs the numbers to reach them. Do you think he wants to plan something?",
+  "model": "shipped",
+  "cards": [
+   "Maybe",
+   "Plan",
+   "Yeah",
+   "Definitely",
+   "Sure",
+   "He",
+   "I",
+   "Sound",
+   "Not"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Do you want fries or rice with it?",
+  "model": "v5",
+  "cards": [
+   "Chips",
+   "Both",
+   "Water",
+   "Pizza",
+   "Rice",
+   "Drink",
+   "Juice",
+   "Ketchup",
+   "Noodles"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh really? How was it?",
+  "model": "v5_a05",
+  "cards": [
+   "Good",
+   "Pretty",
+   "Fun",
+   "Excited",
+   "Busy",
+   "Different",
+   "Boring",
+   "Bad",
+   "Felt"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Is there more?",
+  "model": "v5_a05",
+  "cards": [
+   "Recess",
+   "Gym",
+   "Teacher",
+   "Bathroom",
+   "Library",
+   "Art",
+   "Friend",
+   "Later",
+   "Math"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Oh, 'Bark Buddy'! Classic! Let me set it up.",
+  "model": "v5_a05",
+  "cards": [
+   "Happy",
+   "Okay",
+   "Good",
+   "Thanks",
+   "Thank you",
+   "Great",
+   "It's",
+   "Funny",
+   "Too"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "What happened in your dream?",
+  "model": "v5",
+  "cards": [
+   "Fall",
+   "Dog",
+   "Dark",
+   "Monster",
+   "Scared",
+   "Scary",
+   "Fly",
+   "Sad",
+   "Doctor"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Does your tummy hurt?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Oh",
+   "Hear",
+   "Very",
+   "Not",
+   "Yup",
+   "Ill",
+   "Hurt",
+   "It's"
+  ],
+  "answerable": 1,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "You really think she\u2019s that good?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Yeah",
+   "Really",
+   "Seem",
+   "Definitely",
+   "Love",
+   "True",
+   "Exactly",
+   "Totally"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "What else does he need?",
+  "model": "v5",
+  "cards": [
+   "Water",
+   "Bathroom",
+   "Light",
+   "Phone",
+   "Tablet",
+   "Clothes",
+   "Coat",
+   "Fix",
+   "Shoe"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Which sandwich?",
+  "model": "shipped",
+  "cards": [
+   "Turkey",
+   "Sandwich",
+   "Cheese",
+   "Ham",
+   "Classic",
+   "Avocado",
+   "Tomato",
+   "And",
+   "Cheeseburger"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh, that's great! Was it on time?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "It",
+   "Not",
+   "A little",
+   "Around",
+   "Yeah",
+   "Oh",
+   "After",
+   "Just"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Where is the car parked?",
+  "model": "v5",
+  "cards": [
+   "There",
+   "Home",
+   "Street",
+   "Garage",
+   "School",
+   "Car",
+   "Park",
+   "Here",
+   "Shop"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Where is Mum sitting?",
+  "model": "v5_a05",
+  "cards": [
+   "Bed",
+   "Chair",
+   "Mum",
+   "Back",
+   "Home",
+   "Couch",
+   "Floor",
+   "Behind",
+   "Down"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Hey, how's it going today?",
+  "model": "v5_a05",
+  "cards": [
+   "I am",
+   "Good",
+   "Feel",
+   "Pretty",
+   "Am",
+   "Day",
+   "I feel",
+   "I",
+   "It is"
+  ],
+  "answerable": 2,
+  "plausible": 2,
+  "filler": 6
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Where do you sit in the car?",
+  "model": "v5",
+  "cards": [
+   "Window",
+   "Back",
+   "Front",
+   "Seat",
+   "Mum",
+   "Here",
+   "Dad",
+   "Next",
+   "Right"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Nice! What did she say?",
+  "model": "v5",
+  "cards": [
+   "Talk",
+   "Tell",
+   "Good",
+   "She",
+   "Want",
+   "Excited",
+   "Check",
+   "Happy",
+   "I want"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That's good to hear. What\u2019s on your mind today?",
+  "model": "v5_a05",
+  "cards": [
+   "Want",
+   "Think",
+   "Feel",
+   "Just",
+   "Talk",
+   "I want",
+   "Worried",
+   "Share",
+   "Cheat"
+  ],
+  "answerable": 1,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "When did you lose your tooth?",
+  "model": "v5",
+  "cards": [
+   "Yesterday",
+   "Today",
+   "Last",
+   "Fall",
+   "Tomorrow",
+   "Next",
+   "Morning",
+   "Tooth",
+   "School"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Where do they keep the ice cream?",
+  "model": "v5_a05",
+  "cards": [
+   "Kitchen",
+   "Table",
+   "Cupboard",
+   "There",
+   "Ice cream",
+   "Ice",
+   "Box",
+   "Store",
+   "Hall"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "I'm confused. Do you want a straw or a spoon?",
+  "model": "shipped",
+  "cards": [
+   "Strawberry",
+   "Stew",
+   "Water",
+   "A",
+   "Spider",
+   "Stir",
+   "Star",
+   "Seafood",
+   "Soda"
+  ],
+  "answerable": 0,
+  "plausible": 1,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds intense! Was it scary?",
+  "model": "v5_a05",
+  "cards": [
+   "Dark",
+   "Very",
+   "A little",
+   "Not really",
+   "Scary",
+   "Sometimes",
+   "Little",
+   "Yeah",
+   "Different"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "What happened in your dream?",
+  "model": "v5_a05",
+  "cards": [
+   "Monster",
+   "Dark",
+   "Fall",
+   "Dog",
+   "Scary",
+   "Fly",
+   "Rainbow",
+   "Scared",
+   "Nothing"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Did he seem uncomfortable?",
+  "model": "v5",
+  "cards": [
+   "Very",
+   "Okay",
+   "A",
+   "A little",
+   "Worried",
+   "Different",
+   "Cold",
+   "Sometimes",
+   "Little"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Hey there! Ready for breakfast?",
+  "model": "v5_a05",
+  "cards": [
+   "Morning",
+   "Not",
+   "Good morning",
+   "Definitely",
+   "Yup",
+   "Hungry",
+   "Excited",
+   "Not yet",
+   "Food"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "What if he relapses?",
+  "model": "shipped",
+  "cards": [
+   "He",
+   "It is",
+   "Not",
+   "That's",
+   "Yeah",
+   "How",
+   "Must",
+   "Ok",
+   "Hurt"
+  ],
+  "answerable": 0,
+  "plausible": 3,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Do tell! What happened?",
+  "model": "shipped",
+  "cards": [
+   "Kid",
+   "She",
+   "The",
+   "Get",
+   "Dinner",
+   "I",
+   "Beat",
+   "Hear",
+   "Something"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Tell me what you need.",
+  "model": "v5_a05",
+  "cards": [
+   "Hug",
+   "Water",
+   "Sticker",
+   "Toilet",
+   "Tablet",
+   "Medicine",
+   "Home",
+   "Headphones",
+   "Bathroom"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "How are you getting home?",
+  "model": "v5_a05",
+  "cards": [
+   "Bus",
+   "Car",
+   "Walk",
+   "Dad",
+   "Van",
+   "Train",
+   "Mum",
+   "Driver",
+   "Backpack"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "The door says push. What do we do through the door to get inside?",
+  "model": "v5_a05",
+  "cards": [
+   "Push",
+   "Open",
+   "Door",
+   "Look",
+   "Wait",
+   "Lift",
+   "To enter door",
+   "Button",
+   "Stairs"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "For sure! Maybe we can all have a meal together sometime?",
+  "model": "shipped",
+  "cards": [
+   "Yeah",
+   "Good idea",
+   "Sound",
+   "Sure",
+   "Definitely",
+   "Food",
+   "Good",
+   "Absolutely",
+   "Love"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Would you like a drink?",
+  "model": "shipped",
+  "cards": [
+   "Water",
+   "Ice",
+   "Soda",
+   "Let",
+   "Coffee",
+   "Definitely",
+   "Sure",
+   "Strong",
+   "Thanks"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Where is the car parked?",
+  "model": "v5_a05",
+  "cards": [
+   "Street",
+   "There",
+   "Garage",
+   "Home",
+   "School",
+   "Road",
+   "Far",
+   "Sidewalk",
+   "Upstairs"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Sounds fun! Any favorite food?",
+  "model": "v5_a05",
+  "cards": [
+   "Taco",
+   "Maybe",
+   "Spicy",
+   "Pizza",
+   "Love",
+   "Food",
+   "Curry",
+   "Sushi",
+   "Pasta"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "You tapped 'hot'. Is your food too hot, or do you want something hot?",
+  "model": "v5_a05",
+  "cards": [
+   "Hot",
+   "Cold",
+   "Too",
+   "Ice",
+   "Food",
+   "Water",
+   "Blow",
+   "Hungry",
+   "Warm"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Sounds good! Did he eat well?",
+  "model": "shipped",
+  "cards": [
+   "He",
+   "Not really",
+   "Really",
+   "Not",
+   "Yeah",
+   "Candy",
+   "Good",
+   "Saw",
+   "Pasta"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "How long until we're there?",
+  "model": "v5_a05",
+  "cards": [
+   "Minutes",
+   "Soon",
+   "After",
+   "Lunch",
+   "Long",
+   "Wait",
+   "Sleep",
+   "Five",
+   "Clock"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Does she enjoy it?",
+  "model": "shipped",
+  "cards": [
+   "She",
+   "Love",
+   "It",
+   "Very",
+   "Totally",
+   "Happy",
+   "Not",
+   "Like",
+   "It is"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "How are you getting home?",
+  "model": "v5",
+  "cards": [
+   "Bus",
+   "Car",
+   "Dad",
+   "Mum",
+   "Walk",
+   "Train",
+   "Friend",
+   "Driver",
+   "Backpack"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Should I leave the light on?",
+  "model": "v5_a05",
+  "cards": [
+   "Dark",
+   "On",
+   "Later",
+   "Light",
+   "Off",
+   "Sleep",
+   "Night",
+   "Bright",
+   "Scared"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Have you talked to him?",
+  "model": "shipped",
+  "cards": [
+   "Not yet",
+   "Yet",
+   "I",
+   "Try",
+   "Not",
+   "I want",
+   "I have",
+   "But",
+   "Need"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 6
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Have you talked to him?",
+  "model": "v5_a05",
+  "cards": [
+   "Not yet",
+   "Try",
+   "Yet",
+   "Not",
+   "Scared",
+   "I want",
+   "Shy",
+   "Maybe",
+   "Forget"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "And furniture can show that, right?",
+  "model": "shipped",
+  "cards": [
+   "Yeah",
+   "Furniture",
+   "Very",
+   "Yup",
+   "They",
+   "Bright",
+   "See",
+   "Good",
+   "Exactly"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "I can help you with lunch. Want something quick?",
+  "model": "v5_a05",
+  "cards": [
+   "Sandwich",
+   "Quick",
+   "Maybe",
+   "Just",
+   "Chips",
+   "Juice",
+   "Lunch",
+   "Full",
+   "I want"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Does she enjoy it?",
+  "model": "v5_a05",
+  "cards": [
+   "Very",
+   "Love",
+   "Different",
+   "Totally",
+   "I think so",
+   "She",
+   "Sometimes",
+   "Excited",
+   "Absolutely"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Maybe some bright colours or new paintings would help?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "Happy",
+   "Messy",
+   "Bright",
+   "Color",
+   "Colour",
+   "Funny",
+   "Blue",
+   "I think so"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds serious. Do you know what\u2019s wrong?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Not",
+   "Need",
+   "Bad",
+   "I am",
+   "Just",
+   "Sure",
+   "Oh",
+   "Not really"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 5
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Can you have the cake? What's in it?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Chocolate",
+   "Good",
+   "The",
+   "My",
+   "It",
+   "Very",
+   "Can't",
+   "All"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Did he seem uncomfortable?",
+  "model": "v5_a05",
+  "cards": [
+   "Worried",
+   "A little",
+   "Very",
+   "Different",
+   "Shy",
+   "Okay",
+   "Sometimes",
+   "Nervous",
+   "A"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Perfect! Let\u2019s make a list together. What else?",
+  "model": "shipped",
+  "cards": [
+   "Want",
+   "Maybe",
+   "Need",
+   "Change",
+   "Make",
+   "Bye",
+   "Color",
+   "Talk",
+   "Happy"
+  ],
+  "answerable": 1,
+  "plausible": 2,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh really? When's he leaving?",
+  "model": "v5",
+  "cards": [
+   "Later",
+   "Soon",
+   "Maybe",
+   "Not",
+   "He",
+   "Dinner",
+   "Next week",
+   "Wait",
+   "Probably"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "What did you do on the train?",
+  "model": "v5_a05",
+  "cards": [
+   "Sit",
+   "Music",
+   "Window",
+   "Sleep",
+   "Snack",
+   "Tablet",
+   "Train",
+   "Zoo",
+   "Horn"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "The bath bomb fizzed up really big. What did it look like?",
+  "model": "v5",
+  "cards": [
+   "Big",
+   "Star",
+   "Volcano",
+   "Huge",
+   "Bubbles",
+   "Small",
+   "Rocket",
+   "Tall",
+   "Boat"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That\u2019s surprising. How did it go?",
+  "model": "v5",
+  "cards": [
+   "Good",
+   "Okay",
+   "Excited",
+   "Bad",
+   "Not",
+   "My",
+   "Tired",
+   "Pretty",
+   "Fine"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Totally! What else do you want to do today?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "Nothing",
+   "Not really",
+   "Later",
+   "Dessert",
+   "Ice cream",
+   "Tv",
+   "Fun",
+   "Drink"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "How long will that take?",
+  "model": "v5",
+  "cards": [
+   "Long",
+   "Bored",
+   "Short",
+   "Sleep",
+   "Time",
+   "Tired",
+   "Ten",
+   "Hour",
+   "Minutes"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Are you excited?",
+  "model": "v5_a05",
+  "cards": [
+   "Excited",
+   "I think so",
+   "Very",
+   "Tired",
+   "Yup",
+   "Sure",
+   "Happy",
+   "Nervous",
+   "A little"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Are you joining them?",
+  "model": "v5",
+  "cards": [
+   "Friend",
+   "Wait",
+   "Me",
+   "Dad",
+   "Alone",
+   "Together",
+   "Grandmother",
+   "Mum",
+   "Boy"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "What time does he call?",
+  "model": "shipped",
+  "cards": [
+   "Morning",
+   "At",
+   "Tomorrow",
+   "Always",
+   "Ten",
+   "Seven",
+   "After",
+   "About",
+   "Call"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Classic Olivia, right?",
+  "model": "shipped",
+  "cards": [
+   "Absolutely",
+   "It's",
+   "Very",
+   "Exactly",
+   "Perfect",
+   "Yup",
+   "Right",
+   "It",
+   "That's"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Shall we cut your nails today?",
+  "model": "v5",
+  "cards": [
+   "Later",
+   "Scared",
+   "Wait",
+   "Fingernail",
+   "Toenail",
+   "Me",
+   "Tomorrow",
+   "Nail",
+   "Hurt"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Are you sleepy now?",
+  "model": "shipped",
+  "cards": [
+   "Sleepy",
+   "Not",
+   "I",
+   "Sleep",
+   "A little",
+   "Oh",
+   "Yup",
+   "Of course",
+   "Tired"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "The door says push. What do we do through the door to get inside?",
+  "model": "v5",
+  "cards": [
+   "Push",
+   "Open",
+   "Door",
+   "Wait",
+   "Look",
+   "Go",
+   "Next",
+   "Mum",
+   "Hand"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "When did you lose your tooth?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Day",
+   "Today",
+   "After",
+   "It's",
+   "Last",
+   "Yesterday",
+   "Night",
+   "Morning"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Should we wake her up?",
+  "model": "shipped",
+  "cards": [
+   "Maybe",
+   "Definitely",
+   "Let",
+   "I",
+   "Yeah",
+   "If",
+   "Wake",
+   "Need",
+   "I need"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 5
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Is there more?",
+  "model": "v5",
+  "cards": [
+   "Teacher",
+   "Gym",
+   "Bathroom",
+   "Recess",
+   "Friend",
+   "Later",
+   "Library",
+   "Ball",
+   "Art"
+  ],
+  "answerable": 1,
+  "plausible": 2,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "How old is the wizard pretending to be?",
+  "model": "shipped",
+  "cards": [
+   "A",
+   "Thirty",
+   "Six",
+   "One",
+   "Ten",
+   "He",
+   "Two",
+   "Old",
+   "Four"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Nice! What\u2019s for dinner later?",
+  "model": "shipped",
+  "cards": [
+   "Dinner",
+   "Make",
+   "I'm",
+   "Perfect",
+   "Love",
+   "What",
+   "Food",
+   "Eat",
+   "Fine"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Is there more?",
+  "model": "shipped",
+  "cards": [
+   "Just",
+   "Not",
+   "One",
+   "Hard",
+   "Need",
+   "Like",
+   "Maybe",
+   "A",
+   "All"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "When did we last come here for waffles?",
+  "model": "v5_a05",
+  "cards": [
+   "Last",
+   "Before",
+   "Weekend",
+   "Friday",
+   "Today",
+   "Morning",
+   "Monday",
+   "Dinner",
+   "Saturday"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "You want me to tell him?",
+  "model": "shipped",
+  "cards": [
+   "Let",
+   "Sure",
+   "I",
+   "Yeah",
+   "I'll",
+   "Not",
+   "He",
+   "I'm",
+   "Will"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 7
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "You bumped your knee getting into the car seat. Where does it hurt?",
+  "model": "shipped",
+  "cards": [
+   "Hear",
+   "Feet",
+   "Legs",
+   "Hand",
+   "Back",
+   "Arm",
+   "Leg",
+   "Head",
+   "To hear"
+  ],
+  "answerable": 1,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "What did you put on after your shower?",
+  "model": "v5_a05",
+  "cards": [
+   "Clothes",
+   "Pajamas",
+   "Lotion",
+   "Robe",
+   "Slipper",
+   "Shirt",
+   "Cream",
+   "Pyjamas",
+   "Underwear"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "When should we go to the bathroom, before or after we eat?",
+  "model": "v5_a05",
+  "cards": [
+   "Before",
+   "Food",
+   "After",
+   "Breakfast",
+   "Toilet",
+   "First",
+   "Drink",
+   "Dinner",
+   "Bathroom"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "How did the toothbrush get broken?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "It",
+   "From",
+   "Lot",
+   "The",
+   "Break",
+   "Didn't",
+   "They",
+   "Last"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 5
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "How did you get to school today?",
+  "model": "v5",
+  "cards": [
+   "Bus",
+   "Car",
+   "Walk",
+   "Taxi",
+   "Train",
+   "Dad",
+   "Bike",
+   "School",
+   "Cycle"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh really? How was it?",
+  "model": "v5",
+  "cards": [
+   "Good",
+   "Fun",
+   "Excited",
+   "Pretty",
+   "My",
+   "Bad",
+   "Feel",
+   "Great",
+   "Busy"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That\u2019s surprising. How did it go?",
+  "model": "shipped",
+  "cards": [
+   "Fast",
+   "Good",
+   "It",
+   "Went",
+   "Really",
+   "Last",
+   "Jam",
+   "I",
+   "Yeah"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Do you want to stop playing now?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "I'll",
+   "Not yet",
+   "I'm",
+   "Let's",
+   "Not",
+   "I want",
+   "Definitely",
+   "I am"
+  ],
+  "answerable": 2,
+  "plausible": 2,
+  "filler": 7
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Wow, that\u2019s fast! You ready for that?",
+  "model": "v5_a05",
+  "cards": [
+   "Not really",
+   "I think so",
+   "Excited",
+   "Wait",
+   "Maybe",
+   "Not",
+   "Kind of",
+   "Ready",
+   "Later"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Do you need the potty first?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Yup",
+   "Not",
+   "Definitely",
+   "I want",
+   "I need",
+   "Not yet",
+   "I'm",
+   "Water"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 5
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Really?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "Kind of",
+   "Because",
+   "Not really",
+   "Tired",
+   "Funny",
+   "Later",
+   "I think so",
+   "Boring"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "What happened to your drink?",
+  "model": "shipped",
+  "cards": [
+   "Water",
+   "Wine",
+   "Cocktail",
+   "Orange juice",
+   "I",
+   "Taste",
+   "Carry",
+   "Tea",
+   "She"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Sounds like a blast! Did you eat lunch yet?",
+  "model": "shipped",
+  "cards": [
+   "Not yet",
+   "I",
+   "Yet",
+   "Not",
+   "Had",
+   "Lunch",
+   "Just",
+   "Sleep",
+   "I want"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "We can arrange that, okay?",
+  "model": "shipped",
+  "cards": [
+   "Thanks",
+   "Thank you",
+   "Thank",
+   "That's",
+   "Sure",
+   "Let's",
+   "That",
+   "You",
+   "I'll"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 5
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Are you hungry for snack yet?",
+  "model": "shipped",
+  "cards": [
+   "Snack",
+   "Apple",
+   "I'm hungry",
+   "I'm",
+   "Hungry",
+   "I",
+   "Not",
+   "Not yet",
+   "Grab"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "What's hard for you right now?",
+  "model": "v5",
+  "cards": [
+   "Math",
+   "Loud",
+   "Ear",
+   "Recess",
+   "Tired",
+   "Write",
+   "Read",
+   "Hungry",
+   "Hard"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Can you have the cake? What's in it?",
+  "model": "v5",
+  "cards": [
+   "Chocolate",
+   "Cake",
+   "Ice cream",
+   "Cookie",
+   "My",
+   "Strawberry",
+   "Sticker",
+   "Sweet",
+   "Pie"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "How does he help?",
+  "model": "shipped",
+  "cards": [
+   "He",
+   "Cook",
+   "Teach",
+   "Does",
+   "Understand",
+   "Listen",
+   "With",
+   "Feed",
+   "Make"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Okay I am frying them now. How much salt should I add?",
+  "model": "v5_a05",
+  "cards": [
+   "A little",
+   "Little",
+   "None",
+   "Some",
+   "Full",
+   "Half",
+   "Peas",
+   "Lot",
+   "A"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "You bumped your knee getting into the car seat. Where does it hurt?",
+  "model": "v5",
+  "cards": [
+   "Knee",
+   "Hurt",
+   "Here",
+   "Left",
+   "Shoulder",
+   "Arm",
+   "Hand",
+   "Elbow",
+   "Ear"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "Is she okay with that?",
+  "model": "v5",
+  "cards": [
+   "Okay",
+   "Scared",
+   "Tired",
+   "Worried",
+   "Wait",
+   "Later",
+   "Maybe",
+   "Not really",
+   "Happy"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Do you need the potty first?",
+  "model": "v5",
+  "cards": [
+   "Toilet",
+   "Pee",
+   "Later",
+   "Water",
+   "Poop",
+   "First",
+   "Wait",
+   "Bathroom",
+   "Not"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "What happened in your dream?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Get",
+   "My",
+   "A",
+   "Dream",
+   "She",
+   "The",
+   "I saw",
+   "Just"
+  ],
+  "answerable": 1,
+  "plausible": 2,
+  "filler": 6
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "How many spelling words did you get right?",
+  "model": "v5",
+  "cards": [
+   "None",
+   "One",
+   "Three",
+   "Two",
+   "Four",
+   "Five",
+   "Many",
+   "Lot",
+   "All"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Hey there, how was your day?",
+  "model": "v5",
+  "cards": [
+   "Good",
+   "Day",
+   "Tired",
+   "Okay",
+   "My",
+   "Busy",
+   "Was",
+   "Thank",
+   "It"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "How old is the wizard pretending to be?",
+  "model": "v5",
+  "cards": [
+   "Eighteen",
+   "Ten",
+   "Six",
+   "One",
+   "Four",
+   "Eleven",
+   "Three",
+   "Seven",
+   "Sixteen"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "How did the toothbrush get broken?",
+  "model": "v5",
+  "cards": [
+   "Toothbrush",
+   "Sink",
+   "Drop",
+   "Fall",
+   "Spill",
+   "Lose",
+   "Oops",
+   "Brother",
+   "Cup"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "How long will that take?",
+  "model": "shipped",
+  "cards": [
+   "A",
+   "Couple",
+   "Or",
+   "A little",
+   "My",
+   "One",
+   "I",
+   "Few",
+   "Comfort"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Oh, 'Bark Buddy'! Classic! Let me set it up.",
+  "model": "v5",
+  "cards": [
+   "Happy",
+   "Okay",
+   "Good",
+   "Thanks",
+   "Thank you",
+   "Great",
+   "Me",
+   "Too",
+   "Wait"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Should I bring your blanket to bed?",
+  "model": "v5_a05",
+  "cards": [
+   "Blanket",
+   "Pillow",
+   "Couch",
+   "Sleepy",
+   "Sheet",
+   "Cold",
+   "Soft",
+   "Warm",
+   "Hug"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "You fell in the playground. How are you feeling?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Okay",
+   "Feel",
+   "I am",
+   "Oh",
+   "Not",
+   "Upset",
+   "I'm good",
+   "Pretty"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "We can arrange that, okay?",
+  "model": "v5_a05",
+  "cards": [
+   "Okay",
+   "Thank you",
+   "Maybe",
+   "Thank",
+   "I want",
+   "Can",
+   "Ready",
+   "Thanks",
+   "Tired"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds scary! Was Noah there?",
+  "model": "v5_a05",
+  "cards": [
+   "Not yet",
+   "I think so",
+   "Not really",
+   "Maybe",
+   "Not",
+   "Wait",
+   "Just",
+   "Scared",
+   "Meet"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "What do you want to do in the pool?",
+  "model": "v5",
+  "cards": [
+   "Bubbles",
+   "Jump",
+   "Water",
+   "Splash",
+   "Run",
+   "Slide",
+   "Fast",
+   "Blow",
+   "Play"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Do you want to stop playing now?",
+  "model": "v5",
+  "cards": [
+   "Tired",
+   "Play",
+   "Wait",
+   "Later",
+   "Break",
+   "Not yet",
+   "Finished",
+   "Now",
+   "Again"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "How does he help?",
+  "model": "v5_a05",
+  "cards": [
+   "Teach",
+   "Cook",
+   "Money",
+   "Grocery",
+   "Listen",
+   "Sleep",
+   "Care",
+   "Give",
+   "Clean"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That\u2019s surprising. How did it go?",
+  "model": "v5_a05",
+  "cards": [
+   "Okay",
+   "Good",
+   "Excited",
+   "Bad",
+   "Pretty",
+   "Fine",
+   "Not",
+   "Well",
+   "Really"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "You fell in the playground. How are you feeling?",
+  "model": "v5",
+  "cards": [
+   "Sad",
+   "Hurt",
+   "Okay",
+   "Knee",
+   "Scared",
+   "Angry",
+   "Mad",
+   "Tired",
+   "Head"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Are you excited?",
+  "model": "v5",
+  "cards": [
+   "Excited",
+   "Tired",
+   "Very",
+   "Happy",
+   "I think so",
+   "Sure",
+   "Ready",
+   "Not",
+   "Okay"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Sure! You can mix the batter if you want.",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "I want",
+   "What",
+   "Mix",
+   "Good",
+   "Sound",
+   "Thanks",
+   "Yum",
+   "Depend"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "The door says push. What do we do through the door to get inside?",
+  "model": "shipped",
+  "cards": [
+   "Push",
+   "I",
+   "Door",
+   "Close",
+   "Get",
+   "Not",
+   "I'll",
+   "Just",
+   "Let"
+  ],
+  "answerable": 2,
+  "plausible": 2,
+  "filler": 5
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "The bath bomb fizzed up really big. What did it look like?",
+  "model": "v5_a05",
+  "cards": [
+   "Volcano",
+   "Huge",
+   "Star",
+   "Big",
+   "Rocket",
+   "Foal",
+   "Small",
+   "Tall",
+   "Bubbles"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "You bumped your knee getting into the car seat. Where does it hurt?",
+  "model": "v5_a05",
+  "cards": [
+   "Knee",
+   "Shoulder",
+   "Elbow",
+   "Left",
+   "Ankle",
+   "Foot",
+   "Side",
+   "Leg",
+   "Toe"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Are you sleepy now?",
+  "model": "v5_a05",
+  "cards": [
+   "Sleepy",
+   "Tired",
+   "Not",
+   "Water",
+   "Dark",
+   "Drink",
+   "Bath",
+   "Hug",
+   "Yawn"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "You fell in the playground. How are you feeling?",
+  "model": "v5_a05",
+  "cards": [
+   "Sad",
+   "Hurt",
+   "Okay",
+   "Mad",
+   "Angry",
+   "Knee",
+   "Worried",
+   "Scared",
+   "Head"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Hey there! Ready for breakfast?",
+  "model": "v5",
+  "cards": [
+   "Not",
+   "Morning",
+   "Hungry",
+   "Definitely",
+   "Good morning",
+   "Excited",
+   "Food",
+   "Not yet",
+   "Maybe"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "That's nice to hear! Any plans?",
+  "model": "v5_a05",
+  "cards": [
+   "Later",
+   "Tired",
+   "Excited",
+   "Relax",
+   "Not really",
+   "Maybe",
+   "Snack",
+   "Wait",
+   "Just"
+  ],
+  "answerable": 1,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "What do you want to do in the pool?",
+  "model": "v5_a05",
+  "cards": [
+   "Bubbles",
+   "Jump",
+   "Splash",
+   "Water",
+   "Blow",
+   "Run",
+   "Slide",
+   "Duck",
+   "Climb"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "restaurant",
+  "question": "We have Masala Dosa, which is a spicy potato-filled crepe, and Chicken Vindaloo, a spicy curry. Which would you prefer?",
+  "model": "v5",
+  "cards": [
+   "Chicken",
+   "Spicy",
+   "Chocolate",
+   "Dance",
+   "Pepperoni",
+   "Taco",
+   "Too",
+   "I want",
+   "Hot"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Would you like a drink?",
+  "model": "v5",
+  "cards": [
+   "Water",
+   "Cold",
+   "Juice",
+   "Lemonade",
+   "Cup",
+   "Ice",
+   "Small",
+   "Straw",
+   "Drink"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Does your tummy hurt?",
+  "model": "v5_a05",
+  "cards": [
+   "Sick",
+   "Hurt",
+   "Little",
+   "I have pain in",
+   "Okay",
+   "Sore",
+   "Bad",
+   "Throat",
+   "A little"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "The bath bomb fizzed up really big. What did it look like?",
+  "model": "shipped",
+  "cards": [
+   "It",
+   "The",
+   "Spot",
+   "One",
+   "Great",
+   "I",
+   "A",
+   "To hear",
+   "A little"
+  ],
+  "answerable": 0,
+  "plausible": 1,
+  "filler": 6
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "How many spelling words did you get right?",
+  "model": "v5_a05",
+  "cards": [
+   "None",
+   "Four",
+   "Three",
+   "One",
+   "Five",
+   "Two",
+   "Many",
+   "Zero",
+   "Six"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Should I bring your blanket to bed?",
+  "model": "shipped",
+  "cards": [
+   "Bring",
+   "If",
+   "Definitely",
+   "Bedroom",
+   "Absolutely",
+   "I",
+   "You",
+   "Sure",
+   "That's"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Where do we cross the road?",
+  "model": "shipped",
+  "cards": [
+   "The",
+   "In",
+   "Side",
+   "Park",
+   "At",
+   "Corner",
+   "Direction",
+   "From",
+   "Hand"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "What do you think about it?",
+  "model": "v5_a05",
+  "cards": [
+   "Good",
+   "Excited",
+   "Different",
+   "Pretty",
+   "Happy",
+   "It's",
+   "Nervous",
+   "Fun",
+   "Taste"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Did Sophia mention anything else?",
+  "model": "v5",
+  "cards": [
+   "Tired",
+   "Sleep",
+   "Happy",
+   "Good",
+   "Lunch",
+   "Just",
+   "Call",
+   "Feel",
+   "She"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh really? How was that?",
+  "model": "v5",
+  "cards": [
+   "Good",
+   "Fun",
+   "Excited",
+   "Pretty",
+   "Great",
+   "Really",
+   "Boring",
+   "Food",
+   "My"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "What happened to your drink?",
+  "model": "v5",
+  "cards": [
+   "Spill",
+   "Cold",
+   "Cup",
+   "Juice",
+   "Water",
+   "Drop",
+   "Gone",
+   "Glass",
+   "Wet"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "How old is the wizard pretending to be?",
+  "model": "v5_a05",
+  "cards": [
+   "Eleven",
+   "Eighteen",
+   "Sixteen",
+   "Six",
+   "Ten",
+   "Seven",
+   "Eight",
+   "Young",
+   "Twenty"
+  ],
+  "answerable": 2,
+  "plausible": 9,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Sounds like a blast! Did you eat lunch yet?",
+  "model": "v5_a05",
+  "cards": [
+   "Not",
+   "Not yet",
+   "Lunch",
+   "Yet",
+   "Just",
+   "Yeah",
+   "Forget",
+   "Later",
+   "Today"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Sounds fun! Any favorite food?",
+  "model": "v5",
+  "cards": [
+   "Taco",
+   "Maybe",
+   "Pizza",
+   "Spicy",
+   "Love",
+   "Food",
+   "I",
+   "Pasta",
+   "Curry"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "restaurant",
+  "question": "Right! Olivia is faster, huh?",
+  "model": "shipped",
+  "cards": [
+   "Very",
+   "Absolutely",
+   "It's",
+   "Exactly",
+   "Yup",
+   "Yeah",
+   "That's",
+   "No way",
+   "It"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Good morning! How are you?",
+  "model": "v5",
+  "cards": [
+   "Morning",
+   "Good",
+   "Feel",
+   "I am",
+   "I",
+   "Tired",
+   "I feel",
+   "Am",
+   "Great"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Good morning! How did you sleep?",
+  "model": "v5_a05",
+  "cards": [
+   "Bad",
+   "Sleep",
+   "Okay",
+   "Not",
+   "Oh",
+   "I",
+   "Good morning",
+   "Yeah",
+   "Sleepy"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Should we try something new today?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Pizza",
+   "Food",
+   "New",
+   "Later",
+   "Drink",
+   "Ipad",
+   "I want",
+   "Ice cream"
+  ],
+  "answerable": 1,
+  "plausible": 5,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "And furniture can show that, right?",
+  "model": "v5_a05",
+  "cards": [
+   "Absolutely",
+   "Different",
+   "True",
+   "Living room",
+   "Every",
+   "Yeah",
+   "Very",
+   "Definitely",
+   "Yup"
+  ],
+  "answerable": 1,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Sure! You can mix the batter if you want.",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "Later",
+   "I want",
+   "Good",
+   "Yummy",
+   "Wait",
+   "Fun",
+   "I",
+   "Not"
+  ],
+  "answerable": 1,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "What did you do in the car?",
+  "model": "v5",
+  "cards": [
+   "Tablet",
+   "Window",
+   "Music",
+   "Song",
+   "Sing",
+   "Look",
+   "Sleep",
+   "Play",
+   "Video"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Where do they keep the ice cream?",
+  "model": "shipped",
+  "cards": [
+   "The",
+   "They",
+   "At",
+   "Park",
+   "Kitchen",
+   "Store",
+   "On",
+   "Table",
+   "Strawberry"
+  ],
+  "answerable": 2,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds scary! Was Noah there?",
+  "model": "v5",
+  "cards": [
+   "Not yet",
+   "Maybe",
+   "Not",
+   "Wait",
+   "Not really",
+   "I think so",
+   "Scared",
+   "Just",
+   "Very"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Okay, does he have a phone?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "Phone",
+   "Not",
+   "Miss",
+   "Not yet",
+   "Definitely",
+   "He",
+   "Need",
+   "Not really"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh, that's great! Was it on time?",
+  "model": "v5",
+  "cards": [
+   "Not",
+   "I",
+   "Long",
+   "Time",
+   "Not yet",
+   "Maybe",
+   "Not really",
+   "Okay",
+   "Really"
+  ],
+  "answerable": 1,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "Where do we cross the road?",
+  "model": "v5",
+  "cards": [
+   "Cross",
+   "Home",
+   "School",
+   "Sign",
+   "Car",
+   "Sidewalk",
+   "Bridge",
+   "Green",
+   "Street"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Is it okay if your brother plays with the trains too?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "It is",
+   "Awesome",
+   "Yeah",
+   "Fine",
+   "Sure",
+   "That",
+   "Ok",
+   "Not"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Do you want to take the medicine?",
+  "model": "v5_a05",
+  "cards": [
+   "Medicine",
+   "Spoon",
+   "Water",
+   "Little",
+   "Juice",
+   "Later",
+   "Taste",
+   "Scared",
+   "Pill"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Glad to hear that! I heard Jessica offered to help with some chores. What do you think about that?",
+  "model": "v5_a05",
+  "cards": [
+   "I feel",
+   "I think so",
+   "Yeah",
+   "I want",
+   "I",
+   "Good idea",
+   "Sounds good",
+   "Kind of",
+   "Of"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Are you ready to line up for the bus?",
+  "model": "v5",
+  "cards": [
+   "Wait",
+   "Tired",
+   "Not yet",
+   "Ready",
+   "Teacher",
+   "Play",
+   "Okay",
+   "Noisy",
+   "Friend"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "Wow, that\u2019s fast! You ready for that?",
+  "model": "v5",
+  "cards": [
+   "Wait",
+   "Maybe",
+   "Excited",
+   "Not",
+   "Not really",
+   "Ready",
+   "Later",
+   "I think so",
+   "I"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Hey there! Ready for breakfast?",
+  "model": "shipped",
+  "cards": [
+   "Morning",
+   "Good morning",
+   "Food",
+   "I'm hungry",
+   "Yup",
+   "Absolutely",
+   "Excited",
+   "Hungry",
+   "Oh"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "How do you feel about seeing the nurse?",
+  "model": "v5_a05",
+  "cards": [
+   "Nervous",
+   "Scared",
+   "Worried",
+   "Brave",
+   "Excited",
+   "Proud",
+   "Better",
+   "Nice",
+   "Happy"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Do you play music often?",
+  "model": "v5",
+  "cards": [
+   "Sometimes",
+   "Every",
+   "Always",
+   "Morning",
+   "Definitely",
+   "Once",
+   "Tired",
+   "Very",
+   "Me"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Hmm, 'turn' - whose turn? Show me.",
+  "model": "v5",
+  "cards": [
+   "Me",
+   "You",
+   "My",
+   "My turn",
+   "Friend",
+   "Turn",
+   "Your turn",
+   "Sister",
+   "Dad"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Perfect! Let\u2019s make a list together. What else?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Ready",
+   "Want",
+   "Later",
+   "Need",
+   "Happy",
+   "I want",
+   "Snack",
+   "Good"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Are you hungry for snack yet?",
+  "model": "v5",
+  "cards": [
+   "Hungry",
+   "Not",
+   "Not yet",
+   "Snack",
+   "Lunch",
+   "Wait",
+   "Tired",
+   "Later",
+   "Yet"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Good morning! Ready for today?",
+  "model": "shipped",
+  "cards": [
+   "Excited",
+   "Feel",
+   "Morning",
+   "Need",
+   "Good",
+   "I am",
+   "For",
+   "Today",
+   "Coffee"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Where do they keep the ice cream?",
+  "model": "v5",
+  "cards": [
+   "Kitchen",
+   "Table",
+   "There",
+   "Ice cream",
+   "Home",
+   "Box",
+   "Ice",
+   "Store",
+   "Outside"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "transport",
+  "question": "That's nice to hear! Any plans?",
+  "model": "shipped",
+  "cards": [
+   "Want",
+   "I",
+   "Visit",
+   "I want",
+   "Plan",
+   "Maybe",
+   "Think",
+   "Wait",
+   "Just"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Got it! Noah first. You always look out for him, huh?",
+  "model": "v5",
+  "cards": [
+   "I think so",
+   "I",
+   "Funny",
+   "Always",
+   "He",
+   "Yeah",
+   "Happy",
+   "Love",
+   "Definitely"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "I can help you with lunch. Want something quick?",
+  "model": "v5",
+  "cards": [
+   "Sandwich",
+   "Maybe",
+   "Just",
+   "Chips",
+   "Good",
+   "Juice",
+   "Lunch",
+   "I want",
+   "Quick"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Oh, 'Bark Buddy'! Classic! Let me set it up.",
+  "model": "shipped",
+  "cards": [
+   "Can you",
+   "That",
+   "Let's",
+   "I",
+   "Perfect",
+   "I'll",
+   "Do",
+   "Thanks",
+   "Good"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Sounds like a blast! Did you eat lunch yet?",
+  "model": "v5",
+  "cards": [
+   "Not",
+   "Not yet",
+   "Lunch",
+   "Yet",
+   "Just",
+   "Yeah",
+   "Forget",
+   "Today",
+   "I"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 2
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Good morning! How are you?",
+  "model": "shipped",
+  "cards": [
+   "Feel",
+   "Morning",
+   "I am",
+   "I",
+   "Good",
+   "I feel",
+   "Sleepy",
+   "Not",
+   "Great"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 3
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Perfect! Let\u2019s make a list together. What else?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "Ready",
+   "Later",
+   "Want",
+   "Happy",
+   "Not now",
+   "Need",
+   "I want",
+   "Dessert"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "You pointed at 'more' - more of what?",
+  "model": "v5_a05",
+  "cards": [
+   "Block",
+   "Lego",
+   "Ball",
+   "Bubbles",
+   "Swing",
+   "Build",
+   "Puzzle",
+   "Tall",
+   "Sandbox"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "restaurant",
+  "question": "Right! Olivia is faster, huh?",
+  "model": "v5",
+  "cards": [
+   "Fast",
+   "Maybe",
+   "Good",
+   "Not really",
+   "Fun",
+   "True",
+   "Yup",
+   "Funny",
+   "Best"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Nice! What did she say?",
+  "model": "v5_a05",
+  "cards": [
+   "Tell",
+   "Talk",
+   "She",
+   "Excited",
+   "Good",
+   "Check",
+   "Want",
+   "Enjoy",
+   "Happy"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "How long will that take?",
+  "model": "v5_a05",
+  "cards": [
+   "Short",
+   "Bored",
+   "Long",
+   "Hour",
+   "Minutes",
+   "Ten",
+   "Slow",
+   "Sleep",
+   "Far"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "transport",
+  "question": "How did you get to school today?",
+  "model": "v5_a05",
+  "cards": [
+   "Bus",
+   "Taxi",
+   "Cycle",
+   "Walk",
+   "Car",
+   "Train",
+   "Bike",
+   "Scooter",
+   "Driver"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Maybe next week, takeout instead?",
+  "model": "v5_a05",
+  "cards": [
+   "Maybe",
+   "Yeah",
+   "Definitely",
+   "Not",
+   "Yup",
+   "True",
+   "Sounds good",
+   "Good",
+   "I want"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Do you want to stop playing now?",
+  "model": "v5_a05",
+  "cards": [
+   "Play",
+   "Tired",
+   "Wait",
+   "Later",
+   "Break",
+   "Not yet",
+   "Finished",
+   "My turn",
+   "Almost"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "When should we go to the bathroom, before or after we eat?",
+  "model": "v5",
+  "cards": [
+   "Food",
+   "After",
+   "Before",
+   "Toilet",
+   "Breakfast",
+   "First",
+   "Drink",
+   "Dinner",
+   "Bathroom"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "restaurant",
+  "question": "We have Masala Dosa, which is a spicy potato-filled crepe, and Chicken Vindaloo, a spicy curry. Which would you prefer?",
+  "model": "v5_a05",
+  "cards": [
+   "Chicken",
+   "Pepperoni",
+   "Dance",
+   "Meat",
+   "Samosas",
+   "Spicy",
+   "Chocolate",
+   "Taco",
+   "Spice"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "When did we last come here for waffles?",
+  "model": "v5",
+  "cards": [
+   "Today",
+   "Last",
+   "Morning",
+   "Before",
+   "Weekend",
+   "Dinner",
+   "Lunch",
+   "Friday",
+   "Monday"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Glad to hear that! I heard Jessica offered to help with some chores. What do you think about that?",
+  "model": "v5",
+  "cards": [
+   "I",
+   "I want",
+   "Yeah",
+   "I feel",
+   "Good",
+   "Of",
+   "I think so",
+   "Good idea",
+   "That"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 5
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "That sounds tough. Do you think they need support?",
+  "model": "shipped",
+  "cards": [
+   "Yeah",
+   "Definitely",
+   "Sometimes",
+   "Need",
+   "Maybe",
+   "Absolutely",
+   "Sure",
+   "Not",
+   "They"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Where is Mum sitting?",
+  "model": "v5",
+  "cards": [
+   "Bed",
+   "Mum",
+   "Chair",
+   "Home",
+   "Back",
+   "Here",
+   "Floor",
+   "Down",
+   "Couch"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "I can help you with lunch. Want something quick?",
+  "model": "shipped",
+  "cards": [
+   "Just",
+   "Quick",
+   "Maybe",
+   "Nothing",
+   "Lunch",
+   "What",
+   "Sandwich",
+   "Jam",
+   "Sure"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "What did you use to wash your face?",
+  "model": "v5_a05",
+  "cards": [
+   "Soap",
+   "Shampoo",
+   "Towel",
+   "Toothbrush",
+   "Eyes",
+   "Toothpaste",
+   "Warm",
+   "Comb",
+   "Cup"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "What do you want to do in the pool?",
+  "model": "shipped",
+  "cards": [
+   "Go",
+   "I",
+   "Play",
+   "Need",
+   "A",
+   "Watch",
+   "To move",
+   "Dress",
+   "Walk"
+  ],
+  "answerable": 1,
+  "plausible": 3,
+  "filler": 3
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Who helped you when you got stuck on your maths?",
+  "model": "shipped",
+  "cards": [
+   "I",
+   "Friend",
+   "With",
+   "Need",
+   "I need help",
+   "My",
+   "A",
+   "The",
+   "In"
+  ],
+  "answerable": 1,
+  "plausible": 1,
+  "filler": 8
+ },
+ {
+  "gate": "youth",
+  "setting": "restaurant",
+  "question": "Right! Olivia is faster, huh?",
+  "model": "v5_a05",
+  "cards": [
+   "Not really",
+   "Yup",
+   "Fast",
+   "Maybe",
+   "True",
+   "I think so",
+   "Kind of",
+   "Excite",
+   "Same"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "I'm confused. Do you want a straw or a spoon?",
+  "model": "v5_a05",
+  "cards": [
+   "Straw",
+   "Spoon",
+   "Cup",
+   "Fork",
+   "Both",
+   "Water",
+   "Bottle",
+   "Small",
+   "Little"
+  ],
+  "answerable": 2,
+  "plausible": 5,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "How many marbles fell on the floor?",
+  "model": "shipped",
+  "cards": [
+   "Two",
+   "Thirty",
+   "Three",
+   "Six",
+   "Eleven",
+   "I",
+   "Let",
+   "Seven",
+   "Ten"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "Who helped you when you got stuck on your maths?",
+  "model": "v5_a05",
+  "cards": [
+   "Teacher",
+   "Computer",
+   "Friend",
+   "Nobody",
+   "Dad",
+   "Lady",
+   "Ruler",
+   "Mum",
+   "Librarian"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh, that's great! Was it on time?",
+  "model": "v5_a05",
+  "cards": [
+   "Not",
+   "I",
+   "Not really",
+   "Long",
+   "Not yet",
+   "Evening",
+   "Maybe",
+   "Almost",
+   "Really"
+  ],
+  "answerable": 2,
+  "plausible": 4,
+  "filler": 2
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Would you like to wear the gown or keep your shirt on?",
+  "model": "shipped",
+  "cards": [
+   "Shirt",
+   "Clothes",
+   "Hat",
+   "Dress",
+   "Socks",
+   "Shoe",
+   "Watch",
+   "To watch",
+   "Coat"
+  ],
+  "answerable": 1,
+  "plausible": 2,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "doctor",
+  "question": "Would you like to wear the gown or keep your shirt on?",
+  "model": "v5_a05",
+  "cards": [
+   "Shirt",
+   "Both",
+   "Clothes",
+   "Scared",
+   "Mum",
+   "Stay",
+   "Tight",
+   "Off",
+   "Keep"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "gen",
+  "setting": "selfcare",
+  "question": "What did you put on after your shower?",
+  "model": "shipped",
+  "cards": [
+   "Shirt",
+   "The",
+   "Had",
+   "Juice",
+   "Water",
+   "Just",
+   "Some",
+   "Little",
+   "Two"
+  ],
+  "answerable": 1,
+  "plausible": 1,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "school",
+  "question": "What's hard for you right now?",
+  "model": "v5_a05",
+  "cards": [
+   "Math",
+   "Recess",
+   "Loud",
+   "Ear",
+   "Write",
+   "Homework",
+   "Worried",
+   "Break",
+   "Read"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Nice! What did she say?",
+  "model": "shipped",
+  "cards": [
+   "She",
+   "Talk",
+   "Ask",
+   "Say",
+   "About",
+   "Need",
+   "Good",
+   "Food",
+   "Something"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Yeah, he does! Have you noticed that too?",
+  "model": "v5_a05",
+  "cards": [
+   "Every",
+   "Always",
+   "Usually",
+   "Same",
+   "Sometimes",
+   "He",
+   "Yup",
+   "Yeah",
+   "Morning"
+  ],
+  "answerable": 2,
+  "plausible": 8,
+  "filler": 1
+ },
+ {
+  "gate": "gen",
+  "setting": "restaurant",
+  "question": "Which sandwich?",
+  "model": "v5_a05",
+  "cards": [
+   "Cheese",
+   "Sandwich",
+   "Ham",
+   "Turkey",
+   "Burger",
+   "Classic",
+   "Strawberry",
+   "Jelly",
+   "Chicken"
+  ],
+  "answerable": 2,
+  "plausible": 7,
+  "filler": 0
+ },
+ {
+  "gate": "youth",
+  "setting": "home",
+  "question": "Oh, right. He needs the numbers to reach them. Do you think he wants to plan something?",
+  "model": "v5",
+  "cards": [
+   "Maybe",
+   "Sure",
+   "Not",
+   "I want",
+   "If",
+   "Yeah",
+   "Excited",
+   "I",
+   "Plan"
+  ],
+  "answerable": 1,
+  "plausible": 4,
+  "filler": 4
+ },
+ {
+  "gate": "gen",
+  "setting": "play",
+  "question": "Want to play with play dough now?",
+  "model": "v5",
+  "cards": [
+   "Later",
+   "Play",
+   "Playdough",
+   "Water",
+   "Dog",
+   "Cold",
+   "Friend",
+   "Wait",
+   "Bubbles"
+  ],
+  "answerable": 2,
+  "plausible": 6,
+  "filler": 0
+ }
+]
