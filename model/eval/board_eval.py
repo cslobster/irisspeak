@@ -47,7 +47,14 @@ def predict(question, setting):
     for j in dead: logits[j] = -1e4
     p = np.exp(logits - logits.max()); p /= p.sum(); return p
 
+PRIOR_ALPHA = 0.0
+_prior = None
 def rerank(p, question):
+    global _prior
+    if NO_RERANK and PRIOR_ALPHA > 0:
+        if _prior is None:
+            u = np.array(freq['uni'], dtype=np.float64); u = (u + 1.0) / (u.sum() + len(u)); _prior = np.log(u)
+        return [int(j) for j in np.argsort(-(np.log(p + 1e-12) - PRIOR_ALPHA * _prior[:len(p)]))]
     order = np.argsort(-p)
     if NO_RERANK: return [int(j) for j in order]
     q = st.encode([question], normalize_embeddings=True)[0]
