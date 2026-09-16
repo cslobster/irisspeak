@@ -217,7 +217,7 @@ def distilled_states(path, surf, lem, temperature=1.0, min_kept=3):
         for c in prefix: tg.pop(c, None)                          # a card already tapped is not the next card
         if len(tg) < min_kept: thin += 1; continue
         z = sum(tg.values())
-        out.append({"id": f"distill_{i}", "split": "train", "source": "distill",
+        out.append({"id": f"distill_{os.path.basename(path).rsplit('.',1)[0]}_{i}", "split": "train", "source": "distill",
                     "setting": d.get("setting", "unknown"), "tier": "distill", "weight": 2.0,
                     "partner": d.get("question"), "history": [], "prefix": prefix,
                     "targets": {c: round(v / z, 5) for c, v in sorted(tg.items(), key=lambda kv: -kv[1])},
@@ -343,7 +343,7 @@ def main():
     ap.add_argument("--synth-folder", type=int, default=0, help="v3: synthetic trigger questions per thin folder")
     ap.add_argument("--setting-turns", default="", help="datasets/aac-setting-turns: generated setting-labelled turns")
     ap.add_argument("--setting-turns-max", type=int, default=0, help="cap the generated turns used (0 = all)")
-    ap.add_argument("--distill", default="", help="data/distill/targets.jsonl: teacher next-card distributions")
+    ap.add_argument("--distill", default="", help="teacher next-card distributions; comma-separated files add up (targets.jsonl,targets_abstract.jsonl)")
     ap.add_argument("--distill-temperature", type=float, default=1.0, help=">1 softens the teacher, <1 sharpens it")
     ap.add_argument("--audience", default="", choices=["", "youth"],
                     help="youth: drop the Turk source and any row with an adult-only card or question; also writes "
@@ -470,8 +470,8 @@ def main():
         return kept
     if a.setting_turns:
         synth += gated(setting_turn_states(a.setting_turns, surf, lem, rng, a.setting_turns_max))
-    if a.distill:
-        synth += gated(distilled_states(a.distill, surf, lem, a.distill_temperature))
+    for dpath in [x.strip() for x in a.distill.split(",") if x.strip()]:   # several teacher passes (concrete, abstract) add up
+        synth += gated(distilled_states(dpath, surf, lem, a.distill_temperature))
     for rec in synth:
         if a.folders: rec["targets"] = add_folder_targets(rec["prefix"], rec["targets"], card2folder)
         writers["train"].write(json.dumps(rec, ensure_ascii=False) + "\n"); n_states["train"] += 1; n_states["synthetic"] += 1

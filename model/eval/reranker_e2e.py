@@ -81,7 +81,8 @@ class Feats:
             f = [lp, math.log(r + 1), fq[j], float(self.card_vec[j] @ pv) if e["partner"] else 0.0]
             cat = [0.0] * len(self.cats); intent = [0.0] * len(self.ints)
             if m:
-                cat[self.cats.index(m[0])] = 1; intent[self.ints.index(m[1])] = 1
+                if self.cats: cat[self.cats.index(m[0])] = 1
+                if self.ints: intent[self.ints.index(m[1])] = 1
                 extra = [m[2], m[3], m[4], float(m[5])]
             else: extra = [0, 0, 0, 0]
             f += cat + intent + extra + [float(cid == "<aac_end>"), float(cid == "<name>"), min(len(e["prefix"]), 6) / 6, float(bool(e["partner"])), float(cid.startswith("<folder:"))]

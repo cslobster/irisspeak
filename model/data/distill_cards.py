@@ -40,6 +40,17 @@ Situations:
 Return {{"answers":[{{"i":1,"cards":[["ball",90],["park",60],["END",20]]}}]}} with one entry per situation, in order. JSON only, no fence, no commentary."""
 
 
+ABSTRACT_TEMPLATE = """You are the teacher for a children's AAC (augmentative and alternative communication) picture board. The child replies by tapping picture cards one at a time; the board shows the nine most likely cards, so what matters is the whole set of plausible next cards and how likely each one is.
+
+These are conversational questions: follow-ups, reactions, and open prompts ("Oh really? How?", "Any highlights?", "Can you explain?", "What do you mean?"). They do NOT ask for a thing or a place. A child answers them the way people do in conversation: with a short reaction, an evaluation, a feeling, a stance, or a deferral -- fun, boring, I don't know, later, yes, not really, nothing much, tell you later, because, maybe, hard, easy, tired, good, bad, funny -- and only sometimes with one concrete word.
+
+For each situation, list the 12 picture cards the child is most likely to tap NEXT, best first, each with a weight from 1 to 100. Do NOT reach for nouns that merely fit the setting; the setting is where the child is, not what the question is about. Include "END" with a weight when stopping is a likely next thing to do.
+
+Situations:
+{items}
+
+Return {{"answers":[{{"i":1,"cards":[["fun",80],["I don't know",60],["END",30]]}}]}} with one entry per situation, in order. JSON only, no fence, no commentary."""
+
 def call_claude(prompt, timeout, model=""):
     cmd = ["claude", "-p", prompt, "--allowed-tools", ""]
     if model: cmd += ["--model", model]
@@ -87,6 +98,8 @@ def main():
     ap.add_argument("--dataset", default=DATASET)
     ap.add_argument("--out", default=os.path.join(MODEL_ROOT, "data", "distill", "targets.jsonl"))
     ap.add_argument("--states", type=int, default=4000, help="prediction states to distil (0 = all)")
+    ap.add_argument("--mode", default="concrete", choices=["concrete", "abstract"], help="abstract: conversational follow-ups; the teacher is told the setting is not the topic")
+    ap.add_argument("--questions-file", default="", help="JSONL of {setting, question} states to distil instead of the dataset's questions")
     ap.add_argument("--per-call", type=int, default=6, help="states per teacher call")
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--timeout", type=int, default=420)
@@ -95,7 +108,13 @@ def main():
 
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     rng = random.Random(19)
-    states = load_states(a.dataset, a.states, rng)
+    if a.questions_file:
+        states = [json.loads(l) for l in open(a.questions_file) if l.strip()]
+        for st_ in states: st_.setdefault("prefix", [])
+        rng.shuffle(states); states = states[:a.states] if a.states else states
+    else:
+        states = load_states(a.dataset, a.states, rng)
+    tpl = ABSTRACT_TEMPLATE if a.mode == "abstract" else TEMPLATE
 
     done = set()
     if os.path.exists(a.out):
@@ -115,7 +134,7 @@ def main():
             f'{i+1}. setting={s["setting"]} | partner asked: "{s["question"]}" | '
             f'already tapped: {" + ".join(s["prefix"]) if s["prefix"] else "(nothing yet)"}'
             for i, s in enumerate(batch))
-        return batch, call_claude(TEMPLATE.format(items=items), a.timeout, a.model)
+        return batch, call_claude(tpl.format(items=items), a.timeout, a.model)
 
     fh = open(a.out, "a"); n = 0
     with ThreadPoolExecutor(max_workers=a.workers) as ex:
