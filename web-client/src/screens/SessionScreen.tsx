@@ -27,29 +27,39 @@ type Phase = 'init' | 'idle' | 'thinking' | 'closing';
 // One width for the whole board, set by the fixed row: Yes / No / Please, five personal cards, More ideas and
 // View all -- ten medium chips (96px) at the row gap (12px). Everything above and below the row takes this width.
 const CONTENT_W = 10 * 96 + 9 * 12;   // 1068
+// iPad Safari with its tab bar showing is wide but short. There the action buttons (Refresh / Clear / Done /
+// Feedback) stand in a column on the right of the board instead of a row under it, and the canvas is shorter.
+const ACTION_COL_W = 150;
+const SIDE_DESIGN_H = 800;
+function useShortLandscape() {
+  const calc = () => window.innerWidth >= 900 && window.innerHeight <= 840 && window.innerWidth > window.innerHeight;
+  const [v, setV] = useState(calc);
+  useEffect(() => { const f = () => setV(calc()); window.addEventListener('resize', f); window.addEventListener('orientationchange', f); return () => { window.removeEventListener('resize', f); window.removeEventListener('orientationchange', f); }; }, []);
+  return v;
+}
 const DESIGN_W = CONTENT_W + 32, DESIGN_H = 880;
-function fitFor(vw: number, vh: number) {
-  const s = Math.min(1, vw / DESIGN_W, vh / DESIGN_H);
-  return { s, vw, vh, cw: vw / s, ch: vh / s };
+function fitFor(vw: number, vh: number, dw = DESIGN_W, dh = DESIGN_H) {
+  const s = Math.min(1, vw / dw, vh / dh);
+  return { s, vw, vh, cw: vw / s, ch: vh / s, dw, dh };
 }
 // The size comes from the fixed full-viewport root element (measured with ResizeObserver), not from
 // window.innerHeight, which iPad Safari misreports in full-screen mode and leaves a gap at the bottom.
-function useFitScale(rootRef: React.RefObject<HTMLDivElement>) {
-  const [st, setSt] = useState(() => fitFor(window.innerWidth, window.innerHeight));
+function useFitScale(rootRef: React.RefObject<HTMLDivElement>, dw = DESIGN_W, dh = DESIGN_H) {
+  const [st, setSt] = useState(() => fitFor(window.innerWidth, window.innerHeight, dw, dh));
   useEffect(() => {
     const el = rootRef.current;
     const measure = () => {
       const r = el?.getBoundingClientRect();
       const vw = r && r.width > 0 ? r.width : window.innerWidth;
       const vh = r && r.height > 0 ? r.height : window.innerHeight;
-      setSt(prev => (prev.vw === vw && prev.vh === vh) ? prev : fitFor(vw, vh));
+      setSt(prev => (prev.vw === vw && prev.vh === vh && prev.dw === dw && prev.dh === dh) ? prev : fitFor(vw, vh, dw, dh));
     };
     measure();
     const ro = typeof ResizeObserver !== 'undefined' && el ? new ResizeObserver(measure) : null;
     ro?.observe(el!);
     window.addEventListener('resize', measure); window.addEventListener('orientationchange', measure); window.visualViewport?.addEventListener('resize', measure);
     return () => { ro?.disconnect(); window.removeEventListener('resize', measure); window.removeEventListener('orientationchange', measure); window.visualViewport?.removeEventListener('resize', measure); };
-  }, [rootRef]);
+  }, [rootRef, dw, dh]);
   useEffect(() => {
     document.documentElement.style.setProperty('--fit-scale', String(st.s));
     return () => { document.documentElement.style.removeProperty('--fit-scale'); };
@@ -111,7 +121,8 @@ export function SessionScreen() {
 
   const startedRef = useRef(false);
   const rootRef = useRef<HTMLDivElement>(null);
-  const fit = useFitScale(rootRef);
+  const sideActions = useShortLandscape();
+  const fit = useFitScale(rootRef, CONTENT_W + 32 + (sideActions ? ACTION_COL_W + 12 : 0), sideActions ? SIDE_DESIGN_H : DESIGN_H);
   // the content wrapper's on-screen box (after scaling); the top controls are pinned to it so every row shares one width
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentBox, setContentBox] = useState<{ left: number; width: number } | null>(null);
@@ -526,7 +537,7 @@ export function SessionScreen() {
         </div>
 
         {/* Center content */}
-        <div ref={contentRef} className="flex-1 min-h-0 self-stretch flex flex-col items-stretch w-full mx-auto mt-2 overflow-hidden" style={{ maxWidth: CONTENT_W }}>
+        <div ref={contentRef} className="flex-1 min-h-0 self-stretch flex flex-col items-stretch w-full mx-auto mt-2 overflow-hidden" style={{ maxWidth: CONTENT_W + (sideActions ? ACTION_COL_W + 12 : 0) }}>
           {(phase === 'init' || phase === 'thinking' || phase === 'closing') && (
             <div className="flex-1 flex items-center justify-center">
               <Loader label={phaseLabel} />
@@ -550,7 +561,7 @@ export function SessionScreen() {
           )}
 
           {phase === 'idle' && role === 'child' && childRec && (
-            <ChildTurn onFeedback={() => setFeedbackOpen(true)}
+            <ChildTurn onFeedback={() => setFeedbackOpen(true)} sideActions={sideActions}
               rec={childRec}
               interim={interimCards}
               onCardClick={onCardClick} onCardHold={onCardHold}
@@ -656,10 +667,11 @@ interface ChildTurnProps {
   onMoreOpen: () => void;
   onDone: () => void;
   onFeedback: () => void;
+  sideActions?: boolean;   // short landscape (iPad Safari with tabs): action buttons in a column on the right
   doneEnabled: boolean;
 }
 
-function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefresh, onClear, onConfirm, busy, onSearchOpen, onMoreOpen, onDone, doneEnabled, onFeedback }: ChildTurnProps) {
+function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefresh, onClear, onConfirm, busy, onSearchOpen, onMoreOpen, onDone, doneEnabled, onFeedback, sideActions = false }: ChildTurnProps) {
   const byCat = useMemo(() => {
     const groups: Record<CardInfo['category'], CardInfo[]> = { topic: [], action: [], emotion: [], core: [] };
     for (const c of rec.cards) (groups[c.category] ||= []).push(c);
@@ -674,7 +686,8 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
   ];
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col items-stretch gap-2">
+    <div className={`flex-1 min-h-0 flex ${sideActions ? 'flex-row items-stretch gap-3' : 'flex-col items-stretch gap-2'}`}>
+    <div className="flex-1 min-h-0 min-w-0 flex flex-col items-stretch gap-2">
 
       {/* Selected-card deck -- fixed height, horizontal scroll, text pills */}
       <div
@@ -779,29 +792,32 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
         </div>
       </div>
 
-      {/* Action bar: Refresh / Clear / Done centred, Feedback on the right edge */}
-      <div className="flex-shrink-0 flex items-center gap-2 sm:gap-3 pb-2">
-        <div className="flex-1" />
+      </div>
+
+      {/* Action bar: a row under the board (Refresh / Clear / Done centred, Feedback at the right edge), or in short
+          landscape a column on the right of the board */}
+      <div className={sideActions ? 'flex-shrink-0 flex flex-col justify-end gap-2 pb-2' : 'flex-shrink-0 flex items-center gap-2 sm:gap-3 pb-2'} style={sideActions ? { width: ACTION_COL_W } : undefined}>
+        {!sideActions && <div className="flex-1" />}
         <button
           onClick={onRefresh}
           disabled={busy}
-          className="pill-btn bg-slate-500 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-8 py-2 sm:py-3"
+          className={`pill-btn bg-slate-500 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-8 py-2 sm:py-3 ${sideActions ? 'w-full' : ''}`}
         >↻ Refresh</button>
         <button
           onClick={onClear}
           disabled={busy || interim.length === 0}
-          className="pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3"
+          className={`pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3 ${sideActions ? 'w-full' : ''}`}
         >✕ Clear</button>
         <button
           onClick={onDone}
           disabled={busy}
-          className="pill-btn bg-[#f09281] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg"
+          className={`pill-btn bg-[#f09281] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg ${sideActions ? 'w-full' : ''}`}
         >Done</button>
-        <div className="flex-1 flex justify-end">
+        <div className={sideActions ? 'mt-4' : 'flex-1 flex justify-end'}>
           <button
             onClick={onFeedback}
             disabled={busy}
-            className="pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3"
+            className={`pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3 ${sideActions ? 'w-full' : ''}`}
             title="Tell us when the board misses"
           >💬 Feedback</button>
         </div>
