@@ -43,5 +43,5 @@ cp "$SRC/cards.json" "$MODEL_DIR/cards.json"
 for f in reranker.json freq.json card_vecs.bin; do [ -f "$SRC/$f" ] && cp "$SRC/$f" "$MODEL_DIR/$f"; done
 echo "staged. chunks: $(ls "$MODEL_DIR/$VER" | wc -l | tr -d ' ')  manifest -> $VER  (rollback: sh site/deploy_model.sh --rollback $OLD)"
 printf "upload to R2 now? [y/N] "; read ans; [ "$ans" = "y" ] || { echo "not uploaded"; exit 0; }
-sh "$REPO/site/upload_model.sh" "$VER"
+MODEL_DIR="$MODEL_DIR" sh "$REPO/site/upload_model.sh" "$VER"
 echo "live. verify: curl -s https://model.irisspeak.org/manifest.json | head -3"

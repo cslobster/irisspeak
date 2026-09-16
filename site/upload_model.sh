@@ -5,7 +5,7 @@
 #   sh site/upload_model.sh v3
 set -e
 VER="$1"; [ -n "$VER" ] || { echo "usage: $0 <version dir, e.g. v3>"; exit 1; }
-cd "$(dirname "$0")/public/model"
+cd "${MODEL_DIR:-$(dirname "$0")/public/model}"   # the model files live in the scratch workspace since the repo reorg; deploy_model.sh sets MODEL_DIR
 unset CLOUDFLARE_API_TOKEN
 put() { npx --yes wrangler@latest r2 object put "irisspeak-model/$1" --file "$2" --content-type "$3" --cache-control "$4" --remote >/dev/null && echo "  up $1"; }
 for f in "$VER"/card_model_fp16.part* "$VER"/realiser_fp16.part*; do [ -f "$f" ] && put "$f" "$f" application/octet-stream "public, max-age=31536000, immutable"; done
