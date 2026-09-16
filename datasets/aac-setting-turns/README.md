@@ -47,6 +47,29 @@ concrete setting-specific answers with generic filler ("good", "yes", "thanks") 
 Generation is resumable: each row records the batch that produced it, and re-running tops up to the requested
 count rather than starting over.
 
+## Teacher distributions (the distillation set)
+
+`../../model/data/distill/targets.jsonl` and `targets_abstract.jsonl` are the second half of the release. For a
+state (setting, question, cards tapped so far) each row holds the teacher's twelve most likely next cards with a
+weight, plus `END` when stopping is likely. Mapped onto card ids and renormalised they become the soft target the
+card model trains on, so training on them is distillation; `docs/DISTILLATION.md` has the method.
+
+Two passes, because a prompt that demands concrete setting-specific answers for every question teaches a model to
+answer "Can you explain how?" with the nearest setting noun:
+
+| File | States | Questions | Teacher told |
+|---|---|---|---|
+| `targets.jsonl` | 12,493 | this dataset's questions at prefix 0, 1 and 2 | answer concretely for the setting |
+| `targets_abstract.jsonl` | 1,454 | conversational follow-ups mined from the corpus's own training turns | the setting is where the child is, not what the question is about; reactions, stances and deferrals are answers |
+
+## Audience
+
+This data is for **children and young adults with AAC needs**. The prompts ask for a child's voice; the training
+pipeline (`build_states.py --audience youth`) drops adult sources and any turn touching alcohol, legal, marital,
+gambling or political vocabulary, and keeps young-adult life: job, work, college, friends, dating. The corpus-based
+held-out check is filtered the same way (`test_qa_youth`), and 5% of this dataset's questions are held out by hash
+into `test_gen` so a question is never seen in training under any prefix.
+
 ## Limitations, and what this dataset is not
 
 - **It is model-generated, not observed.** These are plausible turns, not recordings of real AAC users. It is
