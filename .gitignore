@@ -11,7 +11,7 @@ data/.cache
 tsconfig.tsbuildinfo
 
 # ---- model training and export (see PLAN-RETRAIN.md; regenerate, never commit) ----
-model/train/out/
+model/train/out
 model/export/out*/
 model/export/stage*/
 site/public/model/
@@ -25,7 +25,7 @@ site/r2_cors.json
 # corpora: derived from licence-restricted sources (Turk CC BY-ND); rebuild with data/*.py
 model/data/raw/
 model/data/mapped*/
-model/data/processed/
+model/data/processed
 model/data/states*/
 model/data/.cache/
 # ---- iOS ----
@@ -37,8 +37,8 @@ site/.wrangler/
 # the published state dumps are built from Turk dialogues (CC BY-ND): regenerate with data/build_states.py,
 # never commit or redistribute them
 site/public/paper/data/states_*.jsonl.gz
-model/data/mapped/
-model/data/states/
-model/data/processed/
-model/data/realiser/
+model/data/mapped
+model/data/states
+model/data/processed
+model/data/realiser
 __pycache__/
