@@ -653,10 +653,10 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
   }, [rec]);
 
   // Topic 5 columns, Action 1, Feeling 1 -- three rows each: 15 / 3 / 3 (PANEL_BIG in api/local.ts; phones use CompactSession).
-  const mainCats: Array<{ key: 'topic' | 'action' | 'emotion'; label: string; tint: string; n: number; span: string }> = [
-    { key: 'topic',   label: 'Topic',   tint: 'bg-card-topic/40',   n: 5, span: 'col-span-5' },
-    { key: 'action',  label: 'Action',  tint: 'bg-card-action/40',  n: 1, span: 'col-span-1' },
-    { key: 'emotion', label: 'Feeling', tint: 'bg-card-emotion/40', n: 1, span: 'col-span-1' },
+  const mainCats: Array<{ key: 'topic' | 'action' | 'emotion'; label: string; tint: string; n: number }> = [
+    { key: 'topic',   label: 'Topic',   tint: 'bg-card-topic/40',   n: 5 },
+    { key: 'action',  label: 'Action',  tint: 'bg-card-action/40',  n: 1 },
+    { key: 'emotion', label: 'Feeling', tint: 'bg-card-emotion/40', n: 1 },
   ];
 
   return (
@@ -708,11 +708,12 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
             </div>
           </div>
         )}
-        <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
-          {mainCats.map(({ key, label, tint, n, span }) => (
+        {/* each panel hugs its cards (no margin inside), and the three sit centred as a group */}
+        <div className="flex justify-center items-start gap-1.5 sm:gap-2">
+          {mainCats.map(({ key, label, tint, n }) => (
             <div
               key={key}
-              className={`${tint} ${span} rounded-2xl p-1.5 sm:p-2 flex flex-col`}
+              className={`${tint} flex-none rounded-2xl p-1.5 sm:p-2 flex flex-col`}
               style={{ border: '2px solid #000', borderBottomWidth: 4, boxSizing: 'border-box' }}
             >
               <p className="text-center text-sm sm:text-base font-extrabold text-slate-700 mb-1 flex-shrink-0">{label}</p>
