@@ -24,7 +24,10 @@ type Phase = 'init' | 'idle' | 'thinking' | 'closing';
 // Zoom-to-fit: the session screen is laid out on a canvas of at least DESIGN_W x DESIGN_H CSS pixels
 // (an iPad-sized board) and scaled down as a whole on smaller viewports such as an iPhone in landscape,
 // so nothing overflows or needs scrolling. Larger viewports get scale 1 and the canvas simply grows.
-const DESIGN_W = 1200, DESIGN_H = 880;
+// One width for the whole board, set by the fixed row: Yes / No / Please, five personal cards, More ideas and
+// View all -- ten medium chips (96px) at the row gap (12px). Everything above and below the row takes this width.
+const CONTENT_W = 10 * 96 + 9 * 12;   // 1068
+const DESIGN_W = CONTENT_W + 32, DESIGN_H = 880;
 function fitFor(vw: number, vh: number) {
   const s = Math.min(1, vw / DESIGN_W, vh / DESIGN_H);
   return { s, vw, vh, cw: vw / s, ch: vh / s };
@@ -514,7 +517,7 @@ export function SessionScreen() {
         </div>
 
         {/* Center content */}
-        <div className="flex-1 min-h-0 self-stretch flex flex-col items-stretch max-w-[1200px] w-full mx-auto mt-2 overflow-hidden">   {/* matches DESIGN_W: ten full-size quick-row buttons in one row */}
+        <div className="flex-1 min-h-0 self-stretch flex flex-col items-stretch w-full mx-auto mt-2 overflow-hidden" style={{ maxWidth: CONTENT_W }}>
           {(phase === 'init' || phase === 'thinking' || phase === 'closing') && (
             <div className="flex-1 flex items-center justify-center">
               <Loader label={phaseLabel} />
@@ -553,22 +556,24 @@ export function SessionScreen() {
           )}
         </div>
 
-        {role === 'child' && phase === 'idle' && (
-          <div className="fixed left-4 z-20" style={{ top: 'max(0.75rem, env(safe-area-inset-top))' }}>
-            <SettingPicker value={setting} onChange={changeSetting} />
-          </div>
-        )}
-
-        {/* Menu button */}
-        <button
-          onClick={() => setShowMenu(true)}
-          className="icon-btn fixed right-4 z-20 p-3"
-          style={{ top: 'max(0.75rem, env(safe-area-inset-top))' }}
-          title="Menu (Esc)"
-          aria-label="Open session menu"
-        >
-          <MenuIcon size={28} />
-        </button>
+        {/* Top controls sit on a fixed strip exactly as wide as the board content (scaled), so the place picker's
+            left edge and the menu's right edge line up with the fixed row below. */}
+        <div className="fixed left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+             style={{ top: 'max(0.75rem, env(safe-area-inset-top))', width: `min(${Math.round(CONTENT_W * fit.s)}px, calc(100vw - 2rem))` }}>
+          {role === 'child' && phase === 'idle' && (
+            <div className="absolute left-0 top-0 pointer-events-auto">
+              <SettingPicker value={setting} onChange={changeSetting} />
+            </div>
+          )}
+          <button
+            onClick={() => setShowMenu(true)}
+            className="icon-btn absolute right-0 top-0 p-3 pointer-events-auto"
+            title="Menu (Esc)"
+            aria-label="Open session menu"
+          >
+            <MenuIcon size={28} />
+          </button>
+        </div>
 
         {overlays}
       </div>
@@ -708,17 +713,17 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
             </div>
           </div>
         )}
-        {/* each panel hugs its cards (no margin inside), and the three sit centred as a group */}
-        <div className="flex justify-center items-start gap-1.5 sm:gap-2">
+        {/* the three panels span the content width: Action and Feeling hug their column, Topic takes the rest */}
+        <div className="flex items-stretch gap-1.5 sm:gap-2">
           {mainCats.map(({ key, label, tint, n }) => (
             <div
               key={key}
-              className={`${tint} flex-none rounded-2xl p-1.5 sm:p-2 flex flex-col`}
+              className={`${tint} ${n > 1 ? 'flex-1 min-w-0' : 'flex-none'} rounded-2xl p-1.5 sm:p-2 flex flex-col`}
               style={{ border: '2px solid #000', borderBottomWidth: 4, boxSizing: 'border-box' }}
             >
               <p className="text-center text-sm sm:text-base font-extrabold text-slate-700 mb-1 flex-shrink-0">{label}</p>
               {/* yesterday's card size (the large chip), five to a row, packed at the quick row's gap and centred */}
-              <div className="grid gap-2 sm:gap-3 content-start justify-center" style={{ gridTemplateColumns: `repeat(${n}, max-content)` }}>
+              <div className={`grid gap-2 sm:gap-3 content-start ${n > 1 ? 'justify-between' : 'justify-center'}`} style={{ gridTemplateColumns: `repeat(${n}, max-content)` }}>
                 {byCat[key].map(c => (
                   <CardChip key={c.id} card={c} size="lg" onClick={() => !busy && onCardClick(c)} onLongPress={() => !busy && onCardHold(c)} />
                 ))}
