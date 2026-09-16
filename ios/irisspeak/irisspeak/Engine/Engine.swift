@@ -283,7 +283,7 @@ final class Engine: @unchecked Sendable {
     }
 
     private func rerank(order: [Int], p: [Float], question: String, prefix: [String]) throws -> [Int]? {
-        guard let rr = rr, embed != nil, Store.getProfile().useReranker else { return nil }
+        guard let rr = rr, embed != nil, (Store.getProfile().rerankerAB ?? false) else { return nil }
         var sim: (Int) -> Float = { _ in 0 }
         if !question.isEmpty {
             if partnerVecFor != question { partnerVec = try embedText(question); partnerVecFor = question }
