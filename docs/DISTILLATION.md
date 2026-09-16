@@ -164,7 +164,13 @@ panel at 39%. The shipped model has the same disease in another form (*Feel* 41%
 by log p(card | state) - alpha * log prior(card), the model's own training-target frequency, no word list
 (`board_eval.py --prior-alpha`).
 
-### Candidate
+### Deployed 15 Sep 2026: v5
+
+Model-only with prior debiasing (alpha 0.5) and no pinned answers, on R2 as `v5/`; irisspeak.com bundle verified fetching 11 v5 chunks and no reranker assets; 162 ms per prediction.
+
+**Found at deploy: history.** Every evaluation above used an empty Earlier: block. The live prompt carries the account's last two turns, and every generated/distilled training state had none, so off-topic history dominates the setting: the play board for "What do you want to do?" echoed the previous turns (Fix, Talk, Just). Reproduced offline exactly; with play-relevant history the board is right (Park, Slide, Swim, Swing). v7 trains with an Earlier: block on half the generated states, 40% of them off-topic, and `judge_boards.py --history off|same|live` now measures boards the way users see them.
+
+### Candidate before that finding
 
 **v5**, model-only, with the board simplification. Deploy is `sh site/deploy_model.sh distill_v5 v5` (asks
 before uploading; `--rollback v31` restores), then merge `simplify-board`. The iOS app bundles its own Core ML

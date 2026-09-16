@@ -203,7 +203,8 @@ class LocalApi {
     // already on the board is skipped, unless a route or choice pinned it.
     const GLUE = new Set(['am', 'is', 'are', 'be', 'the', 'a', 'an', 'to', 'of']);   // never makes a card distinct: "I am" = "I"
     const stem = (w: string) => { const x = w.replace(/[^a-z']/g, ''); return x === 'i' ? x : x.replace(/(ies|es|s|ing|ed)$/, ''); };
-    const stemsOf = (speak: string) => speak.toLowerCase().replace(/'m\b/g, ' am').replace(/'s\b/g, '').replace(/n't\b/g, ' not').split(/\s+/).map(stem).filter(x => x.length && !GLUE.has(x));
+    // "I'm tired" is the same idea as "Tired": the sentence starter is not what makes a card distinct
+    const stemsOf = (speak: string) => speak.toLowerCase().replace(/^(i'm|i am|i feel|i want to|i want|i need to|i need|i like to|i like)\s+/, '').replace(/'m\b/g, ' am').replace(/'s\b/g, '').replace(/n't\b/g, ' not').split(/\s+/).map(stem).filter(x => x.length && !GLUE.has(x));
     const onBoard = new Set<string>(); const pinned = new Set([...(cur.routed ?? []), ...chosen]);
     for (const list of Object.values(lists)) for (const id of list) for (const st of stemsOf(engine.byId[id].speak)) onBoard.add(st);
     for (const j of cur.ranked) {

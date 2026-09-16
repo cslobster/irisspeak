@@ -227,6 +227,29 @@ def distilled_states(path, surf, lem, temperature=1.0, min_kept=3):
           f"{mapped}/{total} teacher cards mapped ({mapped/max(1,total):.0%})", flush=True)
     return out
 
+
+def attach_history(rows, turns_by_setting, rng, frac, off_topic=0.4):
+    """Give generated and distilled states an "Earlier:" block, the way the app always sends one.
+
+    Every generated state had empty history, and history exists only in corpus rows where it is highly
+    predictive. Deployed, the first board after "What do you want to do?" at play echoed the account's last
+    turns (Fix, Talk, Just) instead of play. So a share of these rows now carry one or two earlier turns in the
+    app's own format ("partner | answer"), sampled from the same setting's turns -- and, for a share of those,
+    from a different setting, so the model learns that an unrelated earlier turn is context, not the answer."""
+    settings = list(turns_by_setting)
+    out = []
+    for r in rows:
+        if rng.random() < frac and turns_by_setting:
+            s = r.get("setting", "unknown")
+            src = rng.choice([x for x in settings if x != s]) if (rng.random() < off_topic and len(settings) > 1) else s
+            pool = turns_by_setting.get(src) or turns_by_setting.get(s) or []
+            if pool:
+                k = 1 if rng.random() < 0.6 else 2
+                picks = rng.sample(pool, min(k, len(pool)))
+                r = dict(r, history=[f"{q} | {a}"[:120] for q, a in picks], id=r["id"] + "_h")
+        out.append(r)
+    return out
+
 def setting_turn_states(dataset_dir, surf, lem, rng, max_rows=0):
     """States from datasets/aac-setting-turns: generated parent/child turns labelled by where they happen.
 
@@ -348,6 +371,7 @@ def main():
     ap.add_argument("--audience", default="", choices=["", "youth"],
                     help="youth: drop the Turk source and any row with an adult-only card or question; also writes "
                          "test_qa_youth.jsonl, the held-out corpus check restricted to the audience")
+    ap.add_argument("--gen-history", type=float, default=0.0, help="share of generated/distilled states that get an Earlier: block (app format), 40%% of them off-topic")
     ap.add_argument("--gen-holdout", type=float, default=0.0,
                     help="fraction of generated/distilled (setting, question) pairs held out into test_gen.jsonl, "
                          "a target-audience check the model never trains on")
@@ -457,6 +481,14 @@ def main():
         if not tok_: continue
         name, _, sc = tok_.partition(":"); gen_scale[name] = float(sc) if sc else 1.0
     test_gen = []
+    turns_by_setting = collections.defaultdict(list)
+    if a.gen_history > 0 and a.setting_turns:
+        for fp in glob.glob(os.path.join(a.setting_turns, "data", "*.jsonl")):
+            for line in open(fp):
+                try: t = json.loads(line)
+                except Exception: continue
+                if t.get("question") and t.get("cards"):
+                    turns_by_setting[t.get("setting", "unknown")].append((t["question"], " ".join(t["cards"])))
     def gated(rows):
         kept = []
         for r in rows:
@@ -466,6 +498,7 @@ def main():
             if gen_holdout(r.get("setting"), r.get("partner"), a.gen_holdout):
                 r["split"] = "test_gen"; test_gen.append(r); continue
             r["weight"] = round(r["weight"] * sc, 3); kept.append(r)
+        if a.gen_history > 0: kept = attach_history(kept, turns_by_setting, rng, a.gen_history)
         print(f"  gen-settings gate: {len(kept)} of {len(rows)} rows kept ({', '.join(f'{k}x{v}' for k, v in gen_scale.items())})", flush=True)
         return kept
     if a.setting_turns:
@@ -482,6 +515,7 @@ def main():
                 if a.audience == "youth" and not youth_ok(r.get("partner"), list(r["prefix"]) + list(r["targets"]), r["source"], adult_ids, youth_why): continue
                 if gen_holdout(r.get("setting"), r.get("partner"), a.gen_holdout): r["split"] = "test_gen"; test_gen.append(r); continue
                 kept.append(r)
+            if a.gen_history > 0: kept = attach_history(kept, turns_by_setting, rng, a.gen_history)
             print(f"  ungated: {len(kept)} of {len(rows)} rows kept from {os.path.basename(dpath)}", flush=True)
             synth += kept
         else:

@@ -34,8 +34,8 @@ def make_board(mdir, onnx, alpha=0.0):
     if alpha > 0:
         u = np.array(json.load(open(f"{mdir}/freq.json"))["uni"], dtype=np.float64); prior = np.log((u + 1.0) / (u.sum() + len(u)))
     tok = AutoTokenizer.from_pretrained(meta.get("backbone", "HuggingFaceTB/SmolLM2-135M-Instruct")); sess = ort.InferenceSession(onnx, providers=["CPUExecutionProvider"]); names = [i.name for i in sess.get_inputs()]
-    def board(setting, q):
-        ids = tok(f"Setting: {setting}.\nPartner: {q[:200]}\nReply cards:", add_special_tokens=True)["input_ids"] + [V + start]; L = len(ids)
+    def board(setting, q, earlier=""):
+        ids = tok(f"Setting: {setting}.\n{earlier}Partner: {q[:200]}\nReply cards:", add_special_tokens=True)["input_ids"] + [V + start]; L = len(ids)
         feed = {"input_ids": np.array([ids], dtype=np.int64), "attention_mask": np.ones((1, L), dtype=np.int64)}
         if "position_ids" in names: feed["position_ids"] = np.arange(L, dtype=np.int64)[None]
         lg = sess.run(None, feed)[0][0, -1, V:V + nOut].astype(np.float32)
@@ -73,14 +73,32 @@ def main():
     ap.add_argument("--n", type=int, default=60, help="questions per gate"); ap.add_argument("--seed", type=int, default=21)
     ap.add_argument("--per-call", type=int, default=6); ap.add_argument("--workers", type=int, default=6); ap.add_argument("--timeout", type=int, default=420)
     ap.add_argument("--out", default=os.path.join(ROOT, "eval", "judge_boards_results.json"))
+    ap.add_argument("--history", default="none", choices=["none", "same", "off", "live"],
+                    help="prepend an Earlier: block the way the app does: same = 2 turns from the same setting, off = 2 turns from another setting, live = the pair seen on the deployed account")
     a = ap.parse_args()
     boards = {}
     for spec in a.models:
         name, _, rest = spec.partition("="); parts = rest.split(":"); mdir, odir = parts[0], parts[1]; alpha = float(parts[2]) if len(parts) > 2 else 0.0
         boards[name] = make_board(os.path.join(WORK, mdir), os.path.join(WORK, odir, "card_model_fp16.onnx"), alpha)
     qs = questions(a.n, a.seed)
+    # the Earlier: block, built the way web-client/src/engine/model.ts builds it ("partner | answer", last 2 turns)
+    rng = random.Random(a.seed + 1); turns = collections.defaultdict(list)
+    if a.history in ("same", "off"):
+        import glob
+        for fp in glob.glob(os.path.join(os.path.dirname(ROOT), "datasets", "aac-setting-turns", "data", "*.jsonl")):
+            for line in open(fp):
+                try: t = json.loads(line)
+                except Exception: continue
+                if t.get("question") and t.get("cards"): turns[t.get("setting", "unknown")].append(f'{t["question"]} | {" ".join(t["cards"])}')
+    def earlier_for(q):
+        if a.history == "none": return ""
+        if a.history == "live": return "Earlier: What do you need? | I need to fix this, talk to you then. | How's it going today? | I think pretty good.\n"
+        s = q["setting"]; src = s if a.history == "same" else rng.choice([x for x in turns if x != s] or [s])
+        pool = turns.get(src) or turns.get(s) or []
+        return ("Earlier: " + " | ".join(h[:120] for h in rng.sample(pool, min(2, len(pool)))) + "\n") if pool else ""
+    for q in qs: q["earlier"] = earlier_for(q)
     # every (question, model) pair becomes one blind item; shuffle so a judge call mixes models
-    items = [{"q": q, "model": m, "cards": boards[m](q["setting"], q["question"])} for q in qs for m in boards]
+    items = [{"q": q, "model": m, "cards": boards[m](q["setting"], q["question"], q["earlier"])} for q in qs for m in boards]
     random.Random(a.seed).shuffle(items)
     batches = [items[i:i + a.per_call] for i in range(0, len(items), a.per_call)]
     def run(b):
@@ -104,7 +122,7 @@ def main():
                     if isinstance(v.get(f), (int, float)): agg[key][f].append(float(v[f]))
                 rows.append({**it["q"], "model": it["model"], "cards": it["cards"], **{f: v.get(f) for f in ("answerable", "plausible", "filler")}})
     json.dump(rows, open(a.out, "w"), indent=1)
-    print(f"{len(qs)} questions x {len(boards)} models, judged blind ({len(rows)} verdicts)\n")
+    print(f"{len(qs)} questions x {len(boards)} models, history={a.history}, judged blind ({len(rows)} verdicts)\n")
     print(f"{'model':<10}{'gate':<7}{'n':>4}{'answerable 0-2':>16}{'plausible /9':>14}{'filler /9':>11}{'answerable=2':>14}")
     for m in boards:
         for g in ("youth", "gen"):
