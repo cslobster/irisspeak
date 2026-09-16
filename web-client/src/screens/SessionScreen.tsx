@@ -502,8 +502,8 @@ export function SessionScreen() {
       {feedbackOpen && (() => { const ctx = api.feedbackContext; return (
         <FeedbackDialog setting={getProfile().setting || 'unknown'} question={ctx?.question || ''} candidates={ctx?.candidates || []}
           onClose={() => setFeedbackOpen(false)}
-          onSend={(choice, answer) => remoteFeedback({ session_id: ctx?.session_id, setting: getProfile().setting || 'unknown', question: ctx?.question || '',
-            candidates: ctx?.candidates || [], prefix: ctx?.prefix || [], choice, answer: choice === 'own_answer' ? answer : undefined,
+          onSend={(choice, answer, disliked) => remoteFeedback({ session_id: ctx?.session_id, setting: getProfile().setting || 'unknown', question: ctx?.question || '',
+            candidates: ctx?.candidates || [], prefix: ctx?.prefix || [], choice, disliked: choice === 'dislike' ? disliked : undefined, answer: choice === 'own_answer' ? answer : undefined,
             model_version: engine.modelVersion, timestamp: Date.now() })} />); })()}
       <div style={{ width: fit.cw, height: fit.ch, transform: `scale(${fit.s})`, transformOrigin: '0 0' }}>
       <div className="h-full overflow-hidden px-3 sm:px-4 pt-3 flex flex-col items-center relative safe-top">
@@ -797,13 +797,15 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
 /** The partner's verdict on this board: no card fits, or the answer the child wanted. Stored as training material. */
 function FeedbackDialog({ setting, question, candidates, onClose, onSend }: {
   setting: string; question: string; candidates: { id: string; label: string; category: string; personal?: boolean }[];
-  onClose: () => void; onSend: (choice: 'no_cards' | 'own_answer', answer: string) => Promise<'sent' | 'queued'>;
+  onClose: () => void; onSend: (choice: 'dislike' | 'own_answer', answer: string, disliked: string[]) => Promise<'sent' | 'queued'>;
 }) {
-  const [choice, setChoice] = useState<'no_cards' | 'own_answer'>('own_answer');
+  const [choice, setChoice] = useState<'dislike' | 'own_answer'>('own_answer');
   const [answer, setAnswer] = useState('');
+  const [disliked, setDisliked] = useState<Set<string>>(new Set());
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'queued'>('idle');
-  const canSend = state === 'idle' && (choice === 'no_cards' || answer.trim().length > 0);
-  const send = async () => { setState('sending'); const r = await onSend(choice, answer.trim()); setState(r); setTimeout(onClose, 1200); };
+  const canSend = state === 'idle' && (choice === 'dislike' ? disliked.size > 0 : answer.trim().length > 0);
+  const send = async () => { setState('sending'); const r = await onSend(choice, answer.trim(), [...disliked]); setState(r); setTimeout(onClose, 1200); };
+  const toggle = (id: string) => { setChoice('dislike'); setDisliked(d => { const n = new Set(d); n.has(id) ? n.delete(id) : n.add(id); return n; }); };
   const shown = candidates.filter(c => c.category !== 'core' || c.personal);
   return (
     <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-6" onClick={onClose}>
@@ -811,13 +813,22 @@ function FeedbackDialog({ setting, question, candidates, onClose, onSend }: {
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-700 mb-3">Feedback</h2>
         <p className="text-sm sm:text-base text-slate-600 mb-1"><span className="font-bold">Setting:</span> {setting}</p>
         <p className="text-sm sm:text-base text-slate-600 mb-3"><span className="font-bold">Question:</span> “{question || '(nothing asked yet)'}”</p>
-        <p className="text-sm font-bold text-slate-600 mb-1">Cards shown:</p>
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {shown.map(c => <span key={c.id} className={`px-2 py-0.5 rounded-full text-xs font-bold border ${c.personal ? 'bg-pink-100 border-pink-300' : 'bg-white border-slate-300'} text-slate-700`}>{c.label}</span>)}
+        <p className="text-sm font-bold text-slate-600 mb-1">Cards shown <span className="font-normal">(tap the cross to mark a card you don't like)</span>:</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {shown.map(c => {
+            const off = disliked.has(c.id);
+            return (
+              <span key={c.id} className={`relative pl-2 pr-6 py-1 rounded-xl text-xs font-bold border-2 ${off ? 'bg-red-50 border-red-400 text-red-700 line-through' : c.personal ? 'bg-pink-100 border-pink-300 text-slate-700' : 'bg-white border-slate-300 text-slate-700'}`}>
+                {c.label}
+                <button type="button" onClick={() => toggle(c.id)} aria-label={off ? `Keep ${c.label}` : `Dislike ${c.label}`} title={off ? 'Keep' : "I don't like this card"}
+                  className={`absolute -top-2 -right-2 w-5 h-5 rounded-full border-2 text-[11px] leading-none flex items-center justify-center ${off ? 'bg-red-500 border-red-600 text-white' : 'bg-white border-slate-400 text-slate-500'}`}>✕</button>
+              </span>
+            );
+          })}
         </div>
         <label className="flex items-start gap-3 mb-2 cursor-pointer">
-          <input type="radio" name="fb" checked={choice === 'no_cards'} onChange={() => setChoice('no_cards')} className="mt-1" />
-          <span className="font-bold text-slate-700">1. No cards fit this question</span>
+          <input type="radio" name="fb" checked={choice === 'dislike'} onChange={() => setChoice('dislike')} className="mt-1" />
+          <span className="font-bold text-slate-700">1. I don't like the answer cards <span className="font-normal text-slate-500">({disliked.size} crossed out)</span></span>
         </label>
         <label className="flex items-start gap-3 mb-2 cursor-pointer">
           <input type="radio" name="fb" checked={choice === 'own_answer'} onChange={() => setChoice('own_answer')} className="mt-1" />

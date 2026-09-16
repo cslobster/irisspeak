@@ -18,7 +18,7 @@ export async function GET(req: Request) {
     FROM board_feedback f LEFT JOIN dyad d ON d.id = f.dyad_id
     ORDER BY f.timestamp DESC LIMIT 5000`) as any[];
   if (url.searchParams.get('format') === 'jsonl') {
-    const lines = rows.map(r => JSON.stringify({ setting: r.setting, question: r.question, candidates: r.candidates, prefix: r.prefix,
+    const lines = rows.map(r => JSON.stringify({ setting: r.setting, question: r.question, candidates: r.candidates, prefix: r.prefix, disliked: r.disliked,
                                                  choice: r.choice, answer: r.answer, model_version: r.model_version, timestamp: Number(r.timestamp) }));
     return new Response(lines.join('\n') + '\n', { headers: { 'content-type': 'application/x-ndjson; charset=utf-8' } });
   }

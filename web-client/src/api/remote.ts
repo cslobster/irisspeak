@@ -143,7 +143,7 @@ export async function remoteRate(sessionId: string, rating: number) {
 export interface BoardFeedback {
   session_id?: string; setting: string; question: string;
   candidates: { id: string; label: string; category: string; personal?: boolean }[];
-  prefix: string[]; choice: 'no_cards' | 'own_answer'; answer?: string; model_version?: string; timestamp: number;
+  prefix: string[]; choice: 'dislike' | 'own_answer'; disliked?: string[]; answer?: string; model_version?: string; timestamp: number;
 }
 const FEEDBACK_QUEUE = 'feedback_queue';
 function queueFeedback(fb: BoardFeedback) { const q = store.get<BoardFeedback[]>(FEEDBACK_QUEUE, []); q.push(fb); store.set(FEEDBACK_QUEUE, q.slice(-100)); }

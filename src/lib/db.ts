@@ -270,6 +270,7 @@ export async function ensureSchema(): Promise<void> {
     await Promise.all([
       sql`CREATE INDEX IF NOT EXISTS idx_message_session ON dialogue_message(session_id, timestamp)`,
       sql`CREATE INDEX IF NOT EXISTS idx_board_feedback_dyad ON board_feedback(dyad_id, timestamp)`,
+      sql`ALTER TABLE board_feedback ADD COLUMN IF NOT EXISTS disliked JSONB`,   // card ids the partner crossed out
       // Ranked, corpus-resolved candidate pool for the turn (topics/actions/folder decision) —
       // lets refreshChildCards page through pre-ranked candidates instead of re-calling the LLM
       // every time (see moderator.ts's generateChildCards).
