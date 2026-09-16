@@ -287,8 +287,10 @@ def main():
     ap.add_argument('--no-pins', action='store_true', help='drop the pinned answer words from routes (school subjects, doctor words): judge the model alone there')
     ap.add_argument('--no-rerank', action='store_true', help='model order only, no reranker')
     ap.add_argument('--qa-file', default='', help='alternative held-out file (test_qa_youth.jsonl, test_gen.jsonl)')
+    ap.add_argument('--prior-alpha', type=float, default=0.0, help='debias the model-only order by the training-target prior: score = log p - alpha*log prior (0 = off)')
     a = ap.parse_args(); bank = json.load(open(a.bank))
     global NO_PINS, NO_RERANK; NO_PINS = a.no_pins; NO_RERANK = a.no_rerank
+    global PRIOR_ALPHA; PRIOR_ALPHA = a.prior_alpha
     if a.qa:   # held-out corpus questions: expected = the acceptable first cards of the real reply
         import random; random.seed(11)
         idl = {c['id']: c for c in cards}

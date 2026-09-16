@@ -28,8 +28,11 @@ Items:
 Return {{"verdicts":[{{"i":1,"answerable":2,"plausible":7,"filler":0}}]}} with one verdict per item, in order. JSON only, no fence."""
 
 
-def make_board(mdir, onnx):
+def make_board(mdir, onnx, alpha=0.0):
     meta = json.load(open(f"{mdir}/cards.json")); cards = meta["cards"]; V = meta.get("V", 49152); start = meta["start_index"]; nOut = meta["n_outputs"]; dead = set(meta.get("dead", []))
+    prior = None
+    if alpha > 0:
+        u = np.array(json.load(open(f"{mdir}/freq.json"))["uni"], dtype=np.float64); prior = np.log((u + 1.0) / (u.sum() + len(u)))
     tok = AutoTokenizer.from_pretrained(meta.get("backbone", "HuggingFaceTB/SmolLM2-135M-Instruct")); sess = ort.InferenceSession(onnx, providers=["CPUExecutionProvider"]); names = [i.name for i in sess.get_inputs()]
     def board(setting, q):
         ids = tok(f"Setting: {setting}.\nPartner: {q[:200]}\nReply cards:", add_special_tokens=True)["input_ids"] + [V + start]; L = len(ids)
@@ -37,6 +40,8 @@ def make_board(mdir, onnx):
         if "position_ids" in names: feed["position_ids"] = np.arange(L, dtype=np.int64)[None]
         lg = sess.run(None, feed)[0][0, -1, V:V + nOut].astype(np.float32)
         for j in dead: lg[j] = -1e4
+        if prior is not None:
+            p = np.exp(lg - lg.max()); p /= p.sum(); lg = np.log(p + 1e-12) - alpha * prior[:len(lg)]
         out = []
         for j in np.argsort(-lg):
             c = cards[j]
@@ -64,15 +69,15 @@ def questions(n, seed):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--models", nargs="+", required=True, help="name=model_dir:onnx_dir (relative to ~/work4/aac)")
+    ap.add_argument("--models", nargs="+", required=True, help="name=model_dir:onnx_dir[:alpha] (relative to ~/work4/aac); alpha = prior debiasing")
     ap.add_argument("--n", type=int, default=60, help="questions per gate"); ap.add_argument("--seed", type=int, default=21)
     ap.add_argument("--per-call", type=int, default=6); ap.add_argument("--workers", type=int, default=6); ap.add_argument("--timeout", type=int, default=420)
     ap.add_argument("--out", default=os.path.join(ROOT, "eval", "judge_boards_results.json"))
     a = ap.parse_args()
     boards = {}
     for spec in a.models:
-        name, _, rest = spec.partition("="); mdir, _, odir = rest.partition(":")
-        boards[name] = make_board(os.path.join(WORK, mdir), os.path.join(WORK, odir, "card_model_fp16.onnx"))
+        name, _, rest = spec.partition("="); parts = rest.split(":"); mdir, odir = parts[0], parts[1]; alpha = float(parts[2]) if len(parts) > 2 else 0.0
+        boards[name] = make_board(os.path.join(WORK, mdir), os.path.join(WORK, odir, "card_model_fp16.onnx"), alpha)
     qs = questions(a.n, a.seed)
     # every (question, model) pair becomes one blind item; shuffle so a judge call mixes models
     items = [{"q": q, "model": m, "cards": boards[m](q["setting"], q["question"])} for q in qs for m in boards]
