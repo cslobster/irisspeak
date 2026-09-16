@@ -182,6 +182,26 @@ shipped v31 against live v5, blind, 50 corpus-youth and 50 generated questions e
 
 So the history echo is a weakness relative to v5's own no-history boards, not relative to what was live before.
 
+### Deployed 15 Sep 2026 (evening): v7 replaces v5
+
+v7 = the v5 recipe plus an Earlier: block on half the generated and distilled training states (app format,
+40% off-topic). No-history gates tie v5 (bank 80, youth 203 vs 206, generated 376 vs 371, setting precision 0.473
+vs 0.474); panel repetition is slightly lower (Tired 38% vs 42%, Wait 24% vs 28%). Judged blind against v5 with
+history in the prompt, 50 corpus-youth and 50 generated questions per condition:
+
+| History | Model | Corpus: fully answerable | Generated: fully answerable | Filler /9 (corpus) |
+|---|---|---|---|---|
+| off-topic | v5 | 72% | 88% | 1.9 |
+| off-topic | **v7** | **78%** | **100%** | **0.6** |
+| same-setting | v5 | 74% | 86% | 1.9 |
+| same-setting | **v7** | **80%** | **94%** | **0.8** |
+| the live account's pair | v5 | 78% | 80% | 2.0 |
+| the live account's pair | **v7** | 76% | **88%** | **1.5** |
+
+Live reproduction on irisspeak.com, same account, same 15 turns of history: the play board for "What do you
+want to do?" went from Color / Fast / Snack / I need help / Drink (v5) to Bike / Chalk / Park / Kite / Snack /
+Block (v7). On R2 as `v7/`; rollback `sh site/deploy_model.sh --rollback v5` (or v31).
+
 ### Candidate before that finding
 
 **v5**, model-only, with the board simplification. Deploy is `sh site/deploy_model.sh distill_v5 v5` (asks
