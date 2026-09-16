@@ -38,13 +38,13 @@ echo "== 5/6 board evaluation =="
 # The reranker ablation on distill_v4 showed the reranker worth one question on the youth gate and none on gen,
 # so the model-only board is the primary number; the reranked line stays so a regression would be visible.
 echo "--- question bank, MODEL ONLY (baseline 80/80, content-only 74/80) ---"
-python3 "$M/eval/board_eval.py" --no-md --no-rerank 2>&1 | tail -1
-echo "--- question bank, with reranker ---"
 python3 "$M/eval/board_eval.py" --no-md 2>&1 | tail -1
+echo "--- question bank, with reranker ---"
+python3 "$M/eval/board_eval.py" --no-md --rerank 2>&1 | tail -1
 echo "--- held-out corpus questions, all (baseline 332/371; adult-heavy, kept for comparison) ---"
 python3 "$M/eval/board_eval.py" --no-md --qa 400 2>&1 | tail -1
-QY="$M/data/states/test_qa_youth.jsonl"; [ -f "$QY" ] && { echo "--- test_qa_youth, MODEL ONLY ---"; python3 "$M/eval/board_eval.py" --no-md --no-rerank --qa 400 --qa-file "$QY" 2>&1 | tail -1; echo "--- test_qa_youth, with reranker ---"; python3 "$M/eval/board_eval.py" --no-md --qa 400 --qa-file "$QY" 2>&1 | tail -1; }
-QG="$M/data/states/test_gen.jsonl";     [ -f "$QG" ] && { echo "--- test_gen, MODEL ONLY ---"; python3 "$M/eval/board_eval.py" --no-md --no-rerank --qa 400 --qa-file "$QG" 2>&1 | tail -1; echo "--- test_gen, with reranker ---"; python3 "$M/eval/board_eval.py" --no-md --qa 400 --qa-file "$QG" 2>&1 | tail -1; }
+QY="$M/data/states/test_qa_youth.jsonl"; [ -f "$QY" ] && { echo "--- test_qa_youth, MODEL ONLY ---"; python3 "$M/eval/board_eval.py" --no-md --qa 400 --qa-file "$QY" 2>&1 | tail -1; echo "--- test_qa_youth, with reranker ---"; python3 "$M/eval/board_eval.py" --no-md --rerank --qa 400 --qa-file "$QY" 2>&1 | tail -1; }
+QG="$M/data/states/test_gen.jsonl";     [ -f "$QG" ] && { echo "--- test_gen, MODEL ONLY ---"; python3 "$M/eval/board_eval.py" --no-md --qa 400 --qa-file "$QG" 2>&1 | tail -1; echo "--- test_gen, with reranker ---"; python3 "$M/eval/board_eval.py" --no-md --rerank --qa 400 --qa-file "$QG" 2>&1 | tail -1; }
 
 echo "== 6/6 setting conditioning (baseline sensitivity 0.519, precision 0.185) =="
 python3 "$M/eval/setting_eval.py" --model-dir "$MDIR" --onnx "$OUT/card_model_fp16.onnx" \
