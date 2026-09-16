@@ -67,6 +67,8 @@ export function SessionMenu({ onClose, onTranscript, setting, settings, onSettin
         <button onClick={() => nav('/stars')} className="w-full text-left py-3 text-sm font-bold text-slate-600 border-t border-slate-100">Previous conversations</button>
         <button onClick={() => nav('/profile')} className="w-full text-left py-3 text-sm font-bold text-slate-600 border-t border-slate-100">Profile</button>
         <button onClick={() => { onClose(); onEnd(); }} className="pill-btn bg-[#94c1c2] w-full text-sm py-2">End conversation</button>
+        {/* the real viewport, to check the layout on a device (iPad Safari with tabs is about 1180 x 720) */}
+        <div className="pt-2 text-[11px] text-slate-400 text-center">Screen {window.innerWidth} × {window.innerHeight} · ×{window.devicePixelRatio}</div>
       </div>
     </div>
   );
