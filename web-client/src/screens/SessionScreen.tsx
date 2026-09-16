@@ -652,9 +652,9 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
     return groups;
   }, [rec]);
 
-  // Topic 4 columns, Action 1, Feeling 1 -- three rows each: 12 / 3 / 3 (see PANEL in api/local.ts).
+  // Topic 5 columns, Action 1, Feeling 1 -- three rows each: 15 / 3 / 3 (PANEL_BIG in api/local.ts; phones use CompactSession).
   const mainCats: Array<{ key: 'topic' | 'action' | 'emotion'; label: string; tint: string; cols: string; span: string }> = [
-    { key: 'topic',   label: 'Topic',   tint: 'bg-card-topic/40',   cols: 'grid-cols-4', span: 'col-span-4' },
+    { key: 'topic',   label: 'Topic',   tint: 'bg-card-topic/40',   cols: 'grid-cols-5', span: 'col-span-5' },
     { key: 'action',  label: 'Action',  tint: 'bg-card-action/40',  cols: 'grid-cols-1', span: 'col-span-1' },
     { key: 'emotion', label: 'Feeling', tint: 'bg-card-emotion/40', cols: 'grid-cols-1', span: 'col-span-1' },
   ];
@@ -708,7 +708,7 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
             </div>
           </div>
         )}
-        <div className="grid grid-cols-6 gap-2 sm:gap-3">
+        <div className="grid grid-cols-7 gap-2 sm:gap-3">
           {mainCats.map(({ key, label, tint, cols, span }) => (
             <div
               key={key}

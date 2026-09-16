@@ -7,7 +7,7 @@ import Foundation
 @MainActor
 final class LocalApi {
     static let shared = LocalApi()
-    static let panel = (topic: 12, action: 3, emotion: 3)   // Topic 4 x 3, Action 1 x 3, Feeling 1 x 3
+    static let panel = (topic: 15, action: 3, emotion: 3)   // Topic 5 x 3, Action 1 x 3, Feeling 1 x 3
     static let maxFolderCards = 1
     private static let feelingFallback = ["happy", "sad", "tired", "excited", "angry", "scared", "bored", "hungry", "okay", "good"]
 

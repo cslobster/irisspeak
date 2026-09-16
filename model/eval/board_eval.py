@@ -13,7 +13,7 @@ from transformers import AutoTokenizer
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 M = os.environ.get('BOARD_MODEL_DIR') or os.path.join(ROOT, 'site', 'public', 'model')      # cards.json, reranker.json, freq.json, card_vecs.bin
 ONNX = os.environ.get('BOARD_ONNX') or os.path.join(ROOT, 'export', 'out_v31', 'card_model_fp16.onnx')
-PANEL = {'topic': 12, 'action': 3, 'emotion': 3}; MAX_FOLDERS = 1
+PANEL = {'topic': 15, 'action': 3, 'emotion': 3}; MAX_FOLDERS = 1
 CORE_LABELS = ['yes', 'no', 'please']   # fixed part of the quick row; the app adds five personal cards (history-based), which a fresh profile fills from the model
 FEELING_FALLBACK = ['happy', 'sad', 'tired', 'excited', 'angry', 'scared', 'bored', 'hungry', 'okay', 'good']
 STOP = {'do', 'you', 'want', 'to', 'the', 'a', 'an', 'some', 'is', 'it', 'one', 'which', 'what', 'or', 'and', 'with', 'for', 'first', 'should', 'we', 'i', 'your', 'my', 'did', 'too', 'here', 'as', 'last'}
