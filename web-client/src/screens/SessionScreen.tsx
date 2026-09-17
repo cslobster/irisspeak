@@ -33,7 +33,7 @@ const CONTENT_W = 10 * 96 + 9 * 12;   // 1068
 // ones the action buttons (Refresh / Clear / Done / Feedback) stand in a column on the right of the board instead
 // of a row under it, and the canvas is shorter, so the cards get the height back.
 const ACTION_COL_W = 112;   // one tile wide (sm:w-24 = 96px) plus breathing room
-const SIDE_DESIGN_H = 760;   // deck + panels + fixed row, no action row
+const SIDE_DESIGN_H = 812;   // header + deck + panels + fixed row (measured 805 at scale 1), no action row
 function useShortLandscape() {
   // iPad-class: landscape, at least 1000 wide, not taller than 900 (an 11-inch iPad is 820 tall; with Safari's tab bar ~720)
   const calc = () => window.innerWidth >= 1000 && window.innerHeight <= 900 && window.innerWidth > window.innerHeight;
@@ -832,7 +832,7 @@ function ActionTile({ label, icon, tint, onClick, disabled, title }: { label: st
       disabled={disabled}
       title={title}
       style={{ touchAction: 'manipulation', WebkitTouchCallout: 'none' as any, WebkitUserSelect: 'none' }}
-      className={`w-[72px] h-24 sm:w-24 sm:h-28 flex flex-col items-center justify-between rounded-2xl ${tint} border-2 border-b-4 border-black hover:shadow-md active:scale-95 transition-all duration-150 p-2 pt-1.5 pb-1.5 select-none disabled:opacity-40 disabled:active:scale-100`}
+      className={`w-[72px] h-24 sm:w-24 sm:h-28 flex flex-col items-center justify-between rounded-2xl ${tint} border-2 border-b-4 border-black hover:shadow-md active:scale-95 transition-all duration-150 px-1 pt-1.5 pb-1.5 select-none disabled:opacity-40 disabled:active:scale-100`}
     >
       <div className="flex-1 w-full rounded-xl flex items-center justify-center">
         <span className="text-3xl leading-none" aria-hidden="true">{icon}</span>
