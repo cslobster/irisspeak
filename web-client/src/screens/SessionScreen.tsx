@@ -756,7 +756,9 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
         </div>
       </div>
 
-      {/* Bottom: the quick row -- Yes / No / Please, five personal cards, the child's name card -- then More ideas and View all, one row */}
+      {/* Bottom: the quick row -- Yes / No / Please, five personal cards, the child's name card -- then More ideas and View all, one row;
+          the action bar sits directly under it (same group), pinned to the bottom of the board column */}
+      <div className="flex-shrink-0 mt-auto flex flex-col gap-1.5">
       <div className="flex-shrink-0 flex justify-center gap-2 sm:gap-3 flex-nowrap">
         {byCat.core.map(c => (
           <div key={c.id} className="shrink-0">
@@ -793,12 +795,24 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
         </div>
       </div>
 
+      {!sideActions && (
+        <div className="flex-shrink-0 flex items-center gap-2 sm:gap-3 pb-1">
+          <div className="flex-1" />
+          <button onClick={onRefresh} disabled={busy} className="pill-btn bg-slate-500 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-8 py-2 sm:py-3">↻ Refresh</button>
+          <button onClick={onClear} disabled={busy || interim.length === 0} className="pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3">✕ Clear</button>
+          <button onClick={onDone} disabled={busy} className="pill-btn bg-[#f09281] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg">Done</button>
+          <div className="flex-1 flex justify-end">
+            <button onClick={onFeedback} disabled={busy} className="pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3" title="Tell us when the board misses">💬 Feedback</button>
+          </div>
+        </div>
+      )}
+      </div>
       </div>
 
-      {/* Action bar: a row under the board (Refresh / Clear / Done centred, Feedback at the right edge), or in short
-          landscape a column on the right of the board */}
-      <div className={sideActions ? 'flex-shrink-0 flex flex-col justify-end gap-2 pb-2' : 'flex-shrink-0 flex items-center gap-2 sm:gap-3 pb-2'} style={sideActions ? { width: ACTION_COL_W } : undefined}>
-        {!sideActions && <div className="flex-1" />}
+      {/* Short landscape (iPad Safari with tabs): the same four buttons as a column on the right of the board */}
+      {sideActions && (
+      <div className="flex-shrink-0 flex flex-col justify-end gap-2 pb-2" style={{ width: ACTION_COL_W }}>
+
         <button
           onClick={onRefresh}
           disabled={busy}
@@ -814,7 +828,7 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
           disabled={busy}
           className={`pill-btn bg-[#f09281] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg ${sideActions ? 'w-full' : ''}`}
         >Done</button>
-        <div className={sideActions ? 'mt-4' : 'flex-1 flex justify-end'}>
+        <div className="mt-4">
           <button
             onClick={onFeedback}
             disabled={busy}
@@ -823,6 +837,7 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
           >💬 Feedback</button>
         </div>
       </div>
+      )}
     </div>
   );
 }
