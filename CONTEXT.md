@@ -1,9 +1,40 @@
-# AACessTalk — Domain Context
+# IrisSpeak — Domain Context
+
+## Current architecture (as of the 2026-09-15 reorg)
+
+The project was renamed AACessTalk → IrisSpeak and the repo restructured into a monorepo
+(`web-client/`, `src/` backend, `admin/`, `ios/`, `model/`, `site/`, `docs/` — see `CLAUDE.md` for
+the full layout). The core product mechanism changed too: card suggestions and sentence
+generation, originally a cloud LLM call (Gemini) per turn, now run **on the child's device** via
+a small fine-tuned model (irisspeak-135m: a card-ranking model + a sentence realiser, both
+exported to ONNX and run in-browser with onnxruntime-web). The training/export/eval pipeline for
+that model lives in `model/`; the runtime that loads and calls it in the browser is
+`web-client/src/engine/` (`model.ts`, `realiser.ts`, `grammar.ts`). Model weights are hosted on
+Cloudflare R2 (`model.irisspeak.org`), not in this repo or on the app's own origin.
+
+**Almost everything below this point (Corpus, Card, Folder Card, Personalization, Small-Talk
+Card, etc.) describes the *original cloud-LLM path* — the per-turn card-generation/sentence-
+inference code that used to live in `src/lib/moderator.ts` and friends, plus `web-client/legacy/`.
+That code was confirmed dead (nothing in the shipped app, admin, or iOS called any of it) and
+deleted on 2026-09-17 — see `CLAUDE.md`'s Architecture section for exactly what went and why it
+was safe. This glossary is kept as historical/design-reasoning documentation (why folders exist,
+why personalization splits into three mechanisms, etc.) in case any of it resurfaces, not as a
+description of the current child-facing experience.** A fresh on-device-path glossary (Card Model,
+Realiser, Board, Reranker, etc.) hasn't been written yet — start one here when that domain gets
+its first real design discussion, the way this legacy glossary grew.
 
 ## Glossary
 
 ### Corpus
-The local vocabulary database used to constrain child-card generation. A CSV file (`data/corpus_vocabulary.csv`) loaded at startup by `corpus.ts`.
+The local vocabulary database used to constrain child-card generation (legacy LLM path — see
+Current architecture above). Was a CSV file loaded at startup by `corpus.ts`.
+
+**Deleted 2026-09-17** along with the rest of the legacy card-generation code (`corpus.ts` and its
+test are gone) — nothing live read it. Kept below as design history only. For the record: the repo
+reorg (`1ff8f9e`, 2026-09-15) had moved this file from root `data/` to `model/data/` without
+updating `corpus.ts`'s hardcoded path, so the legacy path was already throwing `ENOENT` in every
+environment (including production) by the time it was deleted — see `CLAUDE.md` for the equivalent
+bug that *did* need a real fix (`startSession`'s static-guides lookup, same root cause, still live).
 
 **As of 2026-07-29 (`6dc8371`, "Un-bypass AAC card generation"), the corpus is no longer a post-hoc semantic-match target — it's given to the LLM directly.** `moderator.ts` passes the full `topic`/`action` category word lists straight into the prompt (`buildChildCardPrompt`); the model is asked to reason about the parent message's theme and pick 6 ranked candidates per category from that real list, and `corpus.ts` does an exact (case-insensitive) lookup to attach the real image/category and reject anything hallucinated outside the list. There is no fuzzy or embedding-based matching in this path anymore — `corpus.ts`'s cosine-similarity retriever and the `@xenova/transformers` dependency it used were deliberately removed in the same commit (see Corpus Enrichment below for why). The precomputed `data/minilm_name_embeddings.bin`/`.meta.json` files are still on disk but currently unused by any code path.
 

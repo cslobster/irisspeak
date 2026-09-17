@@ -1,57 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
-import type { CardCategory, ParentGuideElement, TopicCategory } from './types';
+import type { ParentGuideElement, TopicCategory } from './types';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
-interface DefaultCard {
-  id: string;
-  label: string;
-  label_localized?: string;
-  category: CardCategory;
-  image?: any;
-}
-
-export interface FolderCardOption {
-  path: string;
-  label: string;
-  icon: string;
-  words: string[];
-  // Literal, narrow phrases (case-insensitive, word-boundary matched) that deterministically
-  // trigger this folder — the data-driven replacement for a hardcoded per-folder regex in
-  // moderator.ts. See CONTEXT.md's Folder Card entry for why a keyword backstop exists at all.
-  triggers?: string[];
-}
-
-let _emotion: DefaultCard[] | null = null;
-let _core: DefaultCard[] | null = null;
-let _folderCards: FolderCardOption[] | null = null;
 let _initialGuides: any | null = null;
-
-export function loadEmotionCards(): DefaultCard[] {
-  if (!_emotion) {
-    const yml = fs.readFileSync(path.join(DATA_DIR, 'default_emotion_cards.yml'), 'utf-8');
-    _emotion = YAML.parse(yml);
-  }
-  return _emotion!;
-}
-
-export function loadCoreCards(): DefaultCard[] {
-  if (!_core) {
-    const yml = fs.readFileSync(path.join(DATA_DIR, 'default_core_cards.yml'), 'utf-8');
-    _core = YAML.parse(yml);
-  }
-  return _core!;
-}
-
-export function loadFolderCards(): FolderCardOption[] {
-  if (!_folderCards) {
-    const yml = fs.readFileSync(path.join(DATA_DIR, 'folder_cards.yml'), 'utf-8');
-    _folderCards = YAML.parse(yml);
-  }
-  return _folderCards!;
-}
 
 export function loadInitialGuidesYaml(): any {
   if (!_initialGuides) {
@@ -60,17 +14,6 @@ export function loadInitialGuidesYaml(): any {
   }
   return _initialGuides!;
 }
-
-export const EMOTION_LABELS = [
-  'joyful', 'glad', 'happy', 'excited', 'sad', 'angry',
-  'surprised', 'bored', 'tired', 'afraid', 'worried', 'tough',
-];
-
-export const TOPIC_DESCRIPTION: Record<TopicCategory, string> = {
-  plan:   "The dyad shares today's todos or plans.",
-  recall: "The dyad gets to know what the child did on that day.",
-  free:   'The dyad converses about a free topic that the child is interested in.',
-};
 
 /** Return the static initial parent guides for turn 1. Substitutes {child_name}. */
 export function buildInitialGuides(
