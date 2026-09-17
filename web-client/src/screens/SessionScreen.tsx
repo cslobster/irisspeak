@@ -758,7 +758,7 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
 
       {/* Bottom: the quick row -- Yes / No / Please, five personal cards, the child's name card -- then More ideas and View all, one row;
           the action bar sits directly under it (same group), pinned to the bottom of the board column */}
-      <div className="flex-shrink-0 mt-auto flex flex-col gap-1.5">
+      <div className="flex-shrink-0 flex flex-col gap-1.5">
       <div className="flex-shrink-0 flex justify-center gap-2 sm:gap-3 flex-nowrap">
         {byCat.core.map(c => (
           <div key={c.id} className="shrink-0">
