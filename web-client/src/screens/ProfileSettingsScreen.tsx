@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CloseIcon } from '../components/Icons';
 import { getProfile, setProfile } from '../engine/store';
 import { pullProfile, pushProfile } from '../api/remote';
 
 // Same fields as irisspeak.com's Profile screen: age, preferred way to communicate, and free notes. Loaded
 // from and saved to the shared account; the local copy feeds the on-device model and reranker.
 export function ProfileSettingsScreen() {
-  const nav = useNavigate();
   const [gender, setGender] = useState<'boy' | 'girl'>('girl');
   const [age, setAge] = useState('');
   const [communicationStyle, setCommunicationStyle] = useState('');
@@ -15,7 +12,6 @@ export function ProfileSettingsScreen() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  useEffect(() => { document.documentElement.classList.add('session-active'); return () => { document.documentElement.classList.remove('session-active'); }; }, []);
 
   useEffect(() => {
     const fill = () => { const p = getProfile(); setGender(p.gender === 'boy' ? 'boy' : 'girl'); setAge(p.age != null ? String(p.age) : ''); setCommunicationStyle(p.communication_style || ''); setNotes(p.notes || ''); };
@@ -32,9 +28,8 @@ export function ProfileSettingsScreen() {
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ background: '#f0ebe1' }}>
       <div className="min-h-screen px-8 py-8 max-w-2xl mx-auto">
-        <header className="flex items-center justify-between mb-6">
+        <header className="mb-6">
           <h2 className="text-2xl font-extrabold text-black">Profile</h2>
-          <button onClick={() => nav(-1)} className="rounded-xl p-2 bg-white border-2 border-b-4 border-black"><CloseIcon /></button>
         </header>
         {loading ? <p className="text-center text-slate-400 py-8">Loading…</p> : (
           <div className="rounded-2xl border-2 border-b-4 border-black bg-white p-5 space-y-4">

@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { addVocabularyWord, deleteVocabularyWord, listCustomWords, syncCustomWords, type CustomWord } from '../api/remote';
-import { CloseIcon } from '../components/Icons';
 
 // Same as irisspeak.com's Vocabulary screen: parent-added custom words with an emoji or a photo, stored on the
 // shared account. Here they also become searchable cards and reranker favourites on this device.
 export function VocabularySettingsScreen() {
-  const nav = useNavigate();
   const [words, setWords] = useState<CustomWord[]>([]);
   const [loading, setLoading] = useState(true);
   const [word, setWord] = useState('');
@@ -15,7 +12,6 @@ export function VocabularySettingsScreen() {
   const [imageData, setImageData] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  useEffect(() => { document.documentElement.classList.add('session-active'); return () => { document.documentElement.classList.remove('session-active'); }; }, []);
 
   function load() {
     setLoading(true);
@@ -46,9 +42,8 @@ export function VocabularySettingsScreen() {
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ background: '#f0ebe1' }}>
       <div className="min-h-screen px-8 py-8 max-w-2xl mx-auto">
-        <header className="flex items-center justify-between mb-6">
+        <header className="mb-6">
           <h2 className="text-2xl font-extrabold text-black">Vocabulary</h2>
-          <button onClick={() => nav(-1)} className="rounded-xl p-2 bg-white border-2 border-b-4 border-black"><CloseIcon /></button>
         </header>
         <p className="text-sm text-slate-500 mb-4">Add words that aren't in the app yet — like a friend's name, pet, or school — so your child can use them.</p>
         <div className="rounded-2xl border-2 border-b-4 border-black bg-white p-4 mb-6 space-y-3">

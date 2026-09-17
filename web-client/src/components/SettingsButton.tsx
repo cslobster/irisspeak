@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { GearIcon, SoundOffIcon, SoundOnIcon } from './Icons';
 import { getMuted, toggleMuted } from '../audio/mute';
 import { VoicePicker } from './VoicePicker';
 import { UI_SCALE_LEVELS, UI_SCALE_LABELS, getUiScaleLevel, setUiScaleLevel, type UiScaleLevel } from '../uiScale';
 import { isSignedIn, onAuthChange, signOut as remoteSignOut } from '../api/remote';
+import { goToSettings } from '../settingsNav';
 
 // Same Settings menu as irisspeak.com, mounted once at the App level inside the fixed top-right button row,
 // so it appears in the same spot on every authenticated screen.
 export function SettingsButton() {
   const nav = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [uiScale, setUiScale] = useState<UiScaleLevel>(getUiScaleLevel);
   const [muted, setMuted] = useState(getMuted);
@@ -74,25 +76,25 @@ export function SettingsButton() {
               </div>
             </div>
             <button
-              onClick={() => { setOpen(false); nav('/stars'); }}
+              onClick={() => { setOpen(false); goToSettings(nav, location, '/stars'); }}
               className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
             >
               Previous conversations
             </button>
             <button
-              onClick={() => { setOpen(false); nav('/vocabulary'); }}
+              onClick={() => { setOpen(false); goToSettings(nav, location, '/vocabulary'); }}
               className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
             >
               Vocabulary
             </button>
             <button
-              onClick={() => { setOpen(false); nav('/profile'); }}
+              onClick={() => { setOpen(false); goToSettings(nav, location, '/profile'); }}
               className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
             >
               Profile
             </button>
             <button
-              onClick={() => { setOpen(false); nav('/credits'); }}
+              onClick={() => { setOpen(false); goToSettings(nav, location, '/credits'); }}
               className="w-full text-left px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition border-b border-slate-100"
             >
               Credits &amp; privacy

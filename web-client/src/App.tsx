@@ -11,6 +11,7 @@ import { GoogleCallbackScreen } from './screens/GoogleCallbackScreen';
 import { SetupScreen } from './screens/SetupScreen';
 import { CreditsScreen } from './screens/CreditsScreen';
 import { SettingsButton } from './components/SettingsButton';
+import { SettingsCloseButton } from './components/SettingsCloseButton';
 import { isSignedIn, needsSetup } from './api/remote';
 
 // Same flow as irisspeak.com: sign in (or continue as guest) first, then the welcome page; the account,
@@ -31,6 +32,7 @@ export default function App() {
     <>
       <div className="fit-topright fixed z-50 flex items-center gap-3">
         <SettingsButton />
+        <SettingsCloseButton />
       </div>
       <Routes>
         <Route path="/" element={<RedirectIfAuthed><SignInScreen /></RedirectIfAuthed>} />

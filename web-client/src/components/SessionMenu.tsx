@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CloseIcon, SoundOffIcon, SoundOnIcon } from './Icons';
 import { getMuted, toggleMuted } from '../audio/mute';
 import { VoicePicker } from './VoicePicker';
 import { UI_SCALE_LEVELS, UI_SCALE_LABELS, getUiScaleLevel, setUiScaleLevel, type UiScaleLevel } from '../uiScale';
+import { goToSettings } from '../settingsNav';
 
 export interface SettingOption { value: string; label: string; icon: string }
 
@@ -18,6 +19,7 @@ interface Props {
 // text size, previous conversations, profile and End conversation.
 export function SessionMenu({ onClose, onTranscript, setting, settings, onSettingChange, onEnd }: Props) {
   const nav = useNavigate();
+  const location = useLocation();
   const [muted, setMuted] = useState(getMuted);
   const [uiScale, setUiScale] = useState<UiScaleLevel>(getUiScaleLevel);
   const cur = settings.find(s => s.value === setting) ?? settings[0];
@@ -64,8 +66,8 @@ export function SessionMenu({ onClose, onTranscript, setting, settings, onSettin
             >{UI_SCALE_LABELS[level]}</button>
           ))}
         </div>
-        <button onClick={() => nav('/stars')} className="w-full text-left py-3 text-sm font-bold text-slate-600 border-t border-slate-100">Previous conversations</button>
-        <button onClick={() => nav('/profile')} className="w-full text-left py-3 text-sm font-bold text-slate-600 border-t border-slate-100">Profile</button>
+        <button onClick={() => goToSettings(nav, location, '/stars')} className="w-full text-left py-3 text-sm font-bold text-slate-600 border-t border-slate-100">Previous conversations</button>
+        <button onClick={() => goToSettings(nav, location, '/profile')} className="w-full text-left py-3 text-sm font-bold text-slate-600 border-t border-slate-100">Profile</button>
         <button onClick={() => { onClose(); onEnd(); }} className="pill-btn bg-[#94c1c2] w-full text-sm py-2">End conversation</button>
         {/* the real viewport, to check the layout on a device (iPad Safari with tabs is about 1180 x 720) */}
         <div className="pt-2 text-[11px] text-slate-400 text-center">Screen {window.innerWidth} × {window.innerHeight} · ×{window.devicePixelRatio}</div>

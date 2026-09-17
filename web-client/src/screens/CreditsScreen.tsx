@@ -1,6 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-import { CloseIcon } from '../components/Icons';
-
 // Third-party work the app is built on, with the licence terms each one asks for.
 const CREDITS: { name: string; what: string; by: string; licence: string; url: string }[] = [
   { name: 'Mulberry Symbols', what: 'Most of the card pictures and folder covers', by: 'Paxtoncrafts Charitable Trust (Steve Lee)', licence: 'CC BY-SA 2.0 UK', url: 'https://mulberrysymbols.org' },
@@ -10,13 +7,11 @@ const CREDITS: { name: string; what: string; by: string; licence: string; url: s
 ];
 
 export function CreditsScreen() {
-  const nav = useNavigate();
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ background: '#f0ebe1' }}>
       <div className="min-h-screen px-8 py-8 max-w-2xl mx-auto">
-        <header className="flex items-center justify-between mb-6">
+        <header className="mb-6">
           <h2 className="text-2xl font-extrabold text-black">Credits</h2>
-          <button onClick={() => nav(-1)} className="rounded-xl p-2 bg-white border-2 border-b-4 border-black"><CloseIcon /></button>
         </header>
         <p className="text-sm text-slate-500 mb-4">IrisSpeak is built on these open resources. Symbol pictures keep their original licences; the card model and sentence model run on your device.</p>
         <div className="space-y-3">

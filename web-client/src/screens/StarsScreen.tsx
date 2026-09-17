@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { api } from '../api/local';
 import { CloseIcon, StarIcon } from '../components/Icons';
 import { TranscriptMessages } from '../components/Transcript';
@@ -12,7 +11,6 @@ const topicLabels: Record<TopicCategory, string> = {
 };
 
 export function StarsScreen() {
-  const nav = useNavigate();
   const [sessions, setSessions] = useState<ExtendedSessionInfo[]>([]);
   const [selected, setSelected] = useState<ExtendedSessionInfo | null>(null);
   const [dialogue, setDialogue] = useState<DialogueMessage[]>([]);
@@ -43,9 +41,8 @@ export function StarsScreen() {
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ background: '#f0ebe1' }}>
       <div className="min-h-screen px-8 py-8 max-w-3xl mx-auto">
-        <header className="flex items-center justify-between mb-6">
+        <header className="mb-6">
           <h2 className="text-2xl font-extrabold text-black">Your conversations</h2>
-          <button onClick={() => nav(-1)} className="rounded-xl p-2 bg-white border-2 border-b-4 border-black"><CloseIcon /></button>
         </header>
 
         <div className="space-y-3">
