@@ -32,10 +32,11 @@ const CONTENT_W = 10 * 96 + 9 * 12;   // 1068
 // 1080x700, iPad mini about 1133x640; the 13-inch is about 1366x920 and keeps the normal layout. In the short
 // ones the action buttons (Refresh / Clear / Done / Feedback) stand in a column on the right of the board instead
 // of a row under it, and the canvas is shorter, so the cards get the height back.
-const ACTION_COL_W = 150;
-const SIDE_DESIGN_H = 800;
+const ACTION_COL_W = 112;   // one tile wide (sm:w-24 = 96px) plus breathing room
+const SIDE_DESIGN_H = 760;   // deck + panels + fixed row, no action row
 function useShortLandscape() {
-  const calc = () => window.innerWidth >= 1000 && window.innerHeight <= 760 && window.innerWidth > window.innerHeight;
+  // iPad-class: landscape, at least 1000 wide, not taller than 900 (an 11-inch iPad is 820 tall; with Safari's tab bar ~720)
+  const calc = () => window.innerWidth >= 1000 && window.innerHeight <= 900 && window.innerWidth > window.innerHeight;
   const [v, setV] = useState(calc);
   useEffect(() => { const f = () => setV(calc()); window.addEventListener('resize', f); window.addEventListener('orientationchange', f); return () => { window.removeEventListener('resize', f); window.removeEventListener('orientationchange', f); }; }, []);
   return v;
@@ -798,11 +799,11 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
       {!sideActions && (
         <div className="flex-shrink-0 flex items-center gap-2 sm:gap-3 pb-1">
           <div className="flex-1" />
-          <button onClick={onRefresh} disabled={busy} className="pill-btn bg-slate-500 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-8 py-2 sm:py-3">↻ Refresh</button>
-          <button onClick={onClear} disabled={busy || interim.length === 0} className="pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3">✕ Clear</button>
-          <button onClick={onDone} disabled={busy} className="pill-btn bg-[#f09281] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg">Done</button>
+          <ActionTile label="Refresh" icon="↻" tint="bg-slate-200" onClick={onRefresh} disabled={busy} />
+          <ActionTile label="Clear" icon="✕" tint="bg-white" onClick={onClear} disabled={busy || interim.length === 0} />
+          <ActionTile label="Done" icon="✓" tint="bg-[#f09281]" onClick={onDone} disabled={busy} />
           <div className="flex-1 flex justify-end">
-            <button onClick={onFeedback} disabled={busy} className="pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3" title="Tell us when the board misses">💬 Feedback</button>
+            <ActionTile label="Feedback" icon="💬" tint="bg-white" onClick={onFeedback} disabled={busy} title="Tell us when the board misses" />
           </div>
         </div>
       )}
@@ -811,34 +812,33 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
 
       {/* Short landscape (iPad Safari with tabs): the same four buttons as a column on the right of the board */}
       {sideActions && (
-      <div className="flex-shrink-0 flex flex-col justify-end gap-2 pb-2" style={{ width: ACTION_COL_W }}>
-
-        <button
-          onClick={onRefresh}
-          disabled={busy}
-          className={`pill-btn bg-slate-500 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-8 py-2 sm:py-3 ${sideActions ? 'w-full' : ''}`}
-        >↻ Refresh</button>
-        <button
-          onClick={onClear}
-          disabled={busy || interim.length === 0}
-          className={`pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3 ${sideActions ? 'w-full' : ''}`}
-        >✕ Clear</button>
-        <button
-          onClick={onDone}
-          disabled={busy}
-          className={`pill-btn bg-[#f09281] disabled:opacity-40 text-base px-8 sm:px-10 py-3 shadow-lg ${sideActions ? 'w-full' : ''}`}
-        >Done</button>
-        <div className="mt-4">
-          <button
-            onClick={onFeedback}
-            disabled={busy}
-            className={`pill-btn bg-white text-slate-600 border-2 border-slate-400 disabled:opacity-40 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3 ${sideActions ? 'w-full' : ''}`}
-            title="Tell us when the board misses"
-          >💬 Feedback</button>
-        </div>
+      <div className="flex-shrink-0 flex flex-col justify-start items-center gap-2 sm:gap-3 pt-1" style={{ width: ACTION_COL_W }}>
+        <ActionTile label="Refresh" icon="↻" tint="bg-slate-200" onClick={onRefresh} disabled={busy} />
+        <ActionTile label="Clear" icon="✕" tint="bg-white" onClick={onClear} disabled={busy || interim.length === 0} />
+        <ActionTile label="Done" icon="✓" tint="bg-[#f09281]" onClick={onDone} disabled={busy} />
+        <div className="mt-2"><ActionTile label="Feedback" icon="💬" tint="bg-white" onClick={onFeedback} disabled={busy} title="Tell us when the board misses" /></div>
       </div>
       )}
     </div>
+  );
+}
+
+/** Refresh / Clear / Done / Feedback as cards: the quick-row chip's size and border, so the whole bottom of the board
+ *  is one family of tiles. */
+function ActionTile({ label, icon, tint, onClick, disabled, title }: { label: string; icon: string; tint: string; onClick: () => void; disabled?: boolean; title?: string }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      title={title}
+      style={{ touchAction: 'manipulation', WebkitTouchCallout: 'none' as any, WebkitUserSelect: 'none' }}
+      className={`w-[72px] h-24 sm:w-24 sm:h-28 flex flex-col items-center justify-between rounded-2xl ${tint} border-2 border-b-4 border-black hover:shadow-md active:scale-95 transition-all duration-150 p-2 pt-1.5 pb-1.5 select-none disabled:opacity-40 disabled:active:scale-100`}
+    >
+      <div className="flex-1 w-full rounded-xl flex items-center justify-center">
+        <span className="text-3xl leading-none" aria-hidden="true">{icon}</span>
+      </div>
+      <div className="text-xs sm:text-sm font-bold text-slate-700 line-clamp-2">{label}</div>
+    </button>
   );
 }
 
