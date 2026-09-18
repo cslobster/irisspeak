@@ -19,7 +19,7 @@ scrolling on any screen** (everything zoom-to-fits the viewport), colourful-and-
 OpenDyslexic font, Fitzgerald-Key card colours (topic/things = orange `#FFE3C2`, action/verbs =
 green `#D9F2D0`, feeling = blue `#D6E8FB`, core/function = pink `#FCD9E5`, tailwind `bg-card-*`).
 
-## Repo map (monorepo, one branch `main`, everything deploys on push)
+## Repo map (monorepo `github.com/cslobster/irisspeak` — renamed from `cslobster/aac`; one branch `main`, everything deploys on push)
 
 | Piece | Dir | Deployed as | Stack |
 |---|---|---|---|
