@@ -1,144 +1,142 @@
-# IrisSpeak — Domain Context
+# IrisSpeak — Domain glossary
 
-## Current architecture (as of the 2026-09-15 reorg)
+Vocabulary for the **current on-device design** (since 2026-09-15). `CLAUDE.md` is the orientation
+document (architecture, routes, file map, workflow); this file only defines terms so conversations
+and code use the same words. Add an entry when a new domain concept gets its first real design
+discussion; delete or correct entries that go stale.
 
-The project was renamed AACessTalk → IrisSpeak and the repo restructured into a monorepo
-(`web-client/`, `src/` backend, `admin/`, `ios/`, `model/`, `site/`, `docs/` — see `CLAUDE.md` for
-the full layout). The core product mechanism changed too: card suggestions and sentence
-generation, originally a cloud LLM call (Gemini) per turn, now run **on the child's device** via
-a small fine-tuned model (irisspeak-135m: a card-ranking model + a sentence realiser, both
-exported to ONNX and run in-browser with onnxruntime-web). The training/export/eval pipeline for
-that model lives in `model/`; the runtime that loads and calls it in the browser is
-`web-client/src/engine/` (`model.ts`, `realiser.ts`, `grammar.ts`). Model weights are hosted on
-Cloudflare R2 (`model.irisspeak.org`), not in this repo or on the app's own origin.
+The pre-2026-09 glossary (Corpus, Corpus Enrichment, Folder Card triggers via `folder_cards.yml`,
+Card Pool, Small-Talk Card, Multi-Digit Number Tap, Vocabulary Slot taxonomy, ARASAAC expansion plan)
+described the deleted cloud-LLM path. It is preserved in git at `git show 4014939:CONTEXT.md` and
+is **not** a description of the shipped product. The reasoning that still matters is folded into the
+entries below.
 
-**Almost everything below this point (Corpus, Card, Folder Card, Personalization, Small-Talk
-Card, etc.) describes the *original cloud-LLM path* — the per-turn card-generation/sentence-
-inference code that used to live in `src/lib/moderator.ts` and friends, plus `web-client/legacy/`.
-That code was confirmed dead (nothing in the shipped app, admin, or iOS called any of it) and
-deleted on 2026-09-17 — see `CLAUDE.md`'s Architecture section for exactly what went and why it
-was safe. This glossary is kept as historical/design-reasoning documentation (why folders exist,
-why personalization splits into three mechanisms, etc.) in case any of it resurfaces, not as a
-description of the current child-facing experience.** A fresh on-device-path glossary (Card Model,
-Realiser, Board, Reranker, etc.) hasn't been written yet — start one here when that domain gets
-its first real design discussion, the way this legacy glossary grew.
+## People and accounts
 
-## Glossary
+**Dyad** — a parent–child pair; the unit of account (`dyad` table). Holds child name/gender/age,
+free-text notes, `communication_style`, `setting`, the parent's email, Google identity, and
+`status` (`pending` after self-serve signup until an admin approves; `active` otherwise). One dyad
+is shared by the web app, iOS app and admin site.
 
-### Corpus
-The local vocabulary database used to constrain child-card generation (legacy LLM path — see
-Current architecture above). Was a CSV file loaded at startup by `corpus.ts`.
+**Partner** — whoever is talking with the child (parent, teacher, clinician). The partner asks;
+the child answers with cards. "Parent turn" and "partner turn" are the same thing in code.
 
-**Deleted 2026-09-17** along with the rest of the legacy card-generation code (`corpus.ts` and its
-test are gone) — nothing live read it. Kept below as design history only. For the record: the repo
-reorg (`1ff8f9e`, 2026-09-15) had moved this file from root `data/` to `model/data/` without
-updating `corpus.ts`'s hardcoded path, so the legacy path was already throwing `ENOENT` in every
-environment (including production) by the time it was deleted — see `CLAUDE.md` for the equivalent
-bug that *did* need a real fix (`startSession`'s static-guides lookup, same root cause, still live).
+**Login code** — the password for alias+code sign-in (`dyad_login_code`). Chosen by the parent at
+signup, stored inactive, activated on admin approval. Google sign-in bypasses it.
 
-**As of 2026-07-29 (`6dc8371`, "Un-bypass AAC card generation"), the corpus is no longer a post-hoc semantic-match target — it's given to the LLM directly.** `moderator.ts` passes the full `topic`/`action` category word lists straight into the prompt (`buildChildCardPrompt`); the model is asked to reason about the parent message's theme and pick 6 ranked candidates per category from that real list, and `corpus.ts` does an exact (case-insensitive) lookup to attach the real image/category and reject anything hallucinated outside the list. There is no fuzzy or embedding-based matching in this path anymore — `corpus.ts`'s cosine-similarity retriever and the `@xenova/transformers` dependency it used were deliberately removed in the same commit (see Corpus Enrichment below for why). The precomputed `data/minilm_name_embeddings.bin`/`.meta.json` files are still on disk but currently unused by any code path.
+**Guest** — the hardcoded `guest`/`12345` dyad behind "Continue as Guest".
 
-**Current state (verified 2026-07-29):** the file has been swapped out multiple times during development and is presently the 738-row Mulberry set (see Mulberry Symbol Set) — a smaller, real-AAC-pictogram set added by a collaborator specifically to test how cards look with real images, not a permanent vocabulary decision. An earlier ~2,000-word corpus (Dale-Chall word list) existed at one point but is gone and not coming back — it's noted here only as history. The corpus file can change without this doc being updated (the project has more than one contributor and there's no guaranteed process for keeping this in sync) — **treat this section as a starting hypothesis and verify the live file before relying on a specific row count or column set.** The standing target for growing this corpus is the ARASAAC pictogram expansion (see ARASAAC / Vocabulary Expansion), not a return to Dale-Chall.
+## The conversation
 
-### Corpus Entry
-A single row in `corpus_vocabulary.csv` — **columns vary by whichever vocabulary set is currently loaded; verify against the live file rather than assuming.** As of the current Mulberry-set state: `category`, `name_en`, `image_url` (real pictogram path, e.g. `/symbols/mulberry/correct.svg` — unlike the historical Dale-Chall version, this set ships with real images already wired for direct use, no separate image-sourcing step needed). A `description_brief` column (optional visual description, reserved for future LLM context) existed in an earlier version of this file and may reappear once the ARASAAC expansion lands, since ARASAAC entries are expected to carry one.
-- `name_en` — the display word shown on the card and spoken by TTS
-- `category` — the AAC slot this word belongs to (see Vocabulary Slot)
+**Session** — one conversation (`session` table): `initial → started → conversation → terminated`;
+gets an optional 1–5 rating and a title (first partner message, or a best-effort Gemini caption at end).
 
-### Mulberry Symbol Set (cboard deck)
-A 741-word, real AAC pictogram set (SVG images) originally sourced from the open-source `cboard` project's Mulberry symbols, bundled via `web-client/public/cboard_cards.json` and also loaded directly as `data/corpus_vocabulary.csv` (738 rows — one entry appears to differ between the two copies; not yet reconciled). Added by a collaborator to see real pictograms on cards during testing. As of `6dc8371` (2026-07-29) this set **is** the vocabulary the main dynamic topic/action card-generation flow draws from directly (see Corpus) — it's also still used separately by the card-search "View all words" overlay. Emojis were tried earlier as a fallback image source and rejected as insufficiently relevant/precise for real communication.
+**Turn** — one side of the exchange: a partner turn (text) or a child turn (cards + the realised
+sentence). The app mirrors each turn to `POST …/device/turn`. A child may bank several sentences
+before pressing Done; each is its own turn.
 
-### Vocabulary Slot
-The semantic role a word plays in AAC communication. Used as the `category` value in the corpus.
+**Setting / Place** — where the conversation happens: `home, school, restaurant, doctor, play,
+transport, selfcare, unknown` (`engine/settings.ts`). Saved on the profile, written into the model
+prompt ("Setting: school."), picks the question bank, and biases the personal row. The v7 model was
+distilled specifically so it *uses* this token (earlier data had random setting labels).
 
-**Verified 2026-07-31 against the live `data/corpus_vocabulary.csv`: the actual `category` column only contains 4 flat values — `topic`, `action`, `core`, `emotion`** (matching `CardCategory` in `types.ts`). There is no `topic_school`/`topic_meals`/`people`/`need`/etc. subcategory split in the live corpus — `corpus.wordsByCategory()` reads by these 4 flat buckets only. An earlier corpus version apparently had a richer slot taxonomy (kept below for history), but it does not describe the current Mulberry-set file. Don't assume finer-grained categories exist without re-checking the live CSV.
+**Question bank** — `public/questions.json`: the top partner questions per setting, ranked by real
+frequency in the AAC training corpora (see `docs/QUESTION-BANK.md`). Shown in `AskPanel`.
 
-| Slot (historical, not live) | Purpose | Examples |
-|---|---|---|
-| `core` | High-frequency communication words | want, need, go, stop, help, more, finished |
-| `action` | Verbs — the action/verb slot | eat, drink, play, read, swim, make |
-| `feeling` | Emotional and state words | happy, sad, tired, scared, frustrated |
-| `repair` | Conversation repair phrases | not that, again, different, wait, start over |
-| `need` | Self-advocacy and needs words | bathroom, break, quiet, food, drink |
-| `people` | People words — the who/subject slot | mom, dad, friend, teacher, doctor |
-| `topic_school` | School context words | teacher, homework, pencil, recess, math |
-| `topic_meals` | Meal context words | pizza, juice, snack, plate, hungry |
-| `topic_play` | Play context words | game, toy, turn, win, fun |
-| `topic_clinic` | Medical context words | doctor, hurt, pain, medicine, stomach |
-| `topic_transitions` | Transition and movement words | home, car, next, first, then, later |
-| `general` | Words that don't fit a specific slot | catch-all for obscure or infrequent vocabulary |
+## Cards and the board
 
-### Corpus Enrichment
-Originally: the process of matching an LLM-generated word against the corpus *after generation* using MiniLM semantic search, to produce a `corpus_name`, `corpus_category`, and match quality score. **This post-hoc approach is gone, not just bypassed** — as of `6dc8371` (2026-07-29) it's been replaced by theme-locked prompting: the LLM is given the real category vocab *before* it generates (see Corpus), so there is no separate "enrichment" match step anymore, just an exact lookup to attach image/category metadata to a word the model already chose from the real list.
+**Card** — one tappable vocabulary item. Identity = a stable id from `model/vocab/vocab.csv`
+(`card_0000`…); display word = `speak`; picture from `card_images.json` (Mulberry SVG, OpenMoji SVG,
+or an emoji fallback). Vocabulary categories (food, actions, feelings, core, phrases, …) collapse to
+four UI categories: **topic** (things), **action**, **emotion/feeling**, **core** (function words).
+Colours follow the Fitzgerald Key.
 
-**Why the old approach was replaced:** A deliberate diagnostic (LLM-raw output vs. corpus-matched output) found post-hoc corpus-matching itself was degrading card relevance — matched cards often had little to do with the actual conversation, to the point where the family couldn't build real sentences from them. Handing the model the real vocabulary upfront and asking it to reason within it (with 6 ranked candidates per category as a backstop) resolved the bounded-vocabulary-vs-relevance tension without needing a match step at all.
+**Vocabulary** — the 3,238-card inventory (`model/vocab/vocab.csv`, append-only ids, curated from
+Cboard Classic, Project Core, and 25 published AAC vocabularies; see `model/vocab/README.md`). Custom
+words and folder browsing extend it per child; the model itself only ever ranks these rows.
 
-**Relevant to `docs/prd-corpus-expansion.md` Tier 2:** that PRD's "constrain-before-generate" design assumes `corpus.ts` still has a reusable exact→word-boundary→cosine retriever to narrow a shortlist before the LLM call. That retriever (and its `@xenova/transformers` dependency) was deleted in this same commit — arguably because the *current* full-category-vocab-in-prompt approach already achieves a version of "constrain before generate" without narrowing, at the corpus's present size (~721 topic+action words). Tier 2's narrowing-via-retrieval will need new code (semantic or keyword-based) if/when it's built, not a reuse of removed code — most likely to matter once Tier 1 (ARASAAC expansion) makes the full category list too large to hand the LLM in full.
+**Board** — everything shown for one child turn: the Topic/Action/Feeling **panels** (15/3/3 on
+iPad, 12/3/3 on phones), at most one **folder card** in the last Topic cell, and the **quick row**.
 
-### Dyad
-A parent–child pair. The unit of account in the system. Contains child name, gender, and locale.
-`parent_type` (mother/father) and `communication_style` were removed from signup — neither
-shaped the child's experience (parent_type only drove cosmetic mother/father wording in two
-LLM prompts and one core card's label). `communication_style` stays a nullable column,
-editable later via Profile Settings; `parent_type` was dropped from the DB entirely.
+**Quick row** — fixed-position cards that never re-rank: `yes`, `no`, `please`, then five
+**personal cards**, then "More ideas" and "View all". Modelled on TD Snap's Quick Fires.
 
-### Turn
-A single side of a conversation — either a parent turn (text input) or a child turn (card selection). The core conversation loop alternates turns.
+**Personal card** — one of the child's own words for the current question: cards from their
+history (weighted by same setting and recency), words in the profile notes, and custom words, scored
+by the model's probability for *this* state (`engine.personalRow`). A brand-new child gets the
+model's next-best content cards instead.
 
-### Card
-A tappable vocabulary item shown to the child. Has a `label` (LLM-generated word) and a `corpus_name` (matched word from corpus — what the child sees and hears). Card categories: `topic`, `action`, `emotion`, `core`.
+**Folder card** — a card that opens a Cboard folder (Numbers, Food, People…) instead of adding a
+word. Decided once per question and frozen: question-type routes → the model's own `<folder:*>`
+output rows (≥ 8 % probability) → keyword triggers (`public/folders.json`) → the folder whose members
+carry the most ranking mass. Exists because open-set answers ("How old are you?") need a picker, and
+because both an LLM and a small model miss the obvious case often enough to want a regex backstop.
 
-### Folder Card (added 2026-07-29)
-A `topic`-category card with `is_folder: true` and a `folder_path` (e.g. `"numbers"`, `"describe > colours"`) instead of a single word — appears **inside the Topic column, replacing one of the 4 topic-word slots per folder card** (not additive — the column always tops out at 4 tiles total, so most turns are still all real words and a folder just swaps in for one when it clearly applies). Shown with the folder's real Cboard icon (`data/folder_cards.yml`'s `icon` field, e.g. `count_,_to.svg` for Numbers — same asset `CardSearchOverlay.tsx`'s `FOLDER_ICONS` map uses for the browse view) as `corpus_image_url`, plus a noticeable dog-eared folded-corner tab overlay (`CardChip.tsx` — a CSS triangle + 📁, not just a small badge, since a plain icon wasn't noticeable enough in practice) so it still reads as "opens a picker," not a normal word. Tapping it opens `CardSearchOverlay` scoped directly into that Cboard folder (via its `initialPath` prop) instead of adding a card to the selection. Exists for questions the fixed topic/action vocab can't answer well (e.g. "How old are you?" → a Numbers folder), so the child can pick the exact value themselves.
+**Route (question-type routing)** — regexes in `local.ts` (`ROUTES`, `SETTING_ROUTES`) that map the
+*shape* of a question (who / where / when / how many / colour / "A or B" …) to a folder and to
+normally-hidden core words that answer it (me, here, now…). Steers, never pins answer words (pins
+were removed when the distilled model stopped needing them).
 
-`data/folder_cards.yml` also carries each folder's actual `words` list (mirrored from `web-client/public/cboard_folders.json`, e.g. numbers' `[zero, one, ..., nine]`) — when a folder card is shown, `generateChildCards()` excludes those exact words from the regular topic-word pool, so the child never sees e.g. both a loose "five" card and the Numbers folder card at once (the folder already covers it). This means backend and frontend now both encode a duplicate of each allow-listed folder's word list — if `cboard_folders.json` changes for one of these five folders, `folder_cards.yml`'s `words` needs a matching update or the exclusion logic drifts stale.
+**Choice cards** — options named in the question ("juice or milk?") are looked up by label and pinned
+to the front of their panels, because offering a choice only works if both options are on the board.
 
-**Trigger is a hybrid, not pure LLM judgment** (`moderator.ts`): the LLM may emit a `folder: [path]` (or `[path1, path2]`) YAML line from a small curated allow-list in `data/folder_cards.yml` (`loadFolderCards()` in `staticData.ts`), cross-referenced against `web-client/public/cboard_folders.json`'s actual folder paths. **This alone proved unreliable even for the canonical "How old are you?" case** — empirically, prompting alone (even a strongly-worded "you MUST" instruction) still misses a meaningful fraction of the time, because the corpus's topic vocab already contains some literal number words, giving the model an easy excuse to skip the folder as "redundant."
+**Dead rows** — the ~340 vocabulary rows with no training target; masked out of the softmax at train
+and inference time. Still reachable through search, folders and custom words.
 
-**As of 2026-08-01, the keyword backstop is data-driven, not a hardcoded TS regex list.** Each `data/folder_cards.yml` entry carries its own `triggers: [phrase, ...]` field — literal, narrow phrases (case-insensitive, word-boundary matched, e.g. `numbers`: `["how old", "your age", "what age"]`). `detectFoldersByKeyword()` in `moderator.ts` loops over whichever folders are currently allow-listed and builds the match regex generically from each entry's `triggers` — there is no per-folder code in `moderator.ts` anymore (previously a `FOLDER_KEYWORD_TRIGGERS` const with one hardcoded regex per folder). **Adding folder coverage going forward is a pure `folder_cards.yml` edit — no code changes needed.** Both the LLM pick and the keyword backstop are deduped and capped at `MAX_FOLDER_CARDS` (2) — folders are meant to be rare, so the prompt explicitly tells the model most messages should get zero folder lines, and the trigger phrases are deliberately narrow (exact phrasings only) rather than broad topic matches.
+**Prior debiasing** — model-only ranking uses `log p − 0.5·prior` so cards the data names everywhere
+(Tired, Wait, Need) stop crowding every panel.
 
-**Coverage as of 2026-08-01: 35 of the ~45 folders in `cboard_folders.json` are wired** (up from 5, across two same-day expansion passes — 9 folders, then a further 21 once the trigger mechanism proved itself data-driven). Wired: the original `numbers`, `describe > colours`, `people > family`, `time`, `weather`; `sports`, `snacks` (covers "favorite ice cream flavor" — ice cream lives under `snacks`, not `food`), `drinks`, `animals`, `toys`, `food`, `transport`, `places`, `clothing`; and `technology`, `furniture`, `hygiene`, `kitchen`, `plants`, `school`, `activities`, `body`, `people`, `people > characters`, `places > countries`, `animals > birds`, `animals > insects`, `animals > marine animals`, `animals > wild animals`, `food > fruit`, `food > vegetables`, `food > soup`, `clothing > clothing accessories`, `describe > shapes`, `school > class room`. Each new entry's `icon` reuses a path already present in `web-client/src/components/CardSearchOverlay.tsx`'s `FOLDER_ICONS` map (subfolders reuse their parent's top-level icon, e.g. `people > characters` reuses `people`'s), so no new image assets were needed. **Deliberately left unwired: `Root`, `quick chat`, `position`, `questions`, top-level `describe`, `emotions`, `actions`** — these don't fit the "pick one specific answer out of an open set" pattern (`Root` is a junk bucket; `emotions`/`actions` are already covered by the fixed feelings set and the action vocab respectively; the rest are too generic/meta to be a single-topic answer folder). If a genuine need for one of these seven surfaces, add it the same way — it's still just a `folder_cards.yml` entry.
+**Reranker** — a 3-layer MLP over the model's top-K with MiniLM question similarity and personal
+features. Retained for A/B (`profile.reranker_ab`) but **off by default** since the distilled model.
 
-**LLM output-format gotcha:** the model is asked to emit the `folder` line in the same bracket style as `topics`/`actions`. Empirically (live-tested against the real ~700-word corpus prompt, not just a small mock vocab), Gemini sometimes ignores "decide this silently" for the folder-decision step and free-writes reasoning prose, then drops the brackets (`folder: numbers` instead of `folder: [numbers]`). `extractYamlList()` (`gemini.ts`) now has a third bare-scalar fallback pattern specifically to survive this drift — if a future prompt tweak reintroduces a new optional key, expect the same failure mode and test against the real corpus size, not a short mock vocab, since prompt length seems to correlate with how often the model goes off-format.
+**Free card** — a card not in the vocabulary: a long-press word form (`grammar.ts`), a searched
+Cboard word, or a custom word. Goes into the sentence like any other card.
 
-### Multi-Digit Number Tap (added 2026-08-03)
-When a child taps consecutive digit-word cards from the Numbers folder (e.g. `one` then `four`), `buildSentenceInferencePrompt` (`prompts.ts`) merges the run into a single multi-digit numeral (`"14"`) before the rest of the prompt logic ever sees it — otherwise rule 3 ("every distinct tapped card must be represented") would force the LLM to treat them as two separate ideas ("I am one and four" instead of "I am 14"). `mergeConsecutiveDigitTaps()` only merges `topic`-category cards whose word is one of `zero`–`nine`, and only when they're adjacent in tap order — a non-digit card in between (or a digit word appearing as an `emotion`/`core` card) breaks the run and each digit is left as its own word. Same-digit repeats in a row (`one`, `one`) still merge (`"11"`) rather than falling into the unrelated repeat-tap-for-emphasis path (`summarizeWords`'s "(tapped Nx)" logic), since two consecutive taps of the Numbers folder are far more likely to be building a number than emphasizing a single digit.
+**Custom Vocabulary Word** — a per-dyad word (`dyad_custom_word`): parent-typed, category topic or
+action, with an uploaded image (base64) or an emoji, optionally an `is_preference_pointer` marking
+an existing vocabulary word as a favourite. Synced to the device and used by search and the personal
+row. The "AI-detected from transcripts" source from the old PRD is not built.
 
-### Card Pool (added 2026-08-01)
-The ranked, corpus-resolved candidate list of topic/action words for one dialogue turn, persisted as JSONB in `child_card_recommendation.pool` (`{ topics: string[], actions: string[], folderPaths: string[] | null, showAgeCard: boolean | null, smallTalk: 'hi'|'bye'|'thanks'|'wellbeing'|'none'|null }`). Introduced to replace the old refresh behavior — previously, tapping Refresh called `generateChildCards()` again from scratch, a brand-new LLM call each time with only a soft prompt-level "avoid these already-shown words" instruction (`seenLabels`), which read as "random" rather than "the next best options." `showAgeCard`/`smallTalk` were added alongside the identity/small-talk cards below and, like `folderPaths`, are decided exactly once per turn and frozen — see Small-Talk Card.
+## Sentence
 
-Now `buildChildCardPrompt` asks the LLM for **12** ranked candidates per category (up from 6) on the turns that need a fresh LLM call at all, and `generateChildCards()` resolves and appends all of them (not just the first 4) into the pool. A refresh first tries to page through the **unseen tail of the existing pool** (`pool.topics`/`pool.actions` filtered against `seenLabels`, sliced in stored rank order) — genuinely "show me the next 4, in order" — and only calls the LLM again once that reservoir is exhausted (typically after the initial batch plus ~2 refreshes). This also fixed a latent bug: folder-card presence (`pool.folderPaths`) is now decided exactly **once** per turn and frozen — previously the folder decision (LLM pick + keyword backstop) reran on every refresh call, so a folder card could silently appear/disappear across refreshes of the same turn.
+**Realiser** — the on-device sentence model (SmolLM2-135M fine-tune): tapped cards + the partner's
+question → one sentence, decoded under a hard constraint (only card words, their inflections, a
+fixed list of function words, and punctuation; negation words unlock only when a negation card was
+tapped). Until it has loaded, the **rule realiser** (`engine.realise`: cards in order, capitalised,
+punctuated) is used. "Another" re-samples avoiding earlier candidates.
 
-No API or frontend change was needed — `pool` is DB-internal, not part of `ChildCardRecommendationResult`, so `SessionScreen.tsx`'s refresh button and `api/client.ts` are unaffected; the pagination behavior lives entirely inside `generateChildCards()`/`refreshChildCards()` in `moderator.ts`.
+**Banked sentence** — a sentence the child approved and the app spoke; several can be banked in one
+child turn before Done hands the turn back.
 
-### Small-Talk Card (added 2026-08-01, wellbeing added 2026-08-02)
-A deterministic-trigger direct-answer card for conversational small talk that isn't really "topic/action vocab" (greetings, farewells, compliments, wellbeing check-ins) — the same `moderator.ts` mechanism as Folder Card's keyword backstop, but for words the corpus already has tagged `core` (`hello`, `goodbye`, `thank you`, `good`, `bad`) that the LLM prompt never surfaces because `generateChildCards` only ever pulls the `topic`/`action` categories. Four kinds, matched in order against the parent's last message and frozen for the turn (`CardPool.smallTalk`): a message-initial `hi`/`hello`/`hey` → "Hi!"; `bye`/`goodbye`/"see you"/"good night" anywhere in the message → "Bye!"; a compliment — both effort-praise ("good job", "proud of you") and everyday appearance/belongings compliments ("Nice shoes!", "I like your shirt", "You look great") → "Thank you!"; a wellbeing/recap question — deliberately general, not anchored to one literal sentence: "how('s| was| is) your ___" (day, trip, the party, school — whatever just happened), "How are you?", "How's it going?", "How do you feel?", or a direct check like "Was this/that/it good/fun/okay?" → a **pair** of cards, "Good!" and "Bad!" — the one case that isn't a single obviously-correct response, so it takes two topic-slot budget instead of one. Deliberately a small hardcoded regex list in `moderator.ts`, not a `folder_cards.yml`-style data file, since (per that file's own doc comment) this is a handful of fixed, singular cases rather than a scaling problem across many categories.
+## Feedback and learning
 
-### Personalization
-The umbrella goal that card recommendations should adapt to a specific child, not just to generic conversational context — a core, stated driving principle of the project. Splits into three independent mechanisms, because each fails independently and is fed by a different signal: **Learned Preference**, **Vocabulary Coverage**, and **Custom Vocabulary Word** (with **Profile Fact** feeding the latter two). None are implemented yet as of this writing (2026-07-31 design discussion) — see each entry for current state.
+**Board feedback** — the partner's verdict on one board (`board_feedback`): "I don't like these
+cards" with the crossed-out ids, or "the child wanted to say …" with the partner's own answer, plus
+the board as shown, the prefix, setting, question and model version. Training material for the next
+card model (`/admin/feedback?format=jsonl` → `model/data/build_states.py`).
 
-### Learned Preference
-A per-child ranking signal derived purely from behavior — `user_event` (every UI tap) and `interim_card_selection` (every card actually chosen per turn), both persisted today but never yet aggregated into a preference model or used to influence card generation. Requires no parent action, unlike Profile Fact.
-_Avoid_: conflating with Profile Fact — different source (observed behavior vs. parent-stated), different implementation (background aggregation vs. a settings form).
+**History** — the child's last 50 confirmed turns, kept on the device and pulled from
+`/dyad/history` on sign-in so other devices' turns count too. Feeds the personal row and the
+"Earlier:" line of the model prompt (only the last two turns — more let old answers outweigh the
+question).
 
-### Vocabulary Coverage
-Whether *any* card exists to answer a given question's theme, independent of which child is asking — a content-completeness property of the shared corpus/folder catalog, not a per-child personalization concern. Largely solved today: 35 of the ~45 folders in `web-client/public/cboard_folders.json` (790 total folder+word rows) are curated into `data/folder_cards.yml` with a hybrid LLM-choice + data-driven-keyword backstop (see Folder Card) — the remaining 7 are deliberately excluded (junk/meta categories, not a coverage gap). Since triggers now live as data (each folder's own `triggers` list) rather than code, closing any further gap is a `folder_cards.yml` edit, not a `moderator.ts` change. The universal last-resort fallback is the "View all words" search overlay, reachable from every child turn unconditionally (not gated behind any folder being detected that turn, and doesn't consume topic-tile budget) — this already guarantees a child can always find *something*, even though it's slow and defeats the point of a "smart" AAC as the primary path.
+**Personalisation** — the standing goal that boards adapt to the child. Implemented today as: the
+personal row (behaviour), profile notes and custom words (parent-stated), setting (context), and
+board feedback (partner-corrected, offline via retraining). No per-child model weights.
 
-### Profile Fact
-A piece of structured or freeform information about a child (favorite color, pet's name, school, notes) that informs **both** card generation and sentence inference (as of 2026-08-03 — previously card generation only). **Not its own storage mechanism** — each fact resolves to one of two things: (a) a preference pointer to a word that already exists in the shared corpus (e.g. "favorite color: red" just flags the existing corpus word `red` as this child's known preference, no new vocabulary needed), or (b) a new **Custom Vocabulary Word** if the fact isn't in the corpus at all (e.g. a pet's name — proper nouns can never be part of a shared vocabulary no matter how much the corpus grows). A small residual of genuinely non-word context (age, freeform notes) stays as plain prompt context rather than becoming a card. Facts are always included in full in the LLM prompt on every call — never conditionally retrieved (see Corpus Enrichment for why retrieval/RAG was already tried and rejected for a structurally similar problem) and never gated behind regex keyword-matching the way Folder Card triggers are, since a missed fact still has Vocabulary Coverage as a fallback underneath it — the severity that justifies Folder Card's hardcoded backstop doesn't apply here.
+## Model pipeline terms
 
-`buildProfileFacts()` (`moderator.ts`) is the single shared builder for the fact string (age/communication_style/known-favorites/notes) — both `generateChildCards()` and `inferSentenceFromCards()` call it, so a fact added to one path is automatically available to the other rather than needing a second hand-written copy. `inferSentenceFromCards()` fetches its own `is_preference_pointer` rows from `dyad_custom_word` (in parallel with the dialogue fetch) since sentence inference doesn't otherwise touch that table.
+**Card model** — the next-card ranker (SmolLM2-135M + a card output layer over the vocabulary +
+folder rows). Shipped version **v7**. **Distillation** — training the card model on a large
+teacher's next-card *distribution* rather than sampled replies (`docs/DISTILLATION.md`).
+**States** — (setting, question, tapped prefix) → target distribution rows built by
+`build_states.py`. **Blind judge** — an LLM asked "could a child answer this question with these
+cards?" per board, used as the acceptance gate for a new model (`model/eval/judge_boards.py`).
+**Manifest** — `manifest.json`/`realiser_manifest.json` on R2 listing the weight chunks; the
+version directory (`v7/…`) is recorded with every feedback row.
 
-### Custom Vocabulary Word
-A word that exists for exactly one dyad, not the shared corpus. Two sources: **parent-direct** (typed into a Vocabulary settings page or an intake wizard field — auto-approved immediately, since deliberate parent input carries no invention risk) and **AI-detected** (a name recurring across multiple *distinct sessions* in parent messages, not just repeated within one message — held in a pending-approval queue until a parent/admin confirms it, since this source is inference rather than a direct parent statement). Both need a `corpus.lookup()`-equivalent check per-dyad, since that function currently only knows the shared corpus and would silently discard any word it doesn't recognize as "hallucinated."
+## Admin analytics
 
-**Image sourcing:** parent-uploaded image is the primary path (auto-approved, same rule as parent-direct word entry — deliberate parent action carries no invention risk); generic emoji is the fallback when no upload exists. This narrows, rather than reverses, the project's earlier decision to reject emoji as a corpus image source (see Mulberry Symbol Set) — that rejection was about emoji as a *broad, primary* source across the shared corpus; this is a *last-resort* fallback for rare, per-child custom words only. Note for the upload UI: some custom words represent other people (a friend's name) who haven't consented to their photo being stored — worth a light "only upload photos you have permission to use" prompt, not currently a solved problem beyond that.
-
-### Session
-A single conversation between a parent and child within a topic context. Lifecycle: `initial → started → conversation → terminated`.
-
-### Daily Active Users (admin, added 2026-08-03)
-Global count of distinct dyads with at least one `user_event` row on a given calendar day, shown as a line chart (`DauChart.tsx`, admin's Stats tab) with 7/30/90-day range presets. Backed by `GET /api/v1/admin/analytics?view=dau&days=N` (`route.ts`), which uses `generate_series` LEFT JOINed against `user_event` so a day with zero activity still shows up as `0` rather than being skipped and leaving a gap in the line. **Gotcha:** the neon driver serializes the query's `::date` column as a full ISO timestamp string (e.g. `"2026-08-03T07:00:00.000Z"`, not a bare `"2026-08-03"`) — the frontend must slice to the first 10 characters before parsing, or naively appending a second `"T00:00:00"` produces `Invalid Date`.
-
-### ARASAAC
-The Aragonese Portal of Augmentative and Alternative Communication — an open pictogram library with ~30k entries and a public API (`api.arasaac.org`). Used as the primary source for vocabulary expansion. License: CC-BY-NC-SA (images are non-commercial; word names themselves are not copyrightable). Each pictogram has a numeric `_id` that maps to an image URL — stored for future image integration.
+**Daily Active Users** — distinct dyads with ≥ 1 `user_event` per calendar day
+(`/admin/analytics?view=dau`). Neon returns the `::date` column as a full ISO timestamp — slice to
+10 characters before parsing.

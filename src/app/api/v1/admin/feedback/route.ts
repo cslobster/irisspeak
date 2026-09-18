@@ -14,7 +14,7 @@ export async function GET(req: Request) {
   await ensureSchema();
   const url = new URL(req.url);
   const rows = (await sql`
-    SELECT f.*, d.child_name, d.parent_name
+    SELECT f.*, d.child_name
     FROM board_feedback f LEFT JOIN dyad d ON d.id = f.dyad_id
     ORDER BY f.timestamp DESC LIMIT 5000`) as any[];
   if (url.searchParams.get('format') === 'jsonl') {

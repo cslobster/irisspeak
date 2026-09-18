@@ -47,7 +47,7 @@ the published chunks from R2. See `docs/PLAN-RETRAIN.md`.
 cd web-client && npm install && npm run dev
 ```
 
-`web-client/legacy/` is the previous cloud-LLM client, kept for reference; it is not built.
+The previous cloud-LLM client (`web-client/legacy/`) was deleted 2026-09-17; it is in git history.
 
 ## Sign-in
 
