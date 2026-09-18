@@ -31,7 +31,7 @@ beforeEach(() => {
 });
 
 describe('startSession', () => {
-  it('reads the static initial guides from data/initial_parent_guides.yml (no LLM call)', async () => {
+  it('serves the static initial guides from staticData.ts (no LLM call)', async () => {
     mockSql.mockImplementation(() => Promise.resolve([]));
     mockSql.mockImplementationOnce(() =>
       Promise.resolve([{ dyad_id: fakeDyad.id, status: 'initial', topic_category: 'recall' }]),
@@ -41,8 +41,7 @@ describe('startSession', () => {
 
     expect(mockChat).not.toHaveBeenCalled();
     expect(result.recommendation.guides.length).toBeGreaterThan(0);
-    // Confirms staticData.ts is actually reading the real YAML file off disk (regression test
-    // for the 2026-09-15 data/ -> model/data/ path bug) and substituting {child_name}.
+    // Confirms the inlined guides are returned and {child_name} is substituted.
     expect(result.recommendation.guides.some((g) => g.guide.includes('Sammy'))).toBe(true);
   });
 

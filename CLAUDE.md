@@ -31,7 +31,7 @@ green `#D9F2D0`, feeling = blue `#D6E8FB`, core/function = pink `#FCD9E5`, tailw
 | Research site + model publishing | `site/` | irisspeak.org — Cloudflare Pages; `/paper/*` behind basic auth | static HTML + `chunk_model.py`/`upload_model.sh` to R2 |
 | Setting-turns dataset | `datasets/aac-setting-turns/` | released with the paper | JSONL |
 | Notes / plans / research | `docs/` | — | markdown (see index below) |
-| `data/` | root | read by the backend at runtime | exactly one file: `initial_parent_guides.yml` |
+| `TODO/` | root | — | notes; `TODO1.md` is the readable copy of the turn-1 parent guides inlined in `src/lib/staticData.ts` |
 | `Archive/`, `goal/`, `scripts/` | root | — | pre-2026-09 leftovers (old corpus scripts, screenshots); nothing live imports them |
 
 Model weights (~520 MB total; card model v7 fp16 in chunks + realiser) are **not in the repo**: they
@@ -141,7 +141,7 @@ Card identity: ids are `card_0000`-style from `model/vocab/vocab.csv`; `cards.js
 ## Architecture — backend (`src/`)
 
 Pure storage + auth. `src/lib/moderator.ts` has only the session lifecycle: `startSession` (static
-parent guides from `data/initial_parent_guides.yml`, no LLM), `endSession` (best-effort Gemini
+parent guides inlined in `src/lib/staticData.ts`, no LLM), `endSession` (best-effort Gemini
 session title via `gemini.ts` + `prompts.ts`; failure never blocks), `abortSession` (deletes row).
 `google.ts` = server-side OAuth code flow (GCP project "irisspeak"); the callback finds/links/creates a
 dyad and redirects back with a dyad JWT in the URL fragment. `auth.ts` = 30-day dyad JWT (`sub` =
@@ -234,7 +234,7 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
   `corpus.ts`, `web-client/legacy/`, prompt builders, their tests) was deleted 2026-09-17 (`23a73ec`).
   It's in git history if ever needed; don't resurrect it by accident.
 - The reorg moved `data/` → `model/data/` which broke `startSession`'s YAML read (`ENOENT` in prod);
-  fixed by restoring root `data/initial_parent_guides.yml`. Don't add pipeline data back into root `data/`.
+  later removed by inlining the guides into `src/lib/staticData.ts`; there is no root `data/` any more.
 - 2026-09-16/17: board redesign — quick row (yes/no/please + 5 personal cards + More ideas + View all),
   Topic 15 / Action 3 / Feeling 3, Feedback button, iPad short-landscape side column, settings-nav fixes.
 

@@ -1,18 +1,71 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import YAML from 'yaml';
 import type { ParentGuideElement, TopicCategory } from './types';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
-
-let _initialGuides: any | null = null;
+/** The static turn-1 parent guides per topic. Readable copy: TODO/TODO1.md. */
+const INITIAL_GUIDES: Record<string, { key: string; guide_category: string; guide: string; example: string }[]> = {
+  "plan": [
+    {
+      "key": "plan-inform",
+      "guide_category": "specification",
+      "guide": "Explain the main event of the day.",
+      "example": "Today we are visiting grandmother."
+    },
+    {
+      "key": "plan-todo",
+      "guide_category": "specification",
+      "guide": "Explain to-do of your child.",
+      "example": "Do you know what to do today, {child_name}?"
+    },
+    {
+      "key": "plan-expectation",
+      "guide_category": "intention",
+      "guide": "Ask your child what they expect to do.",
+      "example": "What do you want to do today, {child_name}?"
+    }
+  ],
+  "recall": [
+    {
+      "key": "recall-event",
+      "guide_category": "specification",
+      "guide": "Ask about an event of the day.",
+      "example": "What did you do, {child_name}?"
+    },
+    {
+      "key": "recall-memorable",
+      "guide_category": "specification",
+      "guide": "Ask about the most memorable thing of the day.",
+      "example": "What was the most memorable thing, {child_name}?"
+    },
+    {
+      "key": "recall-place",
+      "guide_category": "specification",
+      "guide": "Ask where {child_name} went to.",
+      "example": "Did you go to any interesting place, {child_name}?"
+    }
+  ],
+  "free": [
+    {
+      "key": "free-inform",
+      "guide_category": "specification",
+      "guide": "Raise what you are going to talk about.",
+      "example": "What do you want to talk about? {subtopic}?"
+    },
+    {
+      "key": "free-curiosity",
+      "guide_category": "encourage",
+      "guide": "Spice up the conversation.",
+      "example": "Why don't we talk about something interesting?"
+    },
+    {
+      "key": "free-specific",
+      "guide_category": "extend",
+      "guide": "Ask what specific things {child_name} wants to talk about {subtopic}.",
+      "example": "What do you want to specifically talk about {subtopic}?"
+    }
+  ]
+};
 
 export function loadInitialGuidesYaml(): any {
-  if (!_initialGuides) {
-    const yml = fs.readFileSync(path.join(DATA_DIR, 'initial_parent_guides.yml'), 'utf-8');
-    _initialGuides = YAML.parse(yml);
-  }
-  return _initialGuides!;
+  return INITIAL_GUIDES;
 }
 
 /** Return the static initial parent guides for turn 1. Substitutes {child_name}. */
