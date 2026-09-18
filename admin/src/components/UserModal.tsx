@@ -55,9 +55,11 @@ export function UserModal({ dyad, onSave, onClose }: Props) {
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8">
         <h2 className="text-2xl font-extrabold text-slate-800 mb-6">{isEdit ? 'Edit User' : 'Add User'}</h2>
 
-        {(googleEmail || savedSetting) && (
+        {(googleEmail || savedSetting || dyad?.login_code) && (
 
           <div className="mb-4 rounded-xl bg-slate-50 border-2 border-slate-100 px-3 py-2 text-xs font-semibold text-slate-600 space-y-1">
+
+            {dyad?.login_code && <div>Current login code: <span className="font-mono text-slate-800">{dyad.login_code}</span></div>}
 
             {googleEmail && <div>Signs in with Google: <span className="font-mono text-slate-800">{googleEmail}</span></div>}
 

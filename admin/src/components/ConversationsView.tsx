@@ -81,7 +81,9 @@ export function ConversationsView() {
                     <div className={`font-bold text-sm truncate ${selectedId === d.id ? 'text-indigo-700' : 'text-slate-700'}`}>
                       {d.child_name}
                     </div>
-                    <div className="text-xs text-slate-400 truncate mt-0.5">{d.alias}</div>
+                    <div className="text-xs text-slate-400 truncate mt-0.5">
+                      {d.alias}{d.login_code && <span className="font-mono text-slate-500"> · {d.login_code}</span>}
+                    </div>
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition flex-shrink-0">
                     <span
