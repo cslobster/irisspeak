@@ -4,7 +4,10 @@
 // Guests never touch the network: every call below is a no-op without a token.
 import { store, setProfile, getProfile, setCustomWords, type HistoryTurn, type ChildProfile } from '../engine/store';
 
-export const API_BASE = 'https://aac-roan.vercel.app/api/v1';
+// In dev (npm run dev) this goes through Vite's /api proxy (vite.config.ts) to the local backend
+// at localhost:3000, so local testing uses your own DB/env and doesn't depend on the deployed
+// backend at all. Production builds still call the deployed backend directly.
+export const API_BASE = import.meta.env.DEV ? '/api/v1' : 'https://aac-roan.vercel.app/api/v1';
 export const CLIENT_ID = 'web-ondevice';   // which app wrote a session; shown in the admin site
 const TOKEN_KEY = 'jwt';
 const ACCOUNT_KEY = 'account';
