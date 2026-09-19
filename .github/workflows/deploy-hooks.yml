@@ -1,7 +1,7 @@
 # Vercel Hobby only auto-deploys commits authored by the account owner (cslobster); everyone else's
 # pushes come back "Deployment was blocked". Deploy Hooks aren't subject to that check, so on every push
 # to main by anyone else, poke each project's hook. The hook URLs live in repo secrets:
-#   VERCEL_HOOK_WEB_CLIENT  VERCEL_HOOK_AAC  VERCEL_HOOK_ADMIN
+#   VERCEL_HOOK_WEB_CLIENT  VERCEL_HOOK_AAC  VERCEL_HOOK_ADMIN  VERCEL_HOOK_AAC_BACKEND
 # (Vercel project → Settings → Git → Deploy Hooks → name it "github-main", branch "main", copy the URL.)
 # A missing secret is skipped, so it's fine to set them up one at a time.
 name: Trigger Vercel deploys
@@ -19,8 +19,9 @@ jobs:
           WEB_CLIENT: ${{ secrets.VERCEL_HOOK_WEB_CLIENT }}
           AAC: ${{ secrets.VERCEL_HOOK_AAC }}
           ADMIN: ${{ secrets.VERCEL_HOOK_ADMIN }}
+          AAC_BACKEND: ${{ secrets.VERCEL_HOOK_AAC_BACKEND }}
         run: |
-          for name in WEB_CLIENT AAC ADMIN; do
+          for name in WEB_CLIENT AAC ADMIN AAC_BACKEND; do
             url="${!name}"
             if [ -z "$url" ]; then echo "$name: no hook secret, skipped"; continue; fi
             code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$url")

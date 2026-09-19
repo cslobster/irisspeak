@@ -262,7 +262,7 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
   builds `site/`. **Vercel is on cslobster's Hobby plan, which only auto-builds commits authored by
   cslobster** — anyone else's push shows "Deployment was blocked". Workaround in place:
   `.github/workflows/deploy-hooks.yml` POSTs each project's Vercel Deploy Hook on pushes to `main` by
-  other actors (hook URLs are the repo secrets `VERCEL_HOOK_WEB_CLIENT/AAC/ADMIN`; a missing secret is
+  other actors (hook URLs are the repo secrets `VERCEL_HOOK_WEB_CLIENT/AAC/ADMIN/AAC_BACKEND`; a missing secret is
   skipped). If a deploy doesn't appear, check the Action run first, then whether the secret exists.
   Until the secrets are set, a cslobster push (even empty) deploys everything before it. This repo's
   history is sometimes regenerated from outside (new hashes, same content) — on a "forced update",
