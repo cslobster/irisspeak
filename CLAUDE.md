@@ -246,6 +246,11 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
   chip budget (`CONTENT_W` in `SessionScreen.tsx`) at ten.
 
 ## Conventions & workflow
+- **Local dev servers:** whenever a session is going to touch `web-client/` or backend code, start
+  *both* dev servers proactively (don't wait to be asked): `npm run dev` at repo root (backend,
+  :3000) and `cd web-client && npm run dev` (:4200). Since `API_BASE` routes to `localhost:3000` in
+  dev (see "Running locally"), the web app needs the backend for everything now, not just the
+  on-device model — running only one half means logins and sessions fail outright.
 - **Git:** at session start `git fetch origin main`; if behind, `git pull --rebase origin main` before
   changes. After committing something the user asked for, **push to `origin main` in the same turn**
   (no PR step exists). Never force-push. One-line commit messages. End commits with the attribution
