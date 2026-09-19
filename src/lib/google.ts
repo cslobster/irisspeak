@@ -29,8 +29,12 @@ export function isAllowedRedirect(redirect: string): boolean {
   let u: URL;
   try { u = new URL(redirect); } catch { return false; }
   if (u.protocol === 'irisspeak:') return true;                             // iOS app (ASWebAuthenticationSession)
-  if (u.protocol === 'http:') return u.hostname === 'localhost' || u.hostname === '127.0.0.1';
+  const isLocalhost = u.hostname === 'localhost' || u.hostname === '127.0.0.1';
+  if (u.protocol === 'http:') return isLocalhost;
   if (u.protocol !== 'https:') return false;
+  // web-client's local dev server runs over a self-signed HTTPS cert (needed for iPad Safari
+  // testing), so location.origin there is https://localhost:4200, not http:.
+  if (isLocalhost) return true;
   const h = u.hostname;
   return h === 'irisspeak.org' || h === 'www.irisspeak.org' || h === 'irisspeak.com' || h === 'www.irisspeak.com'
     || h.endsWith('.irisspeak.org') || h.endsWith('.irisspeak.com') || h.endsWith('.pages.dev') || h.endsWith('.vercel.app');
