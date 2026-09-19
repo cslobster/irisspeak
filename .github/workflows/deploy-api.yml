@@ -1,0 +1,27 @@
+# API at aac-roan.vercel.app (Vercel project "aaatalk-api", repo root).
+# Deploys through the Vercel CLI with the owner's token, so any collaborator's push to main deploys;
+# Vercel's Git integration is switched off in vercel.json (git.deploymentEnabled).
+name: Deploy API
+on:
+  push:
+    branches: [main]
+    paths: ['src/**', 'package.json', 'package-lock.json', 'next.config.js', 'tsconfig.json', 'vercel.json', '.github/workflows/deploy-api.yml']
+  workflow_dispatch:
+concurrency:
+  group: deploy-api
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --global vercel@latest
+      - run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+      - run: vercel build --prod --token="$VERCEL_TOKEN"
+      - run: vercel deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN"

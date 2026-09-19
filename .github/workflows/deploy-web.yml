@@ -1,0 +1,28 @@
+# irisspeak.com (Vercel project "aaatalk", root directory web-client/).
+# Deploys through the Vercel CLI with the owner's token, so any collaborator's push to main deploys;
+# Vercel's Git integration is switched off in web-client/vercel.json (git.deploymentEnabled).
+name: Deploy web-client
+on:
+  push:
+    branches: [main]
+    paths: ['web-client/**', '.github/workflows/deploy-web.yml']
+  workflow_dispatch:
+concurrency:
+  group: deploy-web
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEB_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --global vercel@latest
+      # The project's Root Directory (web-client) is pulled with the settings, so the CLI runs from the repo root.
+      - run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+      - run: vercel build --prod --token="$VERCEL_TOKEN"
+      - run: vercel deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN"
