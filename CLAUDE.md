@@ -52,11 +52,14 @@ cd admin && npm install && npm run dev
 npm test            # vitest, src/__tests__/sessionLifecycle.test.ts
 ```
 
-**Gotcha — the web app does NOT talk to the local backend.** `web-client/src/api/remote.ts` hardcodes
-`API_BASE = 'https://aac-roan.vercel.app/api/v1'` (production). The Vite `/api` proxy in
-`vite.config.ts` is vestigial. To exercise local backend changes from the web app, point `API_BASE`
-at `http://localhost:3000/api/v1` temporarily (don't commit it). iOS also hardcodes the prod URL
-(`ios/.../Engine/RemoteApi.swift`).
+**Web app talks to the local backend in dev, production in prod** (fixed 2026-09-19).
+`web-client/src/api/remote.ts`'s `API_BASE` is `'/api/v1'` under `import.meta.env.DEV`, which
+Vite's `/api` proxy (`vite.config.ts`) forwards to `localhost:3000`; production builds still call
+`https://aac-roan.vercel.app/api/v1` directly. So `npm run dev` in `web-client` now exercises your
+own local `.env.local` DB/secrets — username+password login works immediately (seeded `guest`/
+`12345`), Google sign-in needs your own `GOOGLE_CLIENT_ID`/`SECRET`/`REDIRECT_URI` locally (the
+existing GCP OAuth client belongs to `coolcottontail@gmail.com`'s project, not this account). iOS
+still hardcodes the prod URL (`ios/.../Engine/RemoteApi.swift`) — untouched by this.
 
 Viewing on an iPad/iPhone on the same Wi-Fi: `ipconfig getifaddr en0` → `https://<ip>:4200`
 (self-signed cert; accept the Safari warning). Vite binds all interfaces (`host: true`).
