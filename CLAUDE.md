@@ -94,7 +94,7 @@ Partner asks a question (typed or Web Speech dictation)  → AskPanel / SessionS
        choice cards ("juice or milk?") pinned first → question-type ROUTES (who/where/when/how many/…)
        → one folder card (decideFolders: routes → model folder rows ≥8% → keyword triggers → category mass)
        → fill Topic/Action/Feeling panels from the ranking, de-duping stems, ≤2 glue words
-       → fixed quick row: yes / no / please + 5 personal cards (engine.personalRow: history+profile+custom words)
+       → fixed quick row: yes / no / please + "?" (marks the sentence a question) + 4 personal cards (engine.personalRow: history+profile+custom words)
 Child taps cards → addChildCard() re-predicts with the new prefix (optimistic UI)
   long-press a card → word forms (grammar.ts inflect: plural/past/-ing/third/possessive) as a free card
   "View all" / folder card / "More ideas" → CardSearchOverlay (Cboard folder browser, public/cboard_folders.json)
@@ -240,6 +240,10 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
   later removed by inlining the guides into `src/lib/staticData.ts`; there is no root `data/` any more.
 - 2026-09-16/17: board redesign — quick row (yes/no/please + 5 personal cards + More ideas + View all),
   Topic 15 / Action 3 / Feeling 3, Feedback button, iPad short-landscape side column, settings-nav fixes.
+- 2026-09-18: added a permanent "?" card to the quick row (any tapped cards + "?" → sentence ends in
+  "?" instead of "."; the realiser/rule never see "?" as a word — `LocalApi.sentenceInput`/`asQuestion`
+  strip it and force the trailing punctuation). `PERSONAL_ROW` dropped 5→4 to keep the row's fixed
+  chip budget (`CONTENT_W` in `SessionScreen.tsx`) at ten.
 
 ## Conventions & workflow
 - **Git:** at session start `git fetch origin main`; if behind, `git pull --rebase origin main` before
@@ -272,6 +276,11 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
 - Gemini 404 → check `LLM_MODEL`/key tier; the title call is best-effort anyway.
 - Neon HTTP driver: each `sql` call is a round trip (~75–100 ms warm); batch with `Promise.all`.
 - R2 custom domain answers `HEAD` inconsistently — use small `GET`s to probe (`model.ts` does).
+- `model.irisspeak.org`'s R2 bucket CORS policy only allows the `irisspeak.com` origin, so a direct
+  browser fetch from `localhost` is blocked ("Failed to fetch", stuck on "Loading vocabulary…" forever).
+  Dev builds route through Vite's `/model-cdn` proxy instead (`vite.config.ts` + `CDN_BASE` in
+  `model.ts`), which sidesteps CORS since the browser only ever talks to the dev server. Don't "fix" this
+  by trying to loosen the bucket's CORS policy — that's shared prod infra outside the repo.
 - Web Speech dictation works on iOS Safari / Chrome / Edge; the mic button is hidden where unsupported.
 - `window.__errs` (index.html) keeps the first runtime errors for diagnosing a blank screen on a device.
 - Card-image coverage: `card_images.json` has 3,239 ids; 1,234 Mulberry SVGs, 14 OpenMoji, ~1,991

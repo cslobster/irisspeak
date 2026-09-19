@@ -17,11 +17,18 @@ interface RerankerJson { K: number; dim: number; mu: number[]; sd: number[]; cat
 interface FreqJson { uni: number[]; bi: Record<string, [number, number][]>; smoothing: number; lambda_bi: number }
 type ImageMap = Record<string, { img?: string; emoji?: string }>;
 
-const CDN_BASE = 'https://model.irisspeak.org/';
+// In dev, go through Vite's /model-cdn proxy (see vite.config.ts): the R2 bucket's CORS policy only
+// allows the production origin, so a direct browser fetch from localhost is blocked ("Failed to fetch").
+const CDN_BASE = import.meta.env.DEV ? '/model-cdn/' : 'https://model.irisspeak.org/';
 // Quick-fire row: seven answers that are always in the same cells (yes/no plus the words a child needs most
 // often mid-conversation), as in TD Snap's Quick Fires. Fixed positions, never re-ranked.
-export const CORE_LABELS = ['yes', 'no', 'please'];   // the fixed part of the quick row; five personal cards follow (personalRow)
-export const PERSONAL_ROW = 5;
+export const CORE_LABELS = ['yes', 'no', 'please'];   // the fixed part of the quick row; the question-mark card, then four personal cards, follow
+export const PERSONAL_ROW = 4;   // was 5; one slot given to the permanent question-mark card so the quick row still totals ten (SessionScreen's CONTENT_W budget)
+// A permanent, always-on-the-board card: tapping it marks the sentence-in-progress as a question,
+// regardless of what the card model predicts. Not a vocabulary word, so it never goes through
+// prediction/reranking; see QUESTION_CARD_ID's use in local.ts (sentence assembly) and
+// SessionScreen.tsx (skipped for per-tap TTS, since "?" alone shouldn't be spoken aloud).
+export const QUESTION_CARD_ID = 'core:?';
 // Time-of-day prior (reranker bonus per vocabulary category). Meal times raise food and drink, after-school
 // hours raise play, evenings raise home and body words. Small and additive, like the personal bonus.
 export function timePrior(hour: number, weekday: boolean): Record<string, number> {

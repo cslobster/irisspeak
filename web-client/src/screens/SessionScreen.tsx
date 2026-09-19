@@ -2,7 +2,7 @@ import { remoteFeedback } from '../api/remote';
 import { useCallback, useEffect, useMemo, useRef, useState, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api/local';
-import { engine } from '../engine/model';
+import { engine, QUESTION_CARD_ID } from '../engine/model';
 import { getProfile, setProfile } from '../engine/store';
 import { TurnBanner } from '../components/TurnBanner';
 import { TranscriptMessages } from '../components/Transcript';
@@ -254,7 +254,7 @@ export function SessionScreen() {
       setShowSearch(true);
       return;
     }
-    speakCard(card);
+    if (card.id !== QUESTION_CARD_ID) speakCard(card);
     setInterimCards(prev => [...prev, card]);
     setRefreshingCards(true);
     try {

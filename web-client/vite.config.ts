@@ -20,6 +20,15 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true,
       },
+      // model.irisspeak.org's R2 CORS policy only allows the production origin (irisspeak.com), so a
+      // browser fetch from localhost is blocked outright ("Failed to fetch", model never loads). Proxying
+      // it through Vite makes the request same-origin from the browser's point of view — no CORS involved,
+      // since the browser only ever talks to the dev server. Dev only; see CDN_BASE in engine/model.ts.
+      '/model-cdn': {
+        target: 'https://model.irisspeak.org',
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/model-cdn/, ''),
+      },
     },
   },
   preview: { port: 4300, host: true },

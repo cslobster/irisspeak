@@ -1,6 +1,6 @@
 // Local replacement for v1's HTTP ApiClient: same method shapes, but every call is answered on the
 // device by the IrisSpeak-135M model + reranker, and sessions live in localStorage.
-import { engine, CORE_LABELS, PERSONAL_ROW } from '../engine/model';
+import { engine, CORE_LABELS, PERSONAL_ROW, QUESTION_CARD_ID } from '../engine/model';
 import { remoteNewSession, remoteStart, remoteParentTurn, remoteChildTurn, remoteEnd, remoteRate, remoteListSessions, remoteDialogue, flushFeedback } from './remote';
 import { getProfile, getHistory, pushHistory, store } from '../engine/store';
 import { realiser } from '../engine/realiser';
@@ -237,6 +237,8 @@ class LocalApi {
       if (c) cards.push(cardFromVocab(c.id, recId, 'core'));
       else cards.push({ id: 'core:' + l, recommendation_id: recId, label: l, label_localized: l, category: 'core', corpus_name: l, corpus_image_url: null, emoji: null });
     }
+    // the question-mark card: always on the board, not a vocabulary word, never re-ranked
+    cards.push({ id: QUESTION_CARD_ID, recommendation_id: recId, label: '?', label_localized: '?', category: 'core', corpus_name: '?', corpus_image_url: null, emoji: '❓' });
     // the five personal cards: chosen once per question so the row holds still while the child taps
     if (!cur.personal && cur.p) cur.personal = engine.personalRow(cur.p, new Set([...cards.map(c => c.id), ...chosen]), getProfile().setting, PERSONAL_ROW);
     for (const id of cur.personal ?? []) if (engine.byId[id]) cards.push({ ...cardFromVocab(id, recId, 'core'), personal: true });
@@ -292,14 +294,24 @@ class LocalApi {
   /** Re-run the model for the current question + selection (used when the setting changes). */
   async repredict(): Promise<ChildCardRecommendationResult | null> { return this.current && this.current.role === 'child' ? this.recompute() : null; }
   async refreshCards(_id: string): Promise<ChildCardRecommendationResult> { const cur = this.current!; cur.page += 1; return this.recommendation(); }
+  /** Split the tapped cards into the words the realiser sees and whether the question-mark card was tapped
+   *  (it marks the sentence as a question; it is never itself a word fed to the realiser). */
+  private sentenceInput(prefix: CardInfo[]): { labels: string[]; question: boolean } {
+    return { labels: prefix.filter(c => c.id !== QUESTION_CARD_ID).map(c => c.corpus_name || c.label), question: prefix.some(c => c.id === QUESTION_CARD_ID) };
+  }
+  /** Both realise paths already guarantee exactly one trailing . ! or ? — swap it for ? when the question card was tapped. */
+  private asQuestion(s: string): string { return s.replace(/[.!?]$/, '') + '?'; }
   /** Sentence from the tapped cards, on the device: the realiser model (cards + the partner's question, constrained
    *  to the card words plus function words), or the rule (cards in order) until it has loaded. No cloud call. */
   async inferSentence(_id: string, again = false): Promise<{ sentence: string; source: 'cloud' | 'device' }> {
-    const cur = this.current!; const labels = cur.prefix.map(c => c.corpus_name || c.label);
-    const rule = engine.realise(labels);
+    const cur = this.current!; const { labels, question } = this.sentenceInput(cur.prefix);
+    const rule = question ? this.asQuestion(engine.realise(labels)) : engine.realise(labels);
     if (!again || !cur.candidates) cur.candidates = [];
     let sentence: string | null = null;
-    try { sentence = await realiser.realise(labels, cur.question, again ? { avoid: cur.candidates, sample: true } : {}); } catch (e) { console.info('realiser failed, using the rule', e); }
+    try {
+      sentence = await realiser.realise(labels, cur.question, again ? { avoid: cur.candidates, sample: true } : {});
+      if (sentence && question) sentence = this.asQuestion(sentence);
+    } catch (e) { console.info('realiser failed, using the rule', e); }
     // "Another": a fresh wording; when the model has none left, the plain card order, then cycle through earlier ones.
     if (!sentence) {
       if (again && !cur.candidates.includes(rule)) sentence = rule;
@@ -311,7 +323,10 @@ class LocalApi {
     return { sentence, source: 'device' };
   }
   async confirmCards(id: string): Promise<ResponseWithTurnId<ChildCardRecommendationResult>> {
-    const cur = this.current!; const sentence = cur.sentence || engine.realise(cur.prefix.map(c => c.corpus_name || c.label)); cur.sentence = undefined;
+    const cur = this.current!;
+    const { labels, question } = this.sentenceInput(cur.prefix);
+    const sentence = cur.sentence || (question ? this.asQuestion(engine.realise(labels)) : engine.realise(labels));
+    cur.sentence = undefined;
     const s = loadSessions()[id]; if (s) { s.dialogue.push({ role: 'child', content: cur.prefix, content_localized: sentence }); saveSession(s); }
     pushHistory({ partner: cur.question, answer: sentence, cards: cur.prefix.map(c => c.id).filter(x => !!engine.byId[x]), t: Date.now(), setting: getProfile().setting });
     remoteChildTurn(id, cur.prefix, sentence, cur.lastShown ?? []);
