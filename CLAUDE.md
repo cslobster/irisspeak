@@ -19,7 +19,7 @@ scrolling on any screen** (everything zoom-to-fits the viewport), colourful-and-
 OpenDyslexic font, Fitzgerald-Key card colours (topic/things = orange `#FFE3C2`, action/verbs =
 green `#D9F2D0`, feeling = blue `#D6E8FB`, core/function = pink `#FCD9E5`, tailwind `bg-card-*`).
 
-## Repo map (monorepo `github.com/cslobster/irisspeak` — renamed from `cslobster/aac`; one branch `main`, everything deploys on push)
+## Repo map (monorepo `github.com/cslobster/irisspeak` — renamed from `cslobster/aac`; one branch `main`, everything deploys on push — see the Vercel deploy-blocked caveat under Conventions & workflow)
 
 | Piece | Dir | Deployed as | Stack |
 |---|---|---|---|
@@ -251,7 +251,17 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
 - **Docs:** when a conversation surfaces a core fact — a decision, a renamed/moved piece, a changed
   data source — add it here (or `CONTEXT.md` for domain vocabulary) in the same turn; delete stale
   statements rather than leaving them.
-- Deploy = push. Vercel builds `web-client` and root separately; Cloudflare Pages builds `site/`.
+- Deploy = push, **in theory** — Vercel builds `web-client` and root separately; Cloudflare Pages
+  builds `site/`. In practice, as of 2026-09-19, pushes to `main` from this session's GitHub account
+  reach `origin/main` fine but the Vercel deploy comes back `"Deployment was blocked"` (checked via
+  `gh api repos/cslobster/irisspeak/deployments/<id>/statuses`) — the connected Vercel team
+  (`coolcottontail-3119s-projects`) doesn't authorize this account to trigger production deploys.
+  cslobster (repo owner) has to deploy manually from the Vercel dashboard, or push themselves.
+  **Don't verify fixes against the live site** — verify against `localhost` and leave the deploy to
+  cslobster; treat commits on `main` as done once pushed. Also note: this repo's entire commit
+  history gets fully regenerated from outside this session sometimes (all-new hashes, same file
+  content) — `git fetch` reporting a "forced update" here is not necessarily a hostile rewrite; diff
+  content against `origin/main` before assuming a commit was lost.
   Model weights are published separately with `site/upload_model.sh` (never via git).
 
 ## Known gotchas
