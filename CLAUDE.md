@@ -50,8 +50,8 @@ npm install && npm run dev
 cd web-client && npm install && npm run dev
 # Admin (optional)               → http://localhost:4201, proxies /api to :3000
 cd admin && npm install && npm run dev
-# Tests (backend only)
-npm test            # vitest, src/__tests__/sessionLifecycle.test.ts
+# Verify everything (backend vitest → web-client typecheck/lint/vitest → Playwright e2e; ~20 s with servers up)
+npm run verify      # see "Verification" below; `npm test` = backend unit tests only
 ```
 
 **Web app talks to the local backend in dev, production in prod** (fixed 2026-09-19).
@@ -80,7 +80,7 @@ TEST_LOGIN_CODE= TEST_DYAD_ALIAS= TEST_CHILD_NAME= ...        # optional seed ov
 ```
 DB tables auto-create/migrate on first request (`ensureSchema()` in `src/lib/db.ts`, cached on
 `globalThis`). Seeded logins: alias `abcde` / code `12345` (child "Sammy") and `guest` / `12345`
-("Continue as Guest" button). Neon free tier sleeps → first query of a session takes 1–2 s.
+(there is no "Continue as Guest" button — guest signs in through the username/password form). Neon free tier sleeps → first query of a session takes 1–2 s.
 CORS on `/api/*` is `*` (next.config.js).
 
 ## Architecture — the on-device conversation loop (`web-client/`)
@@ -113,7 +113,7 @@ Report button → ReportButton.tsx (html2canvas of #root + free text + reportCon
 ```
 
 Board sizes: `PANEL_BIG` 15/3/3 (Topic 5×3, Action 3, Feeling 3) on iPad/desktop; phones use
-`CompactSession.tsx` (12/3/3 grid, no scrolling). `SessionScreen.tsx` lays out on a fixed design
+`CompactSession.tsx` (12/3/3 grid, no scrolling). `screens/session/layout.ts` lays out on a fixed design
 canvas (`CONTENT_W` 1068 px = ten 96 px chips + gaps; `DESIGN_H` 880) and scales the whole thing
 down (`--fit-scale`) so nothing scrolls; "short landscape" iPads (≥1000 wide, ≤900 tall) put the
 Refresh/Clear/Done/Feedback tiles in a right-hand column (`useShortLandscape`). Compact layout kicks
@@ -135,7 +135,12 @@ headers in `web-client/vercel.json` (cross-origin isolation). No proxy worker (i
 | `src/engine/settings.ts` | the 8 places (home/school/restaurant/doctor/play/transport/selfcare/unknown) — in the prompt and the question bank |
 | `src/api/local.ts` | `LocalApi` — the whole board logic (routes, folders, panels, pages, feedback context) |
 | `src/api/remote.ts` | backend calls: sign-in (code or Google), profile/history/custom-word sync, fire-and-forget session/turn/feedback/event mirrors, offline feedback queue |
-| `src/screens/SessionScreen.tsx` (966 lines) | the board + parent turn + sentence approval; `CompactSession.tsx` phone variant |
+| `src/screens/SessionScreen.tsx` (~560 lines) | session shell: all state, effects, handlers, compact/board composition (split 2026-09-20; `CompactSession.tsx` is the phone variant) |
+| `src/screens/session/layout.ts` | `CONTENT_W`/`DESIGN_H`/`ACTION_COL_W`/`SIDE_DESIGN_H`, `useFitScale` (`--fit-scale`), `useShortLandscape` |
+| `src/screens/session/ChildTurn.tsx` | the board: deck + Speak, Topic/Action/Feeling panels, quick row, More ideas / View all, Refresh/Clear/Done/Feedback/Report tiles (row or side-column), local `ActionTile` |
+| `src/screens/session/ParentTurn.tsx` | `ParentTurn` (AskPanel wrapper), `SettingPicker`, `Loader` |
+| `src/screens/session/overlays.tsx` | `SentenceAcceptance` (Yes/No/Another), `FeedbackDialog`, `WordFormsPopover` |
+| `src/**/*.test.ts` | vitest unit tests (`grammar.test.ts`, `local.test.ts` — drives the real `LocalApi` with `engine`/`store`/`realiser`/`remote` mocked; pattern documented at the top of that file) |
 | `src/components/` | `CardChip` (tile, long-press), `CardSearchOverlay` (Cboard folder browser + search), `AskPanel` (place + top questions from `public/questions.json` + mic/text), `SessionMenu` (☰: transcript, sound, place, text size, history, profile, end), `SettingsButton`/`SettingsCloseButton` (fixed top-right, `settingsNav.ts` handles return-to), `Transcript`, `TurnBanner`, `VoicePicker`, `MuteButton`, `Spinner`, `Icons`, `ReportButton` (self-contained "Report a problem" — html2canvas of `#root`, not the model's Feedback dialog) |
 | `src/audio/` | `tts.ts` (Web Speech synthesis, girl/boy voice, mute), `webspeech.ts` (dictation) |
 | `src/uiScale.ts`, `src/labelSize.ts` | text-size setting (normal/large/xl via `--ui-scale`), label shrink for long words |
@@ -145,102 +150,37 @@ Card identity: ids are `card_0000`-style from `model/vocab/vocab.csv`; `cards.js
 `speak`, `category` (vocab categories like food/actions/feelings/core/phrases…), `intent`, flags, and
 `<folder:*>` rows. `categoryOf()` in `local.ts` collapses vocab categories to the four UI categories.
 
-## Architecture — backend (`src/`)
+## Verification & Claude Code config (added 2026-09-20)
+`npm run verify` at the root = `npm test` (backend vitest, `src/**/*.test.ts` only) → `web-client` `typecheck`
+(`tsc --noEmit`, strict off) + `lint` (eslint 10 flat config, 0 errors / warnings allowed by design) + `test`
+(vitest 3 — must stay v3 while Vite is v5) → `npm run e2e` (Playwright, Chromium, `playwright.config.ts`,
+`e2e/*.e2e.ts` — the suffix matters, vitest would grab `.spec.ts`). E2E attaches to running dev servers
+(`reuseExistingServer`) or boots them; `baseURL` is https when `web-client/.certs/` exists; the 520 MB model
+download is stubbed (`holdModel()` routes `/model-cdn/**`), so the populated board is not covered — only the
+loading state. `e2e/no-scroll.e2e.ts` asserts the no-scroll rule on 11 screens × 1180×820 / 1180×720 /
+390×844. **Known violations are locked in its `KNOWN_OVERFLOW` table as `test.fail`**: `/setup`, `/stars`
+(one unbounded column of past sessions), `/signup` at all sizes; `/credits` at 1180×720 and phone. Fixing one
+makes its test fail with "expected to fail, but passed" — delete the entry then. Never add to that table to
+silence a new regression. The smoke test creates and aborts a real session on the `guest` account.
+`.github/workflows/verify.yml` runs `verify` on push to `main` and `workflow_dispatch` only (no schedules);
+needs repo secrets `DATABASE_URL` (use a Neon branch, not prod) + `AUTH_SECRET`, else skips e2e with a notice.
 
-Pure storage + auth. `src/lib/moderator.ts` has only the session lifecycle: `startSession` (static
-parent guides inlined in `src/lib/staticData.ts`, no LLM), `endSession` (best-effort Gemini
-session title via `gemini.ts` + `prompts.ts`; failure never blocks), `abortSession` (deletes row).
-`google.ts` = server-side OAuth code flow (GCP project "irisspeak"); the callback finds/links/creates a
-dyad and redirects back with a dyad JWT in the URL fragment. `auth.ts` = 30-day dyad JWT (`sub` =
-dyad id) and 24-h admin JWT. `responses.ts` = tiny JSON helpers. `text.ts` = `capitalizeName`.
+`.claude/settings.json` (committed) wires hooks (`.claude/hooks/*.sh`, need `jq`): PostToolUse on
+Edit/Write typechecks the package of any edited `.ts(x)` (web-client or root) and feeds errors back;
+Stop runs the fast subset (no e2e) when the tree is dirty and keeps the turn going if red (fingerprint-cached,
+honours `stop_hook_active`); PreToolUse blocks `git push` until the full `verify` passes. Skills (user-invoked
+unless noted): `/verify` (drive it to green; model may invoke), `/ipad-check` (Claude in Chrome no-scroll +
+screenshot pass at the three sizes), `/model-eval` (`model/eval` suite vs committed results), `/triage-reports`
+(open `problem_report` rows → reproduce → proposed diff; never resolves or pushes). **No unattended
+automation, ever**: no cron/routines/`/loop`/scheduled workflows — the user starts every run.
 
-### Routes (all `src/app/api/v1/**/route.ts`, `force-dynamic`, nodejs runtime) — verified 2026-09-17
-| Method | Path | Auth | Purpose |
-|---|---|---|---|
-| GET/HEAD | `/ping` | — | health |
-| POST | `/dyad/account/login` | — | `{username, password}` (alias-or-parent-email + login code) → `{jwt, free_topics, child_name, alias}`; pending accounts get `AccountPendingApproval` |
-| POST | `/dyad/account/signup` | — | self-serve wizard → dyad in `pending` status, login code stored inactive until admin approves |
-| POST | `/dyad/account/password` | dyad | `{login_code}` → sets/replaces this account's login code, so a Google-only account (random alias, no code) can also sign in with parent email + this code. Never touches the real Google password — a separate app credential, added 2026-09-19 |
-| GET | `/dyad/account/google/start?redirect=` | — | → Google consent (allowed redirects: irisspeak.com/.org, *.vercel.app, *.pages.dev, localhost, `irisspeak:` scheme) |
-| GET | `/dyad/account/google/callback` | — | Google returns here → `redirect#jwt=…&alias=…&child_name=…[&new=1]` or `#error=…` |
-| GET/PATCH | `/dyad/profile` | dyad | age, notes, communication_style, setting, child_name, child_gender, alias, parent_email, has_password |
-| GET | `/dyad/history?limit=50` | dyad | the child's confirmed card turns across devices (`{partner, answer, cards, labels, t, session_id}`) — feeds the personal row |
-| GET/POST | `/dyad/vocabulary`, DELETE `/dyad/vocabulary/[id]` | dyad | Custom Vocabulary Words (`word, category topic|action, is_preference_pointer, image_data base64, emoji`) |
-| GET | `/dyad/data/freetopics` | dyad | legacy favourites list (seeded Bluey/Dinosaurs/Lego); UI no longer shows them |
-| POST | `/dyad/session/new` | dyad | `{topic:{category}, timezone, client}` → session id (JSON string) |
-| GET | `/dyad/session/list` | dyad | all sessions |
-| POST | `/dyad/session/[id]/start` | dyad | marks started, returns static parent guides |
-| POST | `/dyad/session/[id]/device/turn` | dyad | **the mirror the app writes**: `{role:'parent', text}` or `{role:'child', cards, sentence, shown}` → `{turn_id}` |
-| GET | `/dyad/session/[id]/message/all` | dyad | transcript (`content_localized` = realised sentence for card turns) |
-| GET | `/dyad/session/[id]/info` | dyad | session row |
-| PUT | `/dyad/session/[id]/end` | dyad | terminate (+ AI title) |
-| PUT | `/dyad/session/[id]/rating` | dyad | 1–5 stars |
-| DELETE | `/dyad/session/[id]/abort` | dyad | delete |
-| POST/GET | `/dyad/feedback` | dyad | board feedback (`choice: 'dislike'|'own_answer'`, `disliked[]`, `answer`, `candidates`, `prefix`, `model_version`) |
-| POST/GET | `/dyad/report` | dyad | "Report a problem": `{description, screenshot? base64, session_id?, context?}` → `problem_report` row; GET returns the family's own reports (no screenshot) |
-| POST | `/dyad/event` | dyad | UI tap analytics (`screen, element, event_type, metadata`) |
-| POST | `/admin/auth/login` | — | `{password}` → admin JWT |
-| GET/POST | `/admin/dyads`, PATCH/DELETE `/admin/dyads/[id]` | admin | list/create/edit/delete accounts (+ set login code) |
-| POST | `/admin/dyads/[id]/approve` | admin | activate a pending signup (activates the code the parent chose, or `{login_code}` override) |
-| GET | `/admin/dyads/[id]/transcripts`, `/admin/dyads/[id]/vocabulary`, `/admin/dyads/[id]/reports` | admin | per-user transcripts / custom words / problem reports (reports include the screenshot) |
-| GET | `/admin/stats` | admin | per-dyad session/turn/message counts |
-| GET | `/admin/analytics?view=summary|by_user|dau&days=N` | admin | tap-event analytics; DAU via `generate_series` (date column comes back as full ISO timestamp — slice 10 chars) |
-| GET | `/admin/feedback[?format=jsonl]` | admin | all board feedback; JSONL form is training input for `model/data/build_states.py` |
-| GET | `/admin/reports[?status=open|resolved]` | admin | all problem reports, newest first, screenshot omitted (fetch by id for that) |
-| GET/PATCH | `/admin/reports/[id]` | admin | one report's full detail (screenshot included) / set `{status: 'open'|'resolved'}` |
-
-### Database tables (`src/lib/db.ts`, Neon, auto-migrated)
-`dyad` (account = parent–child pair: alias, child_name, child_gender, locale, age, notes,
-communication_style, parent_email, status pending|active, setting, google_sub, google_email) ·
-`dyad_login_code` (code, dyad_id, active) · `free_topic` · `dyad_custom_word` · `session` (topic_category,
-status initial|started|conversation|terminated, num_turns, rating, title, client) · `dialogue_turn`
-(role, inferred_sentence) · `dialogue_message` (content_type text|cards, content JSONB) ·
-`child_card_recommendation` (the board shown, + legacy `pool`) · `parent_guide_recommendation` ·
-`interim_card_selection` · `user_event` · `board_feedback` · `problem_report` (id, dyad_id,
-session_id, description, screenshot_data base64, context JSONB, status open|resolved, added
-2026-09-19 for the web-client's "Report a problem" button).
-
-## Admin (`admin/`)
-Four pages in `Dashboard.tsx`: **Users** (`ConversationsView` → `TranscriptPanel`, `UserModal`,
-`DyadVocabularyPanel`, `DyadReportsPanel`), **Pending Signups** (`PendingSignupsTab`, approve
-button), **Reports** (`ReportsView` — global list + detail modal, filter by open/resolved, mark
-resolved; screenshot+context are per-account/per-report only, never in the list response), **Stats
-& Analytics** (`AdvancedView` → `StatsTab`, `AnalyticsTab`, `DauChart`). Token in localStorage
-`aac_admin_token`. Board feedback (the model's card-choice feedback, `board_feedback`) is still only
-reachable via the API (`/admin/feedback`) — there is no admin UI for it, unlike problem reports.
-
-## iOS (`ios/`)
-SwiftUI port with the same screens (`UI/Screens/*`), engine (`Engine/`: BPE + WordPiece tokenizers,
-ONNX/Core ML card model, `Realiser.swift`, `LocalApi.swift`, `RemoteApi.swift` → same backend), TTS +
-speech recognition, and an experimental gaze controller (`Gaze/`). Model files are fetched by
-`scripts/fetch_models.sh` into `Resources/Model/` (git-ignored). `scripts/deploy_ipad.sh` builds and
-installs on the paired iPad. `IRIS_SELFTEST=1` runs a scripted self-test with screenshots.
-
-## Model pipeline (`model/`) — only read when working on the model
-```
-model/vocab/   vocab.csv (3,238 cards, append-only ids; build_vocab.py, folders v2), README.md explains the curation
-model/data/    ingest/map corpora → build_states.py (soft targets, 16 folder rows, choice augmentation) → distill_cards.py
-               (teacher-distribution distillation, see docs/DISTILLATION.md); raw/mapped/states dirs are git-ignored (licence)
-model/train/   train_smollm.py (card model), train_realiser.py, modal_train.py (Modal GPU)
-model/export/  export_onnx_optimum.py (+ --mask), export_realiser.py, quantize_check.py (parity), Core ML variants for iOS
-model/eval/    board_eval.py, judge_boards.py (blind LLM judge "could a child answer with these cards?"), reranker_e2e.py,
-               setting_eval.py, results JSON committed
-site/          chunk_model.py → upload_model.sh (MODEL_DIR=…) → R2; build_results.py / gen_charts.py for the paper pages
-```
-Shipped card model = **v7** (history-aware distillation, 2026-09-15; judged better than v5 in every
-condition). The reranker + MiniLM path is retained but off by default (ablation showed the distilled
-model doesn't need it). Realiser is a separate SmolLM2-135M fine-tune. Full recipes and status logs:
-`docs/PLAN-RETRAIN.md`, `docs/DISTILLATION.md`, `docs/BOARD-EVAL.md`.
-
-## docs/ index (read only what the task needs)
-`PLAN-RETRAIN.md` v3 retrain + folder-row design · `DISTILLATION.md` teacher distillation & v7 ·
-`BOARD-EVAL.md` evaluation method/results · `QUESTION-BANK.md` how `questions.json` was mined ·
-`PLAN-DATA-TRAINING.md`, `PLAN-EXPERIMENTS.md`, `PLAN.md` earlier plans · `PLAN-MERGE.md` how
-irisspeak.org became irisspeak.com · `IRIS-SPEAK-V2-DESIGN.md` v2 design · `FOLDER-RESEARCH.md`,
-`CARD-DISPLAY-RESEARCH.md`, `CONTEXT-PICKER-RESEARCH.md`, `COMPETITIVE-ANALYSIS.md` research ·
-`prd-corpus-expansion.md`, `prd-personalization-core.md` PRDs from the cloud-LLM era (partly
-superseded; custom words/profile/history personalisation are built) · `API-BACKEND.md` points here ·
-`proposal.html`, `system.svg` diagrams. `CONTEXT.md` = domain glossary for the current on-device design.
+## Sub-project detail lives in `.claude/rules/` (path-scoped, loads itself when you read a matching file)
+- `backend-api.md` (`src/**`, `admin/**`) — backend architecture, the full `/api/v1` route table, DB tables, admin pages.
+- `ios.md` (`ios/**`) — SwiftUI port layout and scripts.
+- `model-pipeline.md` (`model/**`, `site/**`, `docs/**`) — data → train → export → eval recipe, shipped model version, `docs/` index.
+Open one directly when planning a task in that area before any file is read. Backend in one line: pure
+storage + auth (Next.js route handlers over Neon; 30-day dyad JWT), no LLM in the loop except a
+best-effort Gemini session title in `endSession`. `CONTEXT.md` = domain glossary.
 
 ## Conventions & workflow
 - **Local dev servers:** whenever a session is going to touch `web-client/` or backend code, start
@@ -248,6 +188,11 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
   :3000) and `cd web-client && npm run dev` (:4200). Since `API_BASE` routes to `localhost:3000` in
   dev (see "Running locally"), the web app needs the backend for everything now, not just the
   on-device model — running only one half means logins and sessions fail outright.
+- **Workflow per task:** plan mode → agree the acceptance check → build → hooks/`npm run verify` green →
+  `/code-review` → push. Independent tasks can run in parallel with `claude --worktree <name>` or the Agent
+  tool's `isolation: worktree` (worktrees live in `.claude/worktrees/`, git-ignored; they have no
+  `node_modules`/`.env.local` — copy `.env.local` from the main checkout if a task needs the backend). Give
+  each parallel agent a disjoint file set; merge branches into `main` and run `verify` before pushing.
 - **Git:** at session start `git fetch origin main`; if behind, `git pull --rebase origin main` before
   changes. After committing something the user asked for, **push to `origin main` in the same turn**
   (no PR step exists). Never force-push. One-line commit messages. End commits with the attribution
