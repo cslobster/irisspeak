@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { adminApi, type ReportRow, type ReportDetail } from '../api';
 import { ReportContextView } from './ReportContextView';
+import { ImageLightbox } from './ImageLightbox';
 
 // "Report a problem" — a parent's in-app screenshot + description of something wrong with the app
 // itself, separate from board_feedback (the model's card-choice feedback, which has no admin UI).
@@ -75,6 +76,7 @@ export function ReportsView() {
 function ReportDetailModal({ id, onClose, onStatus }: { id: string; onClose: () => void; onStatus: (id: string, status: 'open' | 'resolved') => Promise<void> }) {
   const [report, setReport] = useState<ReportDetail | null>(null);
   const [error, setError] = useState('');
+  const [lightbox, setLightbox] = useState(false);
 
   useEffect(() => { adminApi.getReport(id).then(setReport).catch(e => setError(e.message)); }, [id]);
 
@@ -94,7 +96,12 @@ function ReportDetailModal({ id, onClose, onStatus }: { id: string; onClose: () 
               <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-xl leading-none">✕</button>
             </div>
             {report.screenshot_data && (
-              <img src={report.screenshot_data} alt="Screenshot" className="w-full rounded-xl border border-slate-200 mb-4" />
+              <button onClick={() => setLightbox(true)} className="block w-full mb-4 cursor-zoom-in group relative" title="Click to view full size">
+                <img src={report.screenshot_data} alt="Screenshot" className="w-full rounded-xl border border-slate-200" />
+                <span className="absolute inset-0 rounded-xl bg-black/0 group-hover:bg-black/10 transition flex items-center justify-center">
+                  <span className="opacity-0 group-hover:opacity-100 transition text-white text-xs font-bold bg-black/60 rounded-full px-3 py-1">Click to enlarge</span>
+                </span>
+              </button>
             )}
             <p className="text-sm font-bold text-slate-600 mb-1">What the parent said</p>
             <p className="text-sm text-slate-700 bg-slate-50 rounded-xl p-3 mb-4 whitespace-pre-wrap">{report.description}</p>
@@ -114,6 +121,7 @@ function ReportDetailModal({ id, onClose, onStatus }: { id: string; onClose: () 
           </>
         )}
       </div>
+      {lightbox && report?.screenshot_data && <ImageLightbox src={report.screenshot_data} onClose={() => setLightbox(false)} />}
     </div>
   );
 }

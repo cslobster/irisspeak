@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { adminApi, type ReportDetail } from '../api';
 import type { Dyad } from '../types';
 import { ReportContextView } from './ReportContextView';
+import { ImageLightbox } from './ImageLightbox';
 
 interface Props {
   dyad: Dyad;
@@ -15,6 +16,7 @@ export function DyadReportsPanel({ dyad }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
 
   function load() {
     setLoading(true); setError('');
@@ -59,7 +61,14 @@ export function DyadReportsPanel({ dyad }: Props) {
                 </button>
                 {expanded === r.id && (
                   <div className="px-5 pb-5 border-t border-slate-100 pt-4">
-                    {r.screenshot_data && <img src={r.screenshot_data} alt="Screenshot" className="w-full max-w-md rounded-xl border border-slate-200 mb-3" />}
+                    {r.screenshot_data && (
+                      <button onClick={() => setLightboxSrc(r.screenshot_data)} className="block w-full max-w-md mb-3 cursor-zoom-in group relative" title="Click to view full size">
+                        <img src={r.screenshot_data} alt="Screenshot" className="w-full rounded-xl border border-slate-200" />
+                        <span className="absolute inset-0 rounded-xl bg-black/0 group-hover:bg-black/10 transition flex items-center justify-center">
+                          <span className="opacity-0 group-hover:opacity-100 transition text-white text-xs font-bold bg-black/60 rounded-full px-3 py-1">Click to enlarge</span>
+                        </span>
+                      </button>
+                    )}
                     <p className="text-sm text-slate-700 bg-white border border-slate-200 rounded-xl p-3 mb-3 whitespace-pre-wrap">{r.description}</p>
                     {r.context != null && <div className="mb-3"><ReportContextView context={r.context} /></div>}
                     <div className="flex justify-end">
@@ -76,6 +85,7 @@ export function DyadReportsPanel({ dyad }: Props) {
           </div>
         )}
       </div>
+      {lightboxSrc && <ImageLightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />}
     </div>
   );
 }
