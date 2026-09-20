@@ -1,9 +1,11 @@
 # IrisSpeak — project orientation for Claude Code
 
-**Read this file first, then start working. Do not re-scan the repo to "get situated" — everything
-a session needs to orient is here, verified against the code on 2026-09-17.** Only open files that the
-task actually touches. If you find something here is wrong or missing, fix this file in the same turn
-(see "Keeping this file current" at the bottom).
+**Read this file first, then read `STATE.md`, then start working. Do not re-scan the repo to "get
+situated" — everything a session needs to orient is in these two files, verified against the code
+on 2026-09-17.** This file is the stable architecture reference (rarely changes); `STATE.md` is the
+volatile "what's going on right now" (deploy status, recent work, in-flight items — changes most
+sessions). Only open files that the task actually touches. If you find something here is wrong or
+missing, fix it in the same turn (see "Keeping this file current" at the bottom).
 
 ## What the product is
 
@@ -240,27 +242,6 @@ irisspeak.org became irisspeak.com · `IRIS-SPEAK-V2-DESIGN.md` v2 design · `FO
 superseded; custom words/profile/history personalisation are built) · `API-BACKEND.md` points here ·
 `proposal.html`, `system.svg` diagrams. `CONTEXT.md` = domain glossary for the current on-device design.
 
-## History you need to know (so you don't rediscover it)
-- Originally "AACessTalk": a cloud-LLM (Gemini) product where the backend generated cards and
-  sentences per turn. Replaced 2026-09-15 by the on-device model (`11148dd`, `1ff8f9e` repo reorg,
-  `d67e184` brought model/ios/site into this repo). The dead cloud-LLM child-turn code (9 API routes,
-  `corpus.ts`, `web-client/legacy/`, prompt builders, their tests) was deleted 2026-09-17 (`23a73ec`).
-  It's in git history if ever needed; don't resurrect it by accident.
-- The reorg moved `data/` → `model/data/` which broke `startSession`'s YAML read (`ENOENT` in prod);
-  later removed by inlining the guides into `src/lib/staticData.ts`; there is no root `data/` any more.
-- 2026-09-16/17: board redesign — quick row (yes/no/please + 5 personal cards + More ideas + View all),
-  Topic 15 / Action 3 / Feeling 3, Feedback button, iPad short-landscape side column, settings-nav fixes.
-- 2026-09-18: added a permanent "?" card to the quick row (any tapped cards + "?" → sentence ends in
-  "?" instead of "."; the realiser/rule never see "?" as a word — `LocalApi.sentenceInput`/`asQuestion`
-  strip it and force the trailing punctuation). `PERSONAL_ROW` dropped 5→4 to keep the row's fixed
-  chip budget (`CONTENT_W` in `SessionScreen.tsx`) at ten.
-- 2026-09-19: added "Report a problem" (`ReportButton.tsx`) next to the model's Feedback button —
-  in-app screenshot (`html2canvas` on `#root`, never the browser chrome) + free text + conversation
-  context, stored in `problem_report`, visible in admin's new Reports page and per-account sub-tab.
-  Deliberately separate from `board_feedback`/the Feedback button (that one is model training data;
-  this one is app bugs) — not wired into `CompactSession.tsx` (phones), matching the existing
-  Feedback button's precedent of desktop/tablet-only.
-
 ## Conventions & workflow
 - **Local dev servers:** whenever a session is going to touch `web-client/` or backend code, start
   *both* dev servers proactively (don't wait to be asked): `npm run dev` at repo root (backend,
@@ -284,19 +265,11 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
   cslobster** — anyone else's push shows "Deployment was blocked". Workaround in place:
   `.github/workflows/deploy-hooks.yml` POSTs each project's Vercel Deploy Hook on pushes to `main` by
   other actors (hook URLs are the repo secrets `VERCEL_HOOK_WEB_CLIENT/AAC/ADMIN/AAC_BACKEND`; a missing secret is
-  skipped). This repo's history is sometimes regenerated from outside (new hashes, same content) —
-  on a "forced update", diff content before assuming a commit was lost.
-  **Status as of 2026-09-20**: all four secrets are set and every push's Action run hits all four
-  hooks with `HTTP 201` — but only the `aac` (backend) project's production deployment actually
-  picks up the new code (verified: new routes live on `aac-roan.vercel.app`). `web-client` and
-  `admin`'s deployed bundles are still stale (verified by downloading the live production JS and
-  finding zero trace of anything from 2026-09-19's commits), despite their hooks also returning 201.
-  So a "201" from the Action is necessary but not sufficient — it means Vercel *accepted* the
-  trigger, not that the resulting build reached production. Someone with Vercel dashboard access
-  needs to check the `web-client`/`admin` projects' Deployments tab for a build error or a
-  deployment stuck unpromoted. Don't declare this fixed from the Action's green checkmark alone —
-  verify against the actual live bundle (`curl` the deployed JS, grep for something recent) the way
-  this entry was verified.
+  skipped). A `HTTP 201` from a hook only means Vercel *accepted* the trigger, not that the build
+  reached production — verify against the actual deployed bundle, not the Action's checkmark. This
+  repo's history is sometimes regenerated from outside (new hashes, same content) — on a "forced
+  update", diff content before assuming a commit was lost. **Current deploy health is in `STATE.md`,
+  not here** — it changes independently of anything in this file.
 - `.env.local` is manual and cached at module load — restart the backend after editing.
 - Gemini 404 → check `LLM_MODEL`/key tier; the title call is best-effort anyway.
 - Neon HTTP driver: each `sql` call is a round trip (~75–100 ms warm); batch with `Promise.all`.
@@ -313,8 +286,10 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
   folder rows + specials), 342 dead rows masked.
 
 ## Keeping this file current
-This is the single orientation document. Every session: read it, trust it, work. If you change
-architecture, routes, tables, file layout, deploy targets, or discover a wrong statement, **update
-this file in the same commit**. Keep it factual and compact — a route table, not prose; no
-history beyond what prevents a mistake. `CONTEXT.md` holds domain vocabulary; `docs/` holds long-form
-plans and research; memory (`~/.claude/projects/…/memory/`) holds user preferences only.
+This file plus `STATE.md` are the orientation documents. Every session: read both, trust them,
+work. If you change architecture, routes, tables, or file layout, or discover a wrong statement,
+**update this file in the same commit** — keep it factual and compact, a route table, not prose,
+and stable (it shouldn't need touching most sessions). Anything that changes session-to-session —
+deploy status, what shipped recently, what's in flight — goes in `STATE.md` instead, updated the
+same way. `CONTEXT.md` holds domain vocabulary; `docs/` holds long-form plans and research; memory
+(`~/.claude/projects/…/memory/`) holds user preferences only, never project state.
