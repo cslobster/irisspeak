@@ -154,11 +154,12 @@ dyad id) and 24-h admin JWT. `responses.ts` = tiny JSON helpers. `text.ts` = `ca
 | Method | Path | Auth | Purpose |
 |---|---|---|---|
 | GET/HEAD | `/ping` | — | health |
-| POST | `/dyad/account/login` | — | `{username, password}` (alias + login code) → `{jwt, free_topics, child_name, alias}`; pending accounts get `AccountPendingApproval` |
+| POST | `/dyad/account/login` | — | `{username, password}` (alias-or-parent-email + login code) → `{jwt, free_topics, child_name, alias}`; pending accounts get `AccountPendingApproval` |
 | POST | `/dyad/account/signup` | — | self-serve wizard → dyad in `pending` status, login code stored inactive until admin approves |
+| POST | `/dyad/account/password` | dyad | `{login_code}` → sets/replaces this account's login code, so a Google-only account (random alias, no code) can also sign in with parent email + this code. Never touches the real Google password — a separate app credential, added 2026-09-19 |
 | GET | `/dyad/account/google/start?redirect=` | — | → Google consent (allowed redirects: irisspeak.com/.org, *.vercel.app, *.pages.dev, localhost, `irisspeak:` scheme) |
 | GET | `/dyad/account/google/callback` | — | Google returns here → `redirect#jwt=…&alias=…&child_name=…[&new=1]` or `#error=…` |
-| GET/PATCH | `/dyad/profile` | dyad | age, notes, communication_style, setting, child_name, child_gender, alias |
+| GET/PATCH | `/dyad/profile` | dyad | age, notes, communication_style, setting, child_name, child_gender, alias, parent_email, has_password |
 | GET | `/dyad/history?limit=50` | dyad | the child's confirmed card turns across devices (`{partner, answer, cards, labels, t, session_id}`) — feeds the personal row |
 | GET/POST | `/dyad/vocabulary`, DELETE `/dyad/vocabulary/[id]` | dyad | Custom Vocabulary Words (`word, category topic|action, is_preference_pointer, image_data base64, emoji`) |
 | GET | `/dyad/data/freetopics` | dyad | legacy favourites list (seeded Bluey/Dinosaurs/Lego); UI no longer shows them |
