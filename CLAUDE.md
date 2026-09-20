@@ -284,10 +284,19 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
   cslobster** — anyone else's push shows "Deployment was blocked". Workaround in place:
   `.github/workflows/deploy-hooks.yml` POSTs each project's Vercel Deploy Hook on pushes to `main` by
   other actors (hook URLs are the repo secrets `VERCEL_HOOK_WEB_CLIENT/AAC/ADMIN/AAC_BACKEND`; a missing secret is
-  skipped). If a deploy doesn't appear, check the Action run first, then whether the secret exists.
-  Until the secrets are set, a cslobster push (even empty) deploys everything before it. This repo's
-  history is sometimes regenerated from outside (new hashes, same content) — on a "forced update",
-  diff content before assuming a commit was lost.
+  skipped). This repo's history is sometimes regenerated from outside (new hashes, same content) —
+  on a "forced update", diff content before assuming a commit was lost.
+  **Status as of 2026-09-20**: all four secrets are set and every push's Action run hits all four
+  hooks with `HTTP 201` — but only the `aac` (backend) project's production deployment actually
+  picks up the new code (verified: new routes live on `aac-roan.vercel.app`). `web-client` and
+  `admin`'s deployed bundles are still stale (verified by downloading the live production JS and
+  finding zero trace of anything from 2026-09-19's commits), despite their hooks also returning 201.
+  So a "201" from the Action is necessary but not sufficient — it means Vercel *accepted* the
+  trigger, not that the resulting build reached production. Someone with Vercel dashboard access
+  needs to check the `web-client`/`admin` projects' Deployments tab for a build error or a
+  deployment stuck unpromoted. Don't declare this fixed from the Action's green checkmark alone —
+  verify against the actual live bundle (`curl` the deployed JS, grep for something recent) the way
+  this entry was verified.
 - `.env.local` is manual and cached at module load — restart the backend after editing.
 - Gemini 404 → check `LLM_MODEL`/key tier; the title call is best-effort anyway.
 - Neon HTTP driver: each `sql` call is a round trip (~75–100 ms warm); batch with `Promise.all`.
