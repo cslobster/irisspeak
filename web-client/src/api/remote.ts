@@ -168,6 +168,14 @@ export async function flushFeedback() {
   store.set(FEEDBACK_QUEUE, left);
 }
 
+/** "Report a problem": an in-app screenshot + free text + whatever conversation context was on hand,
+ *  for the app itself (not the board's word choices — that's remoteFeedback above). No offline queue —
+ *  if it fails to send, the dialog says so and the parent can try again, since a screenshot can be large
+ *  and isn't worth silently holding in localStorage. */
+export async function submitReport(description: string, screenshot: string | null, session_id: string | undefined, context: unknown): Promise<{ id: string }> {
+  return await call('POST', '/dyad/report', { description, screenshot, session_id, context, client: 'web' });
+}
+
 export async function remoteEvent(screen: string, element: string, session_id?: string, metadata?: unknown) {
   if (!isSignedIn()) return;
   try { await call('POST', '/dyad/event', { screen, element, event_type: 'tap', session_id, metadata, ts: Date.now() }); } catch {}

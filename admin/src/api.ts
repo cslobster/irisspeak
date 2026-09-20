@@ -68,6 +68,17 @@ export const adminApi = {
   // than adding a second list endpoint for what's the same underlying query.
   approveDyad: (id: string, loginCode?: string) =>
     req<{ id: string; status: string; login_code: string }>('POST', `/dyads/${id}/approve`, loginCode ? { login_code: loginCode } : undefined),
+
+  // "Report a problem" — separate from board_feedback (the model's card-choice feedback, which has
+  // no admin UI yet). listReports omits screenshot_data (thousands of base64 images doesn't scale);
+  // getReport fetches one report's full detail, screenshot included.
+  listReports: (status?: 'open' | 'resolved') =>
+    req<ReportRow[]>('GET', `/reports${status ? `?status=${status}` : ''}`),
+  getReport: (id: string) => req<ReportDetail>('GET', `/reports/${id}`),
+  setReportStatus: (id: string, status: 'open' | 'resolved') =>
+    req<{ id: string; status: string }>('PATCH', `/reports/${id}`, { status }),
+  getDyadReports: (dyadId: string) =>
+    req<{ reports: ReportDetail[] }>('GET', `/dyads/${dyadId}/reports`),
 };
 
 export interface DauRow {
@@ -98,4 +109,21 @@ export interface MessageRow {
   content: unknown;
   timestamp: number;
   inferred_sentence: string | null;
+}
+
+export interface ReportRow {
+  id: string;
+  dyad_id: string;
+  session_id: string | null;
+  description: string;
+  status: 'open' | 'resolved';
+  created_at: string;
+  has_screenshot: boolean;
+  alias: string | null;
+  child_name: string | null;
+  parent_email: string | null;
+}
+export interface ReportDetail extends Omit<ReportRow, 'has_screenshot'> {
+  screenshot_data: string | null;
+  context: unknown;
 }

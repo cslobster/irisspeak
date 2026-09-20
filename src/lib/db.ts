@@ -264,12 +264,33 @@ export async function ensureSchema(): Promise<void> {
           created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
       `,
+      // A parent flagging something wrong with the app itself (not the board's word choices — that's
+      // board_feedback above): a screenshot of the app plus a free-text description, so support has
+      // more than one word to go on. screenshot_data is base64, same storage approach as
+      // dyad_custom_word.image_data (no blob store configured). context is whatever the client had
+      // handy — the session's dialogue so far, current prefix, setting, question — for triage without
+      // a second round trip to ask "what were you doing".
+      sql`
+        CREATE TABLE IF NOT EXISTS problem_report (
+          id             TEXT PRIMARY KEY,
+          dyad_id        TEXT NOT NULL REFERENCES dyad(id) ON DELETE CASCADE,
+          session_id     TEXT,
+          description    TEXT NOT NULL,
+          screenshot_data TEXT,
+          context        JSONB,
+          status         TEXT NOT NULL DEFAULT 'open',   -- 'open' | 'resolved'
+          client         TEXT,
+          created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `,
     ]);
 
     // ---------- Phase 5: depend on `dialogue_message` / `interim_card_selection` (phase 4) ----------
     await Promise.all([
       sql`CREATE INDEX IF NOT EXISTS idx_message_session ON dialogue_message(session_id, timestamp)`,
       sql`CREATE INDEX IF NOT EXISTS idx_board_feedback_dyad ON board_feedback(dyad_id, timestamp)`,
+      sql`CREATE INDEX IF NOT EXISTS idx_problem_report_dyad ON problem_report(dyad_id, created_at DESC)`,
+      sql`CREATE INDEX IF NOT EXISTS idx_problem_report_status ON problem_report(status, created_at DESC)`,
       sql`ALTER TABLE board_feedback ADD COLUMN IF NOT EXISTS disliked JSONB`,   // card ids the partner crossed out
       // Ranked, corpus-resolved candidate pool for the turn (topics/actions/folder decision) —
       // lets refreshChildCards page through pre-ranked candidates instead of re-calling the LLM

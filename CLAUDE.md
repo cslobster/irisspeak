@@ -106,6 +106,8 @@ Child approves → confirmCards(): spoken via TTS (audio/tts.ts, girl/boy voice)
        (last 50 turns, localStorage) and mirrored to backend (device/turn role=child, with the board shown).
 "Done" → finishChildTurn() → back to the partner's turn.
 Feedback button → board_feedback row (dislike w/ crossed-out cards, or the partner's own answer) = training data.
+Report button → ReportButton.tsx (html2canvas of #root + free text + reportContext) → problem_report row;
+       app-itself bugs, not card-choice feedback — admin's Reports page/sub-tab, not the model pipeline.
 ```
 
 Board sizes: `PANEL_BIG` 15/3/3 (Topic 5×3, Action 3, Feeling 3) on iPad/desktop; phones use
@@ -132,7 +134,7 @@ headers in `web-client/vercel.json` (cross-origin isolation). No proxy worker (i
 | `src/api/local.ts` | `LocalApi` — the whole board logic (routes, folders, panels, pages, feedback context) |
 | `src/api/remote.ts` | backend calls: sign-in (code or Google), profile/history/custom-word sync, fire-and-forget session/turn/feedback/event mirrors, offline feedback queue |
 | `src/screens/SessionScreen.tsx` (966 lines) | the board + parent turn + sentence approval; `CompactSession.tsx` phone variant |
-| `src/components/` | `CardChip` (tile, long-press), `CardSearchOverlay` (Cboard folder browser + search), `AskPanel` (place + top questions from `public/questions.json` + mic/text), `SessionMenu` (☰: transcript, sound, place, text size, history, profile, end), `SettingsButton`/`SettingsCloseButton` (fixed top-right, `settingsNav.ts` handles return-to), `Transcript`, `TurnBanner`, `VoicePicker`, `MuteButton`, `Spinner`, `Icons` |
+| `src/components/` | `CardChip` (tile, long-press), `CardSearchOverlay` (Cboard folder browser + search), `AskPanel` (place + top questions from `public/questions.json` + mic/text), `SessionMenu` (☰: transcript, sound, place, text size, history, profile, end), `SettingsButton`/`SettingsCloseButton` (fixed top-right, `settingsNav.ts` handles return-to), `Transcript`, `TurnBanner`, `VoicePicker`, `MuteButton`, `Spinner`, `Icons`, `ReportButton` (self-contained "Report a problem" — html2canvas of `#root`, not the model's Feedback dialog) |
 | `src/audio/` | `tts.ts` (Web Speech synthesis, girl/boy voice, mute), `webspeech.ts` (dictation) |
 | `src/uiScale.ts`, `src/labelSize.ts` | text-size setting (normal/large/xl via `--ui-scale`), label shrink for long words |
 | `public/` | `card_images.json` (card id → mulberry/openmoji SVG or emoji), `folders.json` (curated folder cards: path, label, icon, words, triggers, category_to_folder, card_folder), `cboard_folders.json` + `cboard_cards.json` (Cboard hierarchy for the browser), `questions.json` (top questions per place), `symbols/mulberry/` (1,230 SVG) + `symbols/openmoji/` (22), `ort/` (onnxruntime wasm), `aac/index.html` (static 84-cell grid demo page) |
@@ -173,14 +175,17 @@ dyad id) and 24-h admin JWT. `responses.ts` = tiny JSON helpers. `text.ts` = `ca
 | PUT | `/dyad/session/[id]/rating` | dyad | 1–5 stars |
 | DELETE | `/dyad/session/[id]/abort` | dyad | delete |
 | POST/GET | `/dyad/feedback` | dyad | board feedback (`choice: 'dislike'|'own_answer'`, `disliked[]`, `answer`, `candidates`, `prefix`, `model_version`) |
+| POST/GET | `/dyad/report` | dyad | "Report a problem": `{description, screenshot? base64, session_id?, context?}` → `problem_report` row; GET returns the family's own reports (no screenshot) |
 | POST | `/dyad/event` | dyad | UI tap analytics (`screen, element, event_type, metadata`) |
 | POST | `/admin/auth/login` | — | `{password}` → admin JWT |
 | GET/POST | `/admin/dyads`, PATCH/DELETE `/admin/dyads/[id]` | admin | list/create/edit/delete accounts (+ set login code) |
 | POST | `/admin/dyads/[id]/approve` | admin | activate a pending signup (activates the code the parent chose, or `{login_code}` override) |
-| GET | `/admin/dyads/[id]/transcripts`, `/admin/dyads/[id]/vocabulary` | admin | per-user transcripts / custom words |
+| GET | `/admin/dyads/[id]/transcripts`, `/admin/dyads/[id]/vocabulary`, `/admin/dyads/[id]/reports` | admin | per-user transcripts / custom words / problem reports (reports include the screenshot) |
 | GET | `/admin/stats` | admin | per-dyad session/turn/message counts |
 | GET | `/admin/analytics?view=summary|by_user|dau&days=N` | admin | tap-event analytics; DAU via `generate_series` (date column comes back as full ISO timestamp — slice 10 chars) |
 | GET | `/admin/feedback[?format=jsonl]` | admin | all board feedback; JSONL form is training input for `model/data/build_states.py` |
+| GET | `/admin/reports[?status=open|resolved]` | admin | all problem reports, newest first, screenshot omitted (fetch by id for that) |
+| GET/PATCH | `/admin/reports/[id]` | admin | one report's full detail (screenshot included) / set `{status: 'open'|'resolved'}` |
 
 ### Database tables (`src/lib/db.ts`, Neon, auto-migrated)
 `dyad` (account = parent–child pair: alias, child_name, child_gender, locale, age, notes,
@@ -189,14 +194,18 @@ communication_style, parent_email, status pending|active, setting, google_sub, g
 status initial|started|conversation|terminated, num_turns, rating, title, client) · `dialogue_turn`
 (role, inferred_sentence) · `dialogue_message` (content_type text|cards, content JSONB) ·
 `child_card_recommendation` (the board shown, + legacy `pool`) · `parent_guide_recommendation` ·
-`interim_card_selection` · `user_event` · `board_feedback`.
+`interim_card_selection` · `user_event` · `board_feedback` · `problem_report` (id, dyad_id,
+session_id, description, screenshot_data base64, context JSONB, status open|resolved, added
+2026-09-19 for the web-client's "Report a problem" button).
 
 ## Admin (`admin/`)
-Three pages in `Dashboard.tsx`: **Users** (`ConversationsView` → `TranscriptPanel`, `UserModal`,
-`DyadVocabularyPanel`), **Pending Signups** (`PendingSignupsTab`, approve button), **Stats &
-Analytics** (`AdvancedView` → `StatsTab`, `AnalyticsTab`, `DauChart`). Token in
-localStorage `aac_admin_token`. Board feedback is only reachable via the API (`/admin/feedback`),
-there is no admin UI for it yet.
+Four pages in `Dashboard.tsx`: **Users** (`ConversationsView` → `TranscriptPanel`, `UserModal`,
+`DyadVocabularyPanel`, `DyadReportsPanel`), **Pending Signups** (`PendingSignupsTab`, approve
+button), **Reports** (`ReportsView` — global list + detail modal, filter by open/resolved, mark
+resolved; screenshot+context are per-account/per-report only, never in the list response), **Stats
+& Analytics** (`AdvancedView` → `StatsTab`, `AnalyticsTab`, `DauChart`). Token in localStorage
+`aac_admin_token`. Board feedback (the model's card-choice feedback, `board_feedback`) is still only
+reachable via the API (`/admin/feedback`) — there is no admin UI for it, unlike problem reports.
 
 ## iOS (`ios/`)
 SwiftUI port with the same screens (`UI/Screens/*`), engine (`Engine/`: BPE + WordPiece tokenizers,
@@ -245,6 +254,12 @@ superseded; custom words/profile/history personalisation are built) · `API-BACK
   "?" instead of "."; the realiser/rule never see "?" as a word — `LocalApi.sentenceInput`/`asQuestion`
   strip it and force the trailing punctuation). `PERSONAL_ROW` dropped 5→4 to keep the row's fixed
   chip budget (`CONTENT_W` in `SessionScreen.tsx`) at ten.
+- 2026-09-19: added "Report a problem" (`ReportButton.tsx`) next to the model's Feedback button —
+  in-app screenshot (`html2canvas` on `#root`, never the browser chrome) + free text + conversation
+  context, stored in `problem_report`, visible in admin's new Reports page and per-account sub-tab.
+  Deliberately separate from `board_feedback`/the Feedback button (that one is model training data;
+  this one is app bugs) — not wired into `CompactSession.tsx` (phones), matching the existing
+  Feedback button's precedent of desktop/tablet-only.
 
 ## Conventions & workflow
 - **Local dev servers:** whenever a session is going to touch `web-client/` or backend code, start

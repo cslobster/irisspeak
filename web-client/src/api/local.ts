@@ -252,6 +252,18 @@ class LocalApi {
     return { session_id: cur.id, question: cur.question, prefix: cur.prefix.map(c => c.id),
              candidates: (cur.lastShown ?? []).map(c => ({ id: c.id, label: c.label, category: c.category, personal: !!c.personal })) };
   }
+  /** What "Report a problem" sends along with the screenshot: the whole conversation so far (not just
+   *  this turn, unlike feedbackContext above) — a screenshot alone rarely explains what went wrong. */
+  get reportContext() {
+    const cur = this.current;
+    const dialogue = cur ? (loadSessions()[cur.id]?.dialogue ?? []) : [];
+    return {
+      session_id: cur?.id, setting: getProfile().setting, role: cur?.role,
+      question: cur?.question, prefix: cur?.prefix.map(c => c.label) ?? [],
+      dialogue: dialogue.map(m => ({ role: m.role, content: typeof m.content === 'string' ? m.content : (m.content as CardInfo[]).map(c => c.label), content_localized: m.content_localized })),
+      model_version: engine.modelVersion,
+    };
+  }
   /** "More ideas": the next N ranked cards that are not on the board, as rows for the folder browser (one tap, no Refresh). */
   moreSuggestions(n = 60): { folder: string; word: string; image_url: string | null; emoji?: string }[] {
     const cur = this.current; if (!cur) return [];

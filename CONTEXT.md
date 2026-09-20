@@ -115,6 +115,12 @@ cards" with the crossed-out ids, or "the child wanted to say …" with the partn
 the board as shown, the prefix, setting, question and model version. Training material for the next
 card model (`/admin/feedback?format=jsonl` → `model/data/build_states.py`).
 
+**Problem report** — a parent flagging something wrong with the app *itself* (`problem_report`),
+not the model's word choices: an in-app screenshot (the app only, not the browser), a free-text
+description, and whatever conversation context was on hand. Support/triage material, surfaced in
+admin's Reports page and each account's Reports sub-tab — not training data, not the same pipeline
+as board feedback above.
+
 **History** — the child's last 50 confirmed turns, kept on the device and pulled from
 `/dyad/history` on sign-in so other devices' turns count too. Feeds the personal row and the
 "Earlier:" line of the model prompt (only the last two turns — more let old answers outweigh the

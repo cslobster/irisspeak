@@ -2,13 +2,15 @@ import { useState, useEffect, useCallback } from 'react';
 import { ConversationsView } from './ConversationsView';
 import { AdvancedView } from './AdvancedView';
 import { PendingSignupsTab } from './PendingSignupsTab';
+import { ReportsView } from './ReportsView';
 import { adminApi } from '../api';
 
-type Page = 'conversations' | 'pending' | 'advanced';
+type Page = 'conversations' | 'pending' | 'reports' | 'advanced';
 
 export function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [page, setPage] = useState<Page>('conversations');
   const [pendingCount, setPendingCount] = useState(0);
+  const [openReportCount, setOpenReportCount] = useState(0);
 
   // Approving a signup is a gating action (see CONTEXT.md's signup wizard design) — it needs
   // to be immediately visible, not buried behind an "Advanced" button that gives no hint it
@@ -17,8 +19,12 @@ export function Dashboard({ onLogout }: { onLogout: () => void }) {
   const refreshPendingCount = useCallback(() => {
     adminApi.listDyads().then(dyads => setPendingCount(dyads.filter(d => d.status === 'pending').length)).catch(() => {});
   }, []);
+  const refreshOpenReportCount = useCallback(() => {
+    adminApi.listReports('open').then(rows => setOpenReportCount(rows.length)).catch(() => {});
+  }, []);
 
   useEffect(() => { refreshPendingCount(); }, [refreshPendingCount, page]);
+  useEffect(() => { refreshOpenReportCount(); }, [refreshOpenReportCount, page]);
 
   return (
     <div className="h-screen bg-slate-50 flex flex-col">
@@ -36,6 +42,14 @@ export function Dashboard({ onLogout }: { onLogout: () => void }) {
             {pendingCount > 0 && (
               <span className="ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1 rounded-full bg-red-500 text-white text-xs font-extrabold">
                 {pendingCount}
+              </span>
+            )}
+          </NavButton>
+          <NavButton active={page === 'reports'} onClick={() => setPage('reports')}>
+            Reports
+            {openReportCount > 0 && (
+              <span className="ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1 rounded-full bg-red-500 text-white text-xs font-extrabold">
+                {openReportCount}
               </span>
             )}
           </NavButton>
@@ -57,6 +71,7 @@ export function Dashboard({ onLogout }: { onLogout: () => void }) {
           <PendingSignupsTab />
         </div>
       )}
+      {page === 'reports' && <ReportsView />}
       {page === 'advanced' && <AdvancedView onBack={() => setPage('conversations')} />}
     </div>
   );

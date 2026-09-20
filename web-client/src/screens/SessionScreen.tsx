@@ -9,6 +9,7 @@ import { TranscriptMessages } from '../components/Transcript';
 import { CardChip } from '../components/CardChip';
 import { CloseIcon, MenuIcon, MicIcon } from '../components/Icons';
 import { CardSearchOverlay } from '../components/CardSearchOverlay';
+import { ReportButton } from '../components/ReportButton';
 import { Spinner } from '../components/Spinner';
 import { CompactSession } from './CompactSession';
 import { SessionMenu } from '../components/SessionMenu';
@@ -802,8 +803,9 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
           <ActionTile label="Refresh" icon="↻" tint="bg-slate-200" onClick={onRefresh} disabled={busy} />
           <ActionTile label="Clear" icon="✕" tint="bg-white" onClick={onClear} disabled={busy || interim.length === 0} />
           <ActionTile label="Done" icon="✓" tint="bg-[#f09281]" onClick={onDone} disabled={busy} />
-          <div className="flex-1 flex justify-end">
+          <div className="flex-1 flex justify-end gap-2 sm:gap-3">
             <ActionTile label="Feedback" icon="💬" tint="bg-white" onClick={onFeedback} disabled={busy} title="Tell us when the board misses" />
+            <ReportButton />
           </div>
         </div>
       )}
@@ -816,7 +818,10 @@ function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefr
         <ActionTile label="Refresh" icon="↻" tint="bg-slate-200" onClick={onRefresh} disabled={busy} />
         <ActionTile label="Clear" icon="✕" tint="bg-white" onClick={onClear} disabled={busy || interim.length === 0} />
         <ActionTile label="Done" icon="✓" tint="bg-[#f09281]" onClick={onDone} disabled={busy} />
-        <div className="mt-2"><ActionTile label="Feedback" icon="💬" tint="bg-white" onClick={onFeedback} disabled={busy} title="Tell us when the board misses" /></div>
+        <div className="mt-2 flex flex-col gap-2 sm:gap-3">
+          <ActionTile label="Feedback" icon="💬" tint="bg-white" onClick={onFeedback} disabled={busy} title="Tell us when the board misses" />
+          <ReportButton />
+        </div>
       </div>
       )}
     </div>
