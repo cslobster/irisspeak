@@ -13,7 +13,7 @@ const TOKEN_KEY = 'jwt';
 const ACCOUNT_KEY = 'account';
 
 export interface Account { alias: string; child_name: string; dyad_id?: string }
-export interface RemoteProfile { age: number | null; notes: string | null; communication_style: string | null; setting: string | null; child_name: string; child_gender: string; alias: string }
+export interface RemoteProfile { age: number | null; notes: string | null; communication_style: string | null; setting: string | null; child_name: string; child_gender: string; alias: string; parent_email: string | null; has_password: boolean }
 export interface CustomWord { id: string; word: string; category: 'topic' | 'action'; is_preference_pointer: boolean; image_data: string | null; emoji: string | null; source: string }
 
 export function getToken(): string | null { return store.get<string | null>(TOKEN_KEY, null); }
@@ -82,6 +82,11 @@ export async function pullProfile(): Promise<RemoteProfile> {
 export async function pushProfile(p: ChildProfile): Promise<void> {
   if (!isSignedIn()) return;
   await call('PATCH', '/dyad/profile', { age: p.age ?? null, notes: p.notes ?? null, communication_style: p.communication_style ?? null, setting: p.setting, child_name: p.name || null, child_gender: p.gender ?? null });
+}
+/** Sets (or replaces) the login code this account can sign in with directly — the email/password
+ *  alternative to Google, for accounts that only have a Google identity today. */
+export async function setLoginCode(login_code: string): Promise<{ alias: string; parent_email: string | null }> {
+  return await call('POST', '/dyad/account/password', { login_code });
 }
 
 /** The child's last confirmed turns from every device, into the local history the reranker reads. */

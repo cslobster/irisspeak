@@ -11,10 +11,13 @@ export async function POST(req: Request) {
   const { username, password } = await req.json().catch(() => ({}));
   if (!username || !password) return badRequest('username and password required');
 
+  // username may be the alias (signup-wizard/admin accounts) or the parent email (Google accounts,
+  // which get a random unmemorable alias — see google/callback and account/password routes).
   const rows = (await sql`
     SELECT d.* FROM dyad_login_code lc
     JOIN dyad d ON d.id = lc.dyad_id
-    WHERE LOWER(d.alias) = LOWER(${String(username)}) AND lc.code = ${String(password)} AND lc.active = TRUE
+    WHERE (LOWER(d.alias) = LOWER(${String(username)}) OR LOWER(d.parent_email) = LOWER(${String(username)}))
+      AND lc.code = ${String(password)} AND lc.active = TRUE
     LIMIT 1
   `) as Dyad[];
 

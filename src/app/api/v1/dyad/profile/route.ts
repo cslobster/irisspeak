@@ -11,7 +11,9 @@ export async function GET(req: Request) {
   await ensureSchema();
 
   const [row] = await sql`
-    SELECT age, notes, communication_style, setting, child_name, child_gender, alias FROM dyad WHERE id = ${dyad.id} LIMIT 1
+    SELECT d.age, d.notes, d.communication_style, d.setting, d.child_name, d.child_gender, d.alias,
+           d.parent_email, EXISTS(SELECT 1 FROM dyad_login_code lc WHERE lc.dyad_id = d.id AND lc.active = TRUE) AS has_password
+    FROM dyad d WHERE d.id = ${dyad.id} LIMIT 1
   `;
   return ok(row);
 }
