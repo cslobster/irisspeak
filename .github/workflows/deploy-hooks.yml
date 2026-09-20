@@ -24,7 +24,8 @@ jobs:
           for name in WEB_CLIENT AAC ADMIN AAC_BACKEND; do
             url="${!name}"
             if [ -z "$url" ]; then echo "$name: no hook secret, skipped"; continue; fi
-            code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$url")
+            code=$(curl -s -o /tmp/resp.json -w '%{http_code}' -X POST "$url")
             echo "$name: HTTP $code"
+            echo "$name body: $(cat /tmp/resp.json)"
             [ "$code" = "200" ] || [ "$code" = "201" ] || exit 1
           done
