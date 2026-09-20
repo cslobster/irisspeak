@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { adminApi, type ReportDetail } from '../api';
 import type { Dyad } from '../types';
+import { ReportContextView } from './ReportContextView';
 
 interface Props {
   dyad: Dyad;
@@ -59,10 +60,8 @@ export function DyadReportsPanel({ dyad }: Props) {
                 {expanded === r.id && (
                   <div className="px-5 pb-5 border-t border-slate-100 pt-4">
                     {r.screenshot_data && <img src={r.screenshot_data} alt="Screenshot" className="w-full max-w-md rounded-xl border border-slate-200 mb-3" />}
-                    <p className="text-sm text-slate-700 bg-slate-50 rounded-xl p-3 mb-3 whitespace-pre-wrap">{r.description}</p>
-                    {r.context != null && (
-                      <pre className="text-xs text-slate-600 bg-slate-50 rounded-xl p-3 mb-3 overflow-x-auto whitespace-pre-wrap">{JSON.stringify(r.context, null, 2)}</pre>
-                    )}
+                    <p className="text-sm text-slate-700 bg-white border border-slate-200 rounded-xl p-3 mb-3 whitespace-pre-wrap">{r.description}</p>
+                    {r.context != null && <div className="mb-3"><ReportContextView context={r.context} /></div>}
                     <div className="flex justify-end">
                       {r.status === 'open' ? (
                         <button onClick={() => setStatus(r.id, 'resolved')} className="text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition">Mark resolved</button>

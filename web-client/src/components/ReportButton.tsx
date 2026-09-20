@@ -12,6 +12,11 @@ async function captureAppScreenshot(): Promise<string | null> {
   const root = document.getElementById('root');
   if (!root) return null;
   try {
+    // The app renders entirely in OpenDyslexic (see tailwind.config.js). If html2canvas rasterizes
+    // before that @font-face has actually finished loading, it falls back to a different font's
+    // metrics for the measurement pass, which shifts the baseline enough that card labels clip
+    // against the card's own rounded corners. document.fonts.ready guarantees the real metrics.
+    await document.fonts.ready;
     const scale = Math.min(1, 1000 / root.offsetWidth);
     const canvas = await html2canvas(root, { backgroundColor: '#f0ebe1', scale, logging: false });
     return canvas.toDataURL('image/jpeg', 0.7);

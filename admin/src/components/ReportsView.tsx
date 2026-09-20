@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { adminApi, type ReportRow, type ReportDetail } from '../api';
+import { ReportContextView } from './ReportContextView';
 
 // "Report a problem" — a parent's in-app screenshot + description of something wrong with the app
 // itself, separate from board_feedback (the model's card-choice feedback, which has no admin UI).
@@ -95,12 +96,12 @@ function ReportDetailModal({ id, onClose, onStatus }: { id: string; onClose: () 
             {report.screenshot_data && (
               <img src={report.screenshot_data} alt="Screenshot" className="w-full rounded-xl border border-slate-200 mb-4" />
             )}
-            <p className="text-sm font-bold text-slate-600 mb-1">Description</p>
+            <p className="text-sm font-bold text-slate-600 mb-1">What the parent said</p>
             <p className="text-sm text-slate-700 bg-slate-50 rounded-xl p-3 mb-4 whitespace-pre-wrap">{report.description}</p>
             {report.context != null && (
               <>
-                <p className="text-sm font-bold text-slate-600 mb-1">Conversation context</p>
-                <pre className="text-xs text-slate-600 bg-slate-50 rounded-xl p-3 mb-4 overflow-x-auto whitespace-pre-wrap">{JSON.stringify(report.context, null, 2)}</pre>
+                <p className="text-sm font-bold text-slate-600 mb-1">Conversation</p>
+                <div className="mb-4"><ReportContextView context={report.context} /></div>
               </>
             )}
             <div className="flex justify-end gap-2">
