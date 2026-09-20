@@ -9,7 +9,9 @@
     "lint": "next lint",
     "init-db": "tsx scripts/init-db.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "e2e": "playwright test",
+    "verify": "npm test && npm run typecheck --prefix web-client --if-present && npm run lint --prefix web-client --if-present && npm run test --prefix web-client --if-present && npm run e2e"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
@@ -21,6 +23,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@types/node": "^20.17.6",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

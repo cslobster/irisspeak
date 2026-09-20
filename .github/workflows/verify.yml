@@ -1,0 +1,72 @@
+# Runs `npm run verify` (backend unit tests, web-client typecheck/lint/tests when present, Playwright e2e) on every push
+# to main and on demand. Deliberately NO `schedule:` trigger — project rule: nothing runs without a person initiating it.
+#
+# The e2e suite boots the backend, which needs a database: set the repo secrets DATABASE_URL (a Neon connection string —
+# use a branch/test database, not production) and AUTH_SECRET. Without DATABASE_URL the e2e step is skipped with a
+# notice and only the unit/static checks run.
+name: verify
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: 'true'
+      # `secrets` isn't usable in a step `if:`, so surface presence as a plain env var.
+      HAS_DATABASE_URL: ${{ secrets.DATABASE_URL != '' }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            web-client/package-lock.json
+
+      - name: Install (root)
+        run: npm ci
+
+      - name: Install (web-client)
+        run: npm ci --prefix web-client
+
+      - name: Install Playwright Chromium
+        if: env.HAS_DATABASE_URL == 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify (unit + static + e2e)
+        if: env.HAS_DATABASE_URL == 'true'
+        run: npm run verify
+
+      # Same chain as `npm run verify` minus the e2e step, which can't run without a backend database.
+      - name: Verify (unit + static only — e2e skipped)
+        if: env.HAS_DATABASE_URL != 'true'
+        run: |
+          echo "::notice title=e2e skipped::Repo secret DATABASE_URL is not set, so the backend can't start and the Playwright e2e suite was skipped. Add DATABASE_URL (and AUTH_SECRET) under Settings → Secrets and variables → Actions to enable it."
+          npm test
+          npm run typecheck --prefix web-client --if-present
+          npm run lint --prefix web-client --if-present
+          npm run test --prefix web-client --if-present
+
+      - name: Upload Playwright report
+        if: failure() && env.HAS_DATABASE_URL == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            e2e/__screenshots__/
+          if-no-files-found: ignore
+          retention-days: 14

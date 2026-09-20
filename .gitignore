@@ -42,3 +42,9 @@ model/data/states
 model/data/processed
 model/data/realiser
 __pycache__/
+# ---- Playwright e2e (see playwright.config.ts) ----
+e2e/__screenshots__/
+e2e/.auth/
+playwright-report/
+test-results/
+blob-report/
