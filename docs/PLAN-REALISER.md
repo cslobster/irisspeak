@@ -191,3 +191,21 @@ train it already exists in `board_feedback` and the per-child history.
 The mismatch is doing real work: with the prompt it was trained on, two in five outputs are a question back at
 the partner. The apps dodge that by accident, and pay for it with a model running off-distribution — third of
 outputs in the child's own voice, a third of card taps not fully said.
+
+## 8. One thing this plan does not fix
+
+On a first visit the realiser is not loaded yet: it is 270 MB fetched from R2 in the background after the card
+model, and until it arrives every sentence comes from `engine.realise()` — the plain card concatenation. So the
+very first sentences a new family hears are the worst ones the app produces, whatever we do to the model.
+
+Three ways out, none of them chosen yet:
+
+1. **Make the model smaller** so it is there sooner — int8 weights would take 270 MB to ~70 MB. The card model
+   already ships fp16; an int8 realiser needs a quality check of its own.
+2. **Re-speak once it loads** — show the rule sentence, and quietly replace it with the model's when the model
+   arrives, before the child presses Speak.
+3. **A better rule.** Cheap, but it means hard-coded templates, which is the opposite of the direction asked for
+   ("as little hard coded response as possible"), so it is listed last.
+
+Worth deciding after the new model is measured, because option 1 changes the answer to "is the model good
+enough to be worth waiting for".
