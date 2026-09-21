@@ -178,3 +178,16 @@ train it already exists in `board_feedback` and the per-child history.
 | no invented content word | 0.993 | ≥ 0.99 (keep) |
 | blind judge vs shipped, on held-out taps | — | new model preferred ≥ 65% |
 | decode latency | 135 ms | ≤ 200 ms |
+
+## 7. Baseline, measured (21 Sep 2026)
+
+`eval/realiser_judge.py` over the fifteen probe taps, shipped model (`r1/`, 270 MB):
+
+| prompt form | answer | polarity | covered | no-invented | first-person | words | ms |
+|---|---|---|---|---|---|---|---|
+| trainer's (`Setting:` line, what training and eval used) | **0.60** | 0.93 | 0.67 | 1.00 | **0.13** | 6 | 605 |
+| the apps' (no `Setting:` line, what ships) | 1.00 | 0.93 | 0.87 | 1.00 | **0.33** | 3 | 293 |
+
+The mismatch is doing real work: with the prompt it was trained on, two in five outputs are a question back at
+the partner. The apps dodge that by accident, and pay for it with a model running off-distribution — third of
+outputs in the child's own voice, a third of card taps not fully said.

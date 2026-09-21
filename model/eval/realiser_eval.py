@@ -15,9 +15,10 @@ def forms(w):
     if lw.endswith("y"): out |= {lw[:-1] + "ies", lw[:-1] + "ied"}
     if lw in IRR_PAST: out.add(IRR_PAST[lw])
     return out
-def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--onnx", required=True); ap.add_argument("--tok", default=None); ap.add_argument("--n", type=int, default=400); ap.add_argument("--show", type=int, default=15); ap.add_argument("--split", default="test"); ap.add_argument("--probe", default=None, help="JSON list of {cards, partner, setting} to realise instead of scoring"); a = ap.parse_args()
-    tok = AutoTokenizer.from_pretrained(a.tok or os.path.dirname(a.onnx)); s = ort.InferenceSession(a.onnx, providers=["CPUExecutionProvider"])
+def load(onnx_path, tok_dir=None, with_setting=True):
+    """Return a realise(cards, partner, setting) that decodes exactly the way the apps do. `with_setting`
+    selects the prompt form: the trainer's (Setting line) or the one older app builds sent."""
+    tok = AutoTokenizer.from_pretrained(tok_dir or os.path.dirname(onnx_path)); s = ort.InferenceSession(onnx_path, providers=["CPUExecutionProvider"])
     names = [i.name for i in s.get_inputs()]; layers = sum(1 for n in names if n.endswith(".key")); kvs = [i.shape for i in s.get_inputs() if i.name == "past_key_values.0.key"][0]
     kv_heads, head_dim = kvs[1], kvs[3]; outs = [o.name for o in s.get_outputs()]
     enc = lambda t: tok(t, add_special_tokens=False)["input_ids"]
@@ -32,7 +33,8 @@ def main():
         allowed = set(punct) | eos | func_ids
         for c in cards: word_ids(c, allowed, True)
         allowed = np.array(sorted(allowed))
-        ids = enc(f"Setting: {setting or 'unknown'}.\nPartner: {partner.strip() if partner else '(nobody has spoken)'}\nCards: {' | '.join(cards)}\nSentence:")
+        head = f"Setting: {setting or 'unknown'}.\n" if with_setting else ""
+        ids = enc(head + f"Partner: {partner.strip() if partner else '(nobody has spoken)'}\nCards: {' | '.join(cards)}\nSentence:")
         past = {f"past_key_values.{l}.{kv}": np.zeros((1, kv_heads, 0, head_dim), dtype=np.float32) for l in range(layers) for kv in ("key", "value")}
         def feed(toks, pos0, total, past):
             f = dict(past); f["input_ids"] = np.array([toks], dtype=np.int64); f["attention_mask"] = np.ones((1, total), dtype=np.int64); f["position_ids"] = np.array([[pos0 + i for i in range(len(toks))]], dtype=np.int64); return f
@@ -49,6 +51,11 @@ def main():
         if not t: return ""
         t = re.sub(r"\s+([,.!?])", r"\1", t); t = t[0].upper() + t[1:]
         return t if re.search(r"[.!?]$", t) else t + "."
+    return realise
+
+def main():
+    ap = argparse.ArgumentParser(); ap.add_argument("--onnx", required=True); ap.add_argument("--tok", default=None); ap.add_argument("--n", type=int, default=400); ap.add_argument("--show", type=int, default=15); ap.add_argument("--split", default="test"); ap.add_argument("--no-setting", action="store_true", help="omit the Setting line (the prompt older app builds sent)"); ap.add_argument("--probe", default=None, help="JSON list of {cards, partner, setting} to realise instead of scoring"); a = ap.parse_args()
+    realise = load(a.onnx, a.tok, not a.no_setting)
     if a.probe:   # hand-written cases: same cards, different setting/partner, to see the context actually used
         for e in json.load(open(a.probe)):
             print(f"  [{e.get('setting','unknown'):<8}] {e.get('partner') or '(nobody)':<34} {' | '.join(e['cards']):<34} -> {realise(e['cards'], e.get('partner'), e.get('setting'))}")
