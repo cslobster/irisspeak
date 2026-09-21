@@ -67,9 +67,13 @@ def first_person(sentence):
     return re.search(r"\b(i|i'm|i'll|i've|i'd|my|me|mine)\b", sentence.lower()) is not None
 
 # ---------------------------------------------------------------- generated
-def from_generated(path, keep_extra):
-    """Three wordings per triple. The natural wording (a) is always kept so it stays the greedy-decode mode;
-    (b) and (c) are subsampled so the alternatives exist for sampling without drowning it."""
+def from_generated(path, keep):
+    """Three wordings per triple, kept at different rates (`keep`, one probability per wording).
+
+    (a) is the natural wording (69% first person, ~5 words) and is always kept, so it stays what greedy decoding
+    lands on. (b) leads with the first-person frame (99%) and (c) is blunt and telegraphic (13%, ~2 words); both
+    exist so "Another" has real alternatives, but (c) is kept rarely -- weighting it up would drag the greedy
+    mode back toward the two-word outputs the shipped model already overdoes."""
     out = []
     if not os.path.exists(path):
         print(f"no generated data at {path}; run data/gen_realiser_data.py first"); return out
@@ -81,7 +85,7 @@ def from_generated(path, keep_extra):
         cards = d.get("cards") or []
         if not cards: continue
         for k, s in enumerate(d.get("sentences") or []):
-            if k and rng.random() > keep_extra: continue
+            if rng.random() > (keep[k] if k < len(keep) else 0.0): continue
             s = clean(s, max_words=12)
             if not s: continue
             if not covered(s, cards) or not polarity_ok(s, cards) or not is_answer(s, cards): continue
@@ -136,7 +140,7 @@ def from_corpus(strict):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--gen", default=os.path.join(ROOT, "data", "realiser_gen", "sentences.jsonl"))
-    ap.add_argument("--keep-extra", type=float, default=0.5, help="probability of keeping wordings (b) and (c)")
+    ap.add_argument("--keep", default="1,0.5,0.25", help="probability of keeping each wording: natural, first-person, blunt")
     ap.add_argument("--corpus", default="strict", choices=["strict", "loose", "none"])
     ap.add_argument("--corpus-ratio", type=float, default=0.5,
                     help="corpus rows to keep, as a multiple of the generated rows. The corpus is 25x bigger and "
@@ -145,7 +149,7 @@ def main():
     ap.add_argument("--holdout", type=float, default=0.05, help="fraction of generated triples held out for test")
     a = ap.parse_args()
 
-    gen = from_generated(a.gen, a.keep_extra)
+    gen = from_generated(a.gen, [float(x) for x in a.keep.split(",")])
     # hold out whole triples (all their wordings), so a test prompt is never seen in training
     triples = sorted({(d["setting"], d["partner"], tuple(d["cards"])) for d in gen})
     rng.shuffle(triples)
