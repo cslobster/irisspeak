@@ -56,22 +56,25 @@ export class Realiser {
   /** The sentence for the tapped cards, or null when the realiser is not loaded. With `sample`, tokens are drawn
    *  from the top of the allowed distribution (temperature 0.9, top 8) so "Another" yields a different wording; up to
    *  four draws are tried to find one not in `avoid`. */
-  async realise(cards: string[], partner: string, opts: { avoid?: string[]; sample?: boolean; maxNew?: number } = {}): Promise<string | null> {
+  async realise(cards: string[], partner: string, opts: { avoid?: string[]; sample?: boolean; maxNew?: number; setting?: string } = {}): Promise<string | null> {
     if (!this.ready || !cards.length) return null;
     const avoid = new Set((opts.avoid || []).map(x => x.toLowerCase()));
     for (let attempt = 0; attempt < (opts.sample ? 4 : 1); attempt++) {
-      const s = await this.decode(cards, partner, opts.maxNew ?? 20, !!opts.sample);
+      const s = await this.decode(cards, partner, opts.maxNew ?? 20, !!opts.sample, opts.setting);
       if (s && !avoid.has(s.toLowerCase())) return s;
     }
     return null;
   }
 
-  private async decode(cards: string[], partner: string, maxNew: number, sample: boolean): Promise<string | null> {
+  private async decode(cards: string[], partner: string, maxNew: number, sample: boolean, setting?: string): Promise<string | null> {
     const allowed = new Set<number>(this.punctIds); for (const id of this.eos) allowed.add(id);
     for (const c of cards) this.wordIds(c, allowed, true);
     for (const f of FUNCTION_WORDS) this.wordIds(f, allowed, false);
     if (cards.some(c => NEGATIONS.includes(c.toLowerCase().trim()) || /n't$/.test(c.toLowerCase()))) for (const f of NEGATIONS) this.wordIds(f, allowed, false);
-    const prompt = `Partner: ${partner?.trim() ? partner.trim() : '(nobody has spoken)'}\nCards: ${cards.join(' | ')}\nSentence:`;
+    // Exactly the prompt train/train_realiser.py builds. The Setting line used to be missing here, so the model
+    // was decoded off-distribution in production and never saw the one cue that separates "water" at a restaurant
+    // from "water" at the doctor (docs/PLAN-REALISER.md §2).
+    const prompt = `Setting: ${setting?.trim() || 'unknown'}.\nPartner: ${partner?.trim() ? partner.trim() : '(nobody has spoken)'}\nCards: ${cards.join(' | ')}\nSentence:`;
     const ids = this.ids(prompt);
     const man = this.man!; const L0 = ids.length;
     // First pass over the prompt with an empty cache, then one token at a time.

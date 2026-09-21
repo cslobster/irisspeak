@@ -75,15 +75,15 @@ final class Realiser {
     /// The sentence for the tapped cards, or nil when decoding produced nothing usable. With `sample`, tokens are drawn
     /// from the top of the allowed distribution (temperature 0.9, top 8) so "Another" gives a different wording; up to
     /// four draws are tried to find one not in `avoid`.
-    func realise(cards: [String], partner: String, maxNew: Int = 20, sample: Bool = false, avoid: [String] = []) throws -> String? {
+    func realise(cards: [String], partner: String, maxNew: Int = 20, sample: Bool = false, avoid: [String] = [], setting: String? = nil) throws -> String? {
         let seen = Set(avoid.map { $0.lowercased() })
         for _ in 0..<(sample ? 4 : 1) {
-            if let s = try decode(cards: cards, partner: partner, maxNew: maxNew, sample: sample), !seen.contains(s.lowercased()) { return s }
+            if let s = try decode(cards: cards, partner: partner, setting: setting, maxNew: maxNew, sample: sample), !seen.contains(s.lowercased()) { return s }
         }
         return nil
     }
 
-    private func decode(cards: [String], partner: String, maxNew: Int, sample: Bool) throws -> String? {
+    private func decode(cards: [String], partner: String, setting: String?, maxNew: Int, sample: Bool) throws -> String? {
         guard !cards.isEmpty else { return nil }
         var allowed = punctIds.union(eos)
         for c in cards { wordIds(c, into: &allowed, withForms: true) }
@@ -92,7 +92,9 @@ final class Realiser {
             for f in Realiser.negations { wordIds(f, into: &allowed, withForms: false) }
         }
         let p = partner.trimmingCharacters(in: .whitespaces)
-        let prompt = "Partner: \(p.isEmpty ? "(nobody has spoken)" : p)\nCards: \(cards.joined(separator: " | "))\nSentence:"
+        // Same prompt train/train_realiser.py builds; the Setting line was missing here too (docs/PLAN-REALISER.md §2).
+        let place = (setting ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let prompt = "Setting: \(place.isEmpty ? "unknown" : place).\nPartner: \(p.isEmpty ? "(nobody has spoken)" : p)\nCards: \(cards.joined(separator: " | "))\nSentence:"
         var promptIds = ids(prompt)
         if case .coreml(_, let w) = backend, promptIds.count > w - maxNew { promptIds = Array(promptIds.suffix(w - maxNew)) }   // keep the end of a long prompt
         let L0 = promptIds.count
