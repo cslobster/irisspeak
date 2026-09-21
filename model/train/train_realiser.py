@@ -54,10 +54,20 @@ def main():
     results = {"dev": evaluate(model, tok, devset[: a.eval_n], dev, "dev"), "test": evaluate(model, tok, test[: a.eval_n], dev, "test", show=12), "model": a.model, "epochs": a.epochs, "train_n": len(train)}
     json.dump(results, open(os.path.join(a.out, "results.json"), "w"), indent=1); print("DONE", json.dumps(results), flush=True)
 
+NEG = set("not no n't don't doesn't didn't can't couldn't won't wouldn't shouldn't isn't aren't wasn't weren't haven't hasn't never".split())
+
 @torch.no_grad()
 def evaluate(model, tok, exs, dev, name, show=0):
-    """Greedy decode; exact match, and 'covered' = every card word appears in the output (case-insensitive)."""
-    model.eval(); em = cov = 0; samples = []
+    """Greedy decode, scored on the failures that matter (docs/PLAN-REALISER.md §6), not just exact match --
+    it was exact-match-against-one-wording that let a model ship which answers the child with a question:
+
+      exact          match against the reference wording (kept for continuity; a weak signal)
+      cards_covered  every tapped card's word is said
+      answer         not a question back at the partner
+      polarity       a "no"/"not" card gives a negative sentence, and nothing else does
+      first_person   "I ..." / "my ..." -- the voice the app is supposed to speak in
+    """
+    model.eval(); em = cov = ans = pol = fp = 0; samples = []
     for i in range(0, len(exs), 32):
         b = exs[i:i + 32]; tok.padding_side = "left"
         enc = tok([prompt(e) for e in b], return_tensors="pt", padding=True).to(dev)
@@ -67,8 +77,16 @@ def evaluate(model, tok, exs, dev, name, show=0):
             s = tok.decode(o[enc["input_ids"].shape[1]:], skip_special_tokens=True).split("\n")[0].strip()
             em += int(s.lower() == e["sentence"].lower()); words = set(re.findall(r"[a-z']+", s.lower()))
             cov += int(all(any(w in words for w in re.findall(r"[a-z']+", c.lower())) for c in e["cards"]))
+            lab = " ".join(c.lower() for c in e["cards"])
+            asks = "?" in lab or re.search(r"\b(can i|may i|what|where|when|why|who|how)\b", lab)
+            ans += int(not s.rstrip().endswith("?") or bool(asks))
+            card_neg = any(c.lower().strip() in NEG or c.lower().strip().startswith("no ") or c.lower().endswith("n't") for c in e["cards"])
+            pol += int(card_neg == bool(words & NEG))
+            fp += int(bool(re.search(r"\b(i|i'm|i'll|i've|i'd|my|me|mine)\b", s.lower())))
             if len(samples) < show: samples.append({"partner": e["partner"], "cards": e["cards"], "gold": e["sentence"], "out": s})
-    r = {"n": len(exs), "exact": round(em / len(exs), 3), "cards_covered": round(cov / len(exs), 3)}
+    n = len(exs)
+    r = {"n": n, "exact": round(em / n, 3), "cards_covered": round(cov / n, 3),
+         "answer": round(ans / n, 3), "polarity": round(pol / n, 3), "first_person": round(fp / n, 3)}
     if samples: r["samples"] = samples
     return r
 
