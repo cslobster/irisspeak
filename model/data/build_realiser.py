@@ -106,10 +106,14 @@ def examples(setting, partner, seqs, sentence, source, split, strict, speak, cor
         if key in seen: continue
         seen.add(key)
         out.append({"setting": setting, "partner": partner, "cards": labels, "sentence": sentence, "source": source, "split": split})
+        # Telegraphic copy: drop function-word cards so the model learns to put them back. A negation card is
+        # never droppable -- dropping it while keeping a negative sentence is exactly the polarity inversion this
+        # data is meant to train out, and every such row in the previous build came from here.
         if len(seq) > 1:
-            kept = [c for c in seq if c not in core or rng.random() > 0.6]
-            if kept and kept != seq:
-                out.append({"setting": setting, "partner": partner, "cards": [speak[c] for c in kept if c in speak],
+            kept = [c for c in seq if c not in core or speak.get(c, "").lower().strip() in NEG or rng.random() > 0.6]
+            tele = [speak[c] for c in kept if c in speak]
+            if kept and kept != seq and tele and covered(sentence, tele) and polarity_ok(sentence, tele) and is_answer(sentence, tele):
+                out.append({"setting": setting, "partner": partner, "cards": tele,
                             "sentence": sentence, "source": source + "+tele", "split": split})
     return out
 
@@ -134,6 +138,10 @@ def main():
     ap.add_argument("--gen", default=os.path.join(ROOT, "data", "realiser_gen", "sentences.jsonl"))
     ap.add_argument("--keep-extra", type=float, default=0.5, help="probability of keeping wordings (b) and (c)")
     ap.add_argument("--corpus", default="strict", choices=["strict", "loose", "none"])
+    ap.add_argument("--corpus-ratio", type=float, default=0.5,
+                    help="corpus rows to keep, as a multiple of the generated rows. The corpus is 25x bigger and "
+                         "carries the adult register that broke the shipped model, so it is capped and the most "
+                         "child-like rows are the ones kept; it is there for card combinations nobody generated.")
     ap.add_argument("--holdout", type=float, default=0.05, help="fraction of generated triples held out for test")
     a = ap.parse_args()
 
@@ -150,8 +158,23 @@ def main():
     data = list(gen)
     if a.corpus != "none":
         corp = from_corpus(a.corpus == "strict")
+        if a.corpus_ratio and gen:
+            keep = int(len(gen) * a.corpus_ratio)
+            # child-likeness, not chance, decides which corpus rows survive: first person, short, one clause.
+            # The quota is shared out per source, so capping does not silently drop a whole corpus.
+            def voice(d):
+                s_ = d["sentence"]; w = len(s_.split())
+                return (first_person(s_), -abs(w - 6), -(s_.count(".") + s_.count("!") + s_.count("?")))
+            by_src = collections.defaultdict(list)
+            for d in corp: by_src[d["source"].split("+")[0]].append(d)
+            picked = []
+            for src, rows_ in by_src.items():
+                quota = max(1, round(keep * len(rows_) / len(corp)))
+                rows_.sort(key=voice, reverse=True)
+                picked += rows_[:quota]
+            corp = picked
         sents = sorted({d["sentence"] for d in corp if d["split"] == "train"}); rng.shuffle(sents)
-        dev = set(sents[: max(300, len(sents) // 25)])
+        dev = set(sents[: max(50, len(sents) // 25)])
         for d in corp:
             if d["split"] == "train" and d["sentence"] in dev: d["split"] = "dev"
         data += corp
