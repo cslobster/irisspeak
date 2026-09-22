@@ -256,15 +256,19 @@ it is not a regression. **The blind judge was not run: it calls `claude -p`, whi
 Still wrong, and worth the next pass: "I want to ball outside." and "I have to spell it hard." — the vocabulary
 mask leaves the model no verb for a noun-only tap, so it presses the noun into service.
 
-## 10. Not yet deployed
+## 10. Deployed (21 Sep 2026)
 
-Everything needed is built and staged:
+`realiser_v4` is live for the web app as `r2/` on R2 (270,265,610 bytes, sha256 `1094281d6bb4…`), uploaded with
+`site/deploy_realiser.sh`; the client `Setting:` prompt went to `main` in the same step (bundle
+`index-Bf54Ey7L.js`). Checked in the real app: console reports `realiser ready true r2`, and tapping *Science*
+after "What did you learn?" speaks **"I did science."**
 
-- `realiser_v4` in the `irisspeak-train` Modal volume; fp16 ONNX exported, chunked as `r2/` with a manifest.
-- Branch `realiser-v2` carries the client `Setting:` line for both apps (and the iOS build fix).
-- `sh site/deploy_realiser.sh <hf_realiser> r2` uploads and is reversible (`--rollback r1`); it refuses to run
-  unless `eval/prompt_parity.py` passes.
+The swap had no bad window: measured on the old prompt (what already-open tabs send until they reload), the new
+model scores answer 1.00 / polarity 1.00 / covered 1.00 / first-person 0.93.
 
-The one rule that must hold: the branch merges in the same step as the upload. The new model is trained for the
-prompt with the `Setting:` line, and the shipped model is measurably worse with it — shipping either half alone
-makes the app worse than it is today.
+Rollback: `sh site/deploy_realiser.sh --rollback r1` (the old manifest is kept beside the new one; `r1/` chunks
+are still on R2).
+
+Not done: the iOS app bundles its own realiser and still carries r1 — it needs the Core ML export
+(`export/export_coreml_realiser.py`) and an App Store build. The blind judge is still to run once `claude -p` is
+unpaused, along with the ~4,300 triples whose teacher calls came back empty.
