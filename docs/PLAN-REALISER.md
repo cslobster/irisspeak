@@ -210,33 +210,61 @@ Three ways out, none of them chosen yet:
 Worth deciding after the new model is measured, because option 1 changes the answer to "is the model good
 enough to be worth waiting for".
 
-## 9. Where this was paused (21 Sep 2026)
+## 9. Result: realiser_v4 (21 Sep 2026)
 
-Done and committed on `main`:
+Trained on Modal (A100, SmolLM2-135M, 2 epochs, 938 steps, ~3 min) on 14,985 rows — 10,459 of them child-voice
+sentences distilled from `claude -p` for the tap sequences in `datasets/aac-setting-turns`, the adult corpus
+capped at half and reduced to its most child-like rows. Exported fp16 ONNX with KV cache: **270 MB, the same
+download budget as the shipped model**.
 
-- `data/gen_realiser_data.py`, and **9,264 of the 13,555 triples generated** (`model/data/realiser_gen/sentences.jsonl`,
-  2.0 MB, all eight settings, wording (a) 66% first person / 5 words median). The rest are teacher calls that
-  returned nothing; the script is resumable and skips what is already there, so re-running it fills the gap.
-- `data/build_realiser.py` rebuilt around the generated data (corpus capped at half, most child-like rows kept,
-  telegraphic copies no longer able to invert polarity).
-- `eval/realiser_judge.py` (the metrics that matter + blind A/B judge), `eval/prompt_parity.py` (drift guard),
-  trainer metrics, `site/deploy_realiser.sh` (reversible, parity-gated).
-- Measured baseline for the shipped model, in §7.
+**Fifteen hand-written kid taps** (neither model trained on them; each model in the prompt form that suits it
+best — new with the `Setting:` line, shipped without, since that is what ships):
 
-Waiting on branch `realiser-v2` (must ship **with** the model, never before it): the `Setting:` line in
-`web-client/src/engine/realiser.ts` and `ios/.../Realiser.swift`, plus the iOS build fix (`LocalApi.swift` was
-already passing a `setting:` argument that `Realiser.realise` did not accept, so the iOS target does not compile
-at `main`).
+| | answer | polarity | cards covered | no invented word | first-person | words | ms (Mac CPU) |
+|---|---|---|---|---|---|---|---|
+| shipped (r1) | 1.00 | 0.93 | 0.87 | 1.00 | 0.33 | 3 | 182 |
+| **realiser_v4** | **1.00** | **1.00** | **1.00** | **1.00** | **0.87** | 4 | 214 |
 
-Next, in order:
+**150 held-out prompts** from the test split (whole triples held out, so no test prompt was trained on):
 
-1. `python3 data/gen_realiser_data.py --out data/realiser_gen/sentences.jsonl --per-call 8 --workers 8` to finish
-   the remaining ~4,300 triples.
-2. `python3 data/build_realiser.py` — expect roughly 18k generated rows plus ~9k capped corpus rows.
-3. `modal run --detach train/modal_train.py --realiser realiser_v4 --realiser-extra "--epochs 2"`
-   (2 epochs beat 4 last time; the trainer now prints answer / polarity / first-person per epoch).
-4. `modal volume get irisspeak-train realiser_v4/hf_realiser …`, then
-   `python3 eval/realiser_judge.py --onnx <new> --baseline <shipped r1 onnx> --baseline-no-setting --judge --n 120`.
-   The shipped ONNX is on R2 under `r1/`; the success bar is in §6.
-5. If it clears the bar: `sh site/deploy_realiser.sh <hf_realiser> r2`, then merge `realiser-v2` into `main` in
-   the same step and verify in the browser.
+| | answer | polarity | cards covered | no invented word | first-person | words | ms |
+|---|---|---|---|---|---|---|---|
+| shipped (r1) | 0.973 | 0.960 | 0.880 | 0.980 | 0.653 | 6 | 240 |
+| **realiser_v4** | **0.993** | **0.993** | **0.900** | **0.987** | **0.833** | 6 | 240 |
+
+Read the held-out numbers with care: 562 of the 1,211 test rows are generated, so that split shares a
+distribution with the new model's training data. The fifteen hand-written taps are the fair comparison, and the
+margin there is much wider.
+
+The individual fixes are what the tables are made of:
+
+| cards | shipped said | realiser_v4 says |
+|---|---|---|
+| Story \| More | **No story, just more.** | I want a story, more. |
+| Tired \| No | **Not tired. Just tired.** | No, I'm tired. |
+| Music \| Sing \| Happy | Music. Sing happy. | I like singing in music. I'm happy. |
+| Ipad \| Want | Ipad, please. I want to do it again. | I want my Ipad. |
+| Scared | Too scared. | I'm scared. |
+| Friend \| Play \| Outside | So friends played outside. | Friend played outside with me. |
+| Science \| I like | Science, I like it. | I like science. |
+
+Against the bar in §6: answer ✓, polarity ✓, first-person ✓ (0.87 / 0.83 vs a target of 0.80), no-invented ✓ on
+the probes and 0.987 on the held-out set (target 0.99, two cases short). Latency is 214 ms on the probes against
+a 200 ms target — the new model says a little more, and on the same 150-prompt set both models sit at 240 ms, so
+it is not a regression. **The blind judge was not run: it calls `claude -p`, which is paused.**
+
+Still wrong, and worth the next pass: "I want to ball outside." and "I have to spell it hard." — the vocabulary
+mask leaves the model no verb for a noun-only tap, so it presses the noun into service.
+
+## 10. Not yet deployed
+
+Everything needed is built and staged:
+
+- `realiser_v4` in the `irisspeak-train` Modal volume; fp16 ONNX exported, chunked as `r2/` with a manifest.
+- Branch `realiser-v2` carries the client `Setting:` line for both apps (and the iOS build fix).
+- `sh site/deploy_realiser.sh <hf_realiser> r2` uploads and is reversible (`--rollback r1`); it refuses to run
+  unless `eval/prompt_parity.py` passes.
+
+The one rule that must hold: the branch merges in the same step as the upload. The new model is trained for the
+prompt with the `Setting:` line, and the shipped model is measurably worse with it — shipping either half alone
+makes the app worse than it is today.
