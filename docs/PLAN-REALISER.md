@@ -209,3 +209,34 @@ Three ways out, none of them chosen yet:
 
 Worth deciding after the new model is measured, because option 1 changes the answer to "is the model good
 enough to be worth waiting for".
+
+## 9. Where this was paused (21 Sep 2026)
+
+Done and committed on `main`:
+
+- `data/gen_realiser_data.py`, and **9,264 of the 13,555 triples generated** (`model/data/realiser_gen/sentences.jsonl`,
+  2.0 MB, all eight settings, wording (a) 66% first person / 5 words median). The rest are teacher calls that
+  returned nothing; the script is resumable and skips what is already there, so re-running it fills the gap.
+- `data/build_realiser.py` rebuilt around the generated data (corpus capped at half, most child-like rows kept,
+  telegraphic copies no longer able to invert polarity).
+- `eval/realiser_judge.py` (the metrics that matter + blind A/B judge), `eval/prompt_parity.py` (drift guard),
+  trainer metrics, `site/deploy_realiser.sh` (reversible, parity-gated).
+- Measured baseline for the shipped model, in §7.
+
+Waiting on branch `realiser-v2` (must ship **with** the model, never before it): the `Setting:` line in
+`web-client/src/engine/realiser.ts` and `ios/.../Realiser.swift`, plus the iOS build fix (`LocalApi.swift` was
+already passing a `setting:` argument that `Realiser.realise` did not accept, so the iOS target does not compile
+at `main`).
+
+Next, in order:
+
+1. `python3 data/gen_realiser_data.py --out data/realiser_gen/sentences.jsonl --per-call 8 --workers 8` to finish
+   the remaining ~4,300 triples.
+2. `python3 data/build_realiser.py` — expect roughly 18k generated rows plus ~9k capped corpus rows.
+3. `modal run --detach train/modal_train.py --realiser realiser_v4 --realiser-extra "--epochs 2"`
+   (2 epochs beat 4 last time; the trainer now prints answer / polarity / first-person per epoch).
+4. `modal volume get irisspeak-train realiser_v4/hf_realiser …`, then
+   `python3 eval/realiser_judge.py --onnx <new> --baseline <shipped r1 onnx> --baseline-no-setting --judge --n 120`.
+   The shipped ONNX is on R2 under `r1/`; the success bar is in §6.
+5. If it clears the bar: `sh site/deploy_realiser.sh <hf_realiser> r2`, then merge `realiser-v2` into `main` in
+   the same step and verify in the browser.
