@@ -272,3 +272,21 @@ are still on R2).
 Not done: the iOS app bundles its own realiser and still carries r1 — it needs the Core ML export
 (`export/export_coreml_realiser.py`) and an App Store build. The blind judge is still to run once `claude -p` is
 unpaused, along with the ~4,300 triples whose teacher calls came back empty.
+
+## 11. realiser_v5 → r3 (21 Sep 2026, evening): adjective-only taps
+
+Reported from the live app: **Busy | Fun** spoke as "Busy. Fun." — bare concatenation from the model itself.
+
+Cause: the "blunt" third wording (c), kept at 0.25, was two words on average ("Hungry. Bored.") and, for a tap with
+no noun or verb, it was the *only* short pattern the model had seen, so greedy decoding landed on it. The
+mix also had just 5 adjective-only triples in 9,264.
+
+Fix: `build_realiser.py --keep 1,0.7,0` — wording (c) dropped from training, (b) raised. Retrained as
+`realiser_v5` (2 epochs, 13,564 rows). On ten adjective taps: first-person 0.5 → 0.9, median 2 → 4 words;
+"Busy | Fun" → "I was busy and fun.", "Hard | Boring" → "It's hard. It's boring.", "Fun" → "I had fun."
+On the original fifteen: first-person 0.87 → 0.93; "Ball | Outside" → "I want to go outside with the ball.",
+"Arm | Hurt" → "My arm hurts." One regression: "Music | Sing | Happy" now drops *happy* (cards covered 1.00 →
+0.87 on that set). Polarity, answer and no-invented-word all stay at 1.00.
+
+Live as `r3/` (same 270 MB); rollback `sh site/deploy_realiser.sh --rollback r2`. The client prompt is
+unchanged, so no code deploy was needed.
