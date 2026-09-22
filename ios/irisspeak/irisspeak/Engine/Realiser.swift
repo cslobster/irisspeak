@@ -61,15 +61,45 @@ final class Realiser {
         return lg
     }
 
+    /// Which inflections each card word may be said in; empty if realiser_forms.json is missing, which can
+    /// only ever under-generate.
+    var forms: [String: [String]] = [:]
+    private var funcTrie = Trie(); private var negTrie = Trie(); private var triesBuilt = false
+
+    private func buildStaticTries() {
+        guard !triesBuilt else { return }
+        funcTrie = Trie(); for f in Realiser.functionWords { addWord(f, into: &funcTrie, withForms: false) }
+        negTrie = Trie(); for f in Realiser.negations { addWord(f, into: &negTrie, withForms: false) }
+        triesBuilt = true
+    }
+
     private func ids(_ text: String) -> [Int] {
         if let v = idCache[text] { return v }
         let v = tok.encode(text); idCache[text] = v; return v
     }
-    private func wordIds(_ word: String, into out: inout Set<Int>, withForms: Bool) {
+    /// A trie over the token spellings of the words that may be said. `start` holds the space-initial first
+    /// tokens, the only ones allowed to begin a new word.
+    struct Trie { var ch: [String: Set<Int>] = [:]; var term: Set<String> = []; var start: Set<Int> = [] }
+
+    /// Insert every spelling of `word`, so only whole words can be said. A flat set of token ids let any BPE
+    /// *prefix* of an allowed word out on its own: "busy" is ["bus","y"], so the board said "bus" for a card
+    /// nobody tapped (docs/PLAN-REALISER.md 12). Inflections come from `forms` (built by
+    /// data/build_realiser_forms.py), not from applying the spelling rules blindly, which produced "busies".
+    private func addWord(_ word: String, into t: inout Trie, withForms: Bool) {
         let w = word.trimmingCharacters(in: .whitespaces); guard !w.isEmpty else { return }
-        var forms: Set<String> = [w, w.lowercased(), w.prefix(1).uppercased() + w.dropFirst().lowercased()]
-        if withForms { for f in Inflect.Form.allCases { if let x = Inflect.inflect(w, f) { forms.insert(x); forms.insert(x.lowercased()); forms.insert(x.prefix(1).uppercased() + x.dropFirst()) } } }
-        for f in forms { for v in [f, " " + f] { for id in ids(v) { out.insert(id) } } }
+        var spellings: Set<String> = [w, w.lowercased(), w.prefix(1).uppercased() + w.dropFirst().lowercased()]
+        if withForms { for x in forms[w.lowercased()] ?? [] { spellings.insert(x); spellings.insert(x.prefix(1).uppercased() + x.dropFirst()) } }
+        for f in spellings {
+            for v in [f, " " + f] {
+                let seq = ids(v); guard !seq.isEmpty else { continue }
+                for i in 0..<seq.count {
+                    let k = seq[0..<i].map(String.init).joined(separator: ",")
+                    t.ch[k, default: []].insert(seq[i])
+                }
+                t.term.insert(seq.map(String.init).joined(separator: ","))
+                if v.hasPrefix(" ") { t.start.insert(seq[0]) }
+            }
+        }
     }
 
     /// The sentence for the tapped cards, or nil when decoding produced nothing usable. With `sample`, tokens are drawn
@@ -85,12 +115,26 @@ final class Realiser {
 
     private func decode(cards: [String], partner: String, setting: String?, maxNew: Int, sample: Bool) throws -> String? {
         guard !cards.isEmpty else { return nil }
-        var allowed = punctIds.union(eos)
-        for c in cards { wordIds(c, into: &allowed, withForms: true) }
-        for f in Realiser.functionWords { wordIds(f, into: &allowed, withForms: false) }
-        if cards.contains(where: { Realiser.negations.contains($0.lowercased().trimmingCharacters(in: .whitespaces)) || $0.lowercased().hasSuffix("n't") }) {
-            for f in Realiser.negations { wordIds(f, into: &allowed, withForms: false) }
+        buildStaticTries()
+        var cardTrie = Trie()
+        for c in cards {
+            for w in c.split(whereSeparator: { !$0.isLetter && $0 != "'" }) { addWord(String(w), into: &cardTrie, withForms: true) }
         }
+        let negOk = cards.contains(where: { Realiser.negations.contains($0.lowercased().trimmingCharacters(in: .whitespaces)) || $0.lowercased().hasSuffix("n't") })
+        let tries: [Trie] = negOk ? [funcTrie, negTrie, cardTrie] : [funcTrie, cardTrie]
+        let stop = punctIds.union(eos)
+        func childrenOf(_ k: String) -> Set<Int> { var out = Set<Int>(); for t in tries { if let c = t.ch[k] { out.formUnion(c) } }; return out }
+        func isTerm(_ k: String) -> Bool { tries.contains { $0.term.contains(k) } }
+        func canStart(_ id: Int) -> Bool { tries.contains { $0.start.contains(id) } }
+        // legal() runs once per generated token and the word-start set is large, so memoise it per word-state
+        var legalMemo: [String: [Int]] = [:]
+        func legal(_ k: String) -> [Int] {
+            if let v = legalMemo[k] { return v }
+            var set = childrenOf(k)
+            if k.isEmpty || isTerm(k) { for t in tries { set.formUnion(t.start) }; set.formUnion(stop) }
+            let v = Array(set); legalMemo[k] = v; return v
+        }
+        var path: [Int] = []
         let p = partner.trimmingCharacters(in: .whitespaces)
         // Same prompt train/train_realiser.py builds; the Setting line was missing here too (docs/PLAN-REALISER.md §2).
         let place = (setting ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
@@ -112,18 +156,25 @@ final class Realiser {
                 if let lv = res["logits"] { let (lg, shape) = try OnnxModel.floats(lv); logits = lg; V = shape[2]; row = (shape[1] - 1) * V }
             }
             if logits.isEmpty { break }
+            let pathKey = path.map(String.init).joined(separator: ",")
+            let cand = legal(pathKey)
+            if cand.isEmpty { break }
             var best = -1; var bestV = -Float.infinity
             if sample {
-                // top-8 of the allowed tokens at temperature 0.9
+                // top-8 of the legal tokens at temperature 0.9
                 var top: [(Int, Float)] = []
-                for id in allowed where id < V { let v = logits[row + id]; if top.count < 8 { top.append((id, v)); top.sort { $0.1 > $1.1 } } else if v > top[7].1 { top[7] = (id, v); top.sort { $0.1 > $1.1 } } }
+                for id in cand where id < V { let v = logits[row + id]; if top.count < 8 { top.append((id, v)); top.sort { $0.1 > $1.1 } } else if v > top[7].1 { top[7] = (id, v); top.sort { $0.1 > $1.1 } } }
                 if top.isEmpty { break }
                 let m = top[0].1; let w = top.map { exp(($0.1 - m) / 0.9) }; var r = Float.random(in: 0..<w.reduce(0, +)); best = top[top.count - 1].0
                 for (i, wi) in w.enumerated() { r -= wi; if r <= 0 { best = top[i].0; break } }
             } else {
-                for id in allowed where id < V { let v = logits[row + id]; if v > bestV { bestV = v; best = id } }
+                for id in cand where id < V { let v = logits[row + id]; if v > bestV { bestV = v; best = id } }
             }
             if best < 0 || eos.contains(best) { break }
+            // advance the trie: continue this word, else begin a new one, else fall back to a word boundary
+            if childrenOf(pathKey).contains(best) { path.append(best) }
+            else if canStart(best) && (pathKey.isEmpty || isTerm(pathKey)) { path = [best] }
+            else { path = [] }
             reps = best == lastTok ? reps + 1 : 0; lastTok = best; if reps >= 2 { break }
             out.append(best)
             if case .ort = backend {

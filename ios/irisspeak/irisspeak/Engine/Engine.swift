@@ -162,7 +162,12 @@ final class Engine: @unchecked Sendable {
                 } else {
                     realiser = try Realiser(modelURL: try Resources.url("realiser_fp16", "onnx"), tokenizerURL: try Resources.url("realiser_tokenizer", "json"))
                 }
-                log("engine: realiser ready on \(realiser!.backendName)")
+                // Which inflections each card word may be said in (data/build_realiser_forms.py). Without it the
+                // realiser says only base forms, which is safe but loses agreement ("My arm hurt.").
+                if let u = Bundle.main.url(forResource: "realiser_forms", withExtension: "json"),
+                   let d = try? Data(contentsOf: u),
+                   let f = try? JSONDecoder().decode([String: [String]].self, from: d) { realiser?.forms = f }
+                log("engine: realiser ready on \(realiser!.backendName), \(realiser?.forms.count ?? 0) inflected words")
             } catch { log("engine: realiser unavailable: \(error.localizedDescription)") }
         }
     }

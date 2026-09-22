@@ -290,3 +290,36 @@ On the original fifteen: first-person 0.87 → 0.93; "Ball | Outside" → "I wan
 
 Live as `r3/` (same 270 MB); rollback `sh site/deploy_realiser.sh --rollback r2`. The client prompt is
 unchanged, so no code deploy was needed.
+
+## 12. Three ways the decoder could say a word nobody tapped (22 Sep 2026)
+
+Reported from the live app: tapping **Busy | School | Math** and asking for a second wording produced
+*"I had my school math **bus** and a busy one."*
+
+"bus" was not the model inventing a word. The safety mask was a flat set of **token** ids, and `"busy"`
+tokenizes as `['bus','y']`, so the standalone token `bus` was legal and the model could stop on it. The same
+hole let `out` escape from `outside`. Fixing it uncovered two more:
+
+| leak | cause | example |
+|---|---|---|
+| subword prefix | the mask was per token, not per word | `busy` → **bus** |
+| bogus inflection | `inflect()` applied blindly to every word | `busy` → **busies**, **busying** |
+| spaceless word start | a new word could begin with a non-space token and glue onto the last | `a` + `arm` → **aarm** |
+
+The fixes, all in the decoder — the model is unchanged, so no retraining and no new download:
+
+1. **A trie over word spellings.** A token is legal only if it continues some allowed spelling, and a word may
+   only *end* on a complete one, so `bus` is a non-terminal node and unreachable as a word.
+2. **Attested inflections only** (`data/build_realiser_forms.py`, 9 KB, `realiser_forms.json` on R2 and in the
+   iOS bundle). A form is allowed only where the realiser's own training sentences use it for that word:
+   `hurt → hurts, hurting`, `go → going, went`, `busy → []`. Part of speech cannot decide this — vocab.csv
+   tags `hurt` as an adjective, so a POS gate would forbid "hurts" and the app would say "My arm hurt."
+   A word the data does not cover keeps its base form only, which can never invent.
+3. **Only a space-initial token may begin a word**, which removes "aarm".
+
+Measured over 20 sampled draws each for five taps (sampling is what "Another" uses, and is where all of this
+showed up — greedy output is identical before and after): untapped words **1 → 0**, and on the fifteen kid
+probes every quality metric is unchanged (answer 1.00, polarity 1.00, covered 0.87, first-person 0.93).
+
+The eval decoder now has the sampling path too, so the "Another" wording is covered from here on; it was
+greedy-only before, which is why the earlier probes missed this entirely.

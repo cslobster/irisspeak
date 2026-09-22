@@ -10,5 +10,5 @@ unset CLOUDFLARE_API_TOKEN
 put() { npx --yes wrangler@latest r2 object put "irisspeak-model/$1" --file "$2" --content-type "$3" --cache-control "$4" --remote >/dev/null && echo "  up $1"; }
 for f in "$VER"/card_model_fp16.part* "$VER"/realiser_fp16.part*; do [ -f "$f" ] && put "$f" "$f" application/octet-stream "public, max-age=31536000, immutable"; done
 put card_vecs.bin card_vecs.bin application/octet-stream "public, max-age=300"
-for f in manifest.json cards.json reranker.json freq.json realiser_manifest.json; do [ -f "$f" ] || continue; put "$f" "$f" application/json "public, max-age=300"; done
+for f in manifest.json cards.json reranker.json freq.json realiser_manifest.json realiser_forms.json; do [ -f "$f" ] || continue; put "$f" "$f" application/json "public, max-age=300"; done
 echo "uploaded $VER"

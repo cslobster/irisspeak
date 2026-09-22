@@ -19,6 +19,9 @@ REALISER_COREML="${REALISER_COREML:-$ROOT/export/out_realiser/coreml/IrisSpeakRe
 rm -rf "$DST/IrisSpeakRealiser.mlpackage" "$DST/realiser_fp16.onnx"
 if [ -d "$REALISER_COREML" ]; then cp -R "$REALISER_COREML" "$DST/IrisSpeakRealiser.mlpackage"; else cp "$ROOT/export/out_realiser/realiser_fp16.onnx" "$DST/realiser_fp16.onnx"; fi
 cp "$ROOT/export/out_realiser/onnx/tokenizer.json" "$DST/realiser_tokenizer.json"
+# which inflections each card word may be said in (data/build_realiser_forms.py); without it the realiser
+# can only say base forms
+python3 "$ROOT/data/build_realiser_forms.py" --out "$DST/realiser_forms.json" >/dev/null && echo "  realiser_forms.json"
 TOK=$(ls -d ~/.cache/huggingface/hub/models--Qwen--Qwen3-0.6B/snapshots/*/tokenizer.json 2>/dev/null | head -1)
 if [ -n "$CARD_TOKENIZER" ]; then cp "$CARD_TOKENIZER" "$DST/tokenizer.json"; else cp "$ROOT/export/out_realiser/onnx/tokenizer.json" "$DST/tokenizer.json"; fi   # SmolLM2 for the 135M; set CARD_TOKENIZER to the Qwen tokenizer.json for Qwen
 if [ ! -f "$DST/minilm_l6_v2.onnx" ]; then

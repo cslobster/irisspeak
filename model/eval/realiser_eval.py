@@ -15,7 +15,9 @@ def forms(w):
     if lw.endswith("y"): out |= {lw[:-1] + "ies", lw[:-1] + "ied"}
     if lw in IRR_PAST: out.add(IRR_PAST[lw])
     return out
-def load(onnx_path, tok_dir=None, with_setting=True):
+DEFAULT_FORMS = os.path.join(os.path.expanduser("~"), "work4", "aac", "site", "public", "model", "realiser_forms.json")
+
+def load(onnx_path, tok_dir=None, with_setting=True, forms_path=DEFAULT_FORMS):
     """Return a realise(cards, partner, setting) that decodes exactly the way the apps do. `with_setting`
     selects the prompt form: the trainer's (Setting line) or the one older app builds sent."""
     tok = AutoTokenizer.from_pretrained(tok_dir or os.path.dirname(onnx_path)); s = ort.InferenceSession(onnx_path, providers=["CPUExecutionProvider"])
@@ -23,26 +25,76 @@ def load(onnx_path, tok_dir=None, with_setting=True):
     kv_heads, head_dim = kvs[1], kvs[3]; outs = [o.name for o in s.get_outputs()]
     enc = lambda t: tok(t, add_special_tokens=False)["input_ids"]
     eos = set(enc("\n") + [tok.eos_token_id, 0, 2]); punct = {i for p in PUNCT for i in enc(p)}
-    def word_ids(w, out, with_forms):
+    # Which inflections a word may appear in is decided by data/build_realiser_forms.py, not by applying the
+    # spelling rules blindly: "busy" has none, so the decoder cannot say "busies" (docs/PLAN-REALISER.md 12).
+    ATTESTED = json.load(open(forms_path)) if forms_path and os.path.exists(forms_path) else {}
+
+    def variants(w, with_forms):
         fs = {w, w.lower(), w[:1].upper() + w[1:].lower()}
-        if with_forms: fs |= {f for x in forms(w) for f in (x, x[:1].upper() + x[1:])}
-        for f in fs:
-            for v in (f, " " + f): out.update(enc(v))
-    func_ids = set(); [word_ids(f, func_ids, False) for f in FUNC]
-    def realise(cards, partner, setting='unknown'):
-        allowed = set(punct) | eos | func_ids
-        for c in cards: word_ids(c, allowed, True)
-        allowed = np.array(sorted(allowed))
+        if with_forms:
+            fs |= {f for x in ATTESTED.get(w.lower(), []) for f in (x, x[:1].upper() + x[1:])}
+        return fs
+
+    def add_word(w, children, terminal, with_forms, starts=None):
+        """Insert every spelling of `w` into the token trie, so the decoder can only emit whole words.
+
+        The mask used to be a flat set of token ids, which let any BPE *prefix* of an allowed word out on its
+        own: "busy" is ['bus','y'], so ' Bus' was legal by itself and the app said "bus" for a card nobody
+        tapped. A trie makes a token legal only if it continues some allowed spelling, and lets a word end only
+        on a complete one."""
+        for f in variants(w, with_forms):
+            for v in (f, " " + f):
+                ids = tuple(enc(v))
+                if not ids: continue
+                for i in range(len(ids)):
+                    children.setdefault(ids[:i], set()).add(ids[i])
+                terminal.add(ids)
+                # Only a space-initial token may begin the next word. Without this the decoder can start a new
+                # word with a bare token, which glues onto the previous one in the decoded text: "a" + "arm"
+                # came out as "aarm".
+                if starts is not None and v.startswith(" "): starts.add(ids[0])
+
+    # the function words are the same on every call, so their trie is built once
+    FUNC_CH, FUNC_TERM, FUNC_START = {}, set(), set()
+    for f in FUNC: add_word(f, FUNC_CH, FUNC_TERM, False, FUNC_START)
+
+    def realise(cards, partner, setting='unknown', sample=False, rng=None):
+        children = {k: set(v) for k, v in FUNC_CH.items()}; terminal = set(FUNC_TERM); starts = set(FUNC_START)
+        for c in cards:
+            for w in re.findall(r"[A-Za-z']+", c): add_word(w, children, terminal, True, starts)
+        stop = punct | eos
+        # legal() is called once per generated token and the word-start set is large, so memoise it per
+        # word-state; in practice only a handful of states occur in a 20-token sentence.
+        memo = {}
+        def legal(path):
+            v = memo.get(path)
+            if v is None:
+                s_ = set(children.get(path, ()))
+                if path == () or path in terminal: s_ |= starts | stop
+                v = memo[path] = np.array(sorted(s_))
+            return v
         head = f"Setting: {setting or 'unknown'}.\n" if with_setting else ""
         ids = enc(head + f"Partner: {partner.strip() if partner else '(nobody has spoken)'}\nCards: {' | '.join(cards)}\nSentence:")
         past = {f"past_key_values.{l}.{kv}": np.zeros((1, kv_heads, 0, head_dim), dtype=np.float32) for l in range(layers) for kv in ("key", "value")}
         def feed(toks, pos0, total, past):
             f = dict(past); f["input_ids"] = np.array([toks], dtype=np.int64); f["attention_mask"] = np.ones((1, total), dtype=np.int64); f["position_ids"] = np.array([[pos0 + i for i in range(len(toks))]], dtype=np.int64); return f
-        f = feed(ids, 0, len(ids), past); out = []; last = -1; rep = 0
+        f = feed(ids, 0, len(ids), past); out = []; last = -1; rep = 0; path = ()
         for _ in range(20):
             r = dict(zip(outs, s.run(None, f))); lg = r["logits"][0, -1]
-            best = int(allowed[np.argmax(lg[allowed])])
+            cand = legal(path)
+            if not len(cand): break
+            if sample:
+                sub = lg[cand]; k = min(8, len(cand))
+                top = np.argpartition(-sub, k - 1)[:k]
+                w = np.exp((sub[top] - sub[top].max()) / 0.9); w /= w.sum()
+                best = int(cand[top[(rng or np.random).choice(len(top), p=w)]])
+            else:
+                best = int(cand[np.argmax(lg[cand])])
             if best in eos: break
+            # advance the trie: continue the current word, else start a new one, else a word boundary
+            if best in children.get(path, ()): path = path + (best,)
+            elif best in starts and (path == () or path in terminal): path = (best,)
+            else: path = ()
             rep = rep + 1 if best == last else 0; last = best
             if rep >= 2: break
             out.append(best); past = {"past_key_values." + k[8:]: v for k, v in r.items() if k.startswith("present.")}
