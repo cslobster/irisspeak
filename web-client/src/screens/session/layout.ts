@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 // Zoom-to-fit: the session screen is laid out on a canvas of at least DESIGN_W x DESIGN_H CSS pixels
 // (an iPad-sized board) and scaled down as a whole on smaller viewports such as an iPhone in landscape,
 // so nothing overflows or needs scrolling. Larger viewports get scale 1 and the canvas simply grows.
-// One width for the whole board, set by the fixed row: Yes / No / Please, five personal cards, More ideas and
-// View all -- ten medium chips (96px) at the row gap (12px). Everything above and below the row takes this width.
-export const CONTENT_W = 10 * 96 + 9 * 12;   // 1068
+// One width for the whole board, set by the fixed row: Yes / No / Please, five personal cards, My cards, More ideas
+// and View all -- eleven medium chips (96px) at the row gap (12px). Everything above and below the row takes this width.
+export const CONTENT_W = 11 * 96 + 10 * 12;   // 1176
 // iPad Safari in landscape with its tab bar showing is wide but short. Logical viewports (CSS px) with the address
 // bar and tab bar visible: 11-inch iPad Air/Pro about 1180x720 (M4 11-inch 1210x734), 10th-gen 10.9-inch about
 // 1080x700, iPad mini about 1133x640; the 13-inch is about 1366x920 and keeps the normal layout. In the short

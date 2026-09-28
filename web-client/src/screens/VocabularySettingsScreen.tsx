@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { addVocabularyWord, deleteVocabularyWord, listCustomWords, syncCustomWords, type CustomWord } from '../api/remote';
+import { squareJpegBase64 } from '../imageSquare';
 
 // Same as irisspeak.com's Vocabulary screen: parent-added custom words with an emoji or a photo, stored on the
 // shared account. Here they also become searchable cards and reranker favourites on this device.
@@ -19,12 +20,11 @@ export function VocabularySettingsScreen() {
   }
   useEffect(() => { load(); }, []);
 
-  function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) { setImageData(null); return; }
-    const reader = new FileReader();
-    reader.onload = () => { const result = reader.result as string; setImageData(result.split(',')[1] || result); };   // base64 payload only, as the backend stores it
-    reader.readAsDataURL(file);
+    // a 256 px square JPEG (~25 KB), not the raw photo: it is stored in the database and synced to every device
+    try { setImageData(await squareJpegBase64(file)); } catch { setError('That file is not a picture.'); }
   }
   async function addWord() {
     if (!word.trim()) return;
@@ -56,7 +56,7 @@ export function VocabularySettingsScreen() {
           </div>
           <div className="flex items-center gap-3">
             <input type="file" accept="image/*" onChange={onFileChange} className="text-xs" />
-            {imageData && <img src={`data:image/png;base64,${imageData}`} alt="" className="w-10 h-10 rounded-lg object-cover border border-slate-200" />}
+            {imageData && <img src={`data:image/jpeg;base64,${imageData}`} alt="" className="w-10 h-10 rounded-lg object-cover border border-slate-200" />}
           </div>
           <button onClick={addWord} disabled={saving || !word.trim()} className="w-full rounded-xl py-2 text-sm font-bold text-white disabled:opacity-50" style={{ background: '#94c1c2' }}>
             {saving ? 'Adding…' : 'Add word'}

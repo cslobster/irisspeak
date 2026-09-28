@@ -17,13 +17,14 @@ interface ChildTurnProps {
   busy: boolean;
   onSearchOpen: () => void;
   onMoreOpen: () => void;
+  onMyCardsOpen: () => void;
   onDone: () => void;
   onFeedback: () => void;
   sideActions?: boolean;   // short landscape (iPad Safari with tabs): action buttons in a column on the right
   doneEnabled: boolean;
 }
 
-export function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefresh, onClear, onConfirm, busy, onSearchOpen, onMoreOpen, onDone, doneEnabled, onFeedback, sideActions = false }: ChildTurnProps) {
+export function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard, onRefresh, onClear, onConfirm, busy, onSearchOpen, onMoreOpen, onMyCardsOpen, onDone, doneEnabled, onFeedback, sideActions = false }: ChildTurnProps) {
   const byCat = useMemo(() => {
     const groups: Record<CardInfo['category'], CardInfo[]> = { topic: [], action: [], emotion: [], core: [] };
     for (const c of rec.cards) (groups[c.category] ||= []).push(c);
@@ -107,7 +108,7 @@ export function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard,
         </div>
       </div>
 
-      {/* Bottom: the quick row -- Yes / No / Please, five personal cards, the child's name card -- then More ideas and View all, one row;
+      {/* Bottom: the quick row -- Yes / No / Please, five personal cards, the child's name card -- then My cards, More ideas and View all, one row;
           the action bar sits directly under it (same group), pinned to the bottom of the board column */}
       <div className="flex-shrink-0 flex flex-col gap-1.5">
       <div className="flex-shrink-0 flex justify-center gap-2 sm:gap-3 flex-nowrap">
@@ -116,6 +117,20 @@ export function ChildTurn({ rec, interim, onCardClick, onCardHold, onRemoveCard,
             <CardChip card={c} size="md" onClick={() => !busy && onCardClick(c)} />
           </div>
         ))}
+        <div className="shrink-0">
+          <button
+            onClick={onMyCardsOpen}
+            style={{ touchAction: 'manipulation', WebkitTouchCallout: 'none' as any, WebkitUserSelect: 'none' }}
+            className="w-[72px] h-24 sm:w-24 sm:h-28 flex flex-col items-center justify-between rounded-2xl bg-white border-2 border-b-4 border-black hover:shadow-md active:scale-95 transition-all duration-150 p-2 pt-1.5 pb-1.5 select-none"
+          >
+            <div className="flex-1 w-full rounded-xl flex items-center justify-center bg-sky-50">
+              <span className="text-3xl leading-none" role="img" aria-label="My cards">🗂️</span>
+            </div>
+            <div className="w-full mt-1.5 px-0.5 text-center leading-tight">
+              <div className="text-xs sm:text-sm font-bold text-slate-500 line-clamp-2">My cards</div>
+            </div>
+          </button>
+        </div>
         <div className="shrink-0">
           <button
             onClick={onMoreOpen}

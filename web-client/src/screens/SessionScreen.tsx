@@ -3,11 +3,12 @@ import { useCallback, useEffect, useRef, useState, useLayoutEffect } from 'react
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api/local';
 import { engine, QUESTION_CARD_ID } from '../engine/model';
-import { getProfile, setProfile } from '../engine/store';
+import { getProfile, setProfile, getCustomWords } from '../engine/store';
 import { TurnBanner } from '../components/TurnBanner';
 import { TranscriptMessages } from '../components/Transcript';
 import { CloseIcon, MenuIcon, MicIcon } from '../components/Icons';
 import { CardSearchOverlay } from '../components/CardSearchOverlay';
+import { AddCardDialog } from '../components/AddCardDialog';
 import { CompactSession } from './CompactSession';
 import { SessionMenu } from '../components/SessionMenu';
 import { formsFor, inflect, type WordForm } from '../engine/grammar';
@@ -51,6 +52,11 @@ export function SessionScreen() {
   // "More ideas": the next 60 suggested cards as a folder page, refreshed whenever the browser opens
   const [moreRows, setMoreRows] = useState<{ folder: string; word: string; image_url: string | null; emoji?: string }[]>([]);
   const onMoreOpen = useCallback(() => { setMoreRows(api.moreSuggestions()); setScopedFolderPath(['More ideas']); setShowSearch(true); }, []);
+  // "My cards": the family's own words with their own pictures (Settings > Vocabulary, or the Add tile here). The
+  // model cannot rank a word it was never trained on, so these live in their own folder page, reachable in one tap.
+  const myCardRows = () => getCustomWords().map(w => ({ folder: 'My cards', word: w.word, image_url: w.image_url, emoji: w.emoji ?? undefined }));
+  const onMyCardsOpen = useCallback(() => { setMoreRows(myCardRows()); setScopedFolderPath(['My cards']); setShowSearch(true); }, []);
+  const [showAddCard, setShowAddCard] = useState(false);
   const [lastParentMessage, setLastParentMessage] = useState<string | null>(null);
   const [bankedChildSentences, setBankedChildSentences] = useState<string[]>([]);
   const [inferredSentence, setInferredSentence] = useState<string | null>(null);
@@ -448,9 +454,11 @@ export function SessionScreen() {
           <CardSearchOverlay
             initialPath={scopedFolderPath} extraRows={moreRows}
             onSelect={onSearchSelect}
+            onAdd={scopedFolderPath?.[0] === 'My cards' ? () => setShowAddCard(true) : undefined}
             onClose={() => { setShowSearch(false); setScopedFolderPath(undefined); }}
           />
         )}
+        {showAddCard && <AddCardDialog onClose={() => setShowAddCard(false)} onAdded={() => setMoreRows(myCardRows())} />}
     </>
   );
 
@@ -466,7 +474,7 @@ export function SessionScreen() {
           isRecording={recState === 'recording'} partialTranscript={partialTranscript} onMicTap={handleMicTap}
           lastParentMessage={lastParentMessage} bankedChildSentences={bankedChildSentences}
           onCardClick={onCardClick} onCardHold={onCardHold} onRemoveCard={onRemoveCard} onRefresh={onRefreshCards} onClear={onClearCards} onConfirm={onConfirm}
-          busy={refreshingCards} onSearchOpen={() => { setMoreRows(api.moreSuggestions()); setScopedFolderPath(undefined); setShowSearch(true); }} onMoreOpen={onMoreOpen}
+          busy={refreshingCards} onSearchOpen={() => { setMoreRows([...api.moreSuggestions(), ...myCardRows()]); setScopedFolderPath(undefined); setShowSearch(true); }} onMoreOpen={onMoreOpen} onMyCardsOpen={onMyCardsOpen}
           onDone={onFinishTurn} doneEnabled
           setting={setting} settings={SETTINGS} onSettingChange={changeSetting}
           onTranscript={() => setShowDialogue(true)} onEnd={endSession}
@@ -525,7 +533,7 @@ export function SessionScreen() {
               onRefresh={onRefreshCards} onClear={onClearCards}
               onConfirm={onConfirm}
               busy={refreshingCards}
-              onSearchOpen={() => { setMoreRows(api.moreSuggestions()); setScopedFolderPath(undefined); setShowSearch(true); }} onMoreOpen={onMoreOpen}
+              onSearchOpen={() => { setMoreRows([...api.moreSuggestions(), ...myCardRows()]); setScopedFolderPath(undefined); setShowSearch(true); }} onMoreOpen={onMoreOpen} onMyCardsOpen={onMyCardsOpen}
               onDone={onFinishTurn}
               doneEnabled
             />

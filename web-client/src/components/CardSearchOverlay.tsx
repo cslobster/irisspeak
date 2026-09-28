@@ -40,8 +40,10 @@ interface Props {
   // Opens the folder-browse view scoped directly into this path (e.g. ['numbers']) instead
   // of the root — used when a folder card (e.g. "Numbers") is tapped from the session screen.
   initialPath?: string[];
-  /** Extra folder rows supplied by the session (the "More ideas" page of next suggestions). */
+  /** Extra folder rows supplied by the session (the "More ideas" page of next suggestions, the My cards page). */
   extraRows?: FolderCard[];
+  /** When set, the page opens with an "Add a card" tile first (the My cards page). */
+  onAdd?: () => void;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -84,7 +86,7 @@ const FOLDER_ICONS: Record<string, string> = {
   weather: '/symbols/openmoji/weather.svg',
 };
 
-export function CardSearchOverlay({ onSelect, onClose, initialPath, extraRows }: Props) {
+export function CardSearchOverlay({ onSelect, onClose, initialPath, extraRows, onAdd }: Props) {
   const [query, setQuery] = useState('');
   const [allCards, setAllCards] = useState<CboardCard[]>([]);
   const [folderCards, setFolderCards] = useState<FolderCard[]>([]);
@@ -116,9 +118,12 @@ export function CardSearchOverlay({ onSelect, onClose, initialPath, extraRows }:
   const categoryByWord = useMemo(() => {
     const map = new Map<string, string>();
     allCards.forEach(c => map.set(c.word, c.category));
+    for (const w of getCustomWords()) map.set(w.word, w.category);
     return map;
   }, [allCards]);
 
+  // the Add tile belongs to the page the overlay was opened on (My cards), not to wherever the breadcrumb leads
+  const addHere = !!onAdd && !!initialPath && path.join(' > ') === initialPath.join(' > ');
   const q = query.toLowerCase().trim();
   const isSearching = q.length > 0;
   const custom: CboardCard[] = getCustomWords().map(w => ({ word: w.word, image_url: w.image_url, emoji: w.emoji ?? (w.favourite ? '⭐' : '💬'), category: w.category }));
@@ -249,8 +254,15 @@ export function CardSearchOverlay({ onSelect, onClose, initialPath, extraRows }:
                 </div>
               )}
 
-              {wordsHere.length > 0 && (
+              {(wordsHere.length > 0 || addHere) && (
                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
+                  {addHere && (
+                    <button onClick={onAdd} aria-label="Add a card"
+                      className="aspect-square overflow-hidden flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-400 bg-white hover:shadow-md active:scale-95 transition-all p-2">
+                      <span className="w-1/2 h-1/2 flex items-center justify-center text-4xl text-slate-500 mb-1" aria-hidden="true">＋</span>
+                      <span className="text-sm font-bold text-slate-600 text-center leading-tight">Add a card</span>
+                    </button>
+                  )}
                   {wordsHere.map(c => {
                     const category = categoryByWord.get(c.word) ?? 'topic';
                     return (
@@ -271,7 +283,7 @@ export function CardSearchOverlay({ onSelect, onClose, initialPath, extraRows }:
               )}
 
               {subfolders.length === 0 && wordsHere.length === 0 && (
-                <p className="text-center text-slate-400 italic py-12">This folder is empty.</p>
+                <p className="text-center text-slate-400 italic py-12">{addHere ? 'No cards yet. Add a word with its own picture: a friend, a pet, a favourite place.' : 'This folder is empty.'}</p>
               )}
             </div>
           </>

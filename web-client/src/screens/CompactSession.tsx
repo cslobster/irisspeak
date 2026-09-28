@@ -22,7 +22,7 @@ export interface CompactProps {
   isRecording: boolean; partialTranscript: string; onMicTap: () => void;
   lastParentMessage: string | null; bankedChildSentences: string[];
   onCardClick: (c: CardInfo) => void; onCardHold: (c: CardInfo) => void; onRemoveCard: (id: string) => void; onRefresh: () => void; onClear: () => void; onConfirm: () => void;
-  busy: boolean; onSearchOpen: () => void; onMoreOpen: () => void; onDone: () => void; doneEnabled: boolean;
+  busy: boolean; onSearchOpen: () => void; onMoreOpen: () => void; onMyCardsOpen: () => void; onDone: () => void; doneEnabled: boolean;
   setting: string; settings: SettingOption[]; onSettingChange: (v: string) => void;
   onTranscript: () => void; onEnd: () => void;
   onMenu?: () => void;
@@ -110,14 +110,14 @@ function ChildCompact(p: CompactProps & { rec: ChildCardRecommendationResult }) 
   for (const c of p.rec.cards) (by[c.category] ||= []).push(c);
   // Portrait: 3 columns x 10 rows -- Topic rows 1-4, Action row 5, Feeling row 6, quick row 7-10.
   // Landscape: 8 columns x 4 rows filled in order (topic, action, feeling, quick row); colours mark the type.
-  type Cell = CardInfo | 'search' | 'more' | 'refresh' | 'clear' | 'confirm' | 'done' | null;
+  type Cell = CardInfo | 'search' | 'more' | 'mine' | 'refresh' | 'clear' | 'confirm' | 'done' | null;
   const cells: Cell[] = [];
   if (p.landscape) {
     // 8 x 4: topic, action, feeling, the quick row of nine (+ name), View all, then Refresh / Generate / Done as tiles
-    cells.push(...pad(by.topic.slice(0, 12), 12), ...pad(by.action.slice(0, 3), 3), ...pad(by.emotion.slice(0, 3), 3), ...pad(by.core.slice(0, 10), 10), 'more', 'search', 'refresh', 'clear', 'confirm', 'done');
+    cells.push(...pad(by.topic.slice(0, 12), 12), ...pad(by.action.slice(0, 3), 3), ...pad(by.emotion.slice(0, 3), 3), ...pad(by.core.slice(0, 9), 9), 'mine', 'more', 'search', 'refresh', 'clear', 'confirm', 'done');
   } else {
     // 3 x 10: topic rows 1-4, action 5, feeling 6, quick row 7-10 with View all in the last cell
-    cells.push(...pad(by.topic.slice(0, 12), 12), ...pad(by.action.slice(0, 3), 3), ...pad(by.emotion.slice(0, 3), 3), ...pad(by.core.slice(0, 10), 10), 'more', 'search');
+    cells.push(...pad(by.topic.slice(0, 12), 12), ...pad(by.action.slice(0, 3), 3), ...pad(by.emotion.slice(0, 3), 3), ...pad(by.core.slice(0, 9), 9), 'mine', 'more', 'search');
   }
   return (
     <>
@@ -145,6 +145,11 @@ function ChildCompact(p: CompactProps & { rec: ChildCardRecommendationResult }) 
         <div className={`h-full grid gap-1.5 ${p.landscape ? 'grid-cols-9 grid-rows-4' : 'grid-cols-3 grid-rows-10'}`}>
           {cells.map((c, i) => c === null ? <div key={i} /> : c === 'refresh' || c === 'clear' || c === 'confirm' || c === 'done' ? (
             <ActionTile key={c} kind={c} p={p} />
+          ) : c === 'mine' ? (
+            <button key="mine" onClick={p.onMyCardsOpen} className="min-h-0 w-full h-full flex flex-col items-center justify-center rounded-xl bg-white border-2 border-b-[3px] border-black active:scale-95 select-none">
+              <span className="text-2xl leading-none" role="img" aria-label="My cards">🗂️</span>
+              <span className="text-[11px] font-bold text-slate-500 leading-tight">My cards</span>
+            </button>
           ) : c === 'more' ? (
             <button key="more" onClick={p.onMoreOpen} className="min-h-0 w-full h-full flex flex-col items-center justify-center rounded-xl bg-white border-2 border-b-[3px] border-black active:scale-95 select-none">
               <span className="text-2xl leading-none" role="img" aria-label="More ideas">💡</span>
